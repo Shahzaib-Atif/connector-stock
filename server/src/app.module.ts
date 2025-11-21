@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppService } from './services/app.service';
-import { AppController } from './controllers/app.controller';
-import { DBService } from './services/db.service';
-import { DBController } from './controllers/db.controller';
+import { AppService } from 'src/services/app.service';
+import { AppController } from 'src/controllers/app.controller';
+import { DBService } from 'src/services/db.service';
+import { DBController } from 'src/controllers/db.controller';
 import { PrismaService } from 'prisma/prisma.service';
 
 @Module({

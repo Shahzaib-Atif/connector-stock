@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { DBService } from '../services/db.service';
+import { DBService } from 'src/services/db.service';
 
 @Controller()
 export class DBController {
