@@ -1,7 +1,8 @@
 import React from 'react';
-import { ArrowRight, Users, CircuitBoard } from 'lucide-react';
+import { Users, CircuitBoard } from 'lucide-react';
 import { Connector } from '../types';
 import { useAppSelector } from '../store/hooks';
+import { DetailHeader } from './DetailHeader';
 
 interface SearchResultsViewProps {
   query: string;
@@ -20,16 +21,11 @@ export const SearchResultsView: React.FC<SearchResultsViewProps> = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 pb-12 text-slate-200">
-      <header className="bg-slate-900/80 backdrop-blur-md sticky top-0 z-10 border-b border-slate-800 px-4 py-3 flex items-center justify-between shadow-sm">
-        <button onClick={onBack} className="p-2 -ml-2 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">
-          <ArrowRight className="w-6 h-6 rotate-180" />
-        </button>
-        <div className="text-center">
-           <div className="text-xs text-slate-500 font-medium uppercase tracking-wider">Search Results</div>
-           <div className="font-mono font-bold text-xl text-white">REF: {query}</div>
-        </div>
-        <div className="w-10"></div>
-      </header>
+      <DetailHeader
+        label="Search Results"
+        title={`REF: ${query}`}
+        onBack={onBack}
+      />
 
       <div className="max-w-3xl mx-auto p-4 space-y-6">
         <div className="bg-indigo-600/90 rounded-xl p-6 shadow-lg text-white flex items-center gap-4 border border-indigo-500/50">
