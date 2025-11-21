@@ -1,0 +1,196 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model AccessoryTypes {
+  ID              Int    @default(autoincrement())
+  TypeDescription String @db.VarChar(100)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model CapotAngles {
+  ID         Int @default(autoincrement())
+  DegreesNum Int
+
+  @@ignore
+}
+
+model ConnectorFeatures {
+  Id           Int       @default(autoincrement())
+  CodivmacRef  String    @unique(map: "ConnectorFeatures_UNIQUE") @db.NVarChar(8)
+  Dinov2Vector String?   @db.NVarChar(Max)
+  ResnetVector String?   @db.NVarChar(Max)
+  UpdatedAt    DateTime? @default(now(), map: "DF__Connector__Updat__44CA3770") @db.DateTime
+}
+
+model ConnectorTypes {
+  ID      Int     @id(map: "ConnectorTypes_PK") @default(autoincrement())
+  Type    String  @db.VarChar(100)
+  Section String? @db.VarChar(100)
+}
+
+model ContagemNumVias {
+  ID           Int     @unique(map: "ContagemNumVias_UNIQUE") @default(autoincrement())
+  QtdVias      Int?
+  ContagemVias String? @db.VarChar(100)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Cord_CON {
+  CON            String?   @db.NVarChar(255)
+  CV             String?   @db.NVarChar(255)
+  CH             String?   @db.NVarChar(255)
+  LastChangeBy   String?   @db.NVarChar(100)
+  LastChangeDate DateTime? @db.DateTime
+  ESTADO         Int       @default(1, map: "DF__Cord_CON___ESTAD__19DFD96B")
+  CV_Ma          String?   @db.NVarChar(100)
+  CH_Ma          String?   @db.NVarChar(100)
+  SampleSection  String?   @db.VarChar(100)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Cores {
+  Cor_Id   String  @unique(map: "Cores_UNIQUE") @map("Cor Id") @db.NVarChar(1)
+  CORES    String? @db.NVarChar(50)
+  Cores_UK String? @db.NVarChar(255)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Fabricantes {
+  ID_Fabricante Int     @default(autoincrement())
+  Fabricante    String? @db.NVarChar(50)
+
+  @@ignore
+}
+
+model Referencias {
+  Pos_ID           String?   @map("Pos ID") @db.NVarChar(4)
+  Cor              String    @db.NVarChar(1)
+  Vias             String?   @db.NVarChar(1)
+  CODIVMAC         String    @id(map: "Referências_PK") @db.NVarChar(8)
+  Designa__o       String?   @map("Designação") @db.NVarChar(30)
+  Fabricante       String?   @db.NVarChar(50)
+  Refabricante     String?   @db.NVarChar(100)
+  Clip             Boolean?
+  Spacer           Boolean?
+  Vedante          Boolean?
+  Tampa            Boolean?
+  Mola             Boolean?
+  Moldagem         Boolean?
+  Trav_o           Boolean?  @map("Travão")
+  Abracadeira      Boolean?
+  Linguetes        Boolean?
+  Outros           Boolean?
+  Registo          DateTime?
+  Amostra          Boolean?
+  OBS              String?   @db.NVarChar(Max)
+  Imagem           String?   @db.NVarChar(Max)
+  EstadoAmostra    String?   @db.NVarChar(50)
+  CoordVertical    String?   @db.NVarChar(2)
+  CoordHorizontal  Int?
+  LastChangeBy     String?   @db.NVarChar(50)
+  LastUpdateDate   DateTime?
+  ESTADO           Int       @default(1, map: "DF__Referênci__ESTAD__2DE6D218")
+  VersaoConnector  String?   @db.NVarChar(1)
+  SampleSection    String?   @db.VarChar(100)
+  SampleType       String?   @db.VarChar(100)
+  InternalDiameter Int?
+  ExternalDiameter Int?
+  Thickness        Int?
+  ConnType         String?   @db.VarChar(100)
+  ClipColor        String?   @db.VarChar(100)
+  CapotAngle       String?   @db.VarChar(100)
+  Olhal            Boolean?
+
+  @@map("Referências")
+}
+
+model Referencias_test {
+  Pos_ID           String?   @map("Pos ID") @db.NVarChar(4)
+  Cor              String    @db.NVarChar(1)
+  Vias             String?   @db.NVarChar(1)
+  CODIVMAC         String    @id(map: "Referências_test_PK") @db.NVarChar(8)
+  Designa__o       String?   @map("Designação") @db.NVarChar(30)
+  Fabricante       String?   @db.NVarChar(50)
+  Refabricante     String?   @db.NVarChar(100)
+  Clip             Boolean?
+  Spacer           Boolean?
+  Vedante          Boolean?
+  Tampa            Boolean?
+  Mola             Boolean?
+  Moldagem         Boolean?
+  Trav_o           Boolean?  @map("Travão")
+  Abracadeira      Boolean?
+  Linguetes        Boolean?
+  Outros           Boolean?
+  Registo          DateTime?
+  Amostra          Boolean?
+  OBS              String?   @db.NVarChar(Max)
+  Imagem           String?   @db.NVarChar(Max)
+  EstadoAmostra    String?   @db.NVarChar(50)
+  CoordVertical    String?   @db.NVarChar(2)
+  CoordHorizontal  Int?
+  LastChangeBy     String?   @db.NVarChar(50)
+  LastUpdateDate   DateTime?
+  ESTADO           Int
+  VersaoConnector  String?   @db.NVarChar(1)
+  SampleSection    String?   @db.VarChar(100)
+  SampleType       String?   @db.VarChar(100)
+  InternalDiameter Int?
+  ExternalDiameter Int?
+  Thickness        Int?
+  ConnType         String?   @db.VarChar(100)
+  ClipColor        String?   @db.VarChar(100)
+  CapotAngle       String?   @db.VarChar(100)
+  Olhal            Boolean?
+
+  @@map("Referências_test")
+}
+
+model REG_AccessoriesSamples {
+  id              Int      @default(autoincrement())
+  AccessoryType   String   @db.NVarChar(25)
+  CapotAngle      Int?
+  ClipColor       String?  @db.VarChar(25)
+  ConnName        String   @db.VarChar(8)
+  AccImagePath    String   @unique(map: "REG_AccessoriesSamples_UNIQUE") @db.VarChar(500)
+  InsertDate      DateTime @default(now(), map: "DF__REG_Acces__Inser__2BFE89A6") @db.DateTime
+  RefClient       String?  @db.VarChar(100)
+  Qty             Int?
+  RefDV           String?  @db.VarChar(100)
+  ColorAssociated Boolean?
+}
+
+model REG_Amostras {
+  ID               Int       @unique(map: "REG_Amostras_UNIQUE") @default(autoincrement())
+  Cliente          String?   @db.NVarChar(100)
+  Projeto          String?   @db.NVarChar(150)
+  EncDivmac        String?   @db.NVarChar(100)
+  Ref_Descricao    String?   @db.NVarChar(Max)
+  Amostra          String?   @db.NVarChar(150)
+  Data_do_pedido   String?   @db.NVarChar(100)
+  Data_recepcao    String?   @db.NVarChar(100)
+  Entregue_a       String?   @db.NVarChar(100)
+  N_Envio          String?   @db.NVarChar(100)
+  Quantidade       String?   @db.NVarChar(Max)
+  Observacoes      String?   @db.NVarChar(Max)
+  CreatedBy        String?   @db.NVarChar(100)
+  LasUpdateBy      String?   @db.NVarChar(100)
+  DateOfCreation   DateTime? @db.DateTime
+  DateOfLastUpdate String?   @db.NVarChar(100)
+  IsActive         Boolean
+  ActualUser       String?   @db.NVarChar(100)
+  NumORC           String?   @db.VarChar(100)
+  Ref_Fornecedor   String?   @db.NVarChar(100)
+}
