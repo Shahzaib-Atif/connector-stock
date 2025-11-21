@@ -2,19 +2,16 @@ import React from "react";
 import { Wrench, QrCode } from "lucide-react";
 import { Connector } from "../../types";
 import { parseConnector } from "../../services/inventoryService";
-import { CollapsibleSection } from "../CollapsibleSection";
+import { CollapsibleSection } from "../common/CollapsibleSection";
 import { InsightCard } from "../InsightCard";
-import { DetailHeader } from "../DetailHeader";
-import { TransactionBar } from "../TransactionBar";
+import { DetailHeader } from "../common/DetailHeader";
+import { TransactionBar } from "../common/TransactionBar";
 import { useInventoryNavigation } from "../../hooks/useInventoryNavigation";
-import {
-  useEntityDetails,
-  EntityResolver,
-} from "../../hooks/useEntityDetails";
+import { useEntityDetails, EntityResolver } from "../../hooks/useEntityDetails";
 import { resolveLiveStock } from "../../utils/stock";
-import { ConnectorSummary } from "./ConnectorSummary";
-import { AccessoryList } from "./AccessoryList";
-import { BoxShortcut } from "./BoxShortcut";
+import { ConnectorSummary } from "./components/ConnectorSummary";
+import { AccessoryList } from "./components/AccessoryList";
+import { BoxShortcut } from "./components/BoxShortcut";
 
 interface ConnectorViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -104,4 +101,3 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
     </div>
   );
 };
-

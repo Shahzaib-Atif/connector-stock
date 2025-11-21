@@ -1,6 +1,6 @@
 import React from "react";
 import { MapPin, Users } from "lucide-react";
-import { Connector } from "../../types";
+import { Connector } from "../../../types";
 
 interface ConnectorSummaryProps {
   connector: Connector;

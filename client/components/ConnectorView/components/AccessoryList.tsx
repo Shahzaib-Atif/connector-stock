@@ -1,6 +1,6 @@
 import React from "react";
-import { Accessory } from "../../types";
-import { resolveLiveStock } from "../../utils/stock";
+import { Accessory } from "../../../types";
+import { resolveLiveStock } from "../../../utils/stock";
 import { AccessoryItem } from "./AccessoryItem";
 
 interface Props {

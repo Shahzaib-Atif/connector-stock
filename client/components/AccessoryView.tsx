@@ -2,13 +2,10 @@ import React from "react";
 import { QrCode } from "lucide-react";
 import { Accessory } from "../types";
 import { parseAccessory } from "../services/inventoryService";
-import { DetailHeader } from "./DetailHeader";
-import { TransactionBar } from "./TransactionBar";
+import { DetailHeader } from "./common/DetailHeader";
+import { TransactionBar } from "./common/TransactionBar";
 import { useInventoryNavigation } from "../hooks/useInventoryNavigation";
-import {
-  EntityResolver,
-  useEntityDetails,
-} from "../hooks/useEntityDetails";
+import { EntityResolver, useEntityDetails } from "../hooks/useEntityDetails";
 import { resolveLiveStock } from "../utils/stock";
 
 interface AccessoryViewProps {
@@ -16,7 +13,10 @@ interface AccessoryViewProps {
   onOpenQR: (id: string) => void;
 }
 
-const accessoryResolver: EntityResolver<Accessory> = (accessoryId, { stockCache }) => {
+const accessoryResolver: EntityResolver<Accessory> = (
+  accessoryId,
+  { stockCache }
+) => {
   if (!accessoryId.includes("_")) return null;
   return parseAccessory(accessoryId, stockCache);
 };

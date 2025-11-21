@@ -1,7 +1,7 @@
 import React from "react";
 import { Minus, Plus } from "lucide-react";
-import { Accessory } from "../../types";
-import { InventoryListItem } from "../InventoryListItem";
+import { Accessory } from "../../../types";
+import { InventoryListItem } from "../../common/InventoryListItem";
 
 interface Props {
   accessory: Accessory;
