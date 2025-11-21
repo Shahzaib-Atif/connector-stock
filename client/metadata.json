@@ -1,0 +1,5 @@
+{
+  "name": "ConnectorStock AI",
+  "description": "Intelligent stock management for warehouse connectors with QR simulation and Gemini-powered insights.",
+  "requestFramePermissions": []
+}
