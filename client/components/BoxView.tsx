@@ -1,32 +1,39 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import { MapPin, CircuitBoard, Wrench, QrCode } from "lucide-react";
-import { useAppSelector } from "../store/hooks";
+import { Box } from "../types";
 import { getBoxDetails } from "../services/inventoryService";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { DetailHeader } from "./DetailHeader";
 import { InventoryListItem } from "./InventoryListItem";
+import { useInventoryNavigation } from "../hooks/useInventoryNavigation";
+import {
+  EntityResolver,
+  useEntityDetails,
+} from "../hooks/useEntityDetails";
+import { resolveLiveStock } from "../utils/stock";
 
 interface BoxViewProps {
   onOpenQR: (id: string) => void;
 }
 
+const boxResolver: EntityResolver<Box> = (boxId) => {
+  if (boxId.length !== 4) return null;
+  return getBoxDetails(boxId);
+};
+
 export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const stockCache = useAppSelector((state) => state.stock.stockCache);
+  // Shared hook supplies resolved box plus cache.
+  const { entity: box, stockCache } = useEntityDetails<Box>(boxResolver);
+  const { goBack, goToConnector, goToAccessory } = useInventoryNavigation();
 
-  if (!id) return <div>Box not found</div>;
-
-  const box = getBoxDetails(id);
   if (!box) return <div>Box not found</div>;
 
   const handleConnectorScan = (connectorId: string) => {
-    navigate(`/connector/${connectorId}`);
+    goToConnector(connectorId);
   };
 
   const handleAccessoryScan = (accessoryId: string) => {
-    navigate(`/accessory/${accessoryId}`);
+    goToAccessory(accessoryId);
   };
 
   return (
@@ -34,7 +41,7 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
       <DetailHeader
         label="Box Storage"
         title={box.id}
-        onBack={() => navigate(-1)}
+        onBack={goBack}
         rightSlot={
           <button
             onClick={() => onOpenQR(box.id)}
@@ -76,7 +83,8 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
           defaultOpen={true}
         >
           {box.connectors.map((conn) => {
-            const liveStock = stockCache[conn.id] ?? conn.stock;
+            // Helper keeps each row stock in sync.
+            const liveStock = resolveLiveStock(stockCache, conn.id, conn.stock);
             return (
               <InventoryListItem
                 key={conn.id}
@@ -125,7 +133,7 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
             defaultOpen={false}
           >
             {box.accessories.map((acc) => {
-              const liveStock = stockCache[acc.id] ?? acc.stock;
+              const liveStock = resolveLiveStock(stockCache, acc.id, acc.stock);
               return (
                 <InventoryListItem
                   key={acc.id}

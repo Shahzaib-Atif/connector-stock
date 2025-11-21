@@ -1,40 +1,53 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import { QrCode } from "lucide-react";
-import { useAppSelector } from "../store/hooks";
+import { Accessory } from "../types";
 import { parseAccessory } from "../services/inventoryService";
 import { DetailHeader } from "./DetailHeader";
 import { TransactionBar } from "./TransactionBar";
+import { useInventoryNavigation } from "../hooks/useInventoryNavigation";
+import {
+  EntityResolver,
+  useEntityDetails,
+} from "../hooks/useEntityDetails";
+import { resolveLiveStock } from "../utils/stock";
 
 interface AccessoryViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
   onOpenQR: (id: string) => void;
 }
 
+const accessoryResolver: EntityResolver<Accessory> = (accessoryId, { stockCache }) => {
+  if (!accessoryId.includes("_")) return null;
+  return parseAccessory(accessoryId, stockCache);
+};
+
 export const AccessoryView: React.FC<AccessoryViewProps> = ({
   onTransaction,
   onOpenQR,
 }) => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const stockCache = useAppSelector((state) => state.stock.stockCache);
+  // Shared loader keeps this screen layout-focused.
+  const { entity: accessory, stockCache } =
+    useEntityDetails<Accessory>(accessoryResolver);
+  const { goBack } = useInventoryNavigation();
 
-  if (!id) return <div>Accessory not found</div>;
-
-  const accessory = parseAccessory(id, stockCache);
   if (!accessory) return <div>Accessory not found</div>;
 
-  const currentStock = stockCache[accessory.id] ?? accessory.stock;
+  // Cached stock preferred with parsed fallback.
+  const currentStock = resolveLiveStock(
+    stockCache,
+    accessory.id,
+    accessory.stock
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 pb-32 text-slate-200">
       <DetailHeader
         label="Accessory"
         title={accessory.id}
-        onBack={() => navigate(-1)}
+        onBack={goBack}
         rightSlot={
           <button
-            onClick={() => onOpenQR(accessory.id)}
+            onClick={() => onOpenQR(`/accessory/${accessory.id}`)}
             className="p-2 -mr-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg"
             aria-label="Show accessory QR"
           >

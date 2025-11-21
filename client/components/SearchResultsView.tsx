@@ -3,6 +3,7 @@ import { Users, CircuitBoard } from 'lucide-react';
 import { Connector } from '../types';
 import { useAppSelector } from '../store/hooks';
 import { DetailHeader } from './DetailHeader';
+import { resolveLiveStock } from '../utils/stock';
 
 interface SearchResultsViewProps {
   query: string;
@@ -42,7 +43,7 @@ export const SearchResultsView: React.FC<SearchResultsViewProps> = ({
 
         <div className="space-y-3">
             {results.map((conn) => {
-                 const liveStock = stockCache[conn.id] ?? conn.stock;
+                 const liveStock = resolveLiveStock(stockCache, conn.id, conn.stock);
                  return (
                     <button 
                         key={conn.id}

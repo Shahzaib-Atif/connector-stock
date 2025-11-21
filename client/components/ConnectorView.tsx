@@ -1,5 +1,4 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   MapPin,
@@ -10,40 +9,54 @@ import {
   Minus,
   Plus,
 } from "lucide-react";
-import { useAppSelector } from "../store/hooks";
+import { Connector } from "../types";
 import { parseConnector } from "../services/inventoryService";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { InsightCard } from "./InsightCard";
 import { DetailHeader } from "./DetailHeader";
 import { TransactionBar } from "./TransactionBar";
 import { InventoryListItem } from "./InventoryListItem";
+import { useInventoryNavigation } from "../hooks/useInventoryNavigation";
+import {
+  useEntityDetails,
+  EntityResolver,
+} from "../hooks/useEntityDetails";
+import { resolveLiveStock } from "../utils/stock";
 
 interface ConnectorViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
   onOpenQR: (id: string) => void;
 }
 
+const connectorResolver: EntityResolver<Connector> = (connectorId, { stockCache }) => {
+  if (connectorId.length !== 6) return null;
+  return parseConnector(connectorId, stockCache);
+};
+
 export const ConnectorView: React.FC<ConnectorViewProps> = ({
   onTransaction,
   onOpenQR,
 }) => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const stockCache = useAppSelector((state) => state.stock.stockCache);
+  // Shared hook lifts params and cache plumbing.
+  const { entity: connector, stockCache } =
+    useEntityDetails<Connector>(connectorResolver);
+  const { goBack, goToAccessory, goToBox } = useInventoryNavigation();
 
-  if (!id) return <div>Connector not found</div>;
-
-  const connector = parseConnector(id, stockCache);
   if (!connector) return <div>Connector not found</div>;
 
-  const currentStock = stockCache[connector.id] ?? connector.stock;
+  // Prefer cached quantity with parsed fallback.
+  const currentStock = resolveLiveStock(
+    stockCache,
+    connector.id,
+    connector.stock
+  );
 
   const handleAccessoryScan = (accessoryId: string) => {
-    navigate(`/accessory/${accessoryId}`);
+    goToAccessory(accessoryId);
   };
 
   const handleBoxScan = (boxId: string) => {
-    navigate(`/box/${boxId}`);
+    goToBox(boxId);
   };
 
   return (
@@ -51,7 +64,7 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
       <DetailHeader
         label="Connector"
         title={connector.id}
-        onBack={() => navigate(-1)}
+        onBack={goBack}
         rightSlot={
           <button
             onClick={() => onOpenQR(connector.id)}
@@ -131,7 +144,6 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
             count={connector.accessories.length}
           >
             {connector.accessories.map((acc) => {
-              const accStock = stockCache[acc.id] ?? acc.stock;
               return (
                 <InventoryListItem
                   key={acc.id}
@@ -152,7 +164,7 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
                   right={
                     <div className="flex items-center gap-3">
                       <div className="text-lg font-bold text-slate-300 w-8 text-center">
-                        {accStock}
+                        {resolveLiveStock(stockCache, acc.id, acc.stock)}
                       </div>
                       <div className="flex gap-1">
                         <button
