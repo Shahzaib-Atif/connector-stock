@@ -1,38 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from './store/hooks';
-import { initStockData } from './store/stockSlice';
-import { useAppNavigation } from './hooks/useAppNavigation';
-import { useTransactionFlow } from './hooks/useTransactionFlow';
+import React, { useState, useEffect } from "react";
+import { useAppSelector, useAppDispatch } from "./store/hooks";
+import { initStockData } from "./store/stockSlice";
+import { useTransactionFlow } from "./hooks/useTransactionFlow";
 
 // Components
-import { Login } from './components/Login';
-import { ViewManager } from './components/ViewManager';
-import { TransactionModal } from './components/TransactionModal';
-import { QRModal } from './components/QRModal';
+import { Login } from "./components/Login";
+import { TransactionModal } from "./components/TransactionModal";
+import { QRModal } from "./components/QRModal";
+import { AppRoutes } from "./components/AppRoutes";
+import { useScan } from "./hooks/useScan";
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector(state => state.auth);
-  const { loading } = useAppSelector(state => state.stock);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { loading } = useAppSelector((state) => state.stock);
   const [qrModalOpen, setQrModalOpen] = useState(false);
+  const [activeItemId, setActiveItemId] = useState("");
+  const { handleScan } = useScan();
 
-  // --- Logic Hooks ---
-  const nav = useAppNavigation();
-  
-  const tx = useTransactionFlow({
-    activeConnector: nav.activeConnector,
-    setActiveConnector: nav.setActiveConnector,
-    activeAccessory: nav.activeAccessory,
-    setActiveAccessory: nav.setActiveAccessory,
-    currentView: nav.view
-  });
+  const tx = useTransactionFlow();
 
-  // --- Initialization ---
   useEffect(() => {
     dispatch(initStockData());
   }, [dispatch]);
 
-  // --- Render Guard ---
+  const handleOpenQR = (id: string) => {
+    setActiveItemId(id);
+    setQrModalOpen(true);
+  };
 
   if (!isAuthenticated) {
     return <Login />;
@@ -48,33 +43,20 @@ const App: React.FC = () => {
 
   return (
     <>
-      <ViewManager 
-        view={nav.view}
-        activeConnector={nav.activeConnector}
-        activeBox={nav.activeBox}
-        activeAccessory={nav.activeAccessory}
-        searchQuery={nav.searchQuery}
-        searchResults={nav.searchResults}
-        onScan={nav.handleScan}
-        onBack={nav.goBack}
-        onOpenQR={() => setQrModalOpen(true)}
-        onSelectConnector={nav.openConnector}
+      <AppRoutes
+        onScan={handleScan}
+        onOpenQR={handleOpenQR}
         onTransaction={tx.openTransaction}
       />
 
-      {/* --- Global Modals --- */}
-
       {qrModalOpen && (
-        <QRModal 
-          itemId={nav.getActiveItemId()} 
-          onClose={() => setQrModalOpen(false)} 
-        />
+        <QRModal itemId={activeItemId} onClose={() => setQrModalOpen(false)} />
       )}
 
       {tx.isOpen && (
-        <TransactionModal 
+        <TransactionModal
           type={tx.txType}
-          targetId={tx.targetId || nav.getActiveItemId()}
+          targetId={tx.targetId}
           onClose={tx.closeTransaction}
           onConfirm={tx.handleSubmit}
         />
