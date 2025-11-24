@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Connector } from '../types';
-import { searchByClientRef } from '../services/connectorService';
+import { searchConnectors } from '../services/connectorService';
 import { ConnectorSummary } from './ConnectorView/components/ConnectorSummary';
 import { useAppSelector } from '../store/hooks';
 
@@ -17,8 +17,8 @@ export const SearchView: React.FC = () => {
     e.preventDefault();
     if (!searchQuery.trim() || !masterData) return;
 
-    // Pass string directly to searchByClientRef
-    const searchResults = searchByClientRef(searchQuery.trim(), masterData);
+    // Pass string directly to searchConnectors
+    const searchResults = searchConnectors(searchQuery.trim(), masterData);
     setResults(searchResults);
     setHasSearched(true);
   };
@@ -36,7 +36,7 @@ export const SearchView: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by Client Reference (e.g., 8432)..."
+            placeholder="Search by ID or Box..."
             className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
           />
         </div>
@@ -64,7 +64,7 @@ export const SearchView: React.FC = () => {
           
           {hasSearched && results.length === 0 && (
             <div className="text-center py-12 bg-white rounded-xl border border-dashed border-gray-300">
-              <p className="text-gray-500">No connectors found for this reference.</p>
+              <p className="text-gray-500">No connectors found.</p>
             </div>
           )}
         </div>

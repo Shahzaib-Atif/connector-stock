@@ -35,7 +35,26 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
     useEntityDetails<Connector>(connectorResolver);
   const { goBack, goToAccessory, goToBox } = useInventoryNavigation();
 
-  if (!connector) return <div>Connector not found</div>;
+  if (!connector) {
+    return (
+      <div className="min-h-screen bg-slate-900 text-slate-200">
+        <DetailHeader
+          label="Connector"
+          title="Not Found"
+          onBack={goBack}
+        />
+        <div className="flex flex-col items-center justify-center h-[60vh] text-center p-8">
+          <div className="bg-slate-800 p-6 rounded-full mb-4">
+            <Wrench className="w-12 h-12 text-slate-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2">Connector Not Found</h2>
+          <p className="text-slate-400 max-w-md">
+            The connector you are looking for does not exist in the master data.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Prefer cached quantity with parsed fallback.
   const currentStock = resolveLiveStock(

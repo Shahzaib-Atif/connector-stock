@@ -44,18 +44,19 @@ export const parseConnector = (
   id: string,
   stockMap: Record<string, number>,
   masterData: MasterData
-): Connector => {
+): Connector | null => {
   const reference = masterData.references?.[id];
   
-  // If reference is not found, we can't reliably determine details without mock logic.
-  // We will return a basic object with "Unknown" values where data is missing.
+  if (!reference) {
+    return null;
+  }
   
-  const posId = reference?.Pos_ID || id.substring(0, 4);
-  const colorCode = reference?.Cor || id.charAt(4);
-  const viasCode = reference?.Vias || id.charAt(5);
-  const type = reference?.ConnType || "Unknown";
-  const clientName = reference?.Fabricante || "Unknown";
-  const clientRef = reference?.Refabricante || "";
+  const posId = reference.Pos_ID;
+  const colorCode = reference.Cor;
+  const viasCode = reference.Vias;
+  const type = reference.ConnType;
+  const clientName = reference.Fabricante || "Unknown";
+  const clientRef = reference.Refabricante || "";
 
   const coords = getCoordinates(posId, masterData);
 
@@ -106,7 +107,8 @@ export const getBoxDetails = (
   if (masterData.references) {
     Object.values(masterData.references).forEach(ref => {
       if (ref.Pos_ID === boxId) {
-        connectors.push(parseConnector(ref.CODIVMAC, stockMap, masterData));
+        const conn = parseConnector(ref.CODIVMAC, stockMap, masterData);
+        if (conn) connectors.push(conn);
       }
     });
   }
@@ -127,24 +129,37 @@ export const getBoxDetails = (
   };
 };
 
-export const searchByClientRef = (
-  ref: string,
+export const searchConnectors = (
+  query: string,
   masterData: MasterData
 ): Connector[] => {
   const results: Connector[] = [];
   const stockMap = getStockMap();
+  const normalizedQuery = query.trim().toUpperCase();
 
-  // Search in real references first
-  if (masterData.references) {
-    Object.values(masterData.references).forEach(refItem => {
-      // Check if Refabricante matches the search ref
-      if (refItem.Refabricante && refItem.Refabricante === ref) {
-        results.push(parseConnector(refItem.CODIVMAC, stockMap, masterData));
-      }
-    });
+  // 1. Direct Connector ID Match (using references key)
+  if (masterData.references && masterData.references[normalizedQuery]) {
+    const conn = parseConnector(normalizedQuery, stockMap, masterData);
+    if (conn) results.push(conn);
   }
 
-  // No fallback to mock results.
+  // 2. Box ID Match (using positions key)
+  // If the query matches a known Position ID (Box), find all connectors in that box.
+  if (masterData.positions && masterData.positions[normalizedQuery]) {
+    // We found a valid Box ID. Now we need to find connectors in this box.
+    // Since we don't have a direct box->connectors map, we filter references.
+    if (masterData.references) {
+      Object.values(masterData.references).forEach((refItem) => {
+        // Avoid duplicates if we already found it by ID (unlikely if query is 4 chars and ID is 6, but good practice)
+        if (refItem.CODIVMAC === normalizedQuery) return;
+
+        if (refItem.Pos_ID === normalizedQuery) {
+          const conn = parseConnector(refItem.CODIVMAC, stockMap, masterData);
+          if (conn) results.push(conn);
+        }
+      });
+    }
+  }
 
   return results;
 };
