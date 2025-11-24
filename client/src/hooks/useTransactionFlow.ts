@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Department } from "../types";
 import { performTransaction } from "../services/transactionService";
-import { useAppDispatch } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { updateStock } from "../store/stockSlice";
 
 export const useTransactionFlow = () => {
   const dispatch = useAppDispatch();
+
+  const { masterData } = useAppSelector((state) => state.stock);
 
   const [isOpen, setIsOpen] = useState(false);
   const [txType, setTxType] = useState<"IN" | "OUT">("IN");
@@ -23,10 +25,10 @@ export const useTransactionFlow = () => {
   };
 
   const handleSubmit = (amount: number, department?: Department) => {
-    if (!targetId) return;
+    if (!targetId || !masterData) return;
 
     const delta = txType === "IN" ? amount : -amount;
-    const result = performTransaction(targetId, delta, department);
+    const result = performTransaction(targetId, delta, masterData, department);
 
     dispatch(
       updateStock({

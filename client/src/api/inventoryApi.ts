@@ -1,13 +1,38 @@
-import { MasterData, Transaction } from '../types';
-import { MOCK_MASTER_DATA } from '../constants';
+import { MasterData, Transaction, ColorApiResponse } from "../types";
+import { MOCK_MASTER_DATA } from "../constants";
 
-const STORAGE_KEY_STOCK = 'connector_stock_data';
-const STORAGE_KEY_TX = 'connector_transactions';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
+const STORAGE_KEY_STOCK = "connector_stock_data";
+const STORAGE_KEY_TX = "connector_transactions";
+
+export const fetchColors = async (): Promise<Record<string, string>> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/cors`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch colors");
+    }
+    const data: ColorApiResponse[] = await response.json();
+
+    const colorMap: Record<string, string> = {};
+    data.forEach((item) => {
+      colorMap[item.Cor_Id] = item.Cores_UK; // Using UK/English name
+    });
+
+    return colorMap;
+  } catch (error) {
+    console.error("Error fetching colors:", error);
+    return { U: "color?" };
+  }
+};
 
 export const fetchMasterData = async (): Promise<MasterData> => {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(MOCK_MASTER_DATA), 500);
-  });
+  const colors = await fetchColors();
+
+  return {
+    ...MOCK_MASTER_DATA,
+    colors,
+  };
 };
 
 export const getStockMap = (): Record<string, number> => {

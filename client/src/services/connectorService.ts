@@ -1,9 +1,9 @@
-import { Connector, Box, Accessory } from '../types';
-import { MOCK_MASTER_DATA, MOCK_CLIENT_MAP } from '../constants';
+import { Connector, Box, Accessory, MasterData } from '../types';
+import { MOCK_CLIENT_MAP } from '../constants';
 import { getHash, getCoordinates, getClientRefData, getType } from '../utils/inventoryUtils';
 import { getStockMap } from '../api/inventoryApi';
 
-export const parseAccessory = (id: string, stockMap: Record<string, number>): Accessory => {
+export const parseAccessory = (id: string, stockMap: Record<string, number>, masterData: MasterData): Accessory => {
   // ID Format: ConnectorID_ClientRef (e.g., A255PR_8432)
   const parts = id.split('_');
   const connectorId = parts[0];
@@ -16,7 +16,7 @@ export const parseAccessory = (id: string, stockMap: Record<string, number>): Ac
   const clientName = MOCK_CLIENT_MAP[clientRef] || 'Unknown';
 
   const hash = getHash(id);
-  const type = MOCK_MASTER_DATA.accessoryTypes[hash % MOCK_MASTER_DATA.accessoryTypes.length];
+  const type = masterData.accessoryTypes[hash % masterData.accessoryTypes.length];
 
   let stock = stockMap[id];
   if (stock === undefined) {
@@ -34,7 +34,7 @@ export const parseAccessory = (id: string, stockMap: Record<string, number>): Ac
   };
 };
 
-export const parseConnector = (id: string, stockMap: Record<string, number>): Connector => {
+export const parseConnector = (id: string, stockMap: Record<string, number>, masterData: MasterData): Connector => {
   const posId = id.substring(0, 4);
   const colorCode = id.charAt(4);
   const viasCode = id.charAt(5);
@@ -49,27 +49,27 @@ export const parseConnector = (id: string, stockMap: Record<string, number>): Co
 
   // Generate associated accessories
   const accessoryId = `${id}_${clientData.ref}`;
-  const accessories = [parseAccessory(accessoryId, stockMap)];
+  const accessories = [parseAccessory(accessoryId, stockMap, masterData)];
 
   return {
     id,
     posId,
     colorCode,
     viasCode,
-    colorName: MOCK_MASTER_DATA.colors[colorCode] || 'Unknown',
-    viasName: MOCK_MASTER_DATA.vias[viasCode] || 'Standard',
+    colorName: masterData.colors[colorCode] || 'Unknown',
+    viasName: masterData.vias[viasCode] || 'Standard',
     cv: coords.cv,
     ch: coords.ch,
     clientRef: clientData.ref,
     clientName: clientData.name,
-    type: getType(posId),
-    description: `${MOCK_MASTER_DATA.colors[colorCode] || 'Generic'} / ${MOCK_MASTER_DATA.vias[viasCode] || 'Std'}`,
+    type: getType(posId, masterData),
+    description: `${masterData.colors[colorCode] || 'Generic'} / ${masterData.vias[viasCode] || 'Std'}`,
     stock,
     accessories
   };
 };
 
-export const getBoxDetails = (boxId: string): Box | null => {
+export const getBoxDetails = (boxId: string, masterData: MasterData): Box | null => {
   if (boxId.length !== 4) return null;
   
   const coords = getCoordinates(boxId);
@@ -79,7 +79,7 @@ export const getBoxDetails = (boxId: string): Box | null => {
   const demoVariations = ['PR', 'BS', 'RH', 'GF']; 
   
   demoVariations.forEach(suffix => {
-    connectors.push(parseConnector(boxId + suffix, stockMap));
+    connectors.push(parseConnector(boxId + suffix, stockMap, masterData));
   });
 
   const accessories: Accessory[] = [];
@@ -96,7 +96,7 @@ export const getBoxDetails = (boxId: string): Box | null => {
   };
 };
 
-export const searchByClientRef = (ref: number): Connector[] => {
+export const searchByClientRef = (ref: number, masterData: MasterData): Connector[] => {
   const results: Connector[] = [];
   const stockMap = getStockMap();
 
@@ -106,9 +106,9 @@ export const searchByClientRef = (ref: number): Connector[] => {
   const mockBoxId2 = `B${seed}5`;
 
   // Mock finding 3 connectors for this client
-  results.push(parseConnector(`${mockBoxId1}PR`, stockMap));
-  results.push(parseConnector(`${mockBoxId1}GF`, stockMap));
-  results.push(parseConnector(`${mockBoxId2}BS`, stockMap));
+  results.push(parseConnector(`${mockBoxId1}PR`, stockMap, masterData));
+  results.push(parseConnector(`${mockBoxId1}GF`, stockMap, masterData));
+  results.push(parseConnector(`${mockBoxId2}BS`, stockMap, masterData));
 
   // Override their client ref to match the search (since our parse logic usually derives it from ID)
   return results.map(conn => ({

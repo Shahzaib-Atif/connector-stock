@@ -20,10 +20,10 @@ interface ConnectorViewProps {
 
 const connectorResolver: EntityResolver<Connector> = (
   connectorId,
-  { stockCache }
+  { stockCache, masterData }
 ) => {
-  if (connectorId.length !== 6) return null;
-  return parseConnector(connectorId, stockCache);
+  if (connectorId.length !== 6 || !masterData) return null;
+  return parseConnector(connectorId, stockCache, masterData);
 };
 
 export const ConnectorView: React.FC<ConnectorViewProps> = ({

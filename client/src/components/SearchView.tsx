@@ -3,17 +3,26 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { searchByClientRef } from "../services/connectorService";
 import { Connector } from "../types";
 import { ArrowRight } from "lucide-react";
+import { useAppSelector } from "../store/hooks";
 
 export const SearchView: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const query = searchParams.get("q");
+  const { masterData } = useAppSelector((state) => state.stock);
+
+  const [results, setResults] = React.useState<Connector[]>([]);
+
+  React.useEffect(() => {
+    if (query && /^\d+$/.test(query) && masterData) {
+      const ref = parseInt(query, 10);
+      setResults(searchByClientRef(ref, masterData));
+    }
+  }, [query, masterData]);
 
   if (!query) {
     return <div>No search query provided.</div>;
   }
-
-  const results = searchByClientRef(parseInt(query, 10));
 
   const handleSelectConnector = (c: Connector) => {
     navigate(`/connector/${c.id}`);

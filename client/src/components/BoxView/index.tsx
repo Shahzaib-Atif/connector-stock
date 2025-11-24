@@ -17,9 +17,9 @@ interface BoxViewProps {
   onOpenQR: (id: string) => void;
 }
 
-const boxResolver: EntityResolver<Box> = (boxId) => {
-  if (boxId.length !== 4) return null;
-  return getBoxDetails(boxId);
+const boxResolver: EntityResolver<Box> = (boxId, { masterData }) => {
+  if (boxId.length !== 4 || !masterData) return null;
+  return getBoxDetails(boxId, masterData);
 };
 
 export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {

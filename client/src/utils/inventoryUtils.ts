@@ -17,7 +17,7 @@ export const getClientRefData = (posId: string): { ref: number, name: string } =
   return { ref, name: MOCK_CLIENT_MAP[ref] };
 };
 
-export const getType = (posId: string) => {
+export const getType = (posId: string, masterData: { types: string[] }) => {
   const hash = getHash(posId);
-  return MOCK_MASTER_DATA.types[hash % MOCK_MASTER_DATA.types.length];
+  return masterData.types[hash % masterData.types.length];
 };

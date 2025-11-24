@@ -4,14 +4,18 @@ import { parseAccessory, getBoxDetails } from "../services/connectorService";
 
 export const useScan = () => {
   const navigate = useNavigate();
-  const { stockCache } = useAppSelector((state) => state.stock);
+  const { stockCache, masterData } = useAppSelector((state) => state.stock);
 
   const handleScan = (inputCode: string) => {
+    if (!masterData) {
+      console.warn("Master data not loaded yet");
+      return;
+    }
+
     const code = inputCode.trim();
     const upperCode = code.toUpperCase();
 
     if (/^\d+$/.test(code)) {
-      const ref = parseInt(code, 10);
       if (code.length >= 3) {
         navigate(`/search?q=${code}`);
         return;
@@ -19,12 +23,12 @@ export const useScan = () => {
     }
 
     if (code.includes("_")) {
-      const acc = parseAccessory(code, stockCache);
+      const acc = parseAccessory(code, stockCache, masterData);
       navigate(`/accessory/${acc.id}`);
     } else if (code.length === 6) {
       navigate(`/connector/${upperCode}`);
     } else if (code.length === 4) {
-      const box = getBoxDetails(upperCode);
+      const box = getBoxDetails(upperCode, masterData);
       if (box) {
         navigate(`/box/${upperCode}`);
       } else {

@@ -50,6 +50,12 @@ export interface MasterData {
   accessoryTypes: string[];
 }
 
+export interface ColorApiResponse {
+  Cor_Id: string;
+  CORES: string;
+  Cores_UK: string;
+}
+
 export enum Department {
   ASSEMBLY = 'Assembly Line',
   QUALITY = 'Quality Control',

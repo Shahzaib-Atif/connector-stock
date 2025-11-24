@@ -15,10 +15,10 @@ interface AccessoryViewProps {
 
 const accessoryResolver: EntityResolver<Accessory> = (
   accessoryId,
-  { stockCache }
+  { stockCache, masterData }
 ) => {
-  if (!accessoryId.includes("_")) return null;
-  return parseAccessory(accessoryId, stockCache);
+  if (!accessoryId.includes("_") || !masterData) return null;
+  return parseAccessory(accessoryId, stockCache, masterData);
 };
 
 export const AccessoryView: React.FC<AccessoryViewProps> = ({

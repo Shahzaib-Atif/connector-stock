@@ -1,10 +1,11 @@
-import { Transaction, Connector, Accessory } from '../types';
+import { Transaction, Connector, Accessory, MasterData } from '../types';
 import { getStockMap, saveStockMap, getTransactions, saveTransactions } from '../api/inventoryApi';
 import { parseConnector, parseAccessory } from './connectorService';
 
 export const performTransaction = (
   itemId: string, 
   delta: number, 
+  masterData: MasterData,
   department?: string
 ): { connector: Connector | null, accessory: Accessory | null, transaction: Transaction } => {
   const stockMap = getStockMap();
@@ -12,9 +13,9 @@ export const performTransaction = (
   
   let currentStock = 0;
   if (isAccessory) {
-    currentStock = stockMap[itemId] ?? parseAccessory(itemId, stockMap).stock;
+    currentStock = stockMap[itemId] ?? parseAccessory(itemId, stockMap, masterData).stock;
   } else {
-    currentStock = stockMap[itemId] ?? parseConnector(itemId, stockMap).stock;
+    currentStock = stockMap[itemId] ?? parseConnector(itemId, stockMap, masterData).stock;
   }
   
   const newStock = Math.max(0, currentStock + delta);
@@ -36,8 +37,8 @@ export const performTransaction = (
   saveTransactions(history.slice(0, 100));
 
   return {
-    connector: isAccessory ? null : parseConnector(itemId, stockMap),
-    accessory: isAccessory ? parseAccessory(itemId, stockMap) : null,
+    connector: isAccessory ? null : parseConnector(itemId, stockMap, masterData),
+    accessory: isAccessory ? parseAccessory(itemId, stockMap, masterData) : null,
     transaction: tx
   };
 };
