@@ -4,6 +4,7 @@ import {
   ColorApiResponse,
   ViasApiResponse,
   AccessoryTypeApiResponse,
+  ConnectorTypeApiResponse,
 } from "../types";
 import { MOCK_MASTER_DATA } from "../constants";
 
@@ -70,11 +71,27 @@ export const fetchAccessoryTypes = async (): Promise<string[]> => {
   }
 };
 
+export const fetchConnectorTypes = async (): Promise<string[]> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/connector-types`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch connector types");
+    }
+    const data: ConnectorTypeApiResponse[] = await response.json();
+
+    return data.map((item) => item.Type);
+  } catch (error) {
+    console.error("Error fetching connector types:", error);
+    return MOCK_MASTER_DATA.types;
+  }
+};
+
 export const fetchMasterData = async (): Promise<MasterData> => {
-  const [{ colors, colorsPT }, vias, accessoryTypes] = await Promise.all([
+  const [{ colors, colorsPT }, vias, accessoryTypes, connectorTypes] = await Promise.all([
     fetchColors(),
     fetchVias(),
     fetchAccessoryTypes(),
+    fetchConnectorTypes(),
   ]);
 
   return {
@@ -83,6 +100,7 @@ export const fetchMasterData = async (): Promise<MasterData> => {
     colorsPT,
     vias,
     accessoryTypes,
+    types: connectorTypes,
   };
 };
 

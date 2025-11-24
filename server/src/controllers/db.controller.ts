@@ -19,4 +19,9 @@ export class DBController {
   async getAccessoryTypes() {
     return await this.dbService.getAccessoryTypes();
   }
+
+  @Get('connector-types')
+  async getConnectorTypes() {
+    return await this.dbService.getConnectorTypes();
+  }
 }

@@ -68,6 +68,12 @@ export interface AccessoryTypeApiResponse {
   TypeDescription: string;
 }
 
+export interface ConnectorTypeApiResponse {
+  ID: number;
+  Type: string;
+  Section: string;
+}
+
 export enum Department {
   ASSEMBLY = 'Assembly Line',
   QUALITY = 'Quality Control',

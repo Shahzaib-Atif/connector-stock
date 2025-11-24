@@ -31,4 +31,13 @@ export class DBService {
       return [];
     }
   }
+
+  async getConnectorTypes() {
+    try {
+      return await this.prisma.connectorTypes.findMany();
+    } catch (ex: any) {
+      console.error(ex.message);
+      return [];
+    }
+  }
 }

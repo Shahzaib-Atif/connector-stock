@@ -30,8 +30,8 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
         </div>
       </div>
 
-      {/* Color & Vias */}
-      <div className="grid grid-cols-2 gap-4 mb-4">
+      {/* Color, Vias & Type */}
+      <div className="grid grid-cols-3 gap-4 mb-4">
         {/* Color */}
         <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
           <div className="text-xs text-slate-500 uppercase font-bold mb-1">
@@ -42,7 +42,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
               className="w-3 h-3 rounded-full bg-current shadow-sm"
               style={{ color: connector.colorName.split('(')[1]?.replace(')', '').toLowerCase() || 'gray' }}
             ></span>
-            color: {connector.colorName}
+            {connector.colorName}
           </div>
         </div>
         {/* Vias */}
@@ -51,7 +51,16 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
             Vias
           </div>
           <div className="font-semibold text-slate-200">
-            vias: {connector.viasName}
+            {connector.viasName}
+          </div>
+        </div>
+        {/* Type */}
+        <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
+          <div className="text-xs text-slate-500 uppercase font-bold mb-1">
+            Type
+          </div>
+          <div className="font-semibold text-slate-200">
+            {connector.type}
           </div>
         </div>
       </div>
