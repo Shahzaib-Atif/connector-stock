@@ -11,11 +11,11 @@ export const Login: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === "admin" && password === "password") {
+    if (username === "admin" && password === "1234") {
       dispatch(login({ user: username }));
       setError("");
     } else {
-      setError("Invalid credentials. Try admin / password");
+      setError("Invalid credentials.");
     }
   };
 
@@ -80,10 +80,6 @@ export const Login: React.FC = () => {
             SIGN IN
           </button>
         </form>
-
-        <div className="mt-6 text-center text-xs text-slate-500">
-          Demo Credentials: admin / password
-        </div>
       </div>
     </div>
   );
