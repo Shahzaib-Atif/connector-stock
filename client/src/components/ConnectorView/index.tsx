@@ -1,7 +1,7 @@
 import React from "react";
 import { Wrench, QrCode } from "lucide-react";
 import { Connector } from "../../types";
-import { parseConnector } from "../../services/inventoryService";
+import { parseConnector } from "../../services/connectorService";
 import { CollapsibleSection } from "../common/CollapsibleSection";
 import { InsightCard } from "../InsightCard";
 import { DetailHeader } from "../common/DetailHeader";

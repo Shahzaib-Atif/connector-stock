@@ -1,7 +1,7 @@
 import React from "react";
 import { QrCode } from "lucide-react";
 import { Accessory } from "../types";
-import { parseAccessory } from "../services/inventoryService";
+import { parseAccessory } from "../services/connectorService";
 import { DetailHeader } from "./common/DetailHeader";
 import { TransactionBar } from "./common/TransactionBar";
 import { useInventoryNavigation } from "../hooks/useInventoryNavigation";

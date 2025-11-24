@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Department } from "../types";
-import { performTransaction } from "../services/inventoryService";
+import { performTransaction } from "../services/transactionService";
 import { useAppDispatch } from "../store/hooks";
 import { updateStock } from "../store/stockSlice";
 

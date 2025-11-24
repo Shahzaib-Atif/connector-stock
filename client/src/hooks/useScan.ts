@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
-import { parseAccessory, getBoxDetails } from "../services/inventoryService";
+import { parseAccessory, getBoxDetails } from "../services/connectorService";
 
 export const useScan = () => {
   const navigate = useNavigate();

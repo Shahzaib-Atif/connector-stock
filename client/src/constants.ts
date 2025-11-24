@@ -32,3 +32,25 @@ export const getStaticAttributes = (id: string) => {
 
   return { cv, ch, clientRef, type };
 };
+
+export const MOCK_CLIENT_MAP: Record<number, string> = {
+  8430: 'EXT-Corp',
+  8431: 'AutoSys',
+  8432: 'RoboTech',
+  8433: 'AeroSpaceX',
+  8434: 'MarineDynamics',
+  8435: 'SkyNet Systems'
+};
+
+export const MOCK_MASTER_DATA = {
+  colors: {
+    'P': 'Purple', 'R': 'Red', 'B': 'Blue', 'G': 'Green', 
+    'Y': 'Yellow', 'W': 'White', 'K': 'Black'
+  },
+  vias: {
+    'R': 'Round 2mm', 'S': 'Square 2mm', 'H': 'Hex 4mm', 'F': 'Flat 1mm'
+  },
+  types: ['High Voltage', 'Signal', 'Coaxial', 'Fiber Optic'],
+  clients: MOCK_CLIENT_MAP,
+  accessoryTypes: MOCK_ACCESSORY_TYPES
+};

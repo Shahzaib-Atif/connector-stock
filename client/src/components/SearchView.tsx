@@ -1,6 +1,6 @@
 import React from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { searchByClientRef } from "../services/inventoryService";
+import { searchByClientRef } from "../services/connectorService";
 import { Connector } from "../types";
 import { ArrowRight } from "lucide-react";
 

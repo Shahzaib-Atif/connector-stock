@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 import { MasterData, StockState, StockAction, Transaction } from '../types';
-import { fetchMasterData, getStockMap, getTransactions } from '../services/inventoryService';
+import { fetchMasterData, getStockMap, getTransactions } from '../api/inventoryApi';
 
 const initialState: StockState = {
   masterData: null,

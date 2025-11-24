@@ -1,7 +1,7 @@
 import React from "react";
 import { MapPin, CircuitBoard, Wrench, QrCode } from "lucide-react";
 import { Box } from "../../types";
-import { getBoxDetails } from "../../services/inventoryService";
+import { getBoxDetails } from "../../services/connectorService";
 import { CollapsibleSection } from "../common/CollapsibleSection";
 import { DetailHeader } from "../common/DetailHeader";
 import { InventoryListItem } from "../common/InventoryListItem";

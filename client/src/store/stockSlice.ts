@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { MasterData, Transaction } from '../types';
-import { fetchMasterData, getStockMap, getTransactions } from '../services/inventoryService';
+import { fetchMasterData, getStockMap, getTransactions } from '../api/inventoryApi';
 
 interface StockState {
   masterData: MasterData | null;
