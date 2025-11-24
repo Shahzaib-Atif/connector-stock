@@ -53,7 +53,7 @@ export const parseConnector = (
   const colorCode = id.charAt(4);
   const viasCode = id.charAt(5);
 
-  const coords = getCoordinates(posId);
+  const coords = getCoordinates(posId, masterData);
   const clientData = getClientRefData(posId);
 
   let stock = stockMap[id];
@@ -92,7 +92,7 @@ export const getBoxDetails = (
 ): Box | null => {
   if (boxId.length !== 4) return null;
 
-  const coords = getCoordinates(boxId);
+  const coords = getCoordinates(boxId, masterData);
   const stockMap = getStockMap();
 
   const connectors: Connector[] = [];

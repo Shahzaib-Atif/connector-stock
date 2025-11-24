@@ -24,4 +24,9 @@ export class DBController {
   async getConnectorTypes() {
     return await this.dbService.getConnectorTypes();
   }
+
+  @Get('Cord_CON')
+  async getCord_CON() {
+    return await this.dbService.getCord_CON();
+  }
 }

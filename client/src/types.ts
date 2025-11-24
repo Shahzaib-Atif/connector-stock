@@ -50,6 +50,7 @@ export interface MasterData {
   types: string[];
   clients: Record<number, string>; // ID -> Name mapping
   accessoryTypes: string[];
+  positions: Record<string, { cv: string; ch: string }>;
 }
 
 export interface ColorApiResponse {
@@ -72,6 +73,12 @@ export interface ConnectorTypeApiResponse {
   ID: number;
   Type: string;
   Section: string;
+}
+
+export interface PositionApiResponse {
+  CON: string;
+  CV: string;
+  CH: string;
 }
 
 export enum Department {

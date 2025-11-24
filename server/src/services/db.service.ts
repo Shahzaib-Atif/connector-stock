@@ -40,4 +40,16 @@ export class DBService {
       return [];
     }
   }
+
+  async getCord_CON() {
+    try {
+      return await this.prisma.$queryRaw`
+      Select CON, CV, CH from Cord_CON 
+      WHERE CV is not NULL and CH  is not NULL 
+      `;
+    } catch (ex: any) {
+      console.error(ex.message);
+      return [];
+    }
+  }
 }

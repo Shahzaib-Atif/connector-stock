@@ -5,15 +5,19 @@ import {
   ViasApiResponse,
   AccessoryTypeApiResponse,
   ConnectorTypeApiResponse,
+  PositionApiResponse,
 } from "../types";
-import { MOCK_MASTER_DATA } from "../constants";
+import { MASTER_DATA } from "../constants";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
 const STORAGE_KEY_STOCK = "connector_stock_data";
 const STORAGE_KEY_TX = "connector_transactions";
 
-export const fetchColors = async (): Promise<{ colors: Record<string, string>, colorsPT: Record<string, string> }> => {
+export const fetchColors = async (): Promise<{
+  colors: Record<string, string>;
+  colorsPT: Record<string, string>;
+}> => {
   try {
     const response = await fetch(`${API_BASE_URL}/cors`);
     if (!response.ok) {
@@ -23,10 +27,10 @@ export const fetchColors = async (): Promise<{ colors: Record<string, string>, c
 
     const colors: Record<string, string> = {};
     const colorsPT: Record<string, string> = {};
-    
+
     data.forEach((item) => {
       colors[item.Cor_Id] = item.Cores_UK; // UK/English name
-      colorsPT[item.Cor_Id] = item.CORES;  // Portuguese name
+      colorsPT[item.Cor_Id] = item.CORES; // Portuguese name
     });
 
     return { colors, colorsPT };
@@ -67,7 +71,7 @@ export const fetchAccessoryTypes = async (): Promise<string[]> => {
     return data.map((item) => item.TypeDescription);
   } catch (error) {
     console.error("Error fetching accessory types:", error);
-    return MOCK_MASTER_DATA.accessoryTypes;
+    return MASTER_DATA.accessoryTypes;
   }
 };
 
@@ -82,25 +86,61 @@ export const fetchConnectorTypes = async (): Promise<string[]> => {
     return data.map((item) => item.Type);
   } catch (error) {
     console.error("Error fetching connector types:", error);
-    return MOCK_MASTER_DATA.types;
+    return MASTER_DATA.types;
+  }
+};
+
+export const fetchPositions = async (): Promise<
+  Record<string, { cv: string; ch: string }>
+> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/Cord_CON`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch positions");
+    }
+    const data: PositionApiResponse[] = await response.json();
+
+    const positions: Record<string, { cv: string; ch: string }> = {};
+    data.forEach((item) => {
+      if (item.CON) {
+        const key = item.CON.trim();
+        positions[key] = {
+          cv: String(item.CV).trim(),
+          ch: String(item.CH).trim(),
+        };
+      }
+    });
+
+    return positions;
+  } catch (error) {
+    console.error("Error fetching positions:", error);
+    return {};
   }
 };
 
 export const fetchMasterData = async (): Promise<MasterData> => {
-  const [{ colors, colorsPT }, vias, accessoryTypes, connectorTypes] = await Promise.all([
+  const [
+    { colors, colorsPT },
+    vias,
+    accessoryTypes,
+    connectorTypes,
+    positions,
+  ] = await Promise.all([
     fetchColors(),
     fetchVias(),
     fetchAccessoryTypes(),
     fetchConnectorTypes(),
+    fetchPositions(),
   ]);
 
   return {
-    ...MOCK_MASTER_DATA,
+    ...MASTER_DATA,
     colors,
     colorsPT,
     vias,
     accessoryTypes,
     types: connectorTypes,
+    positions,
   };
 };
 
