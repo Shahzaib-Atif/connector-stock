@@ -56,6 +56,11 @@ export interface ColorApiResponse {
   Cores_UK: string;
 }
 
+export interface ViasApiResponse {
+  QtdVias: number;
+  ContagemVias: string;
+}
+
 export enum Department {
   ASSEMBLY = 'Assembly Line',
   QUALITY = 'Quality Control',

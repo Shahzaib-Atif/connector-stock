@@ -39,9 +39,8 @@ model ConnectorTypes {
 }
 
 model ContagemNumVias {
-  ID           Int     @unique(map: "ContagemNumVias_UNIQUE") @default(autoincrement())
-  QtdVias      Int?
-  ContagemVias String? @db.VarChar(100)
+  QtdVias      Int    @unique(map: "ContagemNumVias_UNIQUE")
+  ContagemVias String @db.VarChar(100)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.

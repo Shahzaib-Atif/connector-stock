@@ -1,4 +1,9 @@
-import { MasterData, Transaction, ColorApiResponse } from "../types";
+import {
+  MasterData,
+  Transaction,
+  ColorApiResponse,
+  ViasApiResponse,
+} from "../types";
 import { MOCK_MASTER_DATA } from "../constants";
 
 const API_BASE_URL =
@@ -26,12 +31,33 @@ export const fetchColors = async (): Promise<Record<string, string>> => {
   }
 };
 
+export const fetchVias = async (): Promise<Record<string, string>> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/vias`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch vias");
+    }
+    const data: ViasApiResponse[] = await response.json();
+
+    const viasMap: Record<string, string> = {};
+    data.forEach((item) => {
+      viasMap[item.ContagemVias] = String(item.QtdVias);
+    });
+
+    return viasMap;
+  } catch (error) {
+    console.error("Error fetching vias:", error);
+    return { "0": "vias?" };
+  }
+};
+
 export const fetchMasterData = async (): Promise<MasterData> => {
-  const colors = await fetchColors();
+  const [colors, vias] = await Promise.all([fetchColors(), fetchVias()]);
 
   return {
     ...MOCK_MASTER_DATA,
     colors,
+    vias,
   };
 };
 

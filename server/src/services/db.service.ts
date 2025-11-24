@@ -13,4 +13,13 @@ export class DBService {
       return [];
     }
   }
+
+  async getVias() {
+    try {
+      return await this.prisma.contagemNumVias.findMany();
+    } catch (ex: any) {
+      console.error(ex.message);
+      return [];
+    }
+  }
 }

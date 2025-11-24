@@ -9,4 +9,9 @@ export class DBController {
   async getCors() {
     return await this.dbService.getCors();
   }
+
+  @Get('vias')
+  async getVias() {
+    return await this.dbService.getVias();
+  }
 }
