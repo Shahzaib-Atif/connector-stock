@@ -52,4 +52,23 @@ export class DBService {
       return [];
     }
   }
+
+  async getReferencias() {
+    try {
+      return await this.prisma.referencias_test.findMany({
+        select: {
+          Pos_ID: true,
+          Cor: true,
+          Vias: true,
+          CODIVMAC: true,
+          ConnType: true,
+          Fabricante: true,
+          Refabricante: true,
+        },
+      });
+    } catch (ex: any) {
+      console.error(ex.message);
+      return [];
+    }
+  }
 }

@@ -29,4 +29,9 @@ export class DBController {
   async getCord_CON() {
     return await this.dbService.getCord_CON();
   }
+
+  @Get('Referencias')
+  async getReferencias() {
+    return await this.dbService.getReferencias();
+  }
 }

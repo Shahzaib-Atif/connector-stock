@@ -2,7 +2,7 @@ export interface Accessory {
   id: string;        // e.g., A255PR_1024
   connectorId: string; // e.g. A255PR
   posId: string;     // e.g. A255
-  clientRef: number; // e.g. 1024
+  clientRef: string; // e.g. "1024"
   clientName: string; // e.g. AutoSys
   type: string;      // e.g. "Dust Cap"
   stock: number;
@@ -18,7 +18,7 @@ export interface Connector {
   viasName: string;
   cv: string;        // Vertical Coordinate
   ch: string;        // Horizontal Coordinate
-  clientRef: number; // Numeric Reference
+  clientRef: string; // String Reference
   clientName: string; // Resolved Name
   type: string;
   description: string;
@@ -48,9 +48,10 @@ export interface MasterData {
   colorsPT: Record<string, string>;
   vias: Record<string, string>;
   types: string[];
-  clients: Record<number, string>; // ID -> Name mapping
+  clients: Record<string, string>; // ID -> Name mapping
   accessoryTypes: string[];
   positions: Record<string, { cv: string; ch: string }>;
+  references: Record<string, ConnectorReferenceApiResponse>;
 }
 
 export interface ColorApiResponse {
@@ -79,6 +80,16 @@ export interface PositionApiResponse {
   CON: string;
   CV: string;
   CH: string;
+}
+
+export interface ConnectorReferenceApiResponse {
+  Pos_ID: string;
+  Cor: string;
+  Vias: string;
+  CODIVMAC: string;
+  ConnType: string;
+  Fabricante: string | null;
+  Refabricante: string | null;
 }
 
 export enum Department {

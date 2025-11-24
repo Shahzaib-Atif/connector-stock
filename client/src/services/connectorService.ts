@@ -1,10 +1,7 @@
 import { Connector, Box, Accessory, MasterData } from "../types";
-import { MOCK_CLIENT_MAP } from "../constants";
 import {
   getHash,
   getCoordinates,
-  getClientRefData,
-  getType,
 } from "../utils/inventoryUtils";
 import { getStockMap } from "../api/inventoryApi";
 
@@ -18,11 +15,10 @@ export const parseAccessory = (
   const connectorId = parts[0];
 
   const posId = connectorId.substring(0, 4);
-  const derivedClient = getClientRefData(posId);
-
+  
   // Handle numeric ref in ID if present
-  const clientRef = parts[1] ? parseInt(parts[1], 10) : derivedClient.ref;
-  const clientName = MOCK_CLIENT_MAP[clientRef] || "Unknown";
+  const clientRef = parts[1] || "";
+  const clientName = masterData.clients[clientRef] || "Unknown";
 
   const hash = getHash(id);
   const type =
@@ -49,20 +45,29 @@ export const parseConnector = (
   stockMap: Record<string, number>,
   masterData: MasterData
 ): Connector => {
-  const posId = id.substring(0, 4);
-  const colorCode = id.charAt(4);
-  const viasCode = id.charAt(5);
+  const reference = masterData.references?.[id];
+  
+  // If reference is not found, we can't reliably determine details without mock logic.
+  // We will return a basic object with "Unknown" values where data is missing.
+  
+  const posId = reference?.Pos_ID || id.substring(0, 4);
+  const colorCode = reference?.Cor || id.charAt(4);
+  const viasCode = reference?.Vias || id.charAt(5);
+  const type = reference?.ConnType || "Unknown";
+  const clientName = reference?.Fabricante || "Unknown";
+  const clientRef = reference?.Refabricante || "";
 
   const coords = getCoordinates(posId, masterData);
-  const clientData = getClientRefData(posId);
 
   let stock = stockMap[id];
   if (stock === undefined) {
-    stock = getHash(id) % 150;
+    stock = 0; // Default to 0 stock if not found
   }
 
   // Generate associated accessories
-  const accessoryId = `${id}_${clientData.ref}`;
+  // Note: Accessories are still somewhat mocked as we don't have a full accessory API yet,
+  // but we link them to the real client ref.
+  const accessoryId = `${id}_${clientRef}`;
   const accessories = [parseAccessory(accessoryId, stockMap, masterData)];
 
   return {
@@ -75,9 +80,9 @@ export const parseConnector = (
     viasName: masterData.vias[viasCode] || "Standard",
     cv: coords.cv,
     ch: coords.ch,
-    clientRef: clientData.ref,
-    clientName: clientData.name,
-    type: getType(posId, masterData),
+    clientRef,
+    clientName,
+    type,
     description: `${masterData.colors[colorCode] || "Generic"} / ${
       masterData.vias[viasCode] || "Std"
     }`,
@@ -96,11 +101,17 @@ export const getBoxDetails = (
   const stockMap = getStockMap();
 
   const connectors: Connector[] = [];
-  const demoVariations = ["PR", "BS", "RH", "GF"];
+  
+  // If we have real references, find all connectors that belong to this box (Pos_ID matches boxId)
+  if (masterData.references) {
+    Object.values(masterData.references).forEach(ref => {
+      if (ref.Pos_ID === boxId) {
+        connectors.push(parseConnector(ref.CODIVMAC, stockMap, masterData));
+      }
+    });
+  }
 
-  demoVariations.forEach((suffix) => {
-    connectors.push(parseConnector(boxId + suffix, stockMap, masterData));
-  });
+  // No fallback to demo variations. If no connectors found, return empty list.
 
   const accessories: Accessory[] = [];
   connectors.forEach((conn) => {
@@ -117,26 +128,23 @@ export const getBoxDetails = (
 };
 
 export const searchByClientRef = (
-  ref: number,
+  ref: string,
   masterData: MasterData
 ): Connector[] => {
   const results: Connector[] = [];
   const stockMap = getStockMap();
 
-  // Generate deterministic mock results based on the Ref
-  const seed = ref % 100;
-  const mockBoxId1 = `A${seed}0`;
-  const mockBoxId2 = `B${seed}5`;
+  // Search in real references first
+  if (masterData.references) {
+    Object.values(masterData.references).forEach(refItem => {
+      // Check if Refabricante matches the search ref
+      if (refItem.Refabricante && refItem.Refabricante === ref) {
+        results.push(parseConnector(refItem.CODIVMAC, stockMap, masterData));
+      }
+    });
+  }
 
-  // Mock finding 3 connectors for this client
-  results.push(parseConnector(`${mockBoxId1}PR`, stockMap, masterData));
-  results.push(parseConnector(`${mockBoxId1}GF`, stockMap, masterData));
-  results.push(parseConnector(`${mockBoxId2}BS`, stockMap, masterData));
+  // No fallback to mock results.
 
-  // Override their client ref to match the search (since our parse logic usually derives it from ID)
-  return results.map((conn) => ({
-    ...conn,
-    clientRef: ref,
-    clientName: MOCK_CLIENT_MAP[ref] || "Unknown",
-  }));
+  return results;
 };

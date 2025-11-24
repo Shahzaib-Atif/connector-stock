@@ -46,6 +46,6 @@ export const MASTER_DATA = {
   colors: {},
   vias: {},
   types: [],
-  clients: MOCK_CLIENT_MAP,
+  clients: {},
   accessoryTypes: MOCK_ACCESSORY_TYPES,
 };

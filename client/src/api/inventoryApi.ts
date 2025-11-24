@@ -6,6 +6,7 @@ import {
   AccessoryTypeApiResponse,
   ConnectorTypeApiResponse,
   PositionApiResponse,
+  ConnectorReferenceApiResponse,
 } from "../types";
 import { MASTER_DATA } from "../constants";
 
@@ -118,6 +119,30 @@ export const fetchPositions = async (): Promise<
   }
 };
 
+export const fetchReferences = async (): Promise<
+  Record<string, ConnectorReferenceApiResponse>
+> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/Referencias`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch references");
+    }
+    const data: ConnectorReferenceApiResponse[] = await response.json();
+
+    const references: Record<string, ConnectorReferenceApiResponse> = {};
+    data.forEach((item) => {
+      if (item.CODIVMAC) {
+        references[item.CODIVMAC.trim()] = item;
+      }
+    });
+
+    return references;
+  } catch (error) {
+    console.error("Error fetching references:", error);
+    return {};
+  }
+};
+
 export const fetchMasterData = async (): Promise<MasterData> => {
   const [
     { colors, colorsPT },
@@ -125,12 +150,14 @@ export const fetchMasterData = async (): Promise<MasterData> => {
     accessoryTypes,
     connectorTypes,
     positions,
+    references,
   ] = await Promise.all([
     fetchColors(),
     fetchVias(),
     fetchAccessoryTypes(),
     fetchConnectorTypes(),
     fetchPositions(),
+    fetchReferences(),
   ]);
 
   return {
@@ -141,6 +168,7 @@ export const fetchMasterData = async (): Promise<MasterData> => {
     accessoryTypes,
     types: connectorTypes,
     positions,
+    references,
   };
 };
 
