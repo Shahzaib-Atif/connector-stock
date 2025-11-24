@@ -20,7 +20,7 @@ function ConnectorInfo({ liveStock, conn }: Props) {
       <div>
         <div className="font-mono font-bold text-white text-lg">{conn.id}</div>
         <div className="text-sm text-slate-400">
-          {conn.colorName} • {conn.viasName}
+          {conn.colorNamePT} • {conn.viasName}
         </div>
       </div>
     </>

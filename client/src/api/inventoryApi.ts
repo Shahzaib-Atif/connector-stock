@@ -11,7 +11,7 @@ const API_BASE_URL =
 const STORAGE_KEY_STOCK = "connector_stock_data";
 const STORAGE_KEY_TX = "connector_transactions";
 
-export const fetchColors = async (): Promise<Record<string, string>> => {
+export const fetchColors = async (): Promise<{ colors: Record<string, string>, colorsPT: Record<string, string> }> => {
   try {
     const response = await fetch(`${API_BASE_URL}/cors`);
     if (!response.ok) {
@@ -19,15 +19,18 @@ export const fetchColors = async (): Promise<Record<string, string>> => {
     }
     const data: ColorApiResponse[] = await response.json();
 
-    const colorMap: Record<string, string> = {};
+    const colors: Record<string, string> = {};
+    const colorsPT: Record<string, string> = {};
+    
     data.forEach((item) => {
-      colorMap[item.Cor_Id] = item.Cores_UK; // Using UK/English name
+      colors[item.Cor_Id] = item.Cores_UK; // UK/English name
+      colorsPT[item.Cor_Id] = item.CORES;  // Portuguese name
     });
 
-    return colorMap;
+    return { colors, colorsPT };
   } catch (error) {
     console.error("Error fetching colors:", error);
-    return { U: "color?" };
+    return { colors: { U: "color?" }, colorsPT: { U: "color?" } };
   }
 };
 
@@ -52,11 +55,12 @@ export const fetchVias = async (): Promise<Record<string, string>> => {
 };
 
 export const fetchMasterData = async (): Promise<MasterData> => {
-  const [colors, vias] = await Promise.all([fetchColors(), fetchVias()]);
+  const [{ colors, colorsPT }, vias] = await Promise.all([fetchColors(), fetchVias()]);
 
   return {
     ...MOCK_MASTER_DATA,
     colors,
+    colorsPT,
     vias,
   };
 };

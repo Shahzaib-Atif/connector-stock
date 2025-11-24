@@ -14,6 +14,7 @@ export interface Connector {
   colorCode: string; // e.g., P
   viasCode: string;  // e.g., R
   colorName: string; 
+  colorNamePT: string;
   viasName: string;
   cv: string;        // Vertical Coordinate
   ch: string;        // Horizontal Coordinate
@@ -44,6 +45,7 @@ export interface Transaction {
 
 export interface MasterData {
   colors: Record<string, string>;
+  colorsPT: Record<string, string>;
   vias: Record<string, string>;
   types: string[];
   clients: Record<number, string>; // ID -> Name mapping

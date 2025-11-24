@@ -40,9 +40,9 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
           <div className="font-semibold text-slate-200 flex items-center gap-2">
             <span
               className="w-3 h-3 rounded-full bg-current shadow-sm"
-              style={{ color: connector.colorName.toLowerCase() }}
+              style={{ color: connector.colorName.split('(')[1]?.replace(')', '').toLowerCase() || 'gray' }}
             ></span>
-            {connector.colorName}
+            color: {connector.colorName}
           </div>
         </div>
         {/* Vias */}
@@ -51,7 +51,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
             Vias
           </div>
           <div className="font-semibold text-slate-200">
-            {connector.viasName}
+            vias: {connector.viasName}
           </div>
         </div>
       </div>
