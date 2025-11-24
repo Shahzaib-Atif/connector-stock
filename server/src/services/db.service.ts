@@ -22,4 +22,13 @@ export class DBService {
       return [];
     }
   }
+
+  async getAccessoryTypes() {
+    try {
+      return await this.prisma.accessoryTypes.findMany();
+    } catch (ex: any) {
+      console.error(ex.message);
+      return [];
+    }
+  }
 }

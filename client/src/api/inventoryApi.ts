@@ -3,6 +3,7 @@ import {
   Transaction,
   ColorApiResponse,
   ViasApiResponse,
+  AccessoryTypeApiResponse,
 } from "../types";
 import { MOCK_MASTER_DATA } from "../constants";
 
@@ -54,14 +55,34 @@ export const fetchVias = async (): Promise<Record<string, string>> => {
   }
 };
 
+export const fetchAccessoryTypes = async (): Promise<string[]> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/accessory-types`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch accessory types");
+    }
+    const data: AccessoryTypeApiResponse[] = await response.json();
+
+    return data.map((item) => item.TypeDescription);
+  } catch (error) {
+    console.error("Error fetching accessory types:", error);
+    return MOCK_MASTER_DATA.accessoryTypes;
+  }
+};
+
 export const fetchMasterData = async (): Promise<MasterData> => {
-  const [{ colors, colorsPT }, vias] = await Promise.all([fetchColors(), fetchVias()]);
+  const [{ colors, colorsPT }, vias, accessoryTypes] = await Promise.all([
+    fetchColors(),
+    fetchVias(),
+    fetchAccessoryTypes(),
+  ]);
 
   return {
     ...MOCK_MASTER_DATA,
     colors,
     colorsPT,
     vias,
+    accessoryTypes,
   };
 };
 

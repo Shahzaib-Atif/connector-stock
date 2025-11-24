@@ -63,6 +63,11 @@ export interface ViasApiResponse {
   ContagemVias: string;
 }
 
+export interface AccessoryTypeApiResponse {
+  ID: number;
+  TypeDescription: string;
+}
+
 export enum Department {
   ASSEMBLY = 'Assembly Line',
   QUALITY = 'Quality Control',

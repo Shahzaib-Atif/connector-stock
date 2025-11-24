@@ -10,10 +10,8 @@ datasource db {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model AccessoryTypes {
-  ID              Int    @default(autoincrement())
+  ID              Int    @unique(map: "AccessoryTypes_UNIQUE") @default(autoincrement())
   TypeDescription String @db.VarChar(100)
-
-  @@ignore
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.

@@ -14,4 +14,9 @@ export class DBController {
   async getVias() {
     return await this.dbService.getVias();
   }
+
+  @Get('accessory-types')
+  async getAccessoryTypes() {
+    return await this.dbService.getAccessoryTypes();
+  }
 }
