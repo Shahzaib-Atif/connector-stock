@@ -8,13 +8,11 @@ export const getCoordinates = (posId: string, masterData?: { positions: Record<s
     return masterData.positions[posId];
   }
   
-  console.warn(`Missing real coordinates for ${posId}. Available keys: ${Object.keys(masterData?.positions || {}).length}`);
+  // console.warn(`Missing real coordinates for ${posId}. Available keys: ${Object.keys(masterData?.positions || {}).length}`);
   
-  const hash = getHash(posId);
-  console.warn(`Using mock coordinates for ${posId}`);
   return {
-    cv: `V-${(hash % 90) + 10}`,
-    ch: `H-${(hash % 50) + 10}`
+    cv: '?',
+    ch: '?'
   };
 };
 
