@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+import { ApiOperation } from '@nestjs/swagger';
 import { DBService } from 'src/services/db.service';
 
 @Controller()
@@ -6,6 +7,7 @@ export class DBController {
   constructor(private readonly dbService: DBService) {}
 
   @Get('cors')
+  @ApiOperation({ summary: 'Get all colors' })
   async getCors() {
     return await this.dbService.getCors();
   }
