@@ -5,10 +5,11 @@ import { AppController } from 'src/controllers/app.controller';
 import { DBService } from 'src/services/db.service';
 import { DBController } from 'src/controllers/db.controller';
 import { PrismaService } from 'prisma/prisma.service';
+import { ImageController } from './controllers/image.controller';
 
 @Module({
   imports: [ConfigModule.forRoot()],
-  controllers: [AppController, DBController],
+  controllers: [AppController, DBController, ImageController],
   providers: [AppService, DBService, PrismaService],
 })
 export class AppModule {}
