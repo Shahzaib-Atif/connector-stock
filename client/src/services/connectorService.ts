@@ -148,14 +148,12 @@ export const searchConnectors = (
     if (conn) results.push(conn);
   }
 
-  // 2. Box ID Match (using positions key)
-  // If the query matches a known Position ID (Box), find all connectors in that box.
+  // 2. Box ID Match: Find all connectors in matching box
   if (masterData.positions && masterData.positions[normalizedQuery]) {
-    // We found a valid Box ID. Now we need to find connectors in this box.
-    // Since we don't have a direct box->connectors map, we filter references.
+    // Filter references to find connectors in this box
     if (masterData.references) {
       Object.values(masterData.references).forEach((refItem) => {
-        // Avoid duplicates if we already found it by ID (unlikely if query is 4 chars and ID is 6, but good practice)
+        // Skip if already found by direct ID match
         if (refItem.CODIVMAC === normalizedQuery) return;
 
         if (refItem.Pos_ID === normalizedQuery) {

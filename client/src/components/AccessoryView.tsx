@@ -14,18 +14,8 @@ interface AccessoryViewProps {
 }
 
 /**
- * RESOLVER PATTERN EXPLANATION:
- * 
- * The accessoryResolver is a function that converts an accessory ID (from the URL)
- * into a full Accessory object with all its details.
- * 
- * Flow:
- * 1. User navigates to /accessory/E143P1_P01129373_CLIPS
- * 2. useEntityDetails hook extracts "E143P1_P01129373_CLIPS" from the URL
- * 3. It calls this resolver with that ID
- * 4. Resolver searches masterData.accessories (from API) to find the matching raw data
- * 5. Once found, it passes the raw API data to parseAccessory to create a clean Accessory object
- * 6. The Accessory object is returned and used in the component
+ * Converts accessory ID from URL into full Accessory object.
+ * Searches masterData.accessories, then parses matching raw API data.
  */
 const accessoryResolver: EntityResolver<Accessory> = (
   accessoryId,              // e.g., "E143P1_P01129373_CLIPS"
@@ -34,8 +24,7 @@ const accessoryResolver: EntityResolver<Accessory> = (
   // Basic validation: ID must have underscores and we need master data
   if (!accessoryId.includes("_") || !masterData || !masterData.accessories) return null;
   
-  // Search through all accessories from the API to find the one matching this ID
-  // We reconstruct the ID format (ConnName_RefClient_RefDV) to match
+  // Find accessory by reconstructing ID format: ConnName_RefClient_RefDV
   const apiAccessory = masterData.accessories.find((acc) => {
     const connName = acc.ConnName || "";    // e.g., "E143P1"
     const refClient = acc.RefClient || "";  // e.g., "P01129373"
@@ -55,10 +44,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
   onTransaction,
   onOpenQR,
 }) => {
-  // useEntityDetails is a shared hook that:
-  // 1. Gets the ID from the URL (e.g., /accessory/E143P1_P01129373_CLIPS)
-  // 2. Calls our resolver function above to convert ID -> Accessory object
-  // 3. Returns the accessory object and stockCache for us to use
+  // Gets ID from URL, calls resolver to convert ID to Accessory object
   const { entity: accessory, stockCache } =
     useEntityDetails<Accessory>(accessoryResolver);
   const { goBack } = useInventoryNavigation();
