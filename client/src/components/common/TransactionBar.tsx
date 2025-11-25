@@ -37,7 +37,7 @@ export const TransactionBar: React.FC<TransactionBarProps> = ({
         </button>
         <button
           onClick={onAdd}
-          className={`${defaultButtonClass} bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/50`}
+          className={`${defaultButtonClass} btn-primary shadow-lg shadow-blue-900/50`}
         >
           {addIcon ?? <Plus className="w-5 h-5" />}
           {addLabel}
@@ -46,4 +46,3 @@ export const TransactionBar: React.FC<TransactionBarProps> = ({
     </div>
   );
 };
-

@@ -73,7 +73,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           />
           <button
             onClick={() => onScan(searchQuery)}
-            className="bg-blue-500 hover:bg-blue-400 text-white p-3 rounded-xl transition-colors"
+            className="btn-primary p-3 rounded-xl transition-colors"
           >
             <Search className="w-6 h-6" />
           </button>

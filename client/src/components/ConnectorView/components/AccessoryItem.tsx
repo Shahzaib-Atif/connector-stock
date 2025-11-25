@@ -53,7 +53,7 @@ export const AccessoryItem: React.FC<Props> = ({
           </span>
           <button
             onClick={() => onTransaction("IN", accessory.id)}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-lg btn-primary transition-colors"
           >
             <Plus className="w-4 h-4" />
           </button>
