@@ -1,8 +1,5 @@
 import { Connector, Box, Accessory, MasterData } from "../types";
-import {
-  getHash,
-  getCoordinates,
-} from "../utils/inventoryUtils";
+import { getHash, getCoordinates } from "../utils/inventoryUtils";
 import { getStockMap } from "../api/inventoryApi";
 
 export const parseAccessory = (
@@ -15,7 +12,7 @@ export const parseAccessory = (
   const refClient = apiAccessory.RefClient || "";
   const refDV = apiAccessory.RefDV || "";
   const id = `${connName}_${refClient}_${refDV}`;
-  
+
   const connectorId = connName;
   const posId = connectorId.substring(0, 4);
   const clientRef = refClient;
@@ -47,11 +44,11 @@ export const parseConnector = (
   masterData: MasterData
 ): Connector | null => {
   const reference = masterData.references?.[id];
-  
+
   if (!reference) {
     return null;
   }
-  
+
   const posId = reference.Pos_ID;
   const colorCode = reference.Cor;
   const viasCode = reference.Vias;
@@ -104,13 +101,15 @@ export const getBoxDetails = (
   if (boxId.length !== 4) return null;
 
   const coords = getCoordinates(boxId, masterData);
+  if (!coords) return null;
+
   const stockMap = getStockMap();
 
   const connectors: Connector[] = [];
-  
-  // If we have real references, find all connectors that belong to this box (Pos_ID matches boxId)
+
+  // find all connectors that belong to this box (Pos_ID matches boxId)
   if (masterData.references) {
-    Object.values(masterData.references).forEach(ref => {
+    Object.values(masterData.references).forEach((ref) => {
       if (ref.Pos_ID === boxId) {
         const conn = parseConnector(ref.CODIVMAC, stockMap, masterData);
         if (conn) connectors.push(conn);
@@ -127,8 +126,8 @@ export const getBoxDetails = (
 
   return {
     id: boxId,
-    cv: coords.cv,
-    ch: coords.ch,
+    cv: coords?.cv ?? "?",
+    ch: coords?.ch ?? "?",
     connectors,
     accessories,
   };

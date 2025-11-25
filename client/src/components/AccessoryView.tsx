@@ -1,9 +1,10 @@
 import React from "react";
-import { QrCode } from "lucide-react";
+import { QrCode, Wrench } from "lucide-react";
 import { Accessory } from "../types";
 import { parseAccessory } from "../services/connectorService";
 import { DetailHeader } from "./common/DetailHeader";
 import { TransactionBar } from "./common/TransactionBar";
+import { NotFoundPage } from "./common/NotFoundPage";
 import { useInventoryNavigation } from "../hooks/useInventoryNavigation";
 import { EntityResolver, useEntityDetails } from "../hooks/useEntityDetails";
 import { resolveLiveStock } from "../utils/stock";
@@ -50,7 +51,17 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
   const { goBack } = useInventoryNavigation();
 
   // If the resolver returned null (accessory not found), show error
-  if (!accessory) return <div>Accessory not found</div>;
+  if (!accessory) {
+    return (
+      <NotFoundPage
+        label="Accessory"
+        icon={Wrench}
+        title="Accessory Not Found"
+        message="The accessory you are looking for does not exist in the master data."
+        onBack={goBack}
+      />
+    );
+  }
 
   // Get the current stock, preferring live cached data over the parsed fallback
   const currentStock = resolveLiveStock(

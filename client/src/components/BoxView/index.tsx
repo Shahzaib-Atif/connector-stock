@@ -5,6 +5,7 @@ import { getBoxDetails } from "../../services/connectorService";
 import { CollapsibleSection } from "../common/CollapsibleSection";
 import { DetailHeader } from "../common/DetailHeader";
 import { InventoryListItem } from "../common/InventoryListItem";
+import { NotFoundPage } from "../common/NotFoundPage";
 import { useInventoryNavigation } from "../../hooks/useInventoryNavigation";
 import { EntityResolver, useEntityDetails } from "../../hooks/useEntityDetails";
 import { resolveLiveStock } from "../../utils/stock";
@@ -23,11 +24,22 @@ const boxResolver: EntityResolver<Box> = (boxId, { masterData }) => {
 };
 
 export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
-  // Shared hook supplies resolved box plus cache.
+  // resolve box plus cache.
   const { entity: box, stockCache } = useEntityDetails<Box>(boxResolver);
   const { goBack, goToConnector, goToAccessory } = useInventoryNavigation();
 
-  if (!box) return <div>Box not found</div>;
+  // show not found page if box not found
+  if (!box || box.ch === "?" || box.cv === "?") {
+    return (
+      <NotFoundPage
+        label="Box Storage"
+        icon={MapPin}
+        title="Box Not Found"
+        message="The box you are looking for does not exist in the master data."
+        onBack={goBack}
+      />
+    );
+  }
 
   const handleConnectorScan = (connectorId: string) => {
     goToConnector(connectorId);

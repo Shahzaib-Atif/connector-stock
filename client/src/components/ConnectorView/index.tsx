@@ -6,6 +6,7 @@ import { CollapsibleSection } from "../common/CollapsibleSection";
 import { InsightCard } from "../InsightCard";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
+import { NotFoundPage } from "../common/NotFoundPage";
 import { useInventoryNavigation } from "../../hooks/useInventoryNavigation";
 import { useEntityDetails, EntityResolver } from "../../hooks/useEntityDetails";
 import { resolveLiveStock } from "../../utils/stock";
@@ -37,22 +38,13 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
 
   if (!connector) {
     return (
-      <div className="min-h-screen bg-slate-900 text-slate-200">
-        <DetailHeader
-          label="Connector"
-          title="Not Found"
-          onBack={goBack}
-        />
-        <div className="flex flex-col items-center justify-center h-[60vh] text-center p-8">
-          <div className="bg-slate-800 p-6 rounded-full mb-4">
-            <Wrench className="w-12 h-12 text-slate-600" />
-          </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Connector Not Found</h2>
-          <p className="text-slate-400 max-w-md">
-            The connector you are looking for does not exist in the master data.
-          </p>
-        </div>
-      </div>
+      <NotFoundPage
+        label="Connector"
+        icon={Wrench}
+        title="Connector Not Found"
+        message="The connector you are looking for does not exist in the master data."
+        onBack={goBack}
+      />
     );
   }
 
