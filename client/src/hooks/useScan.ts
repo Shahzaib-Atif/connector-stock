@@ -26,6 +26,7 @@ export const useScan = () => {
 
   const clearError = () => setError(null);
 
+  //#region -- Helper functions
   const handleConnectorNav = (upperCode: string) => {
     const connector = parseConnector(upperCode, {}, masterData);
 
@@ -45,6 +46,7 @@ export const useScan = () => {
       "Invalid Code. Box ID (4 chars) or Connector ID (6 chars) expected."
     );
   };
+  //#endregion
 
   return { handleScan, error, clearError };
 };
