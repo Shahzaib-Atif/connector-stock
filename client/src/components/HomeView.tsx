@@ -23,7 +23,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-800 to-slate-900 text-white relative">
       <a
         href="/"
-        className="absolute top-6 left-6 p-2 text-slate-400 hover:text-white flex items-center gap-2"
+        className="absolute top-3 left-6 p-2 text-slate-400 hover:text-white flex items-center gap-2"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +42,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       <button
         onClick={() => dispatch(logout())}
-        className="absolute top-6 right-6 p-2 text-slate-400 hover:text-white flex items-center gap-2"
+        className="absolute top-3 right-6 p-2 text-slate-400 hover:text-white flex items-center gap-2"
       >
         <span className="text-sm font-mono">{user}</span>
         <LogOut className="w-5 h-5" />
