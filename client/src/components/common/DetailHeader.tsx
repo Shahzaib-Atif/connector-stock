@@ -45,7 +45,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
     <header
       className={`bg-slate-900/80 backdrop-blur-md sticky top-0 z-10 border-b border-slate-800 px-4 py-3 flex items-center justify-between shadow-sm ${className}`}
     >
-      <div className="max-w-4xl mx-auto w-full flex items-center gap-4">
+      <div className="mx-auto w-full flex items-center gap-4">
         <div className="flex items-center gap-2 flex-shrink-0 min-w-[100px]">
           <button
             onClick={onBack}
