@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Search } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { Connector } from '../types';
-import { searchConnectors } from '../services/connectorService';
-import { ConnectorSummary } from './ConnectorView/components/ConnectorSummary';
-import { useAppSelector } from '../store/hooks';
+import React, { useState } from "react";
+import { Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Connector } from "../types";
+import { searchConnectors } from "../services/connectorService";
+import { ConnectorSummary } from "./ConnectorView/components/ConnectorSummary";
+import { useAppSelector } from "../store/hooks";
 
 export const SearchView: React.FC = () => {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState<Connector[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
-  const masterData = useAppSelector(state => state.stock.masterData);
+  const masterData = useAppSelector((state) => state.stock.masterData);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,15 +53,18 @@ export const SearchView: React.FC = () => {
 
         <div className="grid grid-cols-1 gap-4">
           {results.map((connector) => (
-            <div 
+            <div
               key={connector.id}
               onClick={() => onSelectConnector(connector)}
               className="cursor-pointer transition-transform hover:scale-[1.01]"
             >
-              <ConnectorSummary connector={connector} currentStock={connector.stock} />
+              <ConnectorSummary
+                connector={connector}
+                currentStock={connector.stock}
+              />
             </div>
           ))}
-          
+
           {hasSearched && results.length === 0 && (
             <div className="text-center py-12 bg-white rounded-xl border border-dashed border-gray-300">
               <p className="text-gray-500">No connectors found.</p>
