@@ -14,7 +14,6 @@ export const InventoryListItem: React.FC<InventoryListItemProps> = ({
   right,
   onClick,
   interactive = true,
-  className,
 }) => {
   return (
     <div
@@ -27,8 +26,7 @@ export const InventoryListItem: React.FC<InventoryListItemProps> = ({
             "cursor-pointer transition-all",
             "hover:border-blue-500/50 hover:bg-slate-700/50",
             "active:scale-[0.99]",
-          ],
-        className
+          ]
       )}
     >
       <div className="flex items-center gap-4 flex-1">{left}</div>

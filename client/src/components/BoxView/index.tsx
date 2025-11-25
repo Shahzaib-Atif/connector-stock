@@ -105,7 +105,6 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
               <InventoryListItem
                 key={acc.id}
                 onClick={() => handleAccessoryScan(acc.id)}
-                className="hover:border-indigo-500/50 hover:bg-slate-700/50"
                 left={<AccessoryInfo acc={acc} />}
                 right={<StockBadge liveStock={liveStock} />}
               />

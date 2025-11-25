@@ -12,10 +12,8 @@ function AccessoryInfo({ acc }: Props) {
         <Wrench className="w-6 h-6" />
       </div>
       <div>
-        <div className="font-bold text-white">{acc.type}</div>
-        <div className="text-xs font-mono text-slate-400">
-          For {acc.connectorId}
-        </div>
+        <div className="text-white font-mono">type: {acc.type}</div>
+        <div className="font-mono text-slate-400">For {acc.connectorId}</div>
       </div>
     </>
   );
