@@ -6,27 +6,25 @@ import {
 import { getStockMap } from "../api/inventoryApi";
 
 export const parseAccessory = (
-  id: string,
+  apiAccessory: any,
   stockMap: Record<string, number>,
   masterData: MasterData
 ): Accessory => {
-  // ID Format: ConnectorID_ClientRef (e.g., A255PR_8432)
-  const parts = id.split("_");
-  const connectorId = parts[0];
-
-  const posId = connectorId.substring(0, 4);
+  // Construct a unique ID using ConnName, RefClient, and RefDV
+  const connName = apiAccessory.ConnName || "";
+  const refClient = apiAccessory.RefClient || "";
+  const refDV = apiAccessory.RefDV || "";
+  const id = `${connName}_${refClient}_${refDV}`;
   
-  // Handle numeric ref in ID if present
-  const clientRef = parts[1] || "";
+  const connectorId = connName;
+  const posId = connectorId.substring(0, 4);
+  const clientRef = refClient;
   const clientName = masterData.clients[clientRef] || "Unknown";
-
-  const hash = getHash(id);
-  const type =
-    masterData.accessoryTypes[hash % masterData.accessoryTypes.length];
+  const type = apiAccessory.AccessoryType;
 
   let stock = stockMap[id];
   if (stock === undefined) {
-    stock = hash % 50;
+    stock = 0;
   }
 
   return {
@@ -37,6 +35,9 @@ export const parseAccessory = (
     clientName,
     type,
     stock,
+    capotAngle: apiAccessory.CapotAngle || undefined,
+    clipColor: apiAccessory.ClipColor || undefined,
+    refClient: apiAccessory.RefClient || undefined,
   };
 };
 
@@ -65,11 +66,15 @@ export const parseConnector = (
     stock = 0; // Default to 0 stock if not found
   }
 
-  // Generate associated accessories
-  // Note: Accessories are still somewhat mocked as we don't have a full accessory API yet,
-  // but we link them to the real client ref.
-  const accessoryId = `${id}_${clientRef}`;
-  const accessories = [parseAccessory(accessoryId, stockMap, masterData)];
+  // Find associated accessories from the real API data
+  const accessories: Accessory[] = [];
+  if (masterData.accessories) {
+    masterData.accessories.forEach((acc) => {
+      if (acc.ConnName === id) {
+        accessories.push(parseAccessory(acc, stockMap, masterData));
+      }
+    });
+  }
 
   return {
     id,

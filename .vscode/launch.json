@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Vite: Chrome Debug",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/client",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "vite:///*": "${webRoot}/*",
+                "*/src/*": "${webRoot}/src/*",
+                "webpack:///*": "${webRoot}/*",
+                "/*": "${webRoot}/*"
+            }
+        }
+    ]
+}

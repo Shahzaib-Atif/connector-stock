@@ -8,7 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model AccessoryTypes {
   ID              Int    @unique(map: "AccessoryTypes_UNIQUE") @default(autoincrement())
   TypeDescription String @db.VarChar(100)

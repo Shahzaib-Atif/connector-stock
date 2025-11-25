@@ -7,6 +7,7 @@ import {
   ConnectorTypeApiResponse,
   PositionApiResponse,
   ConnectorReferenceApiResponse,
+  AccessoryApiResponse,
 } from "../types";
 import { MASTER_DATA } from "../constants";
 
@@ -143,33 +144,54 @@ export const fetchReferences = async (): Promise<
   }
 };
 
-export const fetchMasterData = async (): Promise<MasterData> => {
-  const [
-    { colors, colorsPT },
-    vias,
-    accessoryTypes,
-    connectorTypes,
-    positions,
-    references,
-  ] = await Promise.all([
-    fetchColors(),
-    fetchVias(),
-    fetchAccessoryTypes(),
-    fetchConnectorTypes(),
-    fetchPositions(),
-    fetchReferences(),
-  ]);
+export const fetchAccessories = async (): Promise<AccessoryApiResponse[]> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/Accessories`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch accessories");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching accessories:", error);
+    return [];
+  }
+};
 
-  return {
-    ...MASTER_DATA,
-    colors,
-    colorsPT,
-    vias,
-    accessoryTypes,
-    types: connectorTypes,
-    positions,
-    references,
-  };
+export const fetchMasterData = async (): Promise<MasterData> => {
+  try {
+    const [
+      { colors, colorsPT },
+      vias,
+      accessoryTypes,
+      connectorTypes,
+      positions,
+      references,
+      accessories,
+    ] = await Promise.all([
+      fetchColors(),
+      fetchVias(),
+      fetchAccessoryTypes(),
+      fetchConnectorTypes(),
+      fetchPositions(),
+      fetchReferences(),
+      fetchAccessories(),
+    ]);
+
+    return {
+      colors,
+      colorsPT,
+      vias,
+      accessoryTypes,
+      types: connectorTypes,
+      positions,
+      references,
+      clients: {}, // Deprecated
+      accessories,
+    };
+  } catch (error) {
+    console.error("Error fetching master data:", error);
+    throw error;
+  }
 };
 
 export const getStockMap = (): Record<string, number> => {

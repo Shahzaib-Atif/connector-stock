@@ -34,4 +34,9 @@ export class DBController {
   async getReferencias() {
     return await this.dbService.getReferencias();
   }
+
+  @Get('Accessories')
+  async getAccessories() {
+    return await this.dbService.getAccessories();
+  }
 }

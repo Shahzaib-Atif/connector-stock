@@ -6,6 +6,9 @@ export interface Accessory {
   clientName: string; // e.g. AutoSys
   type: string;      // e.g. "Dust Cap"
   stock: number;
+  capotAngle?: string;
+  clipColor?: string;
+  refClient?: string;
 }
 
 export interface Connector {
@@ -52,6 +55,7 @@ export interface MasterData {
   accessoryTypes: string[];
   positions: Record<string, { cv: string; ch: string }>;
   references: Record<string, ConnectorReferenceApiResponse>;
+  accessories: AccessoryApiResponse[];
 }
 
 export interface ColorApiResponse {
@@ -90,6 +94,16 @@ export interface ConnectorReferenceApiResponse {
   ConnType: string;
   Fabricante: string | null;
   Refabricante: string | null;
+}
+
+export interface AccessoryApiResponse {
+  ConnName: string;
+  AccessoryType: string;
+  RefClient: string | null;
+  RefDV: string | null;
+  Qty: number | null;
+  CapotAngle: string | null;
+  ClipColor: string | null;
 }
 
 export enum Department {

@@ -13,26 +13,60 @@ interface AccessoryViewProps {
   onOpenQR: (id: string) => void;
 }
 
+/**
+ * RESOLVER PATTERN EXPLANATION:
+ * 
+ * The accessoryResolver is a function that converts an accessory ID (from the URL)
+ * into a full Accessory object with all its details.
+ * 
+ * Flow:
+ * 1. User navigates to /accessory/E143P1_P01129373_CLIPS
+ * 2. useEntityDetails hook extracts "E143P1_P01129373_CLIPS" from the URL
+ * 3. It calls this resolver with that ID
+ * 4. Resolver searches masterData.accessories (from API) to find the matching raw data
+ * 5. Once found, it passes the raw API data to parseAccessory to create a clean Accessory object
+ * 6. The Accessory object is returned and used in the component
+ */
 const accessoryResolver: EntityResolver<Accessory> = (
-  accessoryId,
-  { stockCache, masterData }
+  accessoryId,              // e.g., "E143P1_P01129373_CLIPS"
+  { stockCache, masterData } // Data from Redux store
 ) => {
-  if (!accessoryId.includes("_") || !masterData) return null;
-  return parseAccessory(accessoryId, stockCache, masterData);
+  // Basic validation: ID must have underscores and we need master data
+  if (!accessoryId.includes("_") || !masterData || !masterData.accessories) return null;
+  
+  // Search through all accessories from the API to find the one matching this ID
+  // We reconstruct the ID format (ConnName_RefClient_RefDV) to match
+  const apiAccessory = masterData.accessories.find((acc) => {
+    const connName = acc.ConnName || "";    // e.g., "E143P1"
+    const refClient = acc.RefClient || "";  // e.g., "P01129373"
+    const refDV = acc.RefDV || "";          // e.g., "CLIPS"
+    const id = `${connName}_${refClient}_${refDV}`;
+    return id === accessoryId;
+  });
+  
+  // If we didn't find it in the API data, return null (will show "not found")
+  if (!apiAccessory) return null;
+  
+  // Convert the raw API data into a clean Accessory object with proper formatting
+  return parseAccessory(apiAccessory, stockCache, masterData);
 };
 
 export const AccessoryView: React.FC<AccessoryViewProps> = ({
   onTransaction,
   onOpenQR,
 }) => {
-  // Shared loader keeps this screen layout-focused.
+  // useEntityDetails is a shared hook that:
+  // 1. Gets the ID from the URL (e.g., /accessory/E143P1_P01129373_CLIPS)
+  // 2. Calls our resolver function above to convert ID -> Accessory object
+  // 3. Returns the accessory object and stockCache for us to use
   const { entity: accessory, stockCache } =
     useEntityDetails<Accessory>(accessoryResolver);
   const { goBack } = useInventoryNavigation();
 
+  // If the resolver returned null (accessory not found), show error
   if (!accessory) return <div>Accessory not found</div>;
 
-  // Cached stock preferred with parsed fallback.
+  // Get the current stock, preferring live cached data over the parsed fallback
   const currentStock = resolveLiveStock(
     stockCache,
     accessory.id,
@@ -58,8 +92,57 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
 
       <div className="max-w-3xl mx-auto p-4 space-y-4">
         <div className="bg-slate-800/50 rounded-2xl p-6 shadow-lg border border-slate-700">
-          <h2 className="text-4xl font-bold text-white">{currentStock}</h2>
-          <p className="text-slate-400 font-medium mt-1">Units Available</p>
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h2 className="text-4xl font-bold text-white">{currentStock}</h2>
+              <p className="text-slate-400 font-medium mt-1">Units Available</p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+              <div className="text-xs text-slate-500 uppercase font-bold mb-1">
+                Type
+              </div>
+              <div className="text-slate-200">{accessory.type}</div>
+            </div>
+
+            <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+              <div className="text-xs text-slate-500 uppercase font-bold mb-1">
+                Connector
+              </div>
+              <div className="text-slate-200 font-mono">
+                {accessory.connectorId}
+              </div>
+            </div>
+
+            {accessory.clientRef && (
+              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+                <div className="text-xs text-slate-500 uppercase font-bold mb-1">
+                  Ref Client
+                </div>
+                <div className="text-slate-200">{accessory.clientRef}</div>
+              </div>
+            )}
+
+            {accessory.capotAngle && (
+              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+                <div className="text-xs text-slate-500 uppercase font-bold mb-1">
+                  Capot Angle
+                </div>
+                <div className="text-blue-400">{accessory.capotAngle}</div>
+              </div>
+            )}
+
+            {accessory.clipColor && (
+              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+                <div className="text-xs text-slate-500 uppercase font-bold mb-1">
+                  Clip Color
+                </div>
+                <div className="text-emerald-400">{accessory.clipColor}</div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
