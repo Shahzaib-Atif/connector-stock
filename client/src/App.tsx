@@ -16,7 +16,7 @@ const App: React.FC = () => {
   const { loading } = useAppSelector((state) => state.stock);
   const [qrModalOpen, setQrModalOpen] = useState(false);
   const [activeItemId, setActiveItemId] = useState("");
-  const { handleScan } = useScan();
+  const { handleScan, error, clearError } = useScan();
 
   const tx = useTransactionFlow();
 
@@ -45,6 +45,8 @@ const App: React.FC = () => {
     <>
       <AppRoutes
         onScan={handleScan}
+        scanError={error}
+        onClearScanError={clearError}
         onOpenQR={handleOpenQR}
         onTransaction={tx.openTransaction}
       />

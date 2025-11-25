@@ -5,15 +5,18 @@ import {
   CircuitBoard,
   Search,
   LogOut,
+  AlertTriangle,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logout } from "../store/authSlice";
 
 interface HomeViewProps {
   onScan: (code: string) => void;
+  scanError: string | null;
+  onClearScanError: () => void;
 }
 
-export const HomeView: React.FC<HomeViewProps> = ({ onScan }) => {
+export const HomeView: React.FC<HomeViewProps> = ({ onScan, scanError, onClearScanError }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
@@ -54,7 +57,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onScan }) => {
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Connector Stock</h1>
           <p className="text-slate-400">
-            Scan QR code for Box, Connector, or Accessory
+            Search for Box or Connector by ID
           </p>
         </div>
 
@@ -62,9 +65,12 @@ export const HomeView: React.FC<HomeViewProps> = ({ onScan }) => {
           <input
             type="text"
             className="bg-transparent border-none outline-none text-white placeholder-slate-400 px-4 py-3 flex-1 font-mono text-lg uppercase"
-            placeholder="SCAN or TYPE ID..."
+            placeholder="ENTER BOX or CONNECTOR ID..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              if (scanError) onClearScanError();
+            }}
             onKeyDown={(e) => e.key === "Enter" && onScan(searchQuery)}
           />
           <button
@@ -74,6 +80,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ onScan }) => {
             <Search className="w-6 h-6" />
           </button>
         </div>
+
+        {scanError && (
+          <div className="mt-3 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+            <p className="text-amber-200 text-sm leading-relaxed">{scanError}</p>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-4 pt-8">
           <button

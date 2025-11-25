@@ -8,18 +8,22 @@ import { SearchView } from "./SearchView";
 
 interface AppRoutesProps {
   onScan: (code: string) => void;
+  scanError: string | null;
+  onClearScanError: () => void;
   onOpenQR: (id: string) => void;
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
 }
 
 export const AppRoutes: React.FC<AppRoutesProps> = ({
   onScan,
+  scanError,
+  onClearScanError,
   onOpenQR,
   onTransaction,
 }) => {
   return (
     <Routes>
-      <Route path="/" element={<HomeView onScan={onScan} />} />
+      <Route path="/" element={<HomeView onScan={onScan} scanError={scanError} onClearScanError={onClearScanError} />} />
       <Route
         path="/connector/:id"
         element={
