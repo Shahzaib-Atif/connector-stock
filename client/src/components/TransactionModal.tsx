@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Minus, Plus } from "lucide-react";
+import { X } from "lucide-react";
 import { Department } from "../types";
 import { DEPARTMENTS } from "../constants";
 
