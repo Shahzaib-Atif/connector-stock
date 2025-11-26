@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MapPin, Users } from "lucide-react";
 import { Connector } from "../../../types";
+import { API } from "@/utils/api";
 
 interface ConnectorSummaryProps {
   connector: Connector;
@@ -14,10 +15,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
   const [loading, setLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
   let timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
-  const imageUrl = `${API_BASE_URL}/images/${connector.id}`;
+  const imageUrl = API.connectorImages(connector.id);
 
   useEffect(() => {
     setLoading(true);

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Connector } from "@/types";
+import { API } from "@/utils/api";
 
 interface Props {
   liveStock: number;
@@ -8,9 +9,7 @@ interface Props {
 
 function ConnectorInfo({ liveStock, conn }: Props) {
   const [imageError, setImageError] = useState(false);
-  const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
-  const imageUrl = `${API_BASE_URL}/images/${conn.id}`;
+  const imageUrl = API.connectorImages(conn.id);
 
   return (
     <>

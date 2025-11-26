@@ -10,9 +10,8 @@ import {
   AccessoryApiResponse,
 } from "../types";
 import { MASTER_DATA } from "../constants";
+import { API } from "@/utils/api";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
 const STORAGE_KEY_STOCK = "connector_stock_data";
 const STORAGE_KEY_TX = "connector_transactions";
 
@@ -21,7 +20,7 @@ export const fetchColors = async (): Promise<{
   colorsPT: Record<string, string>;
 }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/cors`);
+    const response = await fetch(API.cors);
     if (!response.ok) {
       throw new Error("Failed to fetch colors");
     }
@@ -44,7 +43,7 @@ export const fetchColors = async (): Promise<{
 
 export const fetchVias = async (): Promise<Record<string, string>> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/vias`);
+    const response = await fetch(API.vias);
     if (!response.ok) {
       throw new Error("Failed to fetch vias");
     }
@@ -64,7 +63,7 @@ export const fetchVias = async (): Promise<Record<string, string>> => {
 
 export const fetchAccessoryTypes = async (): Promise<string[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/accessory-types`);
+    const response = await fetch(API.accessoryTypes);
     if (!response.ok) {
       throw new Error("Failed to fetch accessory types");
     }
@@ -79,7 +78,7 @@ export const fetchAccessoryTypes = async (): Promise<string[]> => {
 
 export const fetchConnectorTypes = async (): Promise<string[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/connector-types`);
+    const response = await fetch(API.connectorTypes);
     if (!response.ok) {
       throw new Error("Failed to fetch connector types");
     }
@@ -96,7 +95,7 @@ export const fetchPositions = async (): Promise<
   Record<string, { cv: string; ch: string }>
 > => {
   try {
-    const response = await fetch(`${API_BASE_URL}/Cord_CON`);
+    const response = await fetch(API.cordCon);
     if (!response.ok) {
       throw new Error("Failed to fetch positions");
     }
@@ -124,7 +123,7 @@ export const fetchReferences = async (): Promise<
   Record<string, ConnectorReferenceApiResponse>
 > => {
   try {
-    const response = await fetch(`${API_BASE_URL}/Referencias`);
+    const response = await fetch(API.referencias);
     if (!response.ok) {
       throw new Error("Failed to fetch references");
     }
@@ -146,7 +145,7 @@ export const fetchReferences = async (): Promise<
 
 export const fetchAccessories = async (): Promise<AccessoryApiResponse[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/Accessories`);
+    const response = await fetch(API.accessories);
     if (!response.ok) {
       throw new Error("Failed to fetch accessories");
     }

@@ -8,7 +8,7 @@ export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
   @ApiOperation({ summary: 'Get image with connector Id' })
-  @Get(':connectorId')
+  @Get('connector/:connectorId')
   getImage(@Param('connectorId') connectorId: string, @Res() res: Response) {
     try {
       const { contentType, stream } =

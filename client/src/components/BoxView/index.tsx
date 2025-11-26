@@ -97,7 +97,7 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
           title="Accessories"
           icon={<Wrench className="w-4 h-4" />}
           count={box.accessories.length}
-          defaultOpen={false}
+          defaultOpen={true}
         >
           {box.accessories.map((acc) => {
             const liveStock = resolveLiveStock(stockCache, acc.id, acc.stock);
