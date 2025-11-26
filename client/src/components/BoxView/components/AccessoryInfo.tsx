@@ -1,16 +1,36 @@
+import { useState } from "react";
 import { Accessory } from "@/types";
-import { Wrench } from "lucide-react";
+import { API } from "@/utils/api";
 
 interface Props {
   acc: Accessory;
+  liveStock: number;
 }
 
-function AccessoryInfo({ acc }: Props) {
+function AccessoryInfo({ acc, liveStock }: Props) {
+  const [imageError, setImageError] = useState(false);
+  const imageUrl = API.accessoryImages(acc.id);
+
   return (
     <>
-      <div className="w-12 h-12 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center">
-        <Wrench className="w-6 h-6" />
-      </div>
+      {!imageError ? (
+        <img
+          src={imageUrl}
+          alt={acc.id}
+          className={`w-12 h-12 rounded-lg object-cover border ${
+            liveStock > 0 ? "border-blue-500/20" : "border-red-500/20"
+          }`}
+          onError={() => setImageError(true)}
+        />
+      ) : (
+        <div
+          className={`w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg border ${
+            liveStock > 0
+              ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
+              : "bg-red-500/10 text-red-400 border-red-500/20"
+          }`}
+        />
+      )}
       <div>
         <div className="text-white font-mono">type: {acc.type}</div>
         <div className="font-mono text-slate-400">For {acc.connectorId}</div>

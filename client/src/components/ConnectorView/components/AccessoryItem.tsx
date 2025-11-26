@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Minus, Plus } from "lucide-react";
 import { Accessory } from "../../../types";
 import { InventoryListItem } from "../../common/InventoryListItem";
+import { API } from "@/utils/api";
 
 interface Props {
   accessory: Accessory;
@@ -16,14 +17,38 @@ export const AccessoryItem: React.FC<Props> = ({
   onInspect,
   onTransaction,
 }) => {
+  const [imageError, setImageError] = useState(false);
+  const imageUrl = API.accessoryImages(accessory.id);
+
   return (
     <InventoryListItem
       interactive={false}
       left={
         <div
           onClick={() => onInspect(accessory.id)}
-          className="cursor-pointer flex-1"
+          className="cursor-pointer flex items-center gap-3 flex-1"
         >
+          {/* Thumbnail */}
+          {!imageError ? (
+            <img
+              src={imageUrl}
+              alt={accessory.id}
+              className={`w-12 h-12 rounded-lg object-cover border ${
+                stock > 0 ? "border-blue-500/20" : "border-red-500/20"
+              }`}
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div
+              className={`w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg border ${
+                stock > 0
+                  ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
+                  : "bg-red-500/10 text-red-400 border-red-500/20"
+              }`}
+            />
+          )}
+
+          {/* Info */}
           <div className="flex-1">
             <div className="text-sm text-slate-400">
               Type: <span className="text-slate-200">{accessory.type}</span>
