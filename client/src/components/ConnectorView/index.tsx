@@ -3,7 +3,6 @@ import { Wrench, QrCode } from "lucide-react";
 import { Connector } from "../../types";
 import { parseConnector } from "../../services/connectorService";
 import { CollapsibleSection } from "../common/CollapsibleSection";
-import { InsightCard } from "../InsightCard";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
 import { NotFoundPage } from "../common/NotFoundPage";
@@ -82,8 +81,8 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
 
       <div className="max-w-3xl mx-auto p-4 space-y-4">
         <ConnectorSummary connector={connector} currentStock={currentStock} />
-        <InsightCard connector={connector} />
 
+        {/* Accessories List */}
         {connector.accessories.length > 0 && (
           <CollapsibleSection
             title="Associated Accessories"
