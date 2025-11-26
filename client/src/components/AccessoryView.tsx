@@ -12,6 +12,7 @@ import { useInventoryNavigation } from "../hooks/useInventoryNavigation";
 import { EntityResolver, useEntityDetails } from "../hooks/useEntityDetails";
 import { resolveLiveStock } from "../utils/stock";
 import { API } from "@/utils/api";
+import { BoxShortcut } from "./ConnectorView/components/BoxShortcut";
 
 interface AccessoryViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -49,7 +50,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
   // Gets ID from URL, calls resolver to convert ID to Accessory object
   const { entity: accessory, stockCache } =
     useEntityDetails<Accessory>(accessoryResolver);
-  const { goBack } = useInventoryNavigation();
+  const { goBack, goToBox } = useInventoryNavigation();
   const [error, setError] = useState(false);
 
   // If the resolver returned null (accessory not found), show error
@@ -73,6 +74,10 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
     accessory.id,
     accessory.stock
   );
+
+  const handleBoxOpen = (boxId: string) => {
+    goToBox(boxId);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 pb-32 text-slate-200">
@@ -164,6 +169,11 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
             )}
           </div>
         </div>
+
+        <BoxShortcut
+          posId={accessory.posId}
+          onOpen={() => handleBoxOpen(accessory.posId)}
+        />
       </div>
 
       <TransactionBar
