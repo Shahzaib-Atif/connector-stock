@@ -32,8 +32,8 @@ function AccessoryInfo({ acc, liveStock }: Props) {
         />
       )}
       <div>
-        <div className="text-white font-mono">type: {acc.type}</div>
-        <div className="font-mono text-slate-400">For {acc.connectorId}</div>
+        <div className="text-slate-400">ConnName: {acc.connectorId}</div>
+        <div className="text-slate-500 text-sm">type: {acc.type}</div>
       </div>
     </>
   );

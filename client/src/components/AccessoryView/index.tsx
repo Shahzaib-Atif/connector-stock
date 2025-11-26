@@ -1,18 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import { QrCode, Wrench } from "lucide-react";
-import { Accessory } from "../types";
+import { Accessory } from "../../types";
 import {
   constructAccessoryId,
   parseAccessory,
-} from "../services/connectorService";
-import { DetailHeader } from "./common/DetailHeader";
-import { TransactionBar } from "./common/TransactionBar";
-import { NotFoundPage } from "./common/NotFoundPage";
-import { useInventoryNavigation } from "../hooks/useInventoryNavigation";
-import { EntityResolver, useEntityDetails } from "../hooks/useEntityDetails";
-import { resolveLiveStock } from "../utils/stock";
+} from "../../services/connectorService";
+import { DetailHeader } from "../common/DetailHeader";
+import { TransactionBar } from "../common/TransactionBar";
+import { NotFoundPage } from "../common/NotFoundPage";
+import { useInventoryNavigation } from "../../hooks/useInventoryNavigation";
+import { EntityResolver, useEntityDetails } from "../../hooks/useEntityDetails";
+import { resolveLiveStock } from "../../utils/stock";
 import { API } from "@/utils/api";
-import { BoxShortcut } from "./ConnectorView/components/BoxShortcut";
+import { BoxShortcut } from "../common/BoxShortcut";
+import AccessoryImage from "./components/AccessoryImage";
+import AccessoryDetailsCard from "./components/AccessoryDetailsCard";
 
 interface AccessoryViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -99,24 +101,15 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
       <div className="max-w-3xl mx-auto p-4 space-y-4">
         <div className="bg-slate-800/50 rounded-2xl p-6 shadow-lg border border-slate-700">
           {/* Accessory Image */}
-          <div className="mb-6 flex justify-center">
-            <div className="relative w-full max-w-sm aspect-video bg-slate-900/80 rounded-xl border border-slate-700 overflow-hidden shadow-2xl">
-              <img
-                src={imageUrl}
-                className="w-full h-full object-contain"
-                onError={() => setError(true)}
-              />
-              {error && (
-                <div className="absolute inset-0 flex items-center justify-center bg-slate-900/90">
-                  <div className="text-center text-slate-500">
-                    <Wrench className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                    <p className="text-sm">No image available</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+          <AccessoryImage
+            error={error}
+            imageUrl={imageUrl}
+            handleError={() => {
+              setError(true);
+            }}
+          />
 
+          {/* Stock Details */}
           <div className="flex justify-between items-start mb-6">
             <div>
               <h2 className="text-4xl font-bold text-white">{currentStock}</h2>
@@ -124,52 +117,11 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
             </div>
           </div>
 
-          <div className="space-y-3">
-            <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
-              <div className="text-xs text-slate-500 uppercase font-bold mb-1">
-                Type
-              </div>
-              <div className="text-slate-200">{accessory.type}</div>
-            </div>
-
-            <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
-              <div className="text-xs text-slate-500 uppercase font-bold mb-1">
-                Connector
-              </div>
-              <div className="text-slate-200 font-mono">
-                {accessory.connectorId}
-              </div>
-            </div>
-
-            {accessory.clientRef && (
-              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
-                <div className="text-xs text-slate-500 uppercase font-bold mb-1">
-                  Ref Client
-                </div>
-                <div className="text-slate-200">{accessory.clientRef}</div>
-              </div>
-            )}
-
-            {accessory.capotAngle && (
-              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
-                <div className="text-xs text-slate-500 uppercase font-bold mb-1">
-                  Capot Angle
-                </div>
-                <div className="text-blue-400">{accessory.capotAngle}</div>
-              </div>
-            )}
-
-            {accessory.clipColor && (
-              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
-                <div className="text-xs text-slate-500 uppercase font-bold mb-1">
-                  Clip Color
-                </div>
-                <div className="text-emerald-400">{accessory.clipColor}</div>
-              </div>
-            )}
-          </div>
+          {/* Accessory Details */}
+          <AccessoryDetailsCard accessory={accessory} />
         </div>
 
+        {/* View Box option */}
         <BoxShortcut
           posId={accessory.posId}
           onOpen={() => handleBoxOpen(accessory.posId)}

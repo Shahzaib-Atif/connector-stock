@@ -12,7 +12,7 @@ import { useEntityDetails, EntityResolver } from "../../hooks/useEntityDetails";
 import { resolveLiveStock } from "../../utils/stock";
 import { ConnectorSummary } from "./components/ConnectorSummary";
 import { AccessoryList } from "./components/AccessoryList";
-import { BoxShortcut } from "./components/BoxShortcut";
+import { BoxShortcut } from "../common/BoxShortcut";
 
 interface ConnectorViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
