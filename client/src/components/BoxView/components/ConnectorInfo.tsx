@@ -30,9 +30,7 @@ function ConnectorInfo({ liveStock, conn }: Props) {
               ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
               : "bg-red-500/10 text-red-400 border-red-500/20"
           }`}
-        >
-          {conn.viasCode}
-        </div>
+        />
       )}
       <div>
         <div className="font-mono font-bold text-white text-lg">{conn.id}</div>
