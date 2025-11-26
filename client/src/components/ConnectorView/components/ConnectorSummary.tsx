@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { MapPin, Users } from "lucide-react";
 import { Connector } from "../../../types";
 import { API } from "@/utils/api";
+import ImageBox from "@/components/common/ImageBox";
 
 interface ConnectorSummaryProps {
   connector: Connector;
@@ -12,46 +13,18 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
   connector,
   currentStock,
 }) => {
-  const [loading, setLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
+  const [error, setError] = useState(false);
   let timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const imageUrl = API.connectorImages(connector.id);
-
-  useEffect(() => {
-    setLoading(true);
-    setImageError(false);
-
-    timeoutRef.current = setTimeout(() => {
-      setImageError(true);
-      setLoading(false);
-    }, 3000);
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [imageUrl]);
-
-  const handleImgLoad = () => {
-    setLoading(false);
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-  };
 
   return (
     <div className="bg-slate-800/50 rounded-2xl p-6 shadow-lg border border-slate-700">
       {/* Connector Image (if available) */}
-      <div className="mb-6 flex justify-center">
-        <div className="relative w-full max-w-sm aspect-video bg-slate-900/80 rounded-xl border border-slate-700 overflow-hidden shadow-2xl">
-          <img
-            src={imageUrl}
-            alt={`Connector ${connector.id}`}
-            className="w-full h-full object-contain"
-            onLoad={handleImgLoad}
-            onError={() => setImageError(true)}
-          />
-        </div>
-      </div>
+      <ImageBox
+        error={error}
+        imageUrl={imageUrl}
+        handleError={() => setError(true)}
+      />
 
       {/* Stock Header */}
       <div className="flex justify-between items-start mb-8">

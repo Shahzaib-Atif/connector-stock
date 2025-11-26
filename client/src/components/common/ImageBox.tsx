@@ -6,7 +6,7 @@ interface Props {
   handleError: () => void;
 }
 
-function AccessoryImage({ imageUrl, error, handleError }: Props) {
+function ImageBox({ imageUrl, error, handleError }: Props) {
   return (
     <div className="mb-6 flex justify-center">
       <div className="relative w-full max-w-sm aspect-video bg-slate-900/80 rounded-xl border border-slate-700 overflow-hidden shadow-2xl">
@@ -28,4 +28,4 @@ function AccessoryImage({ imageUrl, error, handleError }: Props) {
   );
 }
 
-export default AccessoryImage;
+export default ImageBox;
