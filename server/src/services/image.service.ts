@@ -9,7 +9,6 @@ export class ImageService {
 
   getImageStream(connectorId: string) {
     const possibleExtensions = ['.jpg', '.jpeg', '.png'];
-
     let fullPath: string | null = null;
 
     for (const ext of possibleExtensions) {
@@ -20,10 +19,7 @@ export class ImageService {
       }
     }
 
-    if (!fullPath) {
-      console.error('Image not found');
-      return;
-    }
+    if (!fullPath) throw new Error(connectorId + ': Image not found');
 
     const ext = path.extname(fullPath).toLowerCase();
     const contentType = ext === '.png' ? 'image/png' : 'image/jpeg';

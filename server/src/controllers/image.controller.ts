@@ -10,10 +10,15 @@ export class ImageController {
   @ApiOperation({ summary: 'Get image with connector Id' })
   @Get(':connectorId')
   getImage(@Param('connectorId') connectorId: string, @Res() res: Response) {
-    const { contentType, stream } =
-      this.imageService.getImageStream(connectorId);
+    try {
+      const { contentType, stream } =
+        this.imageService.getImageStream(connectorId);
 
-    res.setHeader('Content-Type', contentType);
-    stream.pipe(res);
+      res.setHeader('Content-Type', contentType);
+      stream.pipe(res);
+    } catch (e) {
+      console.error(e.message);
+      res.sendStatus(404);
+    }
   }
 }
