@@ -25,7 +25,7 @@ function SearchInput({
       <input
         type="text"
         className="bg-transparent border-none outline-none text-white placeholder-slate-400 px-4 py-3 flex-1 font-mono text-lg uppercase"
-        placeholder="ENTER BOX or CONNECTOR ID..."
+        placeholder="Search..."
         value={searchQuery}
         onChange={(e) => {
           setSearchQuery(e.target.value);
