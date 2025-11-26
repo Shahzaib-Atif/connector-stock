@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Scan, Search, LogOut, AlertTriangle } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Scan, Search, LogOut, AlertTriangle, Box, Zap } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logout } from "../store/authSlice";
 import ExampleLookup from "./ExampleLookup";
@@ -16,8 +16,63 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onClearScanError,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<{ id: string; type: 'box' | 'connector' }[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
+  const masterData = useAppSelector((state) => state.stock.masterData);
+
+  useEffect(() => {
+    // Close suggestions when clicking outside
+    function handleClickOutside(event: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef]);
+
+  useEffect(() => {
+    if (!searchQuery.trim() || !masterData) {
+      setSuggestions([]);
+      return;
+    }
+
+    const query = searchQuery.trim().toUpperCase();
+    const newSuggestions: { id: string; type: 'box' | 'connector' }[] = [];
+
+    // 1. Search Boxes (Positions)
+    if (masterData.positions) {
+      const boxMatches = Object.keys(masterData.positions)
+        .filter(id => id.toUpperCase().includes(query))
+        .slice(0, 5)
+        .map(id => ({ id, type: 'box' as const }));
+      newSuggestions.push(...boxMatches);
+    }
+
+    // 2. Search Connectors (References)
+    if (masterData.references) {
+      const connectorMatches = Object.keys(masterData.references)
+        .filter(id => id.toUpperCase().includes(query))
+        .slice(0, 5)
+        .map(id => ({ id, type: 'connector' as const }));
+      newSuggestions.push(...connectorMatches);
+    }
+
+    setSuggestions(newSuggestions);
+    setShowSuggestions(newSuggestions.length > 0);
+  }, [searchQuery, masterData]);
+
+  const handleSuggestionClick = (suggestion: { id: string; type: 'box' | 'connector' }) => {
+    setSearchQuery(suggestion.id);
+    setShowSuggestions(false);
+    onScan(suggestion.id);
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-800 to-slate-900 text-white relative">
@@ -59,24 +114,55 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
 
         {/* Search */}
-        <div className="bg-white/10 backdrop-blur-md p-1 rounded-2xl border border-white/10 flex items-center shadow-inner">
-          <input
-            type="text"
-            className="bg-transparent border-none outline-none text-white placeholder-slate-400 px-4 py-3 flex-1 font-mono text-lg uppercase"
-            placeholder="ENTER BOX or CONNECTOR ID..."
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              if (scanError) onClearScanError();
-            }}
-            onKeyDown={(e) => e.key === "Enter" && onScan(searchQuery)}
-          />
-          <button
-            onClick={() => onScan(searchQuery)}
-            className="btn-primary p-3 rounded-xl transition-colors"
-          >
-            <Search className="w-6 h-6" />
-          </button>
+        <div className="relative" ref={wrapperRef}>
+          <div className="bg-white/10 backdrop-blur-md p-1 rounded-2xl border border-white/10 flex items-center shadow-inner">
+            <input
+              type="text"
+              className="bg-transparent border-none outline-none text-white placeholder-slate-400 px-4 py-3 flex-1 font-mono text-lg uppercase"
+              placeholder="ENTER BOX or CONNECTOR ID..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                if (scanError) onClearScanError();
+              }}
+              onKeyDown={(e) => e.key === "Enter" && onScan(searchQuery)}
+              onFocus={() => {
+                if (suggestions.length > 0) setShowSuggestions(true);
+              }}
+            />
+            <button
+              onClick={() => onScan(searchQuery)}
+              className="btn-primary p-3 rounded-xl transition-colors"
+            >
+              <Search className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Autocomplete Dropdown */}
+          {showSuggestions && suggestions.length > 0 && (
+            <div className="absolute z-50 w-full mt-2 bg-slate-800 rounded-xl shadow-xl border border-slate-700 overflow-hidden">
+              {suggestions.map((suggestion) => (
+                <button
+                  key={`${suggestion.type}-${suggestion.id}`}
+                  type="button"
+                  onClick={() => handleSuggestionClick(suggestion)}
+                  className="w-full px-4 py-3 text-left hover:bg-slate-700 flex items-center gap-3 transition-colors border-b border-slate-700 last:border-0"
+                >
+                  <div className={`p-2 rounded-lg ${
+                    suggestion.type === 'box' 
+                      ? 'bg-purple-500/20 text-purple-400' 
+                      : 'bg-blue-500/20 text-blue-400'
+                  }`}>
+                    {suggestion.type === 'box' ? <Box className="w-4 h-4" /> : <Zap className="w-4 h-4" />}
+                  </div>
+                  <div>
+                    <div className="font-semibold text-white font-mono">{suggestion.id}</div>
+                    <div className="text-xs text-slate-400 capitalize">{suggestion.type}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* ERROR Alert */}
