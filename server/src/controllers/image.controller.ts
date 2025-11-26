@@ -7,12 +7,34 @@ import { ImageService } from 'src/services/image.service';
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
-  @ApiOperation({ summary: 'Get image with connector Id' })
+  @ApiOperation({ summary: 'Get connector image' })
   @Get('connector/:connectorId')
-  getImage(@Param('connectorId') connectorId: string, @Res() res: Response) {
+  getConnectorImage(
+    @Param('connectorId') connectorId: string,
+    @Res() res: Response,
+  ) {
     try {
-      const { contentType, stream } =
-        this.imageService.getImageStream(connectorId);
+      const { contentType, stream } = this.imageService.getImageStream(
+        connectorId,
+        'connector',
+      );
+
+      res.setHeader('Content-Type', contentType);
+      stream.pipe(res);
+    } catch (e) {
+      console.error(e.message);
+      res.sendStatus(404);
+    }
+  }
+
+  @ApiOperation({ summary: 'Get connector image' })
+  @Get('accessory/:accessoryId')
+  getImages(@Param('accessoryId') accessoryId: string, @Res() res: Response) {
+    try {
+      const { contentType, stream } = this.imageService.getImageStream(
+        accessoryId,
+        'accessory',
+      );
 
       res.setHeader('Content-Type', contentType);
       stream.pipe(res);

@@ -7,6 +7,8 @@ interface QRModalProps {
 
 export const QRModal: React.FC<QRModalProps> = ({ itemId, onClose }) => {
   const itemIdLink = getItemIdLink(itemId);
+  console.log(itemId);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
       <div className="bg-slate-800 w-full max-w-sm rounded-2xl p-6 shadow-2xl text-center border border-slate-700">
@@ -41,12 +43,14 @@ export const QRModal: React.FC<QRModalProps> = ({ itemId, onClose }) => {
 function getItemIdLink(itemId: string) {
   if (!itemId) return itemId;
 
+  const networkUrl = import.meta.env.VITE_NETWORK_BASE_URL;
+
   const code = itemId.trim();
   const upper = code.toUpperCase();
 
-  if (upper.length === 4) return `http://10.2.2.73:3000/box/${itemId}`;
-  else if (upper.length === 6)
-    return `http://10.2.2.73:3000/connector/${itemId}`;
+  if (upper.length === 4) return `${networkUrl}/box/${itemId}`;
+  else if (upper.length === 6) return `${networkUrl}/connector/${itemId}`;
+  else if (upper.includes("_")) return `${networkUrl}/accessory/${itemId}`;
 
   return itemId;
 }

@@ -3,7 +3,7 @@ const API_BASE_URL =
 
 export const API = {
   connectorImages: (id: string) => `${API_BASE_URL}/images/connector/${id}`,
-  accessoryImages: `${API_BASE_URL}/images`,
+  accessoryImages: (id: string) => `${API_BASE_URL}/images/accessory/${id}`,
   cors: `${API_BASE_URL}/cors`,
   vias: `${API_BASE_URL}/vias`,
   accessoryTypes: `${API_BASE_URL}/accessory-types`,

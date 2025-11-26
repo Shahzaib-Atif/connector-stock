@@ -2,20 +2,26 @@ import { Connector, Box, Accessory, MasterData } from "../types";
 import { getHash, getCoordinates } from "../utils/inventoryUtils";
 import { getStockMap } from "../api/inventoryApi";
 
+// Construct a unique ID using ConnName, RefClient, and RefDV
+export function constructAccessoryId(apiAccessory: any) {
+  const connName = apiAccessory.ConnName || "";
+  const refClient = apiAccessory.RefClient || "";
+  const refDV = apiAccessory.RefDV || "";
+
+  if (refDV) return `${connName}_${refClient}_${refDV}`;
+  else return `${connName}_${refClient}`;
+}
+
 export const parseAccessory = (
   apiAccessory: any,
   stockMap: Record<string, number>,
   masterData: MasterData
 ): Accessory => {
-  // Construct a unique ID using ConnName, RefClient, and RefDV
-  const connName = apiAccessory.ConnName || "";
-  const refClient = apiAccessory.RefClient || "";
-  const refDV = apiAccessory.RefDV || "";
-  const id = `${connName}_${refClient}_${refDV}`;
+  const connectorId = apiAccessory.ConnName || "";
+  const clientRef = apiAccessory.RefClient || "";
+  const id = constructAccessoryId(apiAccessory);
 
-  const connectorId = connName;
   const posId = connectorId.substring(0, 4);
-  const clientRef = refClient;
   const clientName = masterData.clients[clientRef] || "Unknown";
   const type = apiAccessory.AccessoryType;
 
