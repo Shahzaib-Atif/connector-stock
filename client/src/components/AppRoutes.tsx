@@ -4,7 +4,6 @@ import { HomeView } from "./HomeView";
 import { ConnectorView } from "./ConnectorView";
 import { BoxView } from "./BoxView";
 import { AccessoryView } from "./AccessoryView";
-import { SearchView } from "./SearchView";
 
 interface AppRoutesProps {
   onScan: (code: string) => void;
@@ -23,7 +22,16 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({
 }) => {
   return (
     <Routes>
-      <Route path="/" element={<HomeView onScan={onScan} scanError={scanError} onClearScanError={onClearScanError} />} />
+      <Route
+        path="/"
+        element={
+          <HomeView
+            onScan={onScan}
+            scanError={scanError}
+            onClearScanError={onClearScanError}
+          />
+        }
+      />
       <Route
         path="/connector/:id"
         element={
@@ -37,7 +45,6 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({
           <AccessoryView onOpenQR={onOpenQR} onTransaction={onTransaction} />
         }
       />
-      <Route path="/search" element={<SearchView />} />
     </Routes>
   );
 };
