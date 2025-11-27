@@ -18,7 +18,10 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
   const imageUrl = API.connectorImages(connector.id);
 
   return (
-    <div className="bg-slate-800/50 rounded-2xl p-6 shadow-lg border border-slate-700">
+    <div
+      id="connector-summary"
+      className="bg-slate-800/50 rounded-2xl p-6 shadow-lg border border-slate-700"
+    >
       {/* Connector Image (if available) */}
       <ImageBox
         error={error}
@@ -28,11 +31,11 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
 
       {/* Stock Header */}
       <div className="flex justify-between items-start mb-8">
-        <div>
+        <div id="connector-stock">
           <h2 className="text-4xl font-bold text-white">{currentStock}</h2>
           <p className="text-slate-400 font-medium mt-1">Units Available</p>
         </div>
-        <div className="text-right">
+        <div id="connector-position" className="text-right">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-500/10 text-blue-300 rounded-full text-xs font-bold border border-blue-500/20">
             <MapPin className="w-3 h-3" />
             {connector.cv} | {connector.ch}
@@ -42,8 +45,9 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
           </div>
         </div>
       </div>
+
       {/* Color, Vias & Type */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
+      <div id="connector-metadata" className="grid sm:grid-cols-3 gap-4 mb-4">
         {/* Color */}
         <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
           <div className="text-xs text-slate-500 uppercase font-bold mb-1">

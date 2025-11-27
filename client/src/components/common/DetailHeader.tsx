@@ -7,7 +7,6 @@ interface DetailHeaderProps {
   title: React.ReactNode;
   onBack: () => void;
   rightSlot?: React.ReactNode;
-  className?: string;
 }
 
 export const DetailHeader: React.FC<DetailHeaderProps> = ({
@@ -15,7 +14,6 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
   title,
   onBack,
   rightSlot,
-  className = "",
 }) => {
   const brand = (
     <Link
@@ -43,10 +41,11 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
 
   return (
     <header
-      className={`bg-slate-900/80 backdrop-blur-md sticky top-0 z-10 border-b border-slate-800 px-4 py-3 flex items-center justify-between shadow-sm ${className}`}
+      id="detail-header"
+      className="bg-slate-900/80 backdrop-blur-md sticky top-0 z-10 border-b border-slate-800 px-4 py-3 flex items-center justify-between shadow-sm"
     >
       <div className="mx-auto w-full flex items-center gap-4">
-        <div className="flex items-center gap-2 flex-shrink-0 min-w-[100px]">
+        <div className="flex items-center gap-2 flex-shrink-0 sm:min-w-[100px]">
           <button
             onClick={onBack}
             className="p-2 -ml-2 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition-colors"
@@ -62,7 +61,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
           </div>
           <div className="font-mono font-bold text-xl text-white">{title}</div>
         </div>
-        <div className="flex items-center justify-end flex-shrink-0 min-w-[100px]">
+        <div className="flex items-center justify-end flex-shrink-0 sm:min-w-[100px]">
           {rightContent}
         </div>
       </div>

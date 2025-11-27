@@ -114,7 +114,9 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
           {/* Stock Details */}
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h2 className="text-4xl font-bold text-white">{currentStock}</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                {currentStock}
+              </h2>
               <p className="text-slate-400 font-medium mt-1">Units Available</p>
             </div>
           </div>

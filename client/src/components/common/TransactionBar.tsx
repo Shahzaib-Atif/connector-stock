@@ -25,6 +25,7 @@ export const TransactionBar: React.FC<TransactionBarProps> = ({
 }) => {
   return (
     <div
+      id="transaction-bar"
       className={`fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-800 p-4 px-6 pb-6 shadow-2xl z-20 backdrop-blur ${className}`}
     >
       <div className="max-w-3xl mx-auto flex gap-4">
