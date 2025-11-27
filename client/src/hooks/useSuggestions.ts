@@ -41,13 +41,6 @@ export function useSuggestions(
     const isExactConnectorMatch =
       masterData.references && masterData.references[query];
 
-    // Don't show suggestions if it's an exact match
-    if (isExactBoxMatch || isExactConnectorMatch) {
-      setSuggestions([]);
-      setShowSuggestions(false);
-      return;
-    }
-
     // Boxes
     if (masterData.positions) {
       const boxMatches = Object.keys(masterData.positions)
@@ -85,7 +78,17 @@ export function useSuggestions(
     );
 
     setSuggestions(newSuggestions);
-    setShowSuggestions(newSuggestions.length > 0);
+    
+    // Only auto-hide if it's an exact match AND there's only one suggestion
+    // This allows showing multiple connectors even if the box ID is an exact match
+    const hasOnlyExactMatch = 
+      (isExactBoxMatch || isExactConnectorMatch) && newSuggestions.length === 1;
+    
+    if (hasOnlyExactMatch) {
+      setShowSuggestions(false);
+    } else {
+      setShowSuggestions(newSuggestions.length > 0);
+    }
   }, [searchQuery, masterData]);
 
   return { suggestions };

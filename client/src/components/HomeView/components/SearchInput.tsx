@@ -9,6 +9,8 @@ interface Props {
   onClearScanError: () => void;
   suggestions: suggestion[];
   setShowSuggestions: React.Dispatch<React.SetStateAction<boolean>>;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onFocus?: () => void;
 }
 
 function SearchInput({
@@ -19,7 +21,31 @@ function SearchInput({
   onScan,
   onClearScanError,
   setShowSuggestions,
+  onKeyDown,
+  onFocus,
 }: Props) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Call parent handler first for navigation
+    if (onKeyDown) {
+      onKeyDown(e);
+    }
+    // Only trigger scan on Enter if not handled by parent (no suggestions)
+    if (e.key === "Enter" && !e.defaultPrevented) {
+      onScan(searchQuery);
+    }
+  };
+
+  const handleFocus = () => {
+    // Call parent handler first
+    if (onFocus) {
+      onFocus();
+    }
+    // Fallback behavior if no parent handler
+    else if (suggestions.length > 0) {
+      setShowSuggestions(true);
+    }
+  };
+
   return (
     <div className="bg-white/10 backdrop-blur-md p-1 rounded-2xl border border-white/10 flex items-center shadow-inner">
       <input
@@ -31,10 +57,8 @@ function SearchInput({
           setSearchQuery(e.target.value);
           if (scanError) onClearScanError();
         }}
-        onKeyDown={(e) => e.key === "Enter" && onScan(searchQuery)}
-        onFocus={() => {
-          if (suggestions.length > 0) setShowSuggestions(true);
-        }}
+        onKeyDown={handleKeyDown}
+        onFocus={handleFocus}
       />
       <button
         onClick={() => onScan(searchQuery)}
