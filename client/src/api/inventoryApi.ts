@@ -9,7 +9,6 @@ import {
   ConnectorReferenceApiResponse,
   AccessoryApiResponse,
 } from "../types";
-import { MASTER_DATA } from "../constants";
 import { API } from "@/utils/api";
 
 const STORAGE_KEY_STOCK = "connector_stock_data";
@@ -72,7 +71,7 @@ export const fetchAccessoryTypes = async (): Promise<string[]> => {
     return data.map((item) => item.TypeDescription);
   } catch (error) {
     console.error("Error fetching accessory types:", error);
-    return MASTER_DATA.accessoryTypes;
+    return [];
   }
 };
 
@@ -87,7 +86,7 @@ export const fetchConnectorTypes = async (): Promise<string[]> => {
     return data.map((item) => item.Type);
   } catch (error) {
     console.error("Error fetching connector types:", error);
-    return MASTER_DATA.types;
+    return [];
   }
 };
 

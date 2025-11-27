@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Scan } from "lucide-react";
 import ExampleLookup from "../ExampleLookup";
 import HeaderBar from "./components/HeaderBar";

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { QrCode, Wrench } from "lucide-react";
 import { Accessory } from "../../types";
 import {
