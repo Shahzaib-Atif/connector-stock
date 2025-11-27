@@ -1,6 +1,5 @@
 import { Box } from "@/types";
 import { MapPin } from "lucide-react";
-import React from "react";
 
 interface Props {
   box: Box;

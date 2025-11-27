@@ -1,6 +1,7 @@
 import { useAppSelector } from "@/store/hooks";
 import { suggestion } from "@/types";
 import { useEffect, useState } from "react";
+import { constructAccessoryId } from "@/services/connectorService";
 
 export function useSuggestions(
   searchQuery: string,
@@ -33,7 +34,7 @@ export function useSuggestions(
     }
 
     const query = searchQuery.trim().toUpperCase();
-    const newSuggestions: { id: string; type: "box" | "connector" }[] = [];
+    const newSuggestions: suggestion[] = [];
 
     // Check for exact match first
     const isExactBoxMatch = masterData.positions && masterData.positions[query];
@@ -63,6 +64,19 @@ export function useSuggestions(
         .slice(0, 5)
         .map((id) => ({ id, type: "connector" as const }));
       newSuggestions.push(...connectorMatches);
+    }
+
+    // Accessories (by RefClient)
+    if (masterData.accessories) {
+      const accessoryMatches = masterData.accessories
+        .filter((acc) => acc.RefClient && acc.RefClient.toUpperCase().includes(query))
+        .slice(0, 5)
+        .map((acc) => ({
+          id: acc.RefClient || "",
+          type: "accessory" as const,
+          fullId: constructAccessoryId(acc)
+        }));
+      newSuggestions.push(...accessoryMatches);
     }
 
     // Sort by ID naturally (A0, A1, B0…)

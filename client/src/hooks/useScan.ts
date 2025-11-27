@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
-import { getBoxDetails, parseConnector } from "../services/connectorService";
+import {
+  getBoxDetails,
+  parseConnector,
+  constructAccessoryId,
+} from "../services/connectorService";
 
 export const useScan = () => {
   const navigate = useNavigate();
@@ -9,10 +13,10 @@ export const useScan = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleScan = (inputCode: string) => {
-    setError(null); // Clear previous errors
+    setError(null);
 
     if (!masterData) {
-      console.warn("Master data not loaded yet");
+      console.warn("Redux data not loaded yet");
       return;
     }
 
@@ -21,7 +25,7 @@ export const useScan = () => {
 
     if (code.length === 6) handleConnectorNav(upperCode);
     else if (code.length === 4) handleBoxNav(upperCode);
-    else handleInvalidEntry();
+    else handleAccessoryNav(upperCode);
   };
 
   const clearError = () => setError(null);
@@ -41,10 +45,24 @@ export const useScan = () => {
     else setError("Box not found!");
   };
 
-  const handleInvalidEntry = () => {
-    setError(
-      "Invalid Code. Box ID (4 chars) or Connector ID (6 chars) expected."
+  const handleAccessoryNav = (code: string) => {
+    // Search for accessory by RefClient (clientRef field)
+    if (!masterData.accessories) {
+      setError("Accessory not found!");
+      return;
+    }
+
+    const accessory = masterData.accessories.find(
+      (acc) =>
+        acc.RefClient && acc.RefClient.toUpperCase() === code.toUpperCase()
     );
+
+    if (accessory) {
+      const accessoryId = constructAccessoryId(accessory);
+      navigate(`/accessory/${accessoryId}`);
+    } else {
+      setError("Invalid code. Unable to find this item!");
+    }
   };
   //#endregion
 

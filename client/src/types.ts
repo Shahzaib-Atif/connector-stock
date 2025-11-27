@@ -147,5 +147,5 @@ export type StockAction =
 
 export type suggestion = {
   id: string;
-  type: "box" | "connector";
+  type: "box" | "connector" | "accessory";
 };
