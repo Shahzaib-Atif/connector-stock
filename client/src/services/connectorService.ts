@@ -1,6 +1,6 @@
+import { getStockMap } from "@/api/stockApi";
 import { Connector, Box, Accessory, MasterData } from "../types";
-import { getHash, getCoordinates } from "../utils/inventoryUtils";
-import { getStockMap } from "../api/inventoryApi";
+import { getCoordinates } from "../utils/inventoryUtils";
 
 // Construct a unique ID using ConnName, RefClient, and RefDV
 export function constructAccessoryId(apiAccessory: any) {
@@ -49,7 +49,7 @@ export const parseConnector = (
   stockMap: Record<string, number>,
   masterData: MasterData
 ): Connector | null => {
-  const reference = masterData.references?.[id];
+  const reference = masterData.connectors?.[id];
 
   if (!reference) {
     return null;
@@ -84,8 +84,8 @@ export const parseConnector = (
     posId,
     colorCode,
     viasCode,
-    colorName: masterData.colors[colorCode] || "Unknown",
-    colorNamePT: masterData.colorsPT?.[colorCode] || "Unknown",
+    colorName: masterData.colors?.colorsUK[colorCode] || "Unknown",
+    colorNamePT: masterData.colors?.colorsPT?.[colorCode] || "Unknown",
     viasName: masterData.vias[viasCode] || "Standard",
     cv: coords?.cv ?? "?",
     ch: coords?.ch ?? "?",
@@ -114,8 +114,8 @@ export const getBoxDetails = (
   const connectors: Connector[] = [];
 
   // find all connectors that belong to this box (Pos_ID matches boxId)
-  if (masterData.references) {
-    Object.values(masterData.references).forEach((ref) => {
+  if (masterData.connectors) {
+    Object.values(masterData.connectors).forEach((ref) => {
       if (ref.Pos_ID === boxId) {
         const conn = parseConnector(ref.CODIVMAC, stockMap, masterData);
         if (conn) connectors.push(conn);
@@ -148,7 +148,7 @@ export const searchConnectors = (
   const normalizedQuery = query.trim().toUpperCase();
 
   // 1. Direct Connector ID Match (using references key)
-  if (masterData.references && masterData.references[normalizedQuery]) {
+  if (masterData.connectors && masterData.connectors[normalizedQuery]) {
     const conn = parseConnector(normalizedQuery, stockMap, masterData);
     if (conn) results.push(conn);
   }
@@ -156,8 +156,8 @@ export const searchConnectors = (
   // 2. Box ID Match: Find all connectors in matching box
   if (masterData.positions && masterData.positions[normalizedQuery]) {
     // Filter references to find connectors in this box
-    if (masterData.references) {
-      Object.values(masterData.references).forEach((refItem) => {
+    if (masterData.connectors) {
+      Object.values(masterData.connectors).forEach((refItem) => {
         // Skip if already found by direct ID match
         if (refItem.CODIVMAC === normalizedQuery) return;
 

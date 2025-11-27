@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
 import { Department } from "../types";
-import { DEPARTMENTS } from "../constants";
+import { DEPARTMENTS } from "../utils/departments";
 
 interface TransactionModalProps {
   type: "IN" | "OUT";
@@ -17,7 +17,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   onConfirm,
 }) => {
   const [amount, setAmount] = useState(1);
-  const [dept, setDept] = useState<Department>(Department.ASSEMBLY);
+  const [dept, setDept] = useState<Department>(Department.GT);
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
@@ -72,7 +72,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 onChange={(e) => setDept(e.target.value as Department)}
                 className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
               >
-                {DEPARTMENTS.map((d) => (
+                {Object.keys(Department).map((d) => (
                   <option key={d} value={d}>
                     {d}
                   </option>

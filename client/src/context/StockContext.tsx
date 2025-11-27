@@ -1,32 +1,40 @@
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
-import { MasterData, StockState, StockAction, Transaction } from '../types';
-import { fetchMasterData, getStockMap, getTransactions } from '../api/inventoryApi';
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  ReactNode,
+} from "react";
+import { MasterData, StockState, StockAction, Transaction } from "../types";
+import { fetchMasterData } from "../api";
+import { getStockMap } from "@/api/stockApi";
+import { getTransactions } from "@/api/transactionsApi";
 
 const initialState: StockState = {
   masterData: null,
   loading: true,
   transactions: [],
-  stockCache: {}
+  stockCache: {},
 };
 
 const stockReducer = (state: StockState, action: StockAction): StockState => {
   switch (action.type) {
-    case 'INIT_DATA':
+    case "INIT_DATA":
       return {
         ...state,
         masterData: action.payload,
         loading: false,
         stockCache: getStockMap(),
-        transactions: getTransactions()
+        transactions: getTransactions(),
       };
-    case 'UPDATE_STOCK':
+    case "UPDATE_STOCK":
       return {
         ...state,
         stockCache: {
           ...state.stockCache,
-          [action.payload.connectorId]: action.payload.amount
+          [action.payload.connectorId]: action.payload.amount,
         },
-        transactions: [action.payload.transaction, ...state.transactions]
+        transactions: [action.payload.transaction, ...state.transactions],
       };
     default:
       return state;
@@ -38,13 +46,15 @@ const StockContext = createContext<{
   dispatch: React.Dispatch<StockAction>;
 } | null>(null);
 
-export const StockProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const StockProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [state, dispatch] = useReducer(stockReducer, initialState);
 
   useEffect(() => {
     const loadData = async () => {
       const data = await fetchMasterData();
-      dispatch({ type: 'INIT_DATA', payload: data });
+      dispatch({ type: "INIT_DATA", payload: data });
     };
     loadData();
   }, []);

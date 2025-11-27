@@ -47,14 +47,16 @@ export interface Transaction {
 }
 
 export interface MasterData {
-  colors: Record<string, string>;
-  colorsPT: Record<string, string>;
+  colors: {
+    colorsUK: Record<string, string>;
+    colorsPT: Record<string, string>;
+  };
   vias: Record<string, string>;
-  types: string[];
-  clients: Record<string, string>; // ID -> Name mapping
+  connectorTypes: string[];
+  clients: Record<string, string>;
   accessoryTypes: string[];
   positions: Record<string, { cv: string; ch: string }>;
-  references: Record<string, ConnectorReferenceApiResponse>;
+  connectors: Record<string, ConnectorReferenceApiResponse>;
   accessories: AccessoryApiResponse[];
 }
 
@@ -107,24 +109,13 @@ export interface AccessoryApiResponse {
 }
 
 export enum Department {
-  ASSEMBLY = "Assembly Line",
-  QUALITY = "Quality Control",
-  R_AND_D = "R&D Lab",
-  SHIPPING = "Shipping & Logistics",
-  MAINTENANCE = "Maintenance",
-}
-
-export type AppView =
-  | "HOME"
-  | "BOX_DETAILS"
-  | "CONNECTOR_DETAILS"
-  | "ACCESSORY_DETAILS"
-  | "SEARCH_RESULTS";
-
-export interface StockInsight {
-  status: "healthy" | "low" | "critical" | "overstock";
-  message: string;
-  actionable: string;
+  GT = "GT",
+  Montagem = "Montagem",
+  Maquinacao = "Maquinacao",
+  Comercial = "Comercial",
+  ID = "ID",
+  RH = "RH",
+  Planamento = "Planamento",
 }
 
 export interface StockState {

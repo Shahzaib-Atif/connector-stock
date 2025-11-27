@@ -22,7 +22,7 @@ export function useSuggestions(
     // Check for exact match first
     const isExactBoxMatch = masterData.positions && masterData.positions[query];
     const isExactConnectorMatch =
-      masterData.references && masterData.references[query];
+      masterData.connectors && masterData.connectors[query];
     const isExactAccessoryMatch =
       masterData.accessories &&
       masterData.accessories.some(
@@ -39,8 +39,8 @@ export function useSuggestions(
     }
 
     // Connectors
-    if (masterData.references) {
-      const connectorMatches = Object.keys(masterData.references)
+    if (masterData.connectors) {
+      const connectorMatches = Object.keys(masterData.connectors)
         .filter((id) => id.toUpperCase().includes(query))
         .slice(0, 5)
         .map((id) => ({ id, type: "connector" as const }));
