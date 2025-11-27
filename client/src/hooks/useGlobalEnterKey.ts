@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 
-export function useGlobalKeyDown(
+/**
+ * Global keyboard listener for Enter
+ * Triggers when Enter key is pressed anywhere on the page
+ */
+export function useGlobalEnterKey(
   searchQuery: string,
   onScan: (code: string) => void
 ) {

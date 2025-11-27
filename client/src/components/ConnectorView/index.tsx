@@ -12,6 +12,7 @@ import { resolveLiveStock } from "../../utils/stock";
 import { ConnectorSummary } from "./components/ConnectorSummary";
 import { AccessoryList } from "./components/AccessoryList";
 import { BoxShortcut } from "../common/BoxShortcut";
+import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 
 interface ConnectorViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -34,6 +35,9 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
   const { entity: connector, stockCache } =
     useEntityDetails<Connector>(connectorResolver);
   const { goBack, goToAccessory, goToBox } = useInventoryNavigation();
+
+  // Enable Escape key to go back
+  useGlobalBackNavigation(goBack);
 
   if (!connector) {
     return (

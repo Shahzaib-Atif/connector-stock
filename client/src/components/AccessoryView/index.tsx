@@ -15,6 +15,7 @@ import { API } from "@/utils/api";
 import { BoxShortcut } from "../common/BoxShortcut";
 import ImageBox from "../common/ImageBox";
 import AccessoryDetailsCard from "./components/AccessoryDetailsCard";
+import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 
 interface AccessoryViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -54,6 +55,9 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
     useEntityDetails<Accessory>(accessoryResolver);
   const { goBack, goToBox } = useInventoryNavigation();
   const [error, setError] = useState(false);
+
+  // Enable Escape key to go back
+  useGlobalBackNavigation(goBack);
 
   // If the resolver returned null (accessory not found), show error
   if (!accessory) {

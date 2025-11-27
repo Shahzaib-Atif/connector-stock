@@ -13,6 +13,7 @@ import BoxCoordinatesCard from "./components/BoxCoordinatesCard";
 import ConnectorInfo from "./components/ConnectorInfo";
 import StockBadge from "./components/StockBadge";
 import AccessoryInfo from "./components/AccessoryInfo";
+import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 
 interface BoxViewProps {
   onOpenQR: (id: string) => void;
@@ -27,6 +28,9 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
   // resolve box plus cache.
   const { entity: box, stockCache } = useEntityDetails<Box>(boxResolver);
   const { goBack, goToConnector, goToAccessory } = useInventoryNavigation();
+
+  // Enable Escape key to go back
+  useGlobalBackNavigation(goBack);
 
   // show not found page if box not found
   if (!box || box.ch === "?" || box.cv === "?") {

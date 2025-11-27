@@ -9,7 +9,7 @@ import { useSuggestions } from "@/hooks/useSuggestions";
 import ErrorBox from "./components/ErrorBox";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useSuggestionNavigation } from "../../hooks/useSuggestionNavigation";
-import { useGlobalKeyDown } from "@/hooks/useGlobalKeyDown";
+import { useGlobalEnterKey } from "@/hooks/useGlobalEnterKey";
 
 interface HomeViewProps {
   onScan: (code: string) => void;
@@ -62,7 +62,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
   }, [suggestions]);
 
   // Global Enter key listener - trigger search from anywhere on the page
-  useGlobalKeyDown(searchQuery, onScan);
+  useGlobalEnterKey(searchQuery, onScan);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-800 to-slate-900 text-white relative">
