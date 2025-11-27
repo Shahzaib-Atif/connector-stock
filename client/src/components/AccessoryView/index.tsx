@@ -14,9 +14,10 @@ import { resolveLiveStock } from "../../utils/stock";
 import { API } from "@/utils/api";
 import { BoxShortcut } from "../common/BoxShortcut";
 import ImageBox from "../common/ImageBox";
-import AccessoryDetailsCard from "./components/AccessoryDetailsCard";
 import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 import StockDiv from "../common/StockDiv";
+import ClientReference from "../common/ClientReference";
+import AccessoryMetadata from "./components/AccessoryMetadata";
 
 interface AccessoryViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -108,7 +109,13 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
           <StockDiv currentStock={currentStock} />
 
           {/* Accessory Details */}
-          <AccessoryDetailsCard accessory={accessory} />
+          <AccessoryMetadata accessory={accessory} />
+
+          {/* Client Reference */}
+          <ClientReference
+            clientName={accessory.clientName}
+            clientRef={accessory.clientRef}
+          />
         </div>
 
         {/* View Box option */}

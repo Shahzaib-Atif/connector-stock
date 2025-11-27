@@ -21,7 +21,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
   return (
     <header
       id="detail-header"
-      className="bg-slate-900/80 backdrop-blur-md sticky top-0 z-10 border-b border-slate-800 px-4 py-3 flex items-center justify-between shadow-sm"
+      className="bg-slate-900/80 backdrop-blur-md sticky top-0 z-10 border-b border-slate-800 px-4 py-3 shadow-sm"
     >
       <div className="mx-auto w-full flex items-center gap-4">
         {/* LOGO and Back button */}
@@ -38,10 +38,12 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
 
         {/* Label and Title */}
         <div className="text-center flex-1">
-          <div className="text-xs text-slate-500 font-medium uppercase tracking-wider">
+          <div className="text-xs sm:text-sm text-slate-500 font-medium uppercase tracking-wider">
             {label}
           </div>
-          <div className="font-mono font-bold text-xl text-white">{title}</div>
+          <div className="font-mono font-bold text-lg sm:text-xl text-white">
+            {title}
+          </div>
         </div>
 
         {/* QR Option */}

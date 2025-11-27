@@ -4,6 +4,8 @@ import { Connector } from "../../../types";
 import { API } from "@/utils/api";
 import ImageBox from "@/components/common/ImageBox";
 import StockDiv from "@/components/common/StockDiv";
+import CardInfoDiv from "@/components/common/CardInfoDiv";
+import ClientReference from "@/components/common/ClientReference";
 
 interface ConnectorSummaryProps {
   connector: Connector;
@@ -15,7 +17,6 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
   currentStock,
 }) => {
   const [error, setError] = useState(false);
-  let timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const imageUrl = API.connectorImages(connector.id);
 
   return (
@@ -29,9 +30,8 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
         imageUrl={imageUrl}
         handleError={() => setError(true)}
       />
-
       {/* Stock Header */}
-      <div className="flex justify-between items-start mb-8">
+      <div className="flex justify-between items-start">
         <StockDiv currentStock={currentStock} />
         <div id="connector-position" className="text-right">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-500/10 text-blue-300 rounded-full text-xs font-bold border border-blue-500/20">
@@ -43,52 +43,17 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
           </div>
         </div>
       </div>
-
       {/* Color, Vias & Type */}
       <div id="connector-metadata" className="grid sm:grid-cols-3 gap-4 mb-4">
-        {/* Color */}
-        <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
-          <div className="text-xs text-slate-500 uppercase font-bold mb-1">
-            Color
-          </div>
-          <div className="font-semibold text-slate-200 flex items-center gap-2">
-            {connector.colorName}
-          </div>
-        </div>
-        {/* Vias */}
-        <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
-          <div className="text-xs text-slate-500 uppercase font-bold mb-1">
-            Vias
-          </div>
-          <div className="font-semibold text-slate-200">
-            {connector.viasName}
-          </div>
-        </div>
-        {/* Type */}
-        <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
-          <div className="text-xs text-slate-500 uppercase font-bold mb-1">
-            Type
-          </div>
-          <div className="font-semibold text-slate-200">{connector.type}</div>
-        </div>
+        <CardInfoDiv label="Color" value={connector.colorName} />
+        <CardInfoDiv label="Vias" value={connector.viasName} />
+        <CardInfoDiv label="Type" value={connector.type} />
       </div>
       {/* Client Reference */}
-      <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 flex items-center gap-3">
-        <div className="p-2 bg-slate-800 rounded-lg text-slate-400 border border-slate-700">
-          <Users className="w-5 h-5" />
-        </div>
-        <div>
-          <div className="text-xs text-slate-500 uppercase font-bold">
-            Client Reference
-          </div>
-          <div className="font-semibold text-slate-200">
-            {connector.clientName}{" "}
-            <span className="text-slate-500 font-normal">
-              ({connector.clientRef})
-            </span>
-          </div>
-        </div>
-      </div>
+      <ClientReference
+        clientName={connector.clientName}
+        clientRef={connector.clientRef}
+      />
     </div>
   );
 };
