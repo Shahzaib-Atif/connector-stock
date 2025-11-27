@@ -16,6 +16,7 @@ import { BoxShortcut } from "../common/BoxShortcut";
 import ImageBox from "../common/ImageBox";
 import AccessoryDetailsCard from "./components/AccessoryDetailsCard";
 import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
+import StockDiv from "../common/StockDiv";
 
 interface AccessoryViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -104,14 +105,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
           />
 
           {/* Stock Details */}
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white">
-                {currentStock}
-              </h2>
-              <p className="text-slate-400 font-medium mt-1">Units Available</p>
-            </div>
-          </div>
+          <StockDiv currentStock={currentStock} />
 
           {/* Accessory Details */}
           <AccessoryDetailsCard accessory={accessory} />

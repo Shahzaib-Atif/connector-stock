@@ -3,6 +3,7 @@ import { MapPin, Users } from "lucide-react";
 import { Connector } from "../../../types";
 import { API } from "@/utils/api";
 import ImageBox from "@/components/common/ImageBox";
+import StockDiv from "@/components/common/StockDiv";
 
 interface ConnectorSummaryProps {
   connector: Connector;
@@ -31,10 +32,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
 
       {/* Stock Header */}
       <div className="flex justify-between items-start mb-8">
-        <div id="connector-stock">
-          <h2 className="text-4xl font-bold text-white">{currentStock}</h2>
-          <p className="text-slate-400 font-medium mt-1">Units Available</p>
-        </div>
+        <StockDiv currentStock={currentStock} />
         <div id="connector-position" className="text-right">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-500/10 text-blue-300 rounded-full text-xs font-bold border border-blue-500/20">
             <MapPin className="w-3 h-3" />
