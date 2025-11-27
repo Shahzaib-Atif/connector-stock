@@ -72,15 +72,7 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
         label="Connector"
         title={connector.id}
         onBack={goBack}
-        rightSlot={
-          <button
-            onClick={() => onOpenQR(connector.id)}
-            className="p-2 -mr-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg"
-            aria-label="Show connector QR"
-          >
-            <QrCode className="w-6 h-6" />
-          </button>
-        }
+        handleQRClick={() => onOpenQR(connector.id)}
       />
 
       <div className="max-w-3xl mx-auto p-4 space-y-4">

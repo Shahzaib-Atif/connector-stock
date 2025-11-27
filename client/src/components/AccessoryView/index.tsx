@@ -91,15 +91,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
         label="Accessory"
         title={accessory.id}
         onBack={goBack}
-        rightSlot={
-          <button
-            onClick={() => onOpenQR(accessory.id)}
-            className="p-2 -mr-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg"
-            aria-label="Show accessory QR"
-          >
-            <QrCode className="w-6 h-6" />
-          </button>
-        }
+        handleQRClick={() => onOpenQR(accessory.id)}
       />
 
       <div className="max-w-3xl mx-auto p-4 space-y-4">

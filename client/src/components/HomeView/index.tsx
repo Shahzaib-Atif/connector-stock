@@ -65,7 +65,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
   useGlobalEnterKey(searchQuery, onScan);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-800 to-slate-900 text-white relative">
+    <div
+      id="home-view"
+      className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-800 to-slate-900 text-white relative"
+    >
       {/* Header */}
       <HeaderBar />
 
