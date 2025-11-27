@@ -5,27 +5,10 @@ import { constructAccessoryId } from "@/services/connectorService";
 
 export function useSuggestions(
   searchQuery: string,
-  wrapperRef: React.RefObject<HTMLDivElement>,
   setShowSuggestions: (value: React.SetStateAction<boolean>) => void
 ) {
   const masterData = useAppSelector((state) => state.stock.masterData);
   const [suggestions, setSuggestions] = useState<suggestion[]>([]);
-
-  useEffect(() => {
-    // Close suggestions when clicking outside
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
-        setShowSuggestions(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [wrapperRef]);
 
   useEffect(() => {
     if (!searchQuery.trim() || !masterData) {
@@ -40,6 +23,11 @@ export function useSuggestions(
     const isExactBoxMatch = masterData.positions && masterData.positions[query];
     const isExactConnectorMatch =
       masterData.references && masterData.references[query];
+    const isExactAccessoryMatch =
+      masterData.accessories &&
+      masterData.accessories.some(
+        (acc) => acc.RefClient && acc.RefClient.toUpperCase() === query
+      );
 
     // Boxes
     if (masterData.positions) {
@@ -62,12 +50,14 @@ export function useSuggestions(
     // Accessories (by RefClient)
     if (masterData.accessories) {
       const accessoryMatches = masterData.accessories
-        .filter((acc) => acc.RefClient && acc.RefClient.toUpperCase().includes(query))
+        .filter(
+          (acc) => acc.RefClient && acc.RefClient.toUpperCase().includes(query)
+        )
         .slice(0, 5)
         .map((acc) => ({
           id: acc.RefClient || "",
           type: "accessory" as const,
-          fullId: constructAccessoryId(acc)
+          fullId: constructAccessoryId(acc),
         }));
       newSuggestions.push(...accessoryMatches);
     }
@@ -78,12 +68,13 @@ export function useSuggestions(
     );
 
     setSuggestions(newSuggestions);
-    
+
     // Only auto-hide if it's an exact match AND there's only one suggestion
     // This allows showing multiple connectors even if the box ID is an exact match
-    const hasOnlyExactMatch = 
-      (isExactBoxMatch || isExactConnectorMatch) && newSuggestions.length === 1;
-    
+    const hasOnlyExactMatch =
+      (isExactBoxMatch || isExactConnectorMatch || isExactAccessoryMatch) &&
+      newSuggestions.length === 1;
+
     if (hasOnlyExactMatch) {
       setShowSuggestions(false);
     } else {

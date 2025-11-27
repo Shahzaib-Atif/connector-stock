@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Scan, Search, AlertTriangle, Box, Zap } from "lucide-react";
-import { useAppSelector } from "../../store/hooks";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { Scan } from "lucide-react";
 import ExampleLookup from "../ExampleLookup";
 import HeaderBar from "./components/HeaderBar";
 import { suggestion } from "@/types";
@@ -8,6 +7,8 @@ import SearchInput from "./components/SearchInput";
 import SuggestionsList from "./components/SuggestionsList";
 import { useSuggestions } from "@/hooks/useSuggestions";
 import ErrorBox from "./components/ErrorBox";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { useSuggestionNavigation } from "../../hooks/useSuggestionNavigation";
 
 interface HomeViewProps {
   onScan: (code: string) => void;
@@ -22,14 +23,16 @@ export const HomeView: React.FC<HomeViewProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const { suggestions } = useSuggestions(
-    searchQuery,
-    wrapperRef,
-    setShowSuggestions
-  );
+  // get suggestions
+  const { suggestions } = useSuggestions(searchQuery, setShowSuggestions);
+
+  // Close suggestions when clicking outside
+  const handleClickOutside = useCallback(() => {
+    setShowSuggestions(false);
+  }, []);
+  useClickOutside(wrapperRef, handleClickOutside);
 
   const handleSuggestionClick = (suggestion: suggestion) => {
     setSearchQuery(suggestion.id);
@@ -37,33 +40,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
     setSelectedIndex(-1);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!showSuggestions || suggestions.length === 0) return;
-
-    switch (e.key) {
-      case "ArrowDown":
-        e.preventDefault();
-        setSelectedIndex((prev) =>
-          prev < suggestions.length - 1 ? prev + 1 : prev
-        );
-        break;
-      case "ArrowUp":
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
-        break;
-      case "Enter":
-        e.preventDefault();
-        if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
-          handleSuggestionClick(suggestions[selectedIndex]);
-        }
-        break;
-      case "Escape":
-        e.preventDefault();
-        setShowSuggestions(false);
-        setSelectedIndex(-1);
-        break;
-    }
-  };
+  const { handleKeyDown, selectedIndex, setSelectedIndex } =
+    useSuggestionNavigation(
+      suggestions,
+      showSuggestions,
+      setShowSuggestions,
+      handleSuggestionClick
+    );
 
   const handleInputFocus = () => {
     // Re-show suggestions when focusing the input, even if there was an exact match before
@@ -73,12 +56,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
   };
 
   // Reset selected index when suggestions change
-  React.useEffect(() => {
+  useEffect(() => {
     setSelectedIndex(-1);
   }, [suggestions]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-800 to-slate-900 text-white relative">
+      {/* Header */}
       <HeaderBar />
 
       <div className="w-full max-w-md space-y-8">
