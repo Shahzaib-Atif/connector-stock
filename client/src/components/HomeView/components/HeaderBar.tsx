@@ -1,3 +1,4 @@
+import LogoSvg from "@/icons/LogoSvg";
 import { logout } from "@/store/authSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { LogOut } from "lucide-react";
@@ -12,18 +13,7 @@ function HeaderBar() {
         href="/"
         className="absolute top-3 left-3 md:left-6 p-2 text-slate-400 hover:text-white flex items-center gap-2"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-8 w-8 text-blue-500"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-        </svg>
+        <LogoSvg />
         <span className="text-base md:text-xl font-bold">divmac</span>
       </a>
 
