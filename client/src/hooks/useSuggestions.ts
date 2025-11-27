@@ -7,7 +7,7 @@ export function useSuggestions(
   searchQuery: string,
   setShowSuggestions: (value: React.SetStateAction<boolean>) => void
 ) {
-  const masterData = useAppSelector((state) => state.stock.masterData);
+  const masterData = useAppSelector((state) => state.masterData.data);
   const [suggestions, setSuggestions] = useState<suggestion[]>([]);
 
   useEffect(() => {

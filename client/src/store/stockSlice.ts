@@ -1,29 +1,23 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { MasterData, Transaction } from "../types";
-import { fetchMasterData } from "../api";
+import { Transaction } from "../types";
 import { getStockMap } from "@/api/stockApi";
 import { getTransactions } from "@/api/transactionsApi";
 
 interface StockState {
-  masterData: MasterData | null;
-  loading: boolean;
   transactions: Transaction[];
   stockCache: Record<string, number>;
 }
 
 const initialState: StockState = {
-  masterData: null,
-  loading: true,
   transactions: [],
   stockCache: {},
 };
 
-// Loads master data, stock map, and transactions into initial Redux state.
+// Loads stock map and transactions into initial Redux state.
 export const initStockData = createAsyncThunk("stock/init", async () => {
-  const masterData = await fetchMasterData();
   const stockCache = getStockMap();
   const transactions = getTransactions();
-  return { masterData, stockCache, transactions };
+  return { stockCache, transactions };
 });
 
 export const stockSlice = createSlice({
@@ -45,12 +39,10 @@ export const stockSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Populates state with fetched data and marks loading complete.
+    // Populates state with fetched data.
     builder.addCase(initStockData.fulfilled, (state, action) => {
-      state.masterData = action.payload.masterData;
       state.stockCache = action.payload.stockCache;
       state.transactions = action.payload.transactions;
-      state.loading = false;
     });
   },
 });

@@ -9,7 +9,7 @@ import {
 
 export const useScan = () => {
   const navigate = useNavigate();
-  const { masterData } = useAppSelector((state) => state.stock);
+  const masterData = useAppSelector((state) => state.masterData.data);
   const [error, setError] = useState<string | null>(null);
 
   const handleScan = (inputCode: string) => {

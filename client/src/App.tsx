@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "./store/hooks";
 import { initStockData } from "./store/stockSlice";
+import { initMasterData } from "./store/masterDataSlice";
 import { useTransactionFlow } from "./hooks/useTransactionFlow";
 
 // Components
@@ -13,7 +14,7 @@ import { useScan } from "./hooks/useScan";
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { loading } = useAppSelector((state) => state.stock);
+  const { loading } = useAppSelector((state) => state.masterData);
   const [qrModalOpen, setQrModalOpen] = useState(false);
   const [activeItemId, setActiveItemId] = useState("");
   const { handleScan, error, clearError } = useScan();
@@ -21,6 +22,7 @@ const App: React.FC = () => {
   const tx = useTransactionFlow();
 
   useEffect(() => {
+    dispatch(initMasterData());
     dispatch(initStockData());
   }, [dispatch]);
 

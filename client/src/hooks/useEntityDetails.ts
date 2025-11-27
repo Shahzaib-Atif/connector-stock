@@ -17,7 +17,8 @@ export type EntityResolver<T> = (
 // Keeps screens focused on rendering.
 export const useEntityDetails = <T>(resolver: EntityResolver<T>) => {
   const { id } = useParams<{ id: string }>();
-  const { stockCache, masterData } = useAppSelector((state) => state.stock);
+  const { stockCache } = useAppSelector((state) => state.stock);
+  const masterData = useAppSelector((state) => state.masterData.data);
 
   const entity = useMemo(() => {
     if (!id) return null;

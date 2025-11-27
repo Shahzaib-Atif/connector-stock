@@ -7,7 +7,7 @@ import { updateStock } from "../store/stockSlice";
 export const useTransactionFlow = () => {
   const dispatch = useAppDispatch();
 
-  const { masterData } = useAppSelector((state) => state.stock);
+  const { data: masterData } = useAppSelector((state) => state.masterData);
 
   const [isOpen, setIsOpen] = useState(false);
   const [txType, setTxType] = useState<"IN" | "OUT">("IN");
