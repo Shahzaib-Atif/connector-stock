@@ -6,10 +6,10 @@ import { useTransactionFlow } from "./hooks/useTransactionFlow";
 
 // Components
 import { Login } from "./components/Login";
-import { TransactionModal } from "./components/TransactionModal";
 import { QRModal } from "./components/QRModal";
 import { AppRoutes } from "./components/AppRoutes";
 import { useScan } from "./hooks/useScan";
+import { TransactionModal } from "./components/TransactionModal";
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
