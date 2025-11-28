@@ -36,10 +36,8 @@ const accessoryResolver: EntityResolver<Accessory> = (
   if (!accessoryId.includes("_") || !masterData || !masterData.accessories)
     return null;
 
-  // Find accessory by reconstructing ID format: ConnName_RefClient_RefDV
-  const apiAccessory = masterData.accessories.find((acc) => {
-    return accessoryId === constructAccessoryId(acc);
-  });
+  // Find accessory by matching id
+  const apiAccessory = masterData.accessories[accessoryId];
 
   // If we didn't find it in the API data, return null (will show "not found")
   if (!apiAccessory) return null;

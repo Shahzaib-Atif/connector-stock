@@ -1,12 +1,11 @@
 import {
   ConnectorReferenceApiResponse,
   ConnectorTypeApiResponse,
+  MasterData,
 } from "@/types";
 import { API } from "@/utils/api";
 
-export const fetchReferencias = async (): Promise<
-  Record<string, ConnectorReferenceApiResponse>
-> => {
+export const fetchReferencias = async (): Promise<MasterData["connectors"]> => {
   try {
     const response = await fetch(API.referencias);
     if (!response.ok) {
@@ -14,7 +13,7 @@ export const fetchReferencias = async (): Promise<
     }
     const data: ConnectorReferenceApiResponse[] = await response.json();
 
-    const references: Record<string, ConnectorReferenceApiResponse> = {};
+    const references = {};
     data.forEach((item) => {
       if (item.CODIVMAC) {
         references[item.CODIVMAC.trim()] = item;

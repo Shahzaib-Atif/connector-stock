@@ -9,7 +9,7 @@ import {
 import { getCoordinates } from "../utils/inventoryUtils";
 
 // Construct a unique ID using ConnName, RefClient, and RefDV
-export function constructAccessoryId(apiAccessory: any) {
+export function constructAccessoryId(apiAccessory: AccessoryApiResponse) {
   const connName = apiAccessory.ConnName || "";
   const refClient = apiAccessory.RefClient || "";
   const refDV = apiAccessory.RefDV || "";
@@ -73,7 +73,7 @@ export const parseConnector = (
   // Find associated accessories from the real API data
   const accessories: Accessory[] = [];
   if (masterData.accessories) {
-    masterData.accessories.forEach((acc) => {
+    Object.values(masterData.accessories).forEach((acc) => {
       if (acc.ConnName === id) {
         accessories.push(parseAccessory(acc, stockMap, masterData));
       }

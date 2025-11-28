@@ -25,8 +25,8 @@ export function useSuggestions(
       masterData.connectors && masterData.connectors[query];
     const isExactAccessoryMatch =
       masterData.accessories &&
-      masterData.accessories.some(
-        (acc) => acc.RefClient && acc.RefClient.toUpperCase() === query
+      Object.keys(masterData.accessories).some(
+        (key) => key.toUpperCase() === query
       );
 
     // Boxes
@@ -49,15 +49,12 @@ export function useSuggestions(
 
     // Accessories (by RefClient)
     if (masterData.accessories) {
-      const accessoryMatches = masterData.accessories
-        .filter(
-          (acc) => acc.RefClient && acc.RefClient.toUpperCase().includes(query)
-        )
+      const accessoryMatches = Object.keys(masterData.accessories)
+        .filter((key) => key.toUpperCase().includes(query))
         .slice(0, 5)
-        .map((acc) => ({
-          id: acc.RefClient || "",
+        .map((key) => ({
+          id: key,
           type: "accessory" as const,
-          fullId: constructAccessoryId(acc),
         }));
       newSuggestions.push(...accessoryMatches);
     }

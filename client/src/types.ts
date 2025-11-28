@@ -12,7 +12,7 @@ export interface Accessory {
 
 export interface Connector {
   id: string; // e.g., A255PR (6 chars)
-  posId: string; // e.g., A255 (4 chars) - The Box ID
+  posId: string; // e.g., A255 (4 chars)
   colorCode: string; // e.g., P
   viasCode: string; // e.g., R
   colorName: string;
@@ -20,8 +20,8 @@ export interface Connector {
   viasName: string;
   cv: string; // Vertical Coordinate
   ch: string; // Horizontal Coordinate
-  fabricante: string; // String Reference
-  refabricante: string; // Resolved Name
+  fabricante: string;
+  refabricante: string;
   type: string;
   description: string;
   stock: number;
@@ -56,7 +56,7 @@ export interface MasterData {
   accessoryTypes: string[];
   positions: Record<string, { cv: string; ch: string }>;
   connectors: Record<string, ConnectorReferenceApiResponse>;
-  accessories: AccessoryApiResponse[];
+  accessories: Record<string, AccessoryApiResponse>;
 }
 
 export interface ColorApiResponse {

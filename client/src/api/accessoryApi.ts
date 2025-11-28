@@ -1,16 +1,34 @@
-import { AccessoryApiResponse, AccessoryTypeApiResponse } from "@/types";
+import { constructAccessoryId } from "@/services/connectorService";
+import {
+  AccessoryApiResponse,
+  AccessoryTypeApiResponse,
+  MasterData,
+} from "@/types";
 import { API } from "@/utils/api";
 
-export const fetchAccessories = async (): Promise<AccessoryApiResponse[]> => {
+export const fetchAccessories = async (): Promise<
+  MasterData["accessories"]
+> => {
   try {
     const response = await fetch(API.accessories);
     if (!response.ok) {
       throw new Error("Failed to fetch accessories");
     }
-    return await response.json();
+
+    const data: AccessoryApiResponse[] = await response.json();
+
+    const accessories = {};
+    data.forEach((item) => {
+      if (item.RefClient) {
+        const id = constructAccessoryId(item);
+        accessories[id] = item;
+      }
+    });
+
+    return accessories;
   } catch (error) {
     console.error("Error fetching accessories:", error);
-    return [];
+    return {};
   }
 };
 

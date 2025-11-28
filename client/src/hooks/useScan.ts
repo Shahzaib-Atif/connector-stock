@@ -45,24 +45,17 @@ export const useScan = () => {
     else setError("Box not found!");
   };
 
-  const handleAccessoryNav = (code: string) => {
+  const handleAccessoryNav = (id: string) => {
     // Search for accessory by RefClient (clientRef field)
     if (!masterData.accessories) {
       setError("Accessory not found!");
       return;
     }
 
-    const accessory = masterData.accessories.find(
-      (acc) =>
-        acc.RefClient && acc.RefClient.toUpperCase() === code.toUpperCase()
-    );
+    const accessory = masterData.accessories[id];
 
-    if (accessory) {
-      const accessoryId = constructAccessoryId(accessory);
-      navigate(`/accessory/${accessoryId}`);
-    } else {
-      setError("Invalid code. Unable to find this item!");
-    }
+    if (accessory) navigate(`/accessory/${id}`);
+    else setError("Invalid code. Unable to find this item!");
   };
   //#endregion
 
