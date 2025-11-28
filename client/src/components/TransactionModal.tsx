@@ -62,9 +62,27 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             >
               -
             </button>
-            <div className="text-4xl font-bold text-white w-20 text-center">
-              {amount}
-            </div>
+            <input
+              type="number"
+              value={amount === 0 ? "" : amount}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === "") {
+                  setAmount(0);
+                } else {
+                  const num = parseInt(val);
+                  if (!isNaN(num) && num >= 0) {
+                    setAmount(num);
+                  }
+                }
+              }}
+              onBlur={() => {
+                if (amount === 0) {
+                  setAmount(1);
+                }
+              }}
+              className="text-4xl font-bold text-white w-24 text-center bg-transparent border-none outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            />
             <button
               onClick={() => setAmount(amount + 1)}
               className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold text-xl hover:bg-slate-600 transition-colors"
@@ -99,12 +117,17 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           )}
 
           <button
-            onClick={() => onConfirm(amount, type === "OUT" ? dept : undefined)}
+            onClick={() => {
+              if (amount > 0) {
+                onConfirm(amount, type === "OUT" ? dept : undefined);
+              }
+            }}
             className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transition-transform active:scale-[0.98] ${
               type === "IN"
                 ? "btn-primary"
                 : "bg-orange-600 hover:bg-orange-500"
-            }`}
+            } ${amount === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={amount === 0}
           >
             CONFIRM {type === "IN" ? "ENTRY" : "WITHDRAWAL"}
           </button>
