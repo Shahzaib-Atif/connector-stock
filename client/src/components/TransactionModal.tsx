@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { X, ChevronDown } from "lucide-react";
 import { Department } from "../types";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { useEscKeyDown } from "@/hooks/useEscKeyDown";
 
 interface TransactionModalProps {
   type: "IN" | "OUT";
@@ -18,9 +20,19 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   const [amount, setAmount] = useState(1);
   const [dept, setDept] = useState<Department>(Department.GT);
 
+  const ref = useRef(null);
+  useClickOutside(ref, onClose);
+  useEscKeyDown(ref, onClose);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-slate-800 w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl border border-slate-700 animate-in slide-in-from-bottom-10 duration-300">
+    <div
+      id="transaction-modal"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+    >
+      <div
+        ref={ref}
+        className="bg-slate-800 w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl border border-slate-700 animate-in slide-in-from-bottom-10 duration-300"
+      >
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-bold text-white">
             {type === "IN" ? "Add Stock" : "Remove Stock"}
