@@ -1,4 +1,5 @@
-import React from "react";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import React, { useRef } from "react";
 
 interface QRModalProps {
   itemId: string;
@@ -7,11 +8,18 @@ interface QRModalProps {
 
 export const QRModal: React.FC<QRModalProps> = ({ itemId, onClose }) => {
   const itemIdLink = getItemIdLink(itemId);
-  console.log(itemId);
+  const ref = useRef(null);
+  useClickOutside(ref, onClose);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-slate-800 w-full max-w-sm rounded-2xl p-6 shadow-2xl text-center border border-slate-700">
+    <div
+      id="qr-modal"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in"
+    >
+      <div
+        ref={ref}
+        className="bg-slate-800 w-full max-w-sm rounded-2xl p-6 shadow-2xl text-center border border-slate-700"
+      >
         <div className="mb-6">
           <h3 className="text-lg font-bold text-white">Scan Code</h3>
           <p className="text-slate-400 text-sm">Print this for {itemId}</p>
