@@ -29,7 +29,7 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
   const { entity: box, stockCache } = useEntityDetails<Box>(boxResolver);
   const { goBack, goToConnector, goToAccessory } = useInventoryNavigation();
 
-  // Enable Escape key to go back
+  // Enable Back key to go back
   useGlobalBackNavigation(goBack);
 
   // show not found page if box not found

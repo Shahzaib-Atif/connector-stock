@@ -1,4 +1,5 @@
 import { useClickOutside } from "@/hooks/useClickOutside";
+import { useEscKeyDown } from "@/hooks/useEscKeyDown";
 import React, { useRef } from "react";
 
 interface QRModalProps {
@@ -9,7 +10,9 @@ interface QRModalProps {
 export const QRModal: React.FC<QRModalProps> = ({ itemId, onClose }) => {
   const itemIdLink = getItemIdLink(itemId);
   const ref = useRef(null);
+
   useClickOutside(ref, onClose);
+  useEscKeyDown(ref, onClose);
 
   return (
     <div

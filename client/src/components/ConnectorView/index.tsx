@@ -36,7 +36,7 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
     useEntityDetails<Connector>(connectorResolver);
   const { goBack, goToAccessory, goToBox } = useInventoryNavigation();
 
-  // Enable Escape key to go back
+  // Enable Back key to go back
   useGlobalBackNavigation(goBack);
 
   if (!connector) {
