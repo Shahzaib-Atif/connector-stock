@@ -1,5 +1,11 @@
 import { getStockMap } from "@/api/stockApi";
-import { Connector, Box, Accessory, MasterData } from "../types";
+import {
+  Connector,
+  Box,
+  Accessory,
+  MasterData,
+  AccessoryApiResponse,
+} from "../types";
 import { getCoordinates } from "../utils/inventoryUtils";
 
 // Construct a unique ID using ConnName, RefClient, and RefDV
@@ -13,17 +19,13 @@ export function constructAccessoryId(apiAccessory: any) {
 }
 
 export const parseAccessory = (
-  apiAccessory: any,
+  apiAccessory: AccessoryApiResponse,
   stockMap: Record<string, number>,
   masterData: MasterData
 ): Accessory => {
   const connectorId = apiAccessory.ConnName || "";
-  const clientRef = apiAccessory.RefClient || "";
   const id = constructAccessoryId(apiAccessory);
-
   const posId = connectorId.substring(0, 4);
-  const clientName = masterData.clients[clientRef] || "Unknown";
-  const type = apiAccessory.AccessoryType;
 
   let stock = stockMap[id];
   if (stock === undefined) {
@@ -34,13 +36,12 @@ export const parseAccessory = (
     id,
     connectorId,
     posId,
-    clientRef,
-    clientName,
-    type,
     stock,
+    type: apiAccessory.AccessoryType,
+    refClient: apiAccessory.RefClient,
+    refDV: apiAccessory.RefDV,
     capotAngle: apiAccessory.CapotAngle || undefined,
     clipColor: apiAccessory.ClipColor || undefined,
-    refClient: apiAccessory.RefClient || undefined,
   };
 };
 
@@ -59,8 +60,8 @@ export const parseConnector = (
   const colorCode = reference.Cor;
   const viasCode = reference.Vias;
   const type = reference.ConnType;
-  const clientName = reference.Fabricante || "Unknown";
-  const clientRef = reference.Refabricante || "";
+  const fabricante = reference.Fabricante || "--";
+  const refabricante = reference.Refabricante || "";
 
   const coords = getCoordinates(posId, masterData);
 
@@ -89,8 +90,8 @@ export const parseConnector = (
     viasName: masterData.vias[viasCode] || "Standard",
     cv: coords?.cv ?? "?",
     ch: coords?.ch ?? "?",
-    clientRef,
-    clientName,
+    fabricante,
+    refabricante,
     type,
     description: `${masterData.colors[colorCode] || "Generic"} / ${
       masterData.vias[viasCode] || "Std"

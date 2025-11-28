@@ -54,7 +54,7 @@ export const AccessoryItem: React.FC<Props> = ({
               Type: <span className="text-slate-200">{accessory.type}</span>
             </div>
             <div className="text-sm text-slate-500 mt-1 space-y-1">
-              <p>Ref: {accessory.clientRef || "N/A"}</p>
+              <p>Ref: {accessory.refClient || "N/A"}</p>
               {accessory.capotAngle && (
                 <p className="text-blue-400">Angle: {accessory.capotAngle}</p>
               )}

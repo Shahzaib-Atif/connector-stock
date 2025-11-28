@@ -2,13 +2,12 @@ export interface Accessory {
   id: string; // e.g., A255PR_1024
   connectorId: string; // e.g. A255PR
   posId: string; // e.g. A255
-  clientRef: string; // e.g. "1024"
-  clientName: string; // e.g. AutoSys
-  type: string; // e.g. "Dust Cap"
+  refClient: string;
+  refDV: string;
+  type: string;
   stock: number;
   capotAngle?: string;
   clipColor?: string;
-  refClient?: string;
 }
 
 export interface Connector {
@@ -21,8 +20,8 @@ export interface Connector {
   viasName: string;
   cv: string; // Vertical Coordinate
   ch: string; // Horizontal Coordinate
-  clientRef: string; // String Reference
-  clientName: string; // Resolved Name
+  fabricante: string; // String Reference
+  refabricante: string; // Resolved Name
   type: string;
   description: string;
   stock: number;

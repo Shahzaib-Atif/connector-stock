@@ -111,11 +111,10 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
           {/* Accessory Details */}
           <AccessoryMetadata accessory={accessory} />
 
-          {/* Client Reference */}
-          <ClientReference
+          {/* <ClientReference
             clientName={accessory.clientName}
             clientRef={accessory.clientRef}
-          />
+          /> */}
         </div>
 
         {/* View Box option */}
