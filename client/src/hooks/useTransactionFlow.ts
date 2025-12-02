@@ -24,23 +24,35 @@ export const useTransactionFlow = () => {
     setTargetId(undefined);
   };
 
-  const handleSubmit = (amount: number, department?: Department) => {
+  const handleSubmit = async (amount: number, department?: Department) => {
     if (!targetId || !masterData) return;
 
+    // const currentStock = stockCache[targetId] || 0;
+    const currentStock = 0; //  TODO
     const delta = txType === "IN" ? amount : -amount;
-    const result = performTransaction(targetId, delta, masterData, department);
+    const newStock = Math.max(0, currentStock + delta);
 
-    dispatch(
-      updateStock({
-        connectorId: targetId,
-        amount: result.accessory
-          ? result.accessory.stock
-          : result.connector?.stock || 0,
-        transaction: result.transaction,
-      })
-    );
+    try {
+      const result = await performTransaction(
+        targetId,
+        delta,
+        masterData,
+        department
+      );
 
-    closeTransaction();
+      dispatch(
+        updateStock({
+          connectorId: targetId,
+          amount: newStock,
+          transaction: result.transaction,
+        })
+      );
+
+      closeTransaction();
+    } catch (error) {
+      console.error("Transaction failed:", error);
+      // Optionally handle error state here
+    }
   };
 
   return {

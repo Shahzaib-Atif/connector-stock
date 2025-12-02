@@ -1,11 +1,9 @@
-import { getStockMap } from "@/api/stockApi";
 import { Connector, Box, Accessory, MasterData } from "../types";
 import { getCoordinates } from "../utils/inventoryUtils";
 import { parseAccessory } from "./accessoryService";
 
 export const parseConnector = (
   id: string,
-  stockMap: Record<string, number>,
   masterData: MasterData
 ): Connector | null => {
   const reference = masterData.connectors?.[id];
@@ -23,17 +21,14 @@ export const parseConnector = (
 
   const coords = getCoordinates(posId, masterData);
 
-  let stock = stockMap[id];
-  if (stock === undefined) {
-    stock = 0; // Default to 0 stock if not found
-  }
+  const stock = 0; // Stock is now managed by Redux
 
   // Find associated accessories from the real API data
   const accessories: Accessory[] = [];
   if (masterData.accessories) {
     Object.values(masterData.accessories).forEach((acc) => {
       if (acc.ConnName === id) {
-        accessories.push(parseAccessory(acc, stockMap));
+        accessories.push(parseAccessory(acc));
       }
     });
   }
@@ -68,7 +63,7 @@ export const getBoxDetails = (
   const coords = getCoordinates(boxId, masterData);
   if (!coords) return null;
 
-  const stockMap = getStockMap();
+  const stockMap = {};
 
   const connectors: Connector[] = [];
 
@@ -76,7 +71,7 @@ export const getBoxDetails = (
   if (masterData.connectors) {
     Object.values(masterData.connectors).forEach((ref) => {
       if (ref.Pos_ID === boxId) {
-        const conn = parseConnector(ref.CODIVMAC, stockMap, masterData);
+        const conn = parseConnector(ref.CODIVMAC, masterData);
         if (conn) connectors.push(conn);
       }
     });
@@ -103,12 +98,12 @@ export const searchConnectors = (
   masterData: MasterData
 ): Connector[] => {
   const results: Connector[] = [];
-  const stockMap = getStockMap();
+  const stockMap = {};
   const normalizedQuery = query.trim().toUpperCase();
 
   // 1. Direct Connector ID Match (using references key)
   if (masterData.connectors && masterData.connectors[normalizedQuery]) {
-    const conn = parseConnector(normalizedQuery, stockMap, masterData);
+    const conn = parseConnector(normalizedQuery, masterData);
     if (conn) results.push(conn);
   }
 
@@ -121,7 +116,7 @@ export const searchConnectors = (
         if (refItem.CODIVMAC === normalizedQuery) return;
 
         if (refItem.Pos_ID === normalizedQuery) {
-          const conn = parseConnector(refItem.CODIVMAC, stockMap, masterData);
+          const conn = parseConnector(refItem.CODIVMAC, masterData);
           if (conn) results.push(conn);
         }
       });

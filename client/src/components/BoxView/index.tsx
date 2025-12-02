@@ -8,7 +8,6 @@ import { InventoryListItem } from "../common/InventoryListItem";
 import { NotFoundPage } from "../common/NotFoundPage";
 import { useInventoryNavigation } from "../../hooks/useInventoryNavigation";
 import { EntityResolver, useEntityDetails } from "../../hooks/useEntityDetails";
-import { resolveLiveStock } from "../../utils/stock";
 import BoxCoordinatesCard from "./components/BoxCoordinatesCard";
 import ConnectorInfo from "./components/ConnectorInfo";
 import StockBadge from "./components/StockBadge";
@@ -26,7 +25,7 @@ const boxResolver: EntityResolver<Box> = (boxId, { masterData }) => {
 
 export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
   // resolve box plus cache.
-  const { entity: box, stockCache } = useEntityDetails<Box>(boxResolver);
+  const { entity: box } = useEntityDetails<Box>(boxResolver);
   const { goBack, goToConnector, goToAccessory } = useInventoryNavigation();
 
   // Enable Back key to go back
@@ -75,14 +74,12 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
           defaultOpen={true}
         >
           {box.connectors.map((conn) => {
-            // Helper keeps each row stock in sync.
-            const liveStock = resolveLiveStock(stockCache, conn.id, conn.stock);
             return (
               <InventoryListItem
                 key={conn.id}
                 onClick={() => handleConnectorScan(conn.id)}
-                left={<ConnectorInfo conn={conn} liveStock={liveStock} />}
-                right={<StockBadge liveStock={liveStock} />}
+                left={<ConnectorInfo conn={conn} liveStock={conn.stock} />}
+                right={<StockBadge liveStock={conn.stock} />}
               />
             );
           })}
@@ -96,13 +93,12 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
           defaultOpen={true}
         >
           {box.accessories.map((acc) => {
-            const liveStock = resolveLiveStock(stockCache, acc.id, acc.stock);
             return (
               <InventoryListItem
                 key={acc.id}
                 onClick={() => handleAccessoryScan(acc.id)}
-                left={<AccessoryInfo acc={acc} liveStock={liveStock} />}
-                right={<StockBadge liveStock={liveStock} />}
+                left={<AccessoryInfo acc={acc} liveStock={acc.stock} />}
+                right={<StockBadge liveStock={acc.stock} />}
               />
             );
           })}

@@ -8,7 +8,6 @@ import { TransactionBar } from "../common/TransactionBar";
 import { NotFoundPage } from "../common/NotFoundPage";
 import { useInventoryNavigation } from "../../hooks/useInventoryNavigation";
 import { useEntityDetails, EntityResolver } from "../../hooks/useEntityDetails";
-import { resolveLiveStock } from "../../utils/stock";
 import { ConnectorSummary } from "./components/ConnectorSummary";
 import { AccessoryList } from "./components/AccessoryList";
 import { BoxShortcut } from "../common/BoxShortcut";
@@ -21,10 +20,10 @@ interface ConnectorViewProps {
 
 const connectorResolver: EntityResolver<Connector> = (
   connectorId,
-  { stockCache, masterData }
+  { masterData }
 ) => {
   if (connectorId.length !== 6 || !masterData) return null;
-  return parseConnector(connectorId, stockCache, masterData);
+  return parseConnector(connectorId, masterData);
 };
 
 export const ConnectorView: React.FC<ConnectorViewProps> = ({
@@ -32,8 +31,7 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
   onOpenQR,
 }) => {
   // Shared hook lifts params and cache plumbing.
-  const { entity: connector, stockCache } =
-    useEntityDetails<Connector>(connectorResolver);
+  const { entity: connector } = useEntityDetails<Connector>(connectorResolver);
   const { goBack, goToAccessory, goToBox } = useInventoryNavigation();
 
   // Enable Back key to go back
@@ -50,13 +48,6 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
       />
     );
   }
-
-  // Prefer cached quantity with parsed fallback.
-  const currentStock = resolveLiveStock(
-    stockCache,
-    connector.id,
-    connector.stock
-  );
 
   const handleAccessoryInspect = (accessoryId: string) => {
     goToAccessory(accessoryId);
@@ -76,7 +67,10 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
       />
 
       <div className="max-w-3xl mx-auto p-4 space-y-4">
-        <ConnectorSummary connector={connector} currentStock={currentStock} />
+        <ConnectorSummary
+          connector={connector}
+          currentStock={connector.stock}
+        />
 
         {/* Accessories List */}
         {connector.accessories.length > 0 && (
@@ -87,7 +81,6 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
           >
             <AccessoryList
               accessories={connector.accessories}
-              stockCache={stockCache}
               onTransaction={onTransaction}
               onInspect={handleAccessoryInspect}
             />

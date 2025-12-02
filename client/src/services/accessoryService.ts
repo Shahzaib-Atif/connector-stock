@@ -1,17 +1,11 @@
 import { Accessory, AccessoryApiResponse } from "@/types";
 
 export const parseAccessory = (
-  apiAccessory: AccessoryApiResponse,
-  stockMap: Record<string, number>
+  apiAccessory: AccessoryApiResponse
 ): Accessory => {
   const connectorId = apiAccessory.ConnName || "";
   const id = constructAccessoryId(apiAccessory);
   const posId = connectorId.substring(0, 4);
-
-  let stock = stockMap[id];
-  if (stock === undefined) {
-    stock = 0;
-  }
 
   return {
     id,

@@ -121,7 +121,6 @@ export interface StockState {
   masterData: MasterData | null;
   loading: boolean;
   transactions: Transaction[];
-  stockCache: Record<string, number>;
 }
 
 export type StockAction =

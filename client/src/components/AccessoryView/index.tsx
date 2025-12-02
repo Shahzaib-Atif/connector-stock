@@ -6,7 +6,6 @@ import { TransactionBar } from "../common/TransactionBar";
 import { NotFoundPage } from "../common/NotFoundPage";
 import { useInventoryNavigation } from "../../hooks/useInventoryNavigation";
 import { EntityResolver, useEntityDetails } from "../../hooks/useEntityDetails";
-import { resolveLiveStock } from "../../utils/stock";
 import { API } from "@/utils/api";
 import { BoxShortcut } from "../common/BoxShortcut";
 import ImageBox from "../common/ImageBox";
@@ -26,8 +25,8 @@ interface AccessoryViewProps {
  * Searches masterData.accessories, then parses matching raw API data.
  */
 const accessoryResolver: EntityResolver<Accessory> = (
-  accessoryId, // e.g., "E143P1_P01129373_CLIPS"
-  { stockCache, masterData } // Data from Redux store
+  accessoryId,
+  { masterData } // Data from Redux store
 ) => {
   // Basic validation: ID must have underscores and we need master data
   if (!accessoryId.includes("_") || !masterData || !masterData.accessories)
@@ -40,7 +39,7 @@ const accessoryResolver: EntityResolver<Accessory> = (
   if (!apiAccessory) return null;
 
   // Convert the raw API data into a clean Accessory object with proper formatting
-  return parseAccessory(apiAccessory, stockCache);
+  return parseAccessory(apiAccessory);
 };
 
 export const AccessoryView: React.FC<AccessoryViewProps> = ({
@@ -48,8 +47,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
   onOpenQR,
 }) => {
   // Gets ID from URL, calls resolver to convert ID to Accessory object
-  const { entity: accessory, stockCache } =
-    useEntityDetails<Accessory>(accessoryResolver);
+  const { entity: accessory } = useEntityDetails<Accessory>(accessoryResolver);
   const { goBack, goToBox } = useInventoryNavigation();
   const [error, setError] = useState(false);
 
@@ -70,13 +68,6 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
   }
 
   const imageUrl = API.accessoryImages(accessory.id);
-
-  // Get the current stock, preferring live cached data over the parsed fallback
-  const currentStock = resolveLiveStock(
-    stockCache,
-    accessory.id,
-    accessory.stock
-  );
 
   const handleBoxOpen = (boxId: string) => {
     goToBox(boxId);
@@ -101,7 +92,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
           />
 
           {/* Stock Details */}
-          <StockDiv currentStock={currentStock} />
+          <StockDiv currentStock={accessory.stock} />
 
           {/* Accessory Details */}
           <AccessoryMetadata accessory={accessory} />
