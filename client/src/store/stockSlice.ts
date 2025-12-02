@@ -29,7 +29,7 @@ export const stockSlice = createSlice({
         transaction: Transaction;
       }>
     ) => {
-      const { connectorId, amount, transaction } = action.payload;
+      const { transaction } = action.payload;
       state.transactions.unshift(transaction);
     },
   },

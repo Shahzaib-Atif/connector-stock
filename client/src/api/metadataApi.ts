@@ -55,7 +55,7 @@ export const fetchPositions = async (): Promise<
   Record<string, { cv: string; ch: string }>
 > => {
   try {
-    const response = await fetch(API.cordCon);
+    const response = await fetch(API.positions);
     if (!response.ok) {
       throw new Error("Failed to fetch positions");
     }
