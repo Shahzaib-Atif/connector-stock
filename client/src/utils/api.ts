@@ -9,6 +9,7 @@ export const API = {
   accessoryTypes: `${API_BASE_URL}/accessory-types`,
   connectorTypes: `${API_BASE_URL}/connector-types`,
   cordCon: `${API_BASE_URL}/Cord_CON`,
-  referencias: `${API_BASE_URL}/Referencias`,
-  accessories: `${API_BASE_URL}/Accessories`,
+  referencias: `${API_BASE_URL}/referencias`,
+  accessories: `${API_BASE_URL}/accessories`,
+  transactions: `${API_BASE_URL}/transactions`,
 };
