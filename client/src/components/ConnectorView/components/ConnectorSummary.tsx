@@ -6,6 +6,7 @@ import ImageBox from "@/components/common/ImageBox";
 import StockDiv from "@/components/common/StockDiv";
 import CardInfoDiv from "@/components/common/CardInfoDiv";
 import ClientReference from "@/components/common/ClientReference";
+import { VIEW_SUMMARY_CLASS } from "@/utils/constants";
 
 interface ConnectorSummaryProps {
   connector: Connector;
@@ -20,10 +21,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
   const imageUrl = API.connectorImages(connector.id);
 
   return (
-    <div
-      id="connector-summary"
-      className="bg-slate-800/50 rounded-2xl p-6 shadow-lg border border-slate-700"
-    >
+    <div id="connector-summary" className={VIEW_SUMMARY_CLASS}>
       {/* Connector Image (if available) */}
       <ImageBox
         error={error}
@@ -44,7 +42,10 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
         </div>
       </div>
       {/* Color, Vias & Type */}
-      <div id="connector-metadata" className="grid sm:grid-cols-3 gap-4 mb-4">
+      <div
+        id="connector-metadata"
+        className="grid sm:grid-cols-3 gap-3 sm:gap-4 mb-4"
+      >
         <CardInfoDiv label="Color" value={connector.colorName} />
         <CardInfoDiv label="Vias" value={connector.viasName} />
         <CardInfoDiv label="Type" value={connector.type} />

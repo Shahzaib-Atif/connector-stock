@@ -18,6 +18,7 @@ import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 import StockDiv from "../common/StockDiv";
 import ClientReference from "../common/ClientReference";
 import AccessoryMetadata from "./components/AccessoryMetadata";
+import { VIEW_SUMMARY_CLASS } from "@/utils/constants";
 
 interface AccessoryViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -95,7 +96,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
       />
 
       <div className="max-w-3xl mx-auto p-4 space-y-4">
-        <div className="bg-slate-800/50 rounded-2xl p-6 shadow-lg border border-slate-700">
+        <div id="accessory-summary" className={VIEW_SUMMARY_CLASS}>
           {/* Accessory Image */}
           <ImageBox
             error={error}
