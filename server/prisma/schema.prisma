@@ -190,3 +190,12 @@ model REG_Amostras {
   NumORC           String?   @db.VarChar(100)
   Ref_Fornecedor   String?   @db.NVarChar(100)
 }
+
+model Transactions {
+  ID              Int       @id(map: "Transactions_PK") @default(autoincrement())
+  itemId          String    @db.VarChar(30)
+  transactionType String    @db.VarChar(3)
+  amount          Int
+  department      String?   @db.VarChar(20)
+  updatedAt       DateTime?
+}

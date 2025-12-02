@@ -1,11 +1,5 @@
-import { getTransactions } from "@/api/transactionsApi";
-import {
-  Transaction,
-  Connector,
-  Accessory,
-  MasterData,
-  AccessoryApiResponse,
-} from "../types";
+import { createTransaction } from "@/api/transactionsApi";
+import { Transaction, Connector, Accessory, MasterData } from "../types";
 import { parseConnector } from "./connectorService";
 import { parseAccessory } from "./accessoryService";
 
@@ -28,9 +22,7 @@ export const performTransaction = async (
     department,
   };
 
-  const transaction = await import("@/api/transactionsApi").then((api) =>
-    api.createTransaction(txData)
-  );
+  const transaction = await createTransaction(txData);
 
   return {
     connector: isAccessory ? null : parseConnector(itemId, masterData), // Passing empty stock map as it's not needed for parsing static data
