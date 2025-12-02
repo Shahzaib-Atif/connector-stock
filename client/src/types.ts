@@ -38,7 +38,7 @@ export interface Box {
 
 export interface Transaction {
   id: string;
-  connectorId: string; // This now serves as generic Item ID (works for Accessory ID too)
+  itemId: string; // accessory or connector id
   type: "IN" | "OUT";
   amount: number;
   department?: string;
@@ -116,23 +116,6 @@ export enum Department {
   RH = "RH",
   Planamento = "Planamento",
 }
-
-export interface StockState {
-  masterData: MasterData | null;
-  loading: boolean;
-  transactions: Transaction[];
-}
-
-export type StockAction =
-  | { type: "INIT_DATA"; payload: MasterData }
-  | {
-      type: "UPDATE_STOCK";
-      payload: {
-        connectorId: string;
-        amount: number;
-        transaction: Transaction;
-      };
-    };
 
 export type suggestion = {
   id: string;
