@@ -3,7 +3,7 @@ import { ApiOperation } from '@nestjs/swagger';
 import { DBService } from 'src/services/db.service';
 
 @Controller()
-export class DBController {
+export class MetadataController {
   constructor(private readonly dbService: DBService) {}
 
   @Get('cors')
@@ -17,28 +17,8 @@ export class DBController {
     return await this.dbService.getVias();
   }
 
-  @Get('accessory-types')
-  async getAccessoryTypes() {
-    return await this.dbService.getAccessoryTypes();
-  }
-
-  @Get('connector-types')
-  async getConnectorTypes() {
-    return await this.dbService.getConnectorTypes();
-  }
-
   @Get('positions')
   async getCord_CON() {
     return await this.dbService.getCord_CON();
-  }
-
-  @Get('referencias')
-  async getReferencias() {
-    return await this.dbService.getReferencias();
-  }
-
-  @Get('accessories')
-  async getAccessories() {
-    return await this.dbService.getAccessories();
   }
 }

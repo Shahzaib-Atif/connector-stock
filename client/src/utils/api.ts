@@ -6,10 +6,10 @@ export const API = {
   accessoryImages: (id: string) => `${API_BASE_URL}/images/accessory/${id}`,
   cors: `${API_BASE_URL}/cors`,
   vias: `${API_BASE_URL}/vias`,
-  accessoryTypes: `${API_BASE_URL}/accessory-types`,
-  connectorTypes: `${API_BASE_URL}/connector-types`,
+  accessoryTypes: `${API_BASE_URL}/accessories/types`,
+  connectorTypes: `${API_BASE_URL}/connectors/types`,
   positions: `${API_BASE_URL}/positions`,
-  referencias: `${API_BASE_URL}/referencias`,
+  connectors: `${API_BASE_URL}/connectors`,
   accessories: `${API_BASE_URL}/accessories`,
   transactions: `${API_BASE_URL}/transactions`,
 };

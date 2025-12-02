@@ -5,9 +5,9 @@ import {
 } from "@/types";
 import { API } from "@/utils/api";
 
-export const fetchReferencias = async (): Promise<MasterData["connectors"]> => {
+export const fetchConnectors = async (): Promise<MasterData["connectors"]> => {
   try {
-    const response = await fetch(API.referencias);
+    const response = await fetch(API.connectors);
     if (!response.ok) {
       throw new Error("Failed to fetch references");
     }
