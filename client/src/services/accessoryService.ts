@@ -17,7 +17,7 @@ export const parseAccessory = (
     id,
     connectorId,
     posId,
-    stock,
+    stock: apiAccessory.Qty,
     type: apiAccessory.AccessoryType,
     refClient: apiAccessory.RefClient,
     refDV: apiAccessory.RefDV,
