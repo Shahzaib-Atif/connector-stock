@@ -27,17 +27,17 @@ export class DBController {
     return await this.dbService.getConnectorTypes();
   }
 
-  @Get('Cord_CON')
+  @Get('cord_CON')
   async getCord_CON() {
     return await this.dbService.getCord_CON();
   }
 
-  @Get('Referencias')
+  @Get('referencias')
   async getReferencias() {
     return await this.dbService.getReferencias();
   }
 
-  @Get('Accessories')
+  @Get('accessories')
   async getAccessories() {
     return await this.dbService.getAccessories();
   }

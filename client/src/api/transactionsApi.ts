@@ -1,16 +1,29 @@
 import { Transaction } from "@/types";
+import { API } from "@/utils/api";
 
-const STORAGE_KEY_TX = "connector_transactions";
+export const createTransaction = async (
+  transaction: Omit<Transaction, "id" | "timestamp">
+): Promise<Transaction> => {
+  const response = await fetch(API.transactions, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(transaction),
+  });
 
-export const getTransactions = (): Transaction[] => {
-  try {
-    const data = localStorage.getItem(STORAGE_KEY_TX);
-    return data ? JSON.parse(data) : [];
-  } catch (e) {
-    return [];
+  if (!response.ok) {
+    throw new Error("Failed to create transaction");
   }
+
+  return response.json();
 };
 
-export const saveTransactions = (transactions: Transaction[]) => {
-  localStorage.setItem(STORAGE_KEY_TX, JSON.stringify(transactions));
+export const getTransactions = async (): Promise<Transaction[]> => {
+  const response = await fetch(API.transactions);
+  if (!response.ok) {
+    throw new Error("Failed to fetch transactions");
+  }
+  return response.json();
 };
+
