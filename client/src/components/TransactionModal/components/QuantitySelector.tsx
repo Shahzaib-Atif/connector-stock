@@ -5,6 +5,9 @@ interface QuantitySelectorProps {
   onChange: (amount: number) => void;
 }
 
+const iconBtnClass =
+  "w-10 sm:w-12 h-10 sm:h-12 rounded-full bg-slate-700 text-white font-bold text-xl hover:bg-slate-600 transition-colors";
+
 export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   amount,
   onChange,
@@ -13,7 +16,7 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
     <div className="flex items-center justify-center gap-6">
       <button
         onClick={() => onChange(Math.max(1, amount - 1))}
-        className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold text-xl hover:bg-slate-600 transition-colors"
+        className={iconBtnClass}
       >
         -
       </button>
@@ -36,12 +39,9 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
             onChange(1);
           }
         }}
-        className="text-4xl font-bold text-white w-24 text-center bg-transparent border-none outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        className="text-2xl sm:text-3xl font-bold text-white w-16 sm:w-24 text-center bg-transparent border-none outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       />
-      <button
-        onClick={() => onChange(amount + 1)}
-        className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold text-xl hover:bg-slate-600 transition-colors"
-      >
+      <button onClick={() => onChange(amount + 1)} className={iconBtnClass}>
         +
       </button>
     </div>

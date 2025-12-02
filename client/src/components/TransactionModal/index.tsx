@@ -33,11 +33,11 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
     >
       <div
         ref={ref}
-        className="bg-slate-800 w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl border border-slate-700 animate-in slide-in-from-bottom-10 duration-300"
+        className="flex flex-col gap-8 sm:gap-12 bg-slate-800 w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl border border-slate-700 animate-in slide-in-from-bottom-10 duration-300"
       >
         <TransactionHeader type={type} onClose={onClose} />
 
-        <div className="space-y-6">
+        <div className="space-y-6 sm:space-y-10">
           {targetId.includes("_") && (
             <div className="text-sm text-center bg-slate-900 p-2 rounded-lg border border-slate-700 text-slate-400">
               Adjusting Accessory:{" "}
@@ -59,7 +59,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 onConfirm(amount, type === "OUT" ? dept : undefined);
               }
             }}
-            className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transition-transform active:scale-[0.98] ${
+            className={`w-full py-4 rounded-xl font-bold text-base sm:text-lg shadow-lg transition-transform active:scale-[0.98] ${
               type === "IN"
                 ? "btn-primary"
                 : "bg-orange-600 hover:bg-orange-500"
