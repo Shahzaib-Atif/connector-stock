@@ -1,24 +1,24 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
-import { DBService } from 'src/services/db.service';
+import { MetadataRepo } from 'src/repository/metadata.repo';
 
 @Controller()
 export class MetadataController {
-  constructor(private readonly dbService: DBService) {}
+  constructor(private readonly repo: MetadataRepo) {}
 
   @Get('cors')
   @ApiOperation({ summary: 'Get all colors' })
   async getCors() {
-    return await this.dbService.getCors();
+    return await this.repo.getCors();
   }
 
   @Get('vias')
   async getVias() {
-    return await this.dbService.getVias();
+    return await this.repo.getVias();
   }
 
   @Get('positions')
   async getCord_CON() {
-    return await this.dbService.getCord_CON();
+    return await this.repo.getCord_CON();
   }
 }
