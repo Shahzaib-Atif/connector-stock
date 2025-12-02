@@ -5,6 +5,8 @@
     "esModuleInterop": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "sourceMap": true,
+    "inlineSources": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   }

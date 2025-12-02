@@ -196,6 +196,7 @@ model Transactions {
   itemId          String    @db.VarChar(30)
   transactionType String    @db.VarChar(3)
   amount          Int
+  itemType        String    @db.VarChar(11)
   department      String?   @db.VarChar(20)
   updatedAt       DateTime?
 }

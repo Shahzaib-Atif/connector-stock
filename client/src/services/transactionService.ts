@@ -17,15 +17,16 @@ export const performTransaction = async (
 
   const txData: Omit<Transaction, "id" | "timestamp"> = {
     itemId,
-    type: delta > 0 ? "IN" : "OUT",
+    transactionType: delta > 0 ? "IN" : "OUT",
     amount: Math.abs(delta),
+    itemType: isAccessory ? "accessory" : "connector",
     department,
   };
 
   const transaction = await createTransaction(txData);
 
   return {
-    connector: isAccessory ? null : parseConnector(itemId, masterData), // Passing empty stock map as it's not needed for parsing static data
+    connector: isAccessory ? null : parseConnector(itemId, masterData),
     accessory: isAccessory
       ? parseAccessory(masterData.accessories[itemId])
       : null,

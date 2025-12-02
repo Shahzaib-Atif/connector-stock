@@ -31,4 +31,37 @@ export class AccessoryRepo {
       return [];
     }
   }
+
+  async findAccessories(searchItem: string) {
+    try {
+      return await this.prisma.rEG_AccessoriesSamples.count({
+        where: {
+          AccImagePath: {
+            contains: searchItem,
+          },
+        },
+      });
+    } catch (ex: any) {
+      console.error(ex.message);
+      return 0;
+    }
+  }
+
+  async update(searchItem: string, amount: number) {
+    try {
+      return await this.prisma.rEG_AccessoriesSamples.updateMany({
+        where: {
+          AccImagePath: {
+            contains: searchItem,
+          },
+        },
+        data: {
+          Qty: { increment: amount },
+        },
+      });
+    } catch (ex: any) {
+      console.error(ex.message);
+      return null;
+    }
+  }
 }

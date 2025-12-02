@@ -11,6 +11,9 @@ import { ConnectorController } from './controllers/connectors.controller';
 import { MetadataRepo } from './repository/metadata.repo';
 import { AccessoryRepo } from './repository/accessories.repo';
 import { ConnectorRepo } from './repository/connectors.repo';
+import { TransactionsController } from './controllers/transactions.controller';
+import { TransactionsService } from './services/transactions.service';
+import { TransactionsRepo } from './repository/transactions.repo';
 
 @Module({
   imports: [ConfigModule.forRoot()],
@@ -20,6 +23,7 @@ import { ConnectorRepo } from './repository/connectors.repo';
     MetadataController,
     AccessoryController,
     ConnectorController,
+    TransactionsController,
   ],
   providers: [
     AppService,
@@ -28,6 +32,8 @@ import { ConnectorRepo } from './repository/connectors.repo';
     MetadataRepo,
     AccessoryRepo,
     ConnectorRepo,
+    TransactionsService,
+    TransactionsRepo,
   ],
 })
 export class AppModule {}
