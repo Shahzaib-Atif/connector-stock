@@ -1,7 +1,14 @@
 import { getStockMap, saveStockMap } from "@/api/stockApi";
 import { getTransactions, saveTransactions } from "@/api/transactionsApi";
-import { Transaction, Connector, Accessory, MasterData } from "../types";
-import { parseConnector, parseAccessory } from "./connectorService";
+import {
+  Transaction,
+  Connector,
+  Accessory,
+  MasterData,
+  AccessoryApiResponse,
+} from "../types";
+import { parseConnector } from "./connectorService";
+import { parseAccessory } from "./accessoryService";
 
 export const performTransaction = (
   itemId: string,
@@ -19,7 +26,8 @@ export const performTransaction = (
   let currentStock = 0;
   if (isAccessory) {
     currentStock =
-      stockMap[itemId] ?? parseAccessory(itemId, stockMap, masterData).stock;
+      stockMap[itemId] ??
+      parseAccessory(masterData.accessories[itemId], stockMap).stock;
   } else {
     currentStock =
       stockMap[itemId] ?? parseConnector(itemId, stockMap, masterData).stock;
@@ -48,7 +56,7 @@ export const performTransaction = (
       ? null
       : parseConnector(itemId, stockMap, masterData),
     accessory: isAccessory
-      ? parseAccessory(itemId, stockMap, masterData)
+      ? parseAccessory(masterData.accessories[itemId], stockMap)
       : null,
     transaction: tx,
   };

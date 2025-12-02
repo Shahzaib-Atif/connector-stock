@@ -1,49 +1,7 @@
 import { getStockMap } from "@/api/stockApi";
-import {
-  Connector,
-  Box,
-  Accessory,
-  MasterData,
-  AccessoryApiResponse,
-} from "../types";
+import { Connector, Box, Accessory, MasterData } from "../types";
 import { getCoordinates } from "../utils/inventoryUtils";
-
-// Construct a unique ID using ConnName, RefClient, and RefDV
-export function constructAccessoryId(apiAccessory: AccessoryApiResponse) {
-  const connName = apiAccessory.ConnName || "";
-  const refClient = apiAccessory.RefClient || "";
-  const refDV = apiAccessory.RefDV || "";
-
-  if (refDV) return `${connName}_${refClient}_${refDV}`;
-  else return `${connName}_${refClient}`;
-}
-
-export const parseAccessory = (
-  apiAccessory: AccessoryApiResponse,
-  stockMap: Record<string, number>,
-  masterData: MasterData
-): Accessory => {
-  const connectorId = apiAccessory.ConnName || "";
-  const id = constructAccessoryId(apiAccessory);
-  const posId = connectorId.substring(0, 4);
-
-  let stock = stockMap[id];
-  if (stock === undefined) {
-    stock = 0;
-  }
-
-  return {
-    id,
-    connectorId,
-    posId,
-    stock,
-    type: apiAccessory.AccessoryType,
-    refClient: apiAccessory.RefClient,
-    refDV: apiAccessory.RefDV,
-    capotAngle: apiAccessory.CapotAngle || undefined,
-    clipColor: apiAccessory.ClipColor || undefined,
-  };
-};
+import { parseAccessory } from "./accessoryService";
 
 export const parseConnector = (
   id: string,
@@ -75,7 +33,7 @@ export const parseConnector = (
   if (masterData.accessories) {
     Object.values(masterData.accessories).forEach((acc) => {
       if (acc.ConnName === id) {
-        accessories.push(parseAccessory(acc, stockMap, masterData));
+        accessories.push(parseAccessory(acc, stockMap));
       }
     });
   }

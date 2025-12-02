@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-import { QrCode, Wrench } from "lucide-react";
+import { Wrench } from "lucide-react";
 import { Accessory } from "../../types";
-import {
-  constructAccessoryId,
-  parseAccessory,
-} from "../../services/connectorService";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
 import { NotFoundPage } from "../common/NotFoundPage";
@@ -16,9 +12,9 @@ import { BoxShortcut } from "../common/BoxShortcut";
 import ImageBox from "../common/ImageBox";
 import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 import StockDiv from "../common/StockDiv";
-import ClientReference from "../common/ClientReference";
 import AccessoryMetadata from "./components/AccessoryMetadata";
 import { VIEW_SUMMARY_CLASS } from "@/utils/constants";
+import { parseAccessory } from "@/services/accessoryService";
 
 interface AccessoryViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -44,7 +40,7 @@ const accessoryResolver: EntityResolver<Accessory> = (
   if (!apiAccessory) return null;
 
   // Convert the raw API data into a clean Accessory object with proper formatting
-  return parseAccessory(apiAccessory, stockCache, masterData);
+  return parseAccessory(apiAccessory, stockCache);
 };
 
 export const AccessoryView: React.FC<AccessoryViewProps> = ({

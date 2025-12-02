@@ -1,4 +1,4 @@
-import { constructAccessoryId } from "@/services/connectorService";
+import { constructAccessoryId } from "@/services/accessoryService";
 import {
   AccessoryApiResponse,
   AccessoryTypeApiResponse,
