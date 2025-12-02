@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useAppSelector } from "@/store/hooks";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEscKeyDown } from "@/hooks/useEscKeyDown";
 import { Department } from "@/types";
@@ -38,15 +39,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         <TransactionHeader type={type} onClose={onClose} />
 
         <div className="space-y-6 sm:space-y-10">
-          {targetId.includes("_") && (
-            <div className="text-sm text-center bg-slate-900 p-2 rounded-lg border border-slate-700 text-slate-400">
-              Adjusting Accessory:{" "}
-              <span className="font-mono font-bold text-slate-200">
-                {targetId}
-              </span>
-            </div>
-          )}
-
           <QuantitySelector amount={amount} onChange={setAmount} />
 
           {type === "OUT" && (
