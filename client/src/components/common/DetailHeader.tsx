@@ -7,7 +7,7 @@ interface DetailHeaderProps {
   label: string;
   title: React.ReactNode;
   onBack: () => void;
-  handleQRClick: () => void;
+  handleQRClick?: () => void;
   showQR?: boolean;
 }
 
@@ -47,7 +47,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
         </div>
 
         {/* QR Option */}
-        {showQR && (
+        {showQR && handleQRClick && (
           <div className="flex flex-none items-center justify-end flex-shrink-0 sm:min-w-[100px]">
             <button
               onClick={handleQRClick}

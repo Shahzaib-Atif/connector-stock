@@ -4,6 +4,7 @@ import { HomeView } from "./HomeView";
 import { ConnectorView } from "./ConnectorView";
 import { BoxView } from "./BoxView";
 import { AccessoryView } from "./AccessoryView";
+import { TransactionsView } from "./TransactionsView";
 
 interface AppRoutesProps {
   onScan: (code: string) => void;
@@ -45,6 +46,7 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({
           <AccessoryView onOpenQR={onOpenQR} onTransaction={onTransaction} />
         }
       />
+      <Route path="/transactions" element={<TransactionsView />} />
     </Routes>
   );
 };
