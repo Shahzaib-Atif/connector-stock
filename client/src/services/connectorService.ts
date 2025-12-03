@@ -18,10 +18,7 @@ export const parseConnector = (
   const type = reference.ConnType;
   const fabricante = reference.Fabricante || "--";
   const refabricante = reference.Refabricante || "";
-
   const coords = getCoordinates(posId, masterData);
-
-  const stock = 0; // Stock is now managed by Redux
 
   // Find associated accessories from the real API data
   const accessories: Accessory[] = [];
@@ -49,7 +46,7 @@ export const parseConnector = (
     description: `${masterData.colors[colorCode] || "Generic"} / ${
       masterData.vias[viasCode] || "Std"
     }`,
-    stock,
+    stock: masterData.connectors[id].Qty,
     accessories,
   };
 };

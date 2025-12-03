@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AccessoryRepo } from 'src/repository/accessories.repo';
+import { ConnectorRepo } from 'src/repository/connectors.repo';
 import { TransactionsRepo } from 'src/repository/transactions.repo';
 import { CreateTransactionsDto } from 'src/utils/types';
 
@@ -8,18 +9,33 @@ export class TransactionsService {
   constructor(
     private readonly txRepo: TransactionsRepo,
     private readonly accRepo: AccessoryRepo,
+    private readonly connRepo: ConnectorRepo,
   ) {}
 
   async processTransaction(dto: CreateTransactionsDto) {
-    const { itemId, transactionType } = dto;
+    const { itemId, transactionType, itemType } = dto;
+
+    // make amount positive or negative
     const amount = transactionType === 'IN' ? dto.amount : dto.amount * -1;
 
-    // update stock
-    if (dto.itemType === 'accessory')
-      await this.handleAccessoryTx(itemId, amount);
+    // update stock of accessory or connector
+    await this.updateStock(itemId, amount, itemType);
 
     // update transactions table
     return await this.txRepo.addTransaction(dto);
+  }
+
+  private async updateStock(itemId: string, amount: number, itemType: string) {
+    switch (itemType) {
+      case 'accessory':
+        await this.handleAccessoryTx(itemId, amount);
+        break;
+      case 'connector':
+        await this.connRepo.update(itemId, amount);
+        break;
+      default:
+        throw new Error('unknown itemType!');
+    }
   }
 
   private async handleAccessoryTx(itemId: string, amount: number) {

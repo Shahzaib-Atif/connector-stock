@@ -1,11 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
-import {
-  getBoxDetails,
-  parseConnector,
-  constructAccessoryId,
-} from "../services/connectorService";
+import { getBoxDetails, parseConnector } from "../services/connectorService";
 
 export const useScan = () => {
   const navigate = useNavigate();
@@ -32,7 +28,7 @@ export const useScan = () => {
 
   //#region -- Helper functions
   const handleConnectorNav = (upperCode: string) => {
-    const connector = parseConnector(upperCode, {}, masterData);
+    const connector = parseConnector(upperCode, masterData);
 
     if (connector) navigate(`/connector/${upperCode}`);
     else setError("Connector not found!");

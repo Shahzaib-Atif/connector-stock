@@ -67,10 +67,7 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
       />
 
       <div className="max-w-3xl mx-auto p-4 space-y-4">
-        <ConnectorSummary
-          connector={connector}
-          currentStock={connector.stock}
-        />
+        <ConnectorSummary connector={connector} />
 
         {/* Accessories List */}
         {connector.accessories.length > 0 && (

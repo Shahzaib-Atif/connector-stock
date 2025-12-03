@@ -25,11 +25,28 @@ export class ConnectorRepo {
           ConnType: true,
           Fabricante: true,
           Refabricante: true,
+          Qty: true,
         },
       });
     } catch (ex: any) {
       console.error(ex.message);
       return [];
+    }
+  }
+
+  async update(codivmacId: string, amount: number) {
+    try {
+      return await this.prisma.referencias_test.update({
+        where: {
+          CODIVMAC: codivmacId,
+        },
+        data: {
+          Qty: { increment: amount },
+        },
+      });
+    } catch (ex: any) {
+      console.error(ex.message);
+      return null;
     }
   }
 }

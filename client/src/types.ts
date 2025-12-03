@@ -96,6 +96,7 @@ export interface ConnectorReferenceApiResponse {
   ConnType: string;
   Fabricante: string | null;
   Refabricante: string | null;
+  Qty: number | null;
 }
 
 export interface AccessoryApiResponse {

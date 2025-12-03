@@ -150,6 +150,7 @@ model Referencias_test {
   ClipColor        String?   @db.VarChar(100)
   CapotAngle       String?   @db.VarChar(100)
   Olhal            Boolean?
+  Qty              Int       @default(0)
 
   @@map("Referências_test")
 }
@@ -163,7 +164,7 @@ model REG_AccessoriesSamples {
   AccImagePath    String   @unique(map: "REG_AccessoriesSamples_UNIQUE") @db.VarChar(500)
   InsertDate      DateTime @default(now(), map: "DF__REG_Acces__Inser__2BFE89A6") @db.DateTime
   RefClient       String?  @db.VarChar(100)
-  Qty             Int?
+  Qty             Int      @default(0)
   RefDV           String?  @db.VarChar(100)
   ColorAssociated Boolean?
 }
