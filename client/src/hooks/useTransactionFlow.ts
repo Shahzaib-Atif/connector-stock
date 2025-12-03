@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Department } from "../types";
-import { performTransaction } from "../services/transactionService";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { performTransactionThunk } from "@/store/slices/transactionsSlice";
 
@@ -27,18 +26,8 @@ export const useTransactionFlow = () => {
   const handleSubmit = async (amount: number, department?: Department) => {
     if (!targetId || !masterData) return;
 
-    // const currentStock = stockCache[targetId] || 0;
-    const currentStock = 0; //  TODO
     const delta = txType === "IN" ? amount : -amount;
-    const newStock = Math.max(0, currentStock + delta);
-
     try {
-      // const result = await performTransaction(
-      //   targetId,
-      //   delta,
-      //   masterData,
-      //   department
-      // );
       dispatch(
         performTransactionThunk({
           itemId: targetId,
@@ -46,14 +35,6 @@ export const useTransactionFlow = () => {
           department,
         })
       );
-
-      // dispatch(
-      //   updateStock({
-      //     connectorId: targetId,
-      //     amount: newStock,
-      //     transaction: result.transaction,
-      //   })
-      // );
 
       closeTransaction();
     } catch (error) {

@@ -1,9 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { createTransaction, getTransactions } from "@/api/transactionsApi";
 import { parseConnector } from "@/services/connectorService";
-import { parseAccessory } from "@/services/accessoryService";
 import { RootState } from "@/store";
-import { Accessory, AccessoryApiResponse, Transaction } from "@/types";
+import { AccessoryApiResponse, Transaction } from "@/types";
 import { updateAccessory } from "./masterDataSlice";
 
 interface TransactionState {
