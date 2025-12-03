@@ -1,12 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './authSlice';
-import stockReducer from './stockSlice';
-import masterDataReducer from './masterDataSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./slices/authSlice";
+import masterDataReducer from "./slices/masterDataSlice";
+import transactionsReducer from "./slices/transactionsSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    stock: stockReducer,
+    txData: transactionsReducer,
     masterData: masterDataReducer,
   },
 });

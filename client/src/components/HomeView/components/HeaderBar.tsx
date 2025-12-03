@@ -1,5 +1,5 @@
 import LogoSvg from "@/icons/LogoSvg";
-import { logout } from "@/store/authSlice";
+import { logout } from "@/store/slices/authSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { LogOut } from "lucide-react";
 

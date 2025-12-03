@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Lock, User } from "lucide-react";
 import { useAppDispatch } from "../store/hooks";
-import { login } from "../store/authSlice";
+import { login } from "../store/slices/authSlice";
 
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();

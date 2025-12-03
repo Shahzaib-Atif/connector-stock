@@ -19,7 +19,7 @@ export class TransactionsService {
       await this.handleAccessoryTx(itemId, amount);
 
     // update transactions table
-    await this.txRepo.addTransaction(dto);
+    return await this.txRepo.addTransaction(dto);
   }
 
   private async handleAccessoryTx(itemId: string, amount: number) {

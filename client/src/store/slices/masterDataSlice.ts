@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { MasterData } from "../types";
-import { fetchMasterData } from "../api";
+import { fetchMasterData } from "@/api";
+import { Accessory, AccessoryApiResponse, MasterData } from "@/types";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 interface MasterDataState {
   data: MasterData | null;
@@ -14,18 +14,24 @@ const initialState: MasterDataState = {
   error: null,
 };
 
-export const initMasterData = createAsyncThunk(
-  "masterData/init",
-  async () => {
-    const data = await fetchMasterData();
-    return data;
-  }
-);
+export const initMasterData = createAsyncThunk("masterData/init", async () => {
+  const data = await fetchMasterData();
+  return data;
+});
 
 export const masterDataSlice = createSlice({
   name: "masterData",
   initialState,
-  reducers: {},
+  reducers: {
+    updateAccessory: (
+      state,
+      action: PayloadAction<{ itemId: string; accessory: AccessoryApiResponse }>
+    ) => {
+      const { itemId, accessory } = action.payload;
+      if (!state.data) return;
+      state.data.accessories[itemId] = accessory;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(initMasterData.pending, (state) => {
@@ -43,4 +49,5 @@ export const masterDataSlice = createSlice({
   },
 });
 
+export const { updateAccessory } = masterDataSlice.actions;
 export default masterDataSlice.reducer;

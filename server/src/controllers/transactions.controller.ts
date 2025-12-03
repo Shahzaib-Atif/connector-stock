@@ -17,7 +17,6 @@ export class TransactionsController {
 
   @Post('')
   async addTransaction(@Body() dto: CreateTransactionsDto) {
-    await this.service.processTransaction(dto);
-    return dto;
+    return await this.service.processTransaction(dto);
   }
 }

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Department } from "../types";
 import { performTransaction } from "../services/transactionService";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { updateStock } from "../store/stockSlice";
+import { performTransactionThunk } from "@/store/slices/transactionsSlice";
 
 export const useTransactionFlow = () => {
   const dispatch = useAppDispatch();
@@ -33,20 +33,27 @@ export const useTransactionFlow = () => {
     const newStock = Math.max(0, currentStock + delta);
 
     try {
-      const result = await performTransaction(
-        targetId,
-        delta,
-        masterData,
-        department
-      );
-
+      // const result = await performTransaction(
+      //   targetId,
+      //   delta,
+      //   masterData,
+      //   department
+      // );
       dispatch(
-        updateStock({
-          connectorId: targetId,
-          amount: newStock,
-          transaction: result.transaction,
+        performTransactionThunk({
+          itemId: targetId,
+          delta,
+          department,
         })
       );
+
+      // dispatch(
+      //   updateStock({
+      //     connectorId: targetId,
+      //     amount: newStock,
+      //     transaction: result.transaction,
+      //   })
+      // );
 
       closeTransaction();
     } catch (error) {

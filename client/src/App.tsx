@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "./store/hooks";
-import { initStockData } from "./store/stockSlice";
-import { initMasterData } from "./store/masterDataSlice";
+import { initMasterData } from "./store/slices/masterDataSlice";
 import { useTransactionFlow } from "./hooks/useTransactionFlow";
 
 // Components
@@ -10,6 +9,7 @@ import { QRModal } from "./components/QRModal";
 import { AppRoutes } from "./components/AppRoutes";
 import { useScan } from "./hooks/useScan";
 import { TransactionModal } from "./components/TransactionModal";
+import { initTransactionsData } from "./store/slices/transactionsSlice";
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +23,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     dispatch(initMasterData());
-    dispatch(initStockData());
+    dispatch(initTransactionsData());
   }, [dispatch]);
 
   const handleOpenQR = (id: string) => {
