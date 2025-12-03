@@ -37,7 +37,7 @@ export interface Box {
 }
 
 export interface Transaction {
-  id: string;
+  ID: string;
   itemId: string; // accessory or connector id
   transactionType: "IN" | "OUT";
   amount: number;
