@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Scan } from "lucide-react";
 import ExampleLookup from "../ExampleLookup";
-import HeaderBar from "./components/HeaderBar";
+import { DetailHeader } from "../common/DetailHeader";
 import { suggestion } from "@/types";
 import SearchInput from "./components/SearchInput";
 import SuggestionsList from "./components/SuggestionsList";
@@ -67,52 +67,55 @@ export const HomeView: React.FC<HomeViewProps> = ({
   return (
     <div
       id="home-view"
-      className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-800 to-slate-900 text-white relative"
+      className="min-h-screen flex flex-col bg-gradient-to-br from-slate-800 to-slate-900 text-white"
     >
       {/* Header */}
-      <HeaderBar />
+      <DetailHeader showQR={false} />
 
-      <div className="w-full max-w-md space-y-8">
-        {/* Title and description */}
-        <div className="text-center space-y-2">
-          <div className="w-20 h-20 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-6">
-            <Scan className="w-10 h-10 text-white" />
+      {/* Main content - centered */}
+      <div className="flex-1 flex items-center justify-center p-6">
+        <div className="w-full max-w-md space-y-8">
+          {/* Title and description */}
+          <div className="text-center space-y-2">
+            <div className="w-20 h-20 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-6">
+              <Scan className="w-10 h-10 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight">Connector Stock</h1>
+            <p className="text-slate-400">
+              Search for Box, Connector or Client Reference
+            </p>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">Connector Stock</h1>
-          <p className="text-slate-400">
-            Search for Box, Connector or Client Reference
-          </p>
-        </div>
 
-        {/* Search */}
-        <div className="relative" ref={wrapperRef}>
-          <SearchInput
-            searchQuery={searchQuery}
-            scanError={scanError}
-            suggestions={suggestions}
-            onClearScanError={onClearScanError}
-            onScan={onScan}
-            setSearchQuery={setSearchQuery}
-            setShowSuggestions={setShowSuggestions}
-            onKeyDown={handleKeyDown}
-            onFocus={handleInputFocus}
-          />
-
-          {/* Autocomplete Dropdown */}
-          {showSuggestions && suggestions.length > 0 && (
-            <SuggestionsList
+          {/* Search */}
+          <div className="relative" ref={wrapperRef}>
+            <SearchInput
+              searchQuery={searchQuery}
+              scanError={scanError}
               suggestions={suggestions}
-              handleSuggestionClick={handleSuggestionClick}
-              selectedIndex={selectedIndex}
+              onClearScanError={onClearScanError}
+              onScan={onScan}
+              setSearchQuery={setSearchQuery}
+              setShowSuggestions={setShowSuggestions}
+              onKeyDown={handleKeyDown}
+              onFocus={handleInputFocus}
             />
-          )}
+
+            {/* Autocomplete Dropdown */}
+            {showSuggestions && suggestions.length > 0 && (
+              <SuggestionsList
+                suggestions={suggestions}
+                handleSuggestionClick={handleSuggestionClick}
+                selectedIndex={selectedIndex}
+              />
+            )}
+          </div>
+
+          {/* ERROR Alert */}
+          {scanError && <ErrorBox scanError={scanError} />}
+
+          {/* EXAMPLE */}
+          <ExampleLookup onScan={onScan} />
         </div>
-
-        {/* ERROR Alert */}
-        {scanError && <ErrorBox scanError={scanError} />}
-
-        {/* EXAMPLE */}
-        <ExampleLookup onScan={onScan} />
       </div>
     </div>
   );
