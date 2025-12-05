@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppService } from 'src/services/app.service';
-import { AppController } from 'src/controllers/app.controller';
 import { PrismaService } from 'prisma/prisma.service';
 import { ImageController } from './controllers/image.controller';
 import { ImageService } from './services/image.service';
@@ -14,19 +12,20 @@ import { ConnectorRepo } from './repository/connectors.repo';
 import { TransactionsController } from './controllers/transactions.controller';
 import { TransactionsService } from './services/transactions.service';
 import { TransactionsRepo } from './repository/transactions.repo';
+import { SamplesController } from './controllers/samples.controller';
+import { SamplesRepo } from './repository/samples.repo';
 
 @Module({
   imports: [ConfigModule.forRoot()],
   controllers: [
-    AppController,
     ImageController,
     MetadataController,
     AccessoryController,
     ConnectorController,
     TransactionsController,
+    SamplesController,
   ],
   providers: [
-    AppService,
     PrismaService,
     ImageService,
     MetadataRepo,
@@ -34,6 +33,7 @@ import { TransactionsRepo } from './repository/transactions.repo';
     ConnectorRepo,
     TransactionsService,
     TransactionsRepo,
+    SamplesRepo,
   ],
 })
 export class AppModule {}

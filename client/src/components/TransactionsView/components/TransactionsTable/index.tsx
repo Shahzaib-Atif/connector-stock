@@ -23,7 +23,9 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
               </td>
             </tr>
           ) : (
-            transactions.map((tx, index) => <TableRow tx={tx} index={index} />)
+            transactions.map((tx, index) => (
+              <TableRow key={tx.ID} tx={tx} index={index} />
+            ))
           )}
         </tbody>
       </table>

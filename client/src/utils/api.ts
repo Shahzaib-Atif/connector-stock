@@ -24,4 +24,5 @@ export const API = {
   ...accessories,
   ...metadata,
   transactions: `${API_BASE_URL}/transactions`,
+  samples: `${API_BASE_URL}/samples`,
 };

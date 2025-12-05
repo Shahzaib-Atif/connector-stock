@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, QrCode, Receipt, LogOut } from "lucide-react";
+import { ArrowRight, QrCode, Receipt, LogOut, Beaker } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BrandLogo from "./BrandLogo";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -88,6 +88,16 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
             title="View Transactions"
           >
             <Receipt className="w-5 h-5" />
+          </button>
+
+          {/* Samples button */}
+          <button
+            id="view-samples-btn"
+            onClick={() => navigate("/samples")}
+            className="p-2 text-slate-400 hover:text-white transition-colors rounded-lg"
+            title="View Samples"
+          >
+            <Beaker className="w-5 h-5" />
           </button>
 
           {/* Logout button */}
