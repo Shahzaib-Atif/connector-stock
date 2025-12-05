@@ -22,8 +22,13 @@ export const SamplesView: React.FC = () => {
   const { samples, loading, error } = useAppSelector((state) => state.samples);
 
   // Custom hooks
-  const { filters, setCliente, setRefDescricao, setEncDivmac, filteredSamples } =
-    useSampleFilters(samples);
+  const {
+    filters,
+    setCliente,
+    setRefDescricao,
+    setEncDivmac,
+    filteredSamples,
+  } = useSampleFilters(samples);
 
   const {
     paginatedItems: paginatedSamples,
@@ -148,4 +153,3 @@ export const SamplesView: React.FC = () => {
     </div>
   );
 };
-

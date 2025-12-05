@@ -21,9 +21,12 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     "w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700">
+    <div
+      id="samples-filter-bar"
+      className="flex flex-col sm:flex-row justify-end gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700"
+    >
       {/* Cliente Filter */}
-      <div>
+      <div className="max-w-sm">
         <label className="block text-sm font-semibold text-slate-300 mb-2">
           Cliente
         </label>
@@ -37,7 +40,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       </div>
 
       {/* Ref_Descricao Filter */}
-      <div>
+      <div className="max-w-sm">
         <label className="block text-sm font-semibold text-slate-300 mb-2">
           Ref. Descrição
         </label>
@@ -51,7 +54,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       </div>
 
       {/* EncDivmac Filter */}
-      <div>
+      <div className="max-w-sm">
         <label className="block text-sm font-semibold text-slate-300 mb-2">
           EncDivmac
         </label>
