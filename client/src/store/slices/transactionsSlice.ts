@@ -39,7 +39,7 @@ export const performTransactionThunk = createAsyncThunk(
     const masterData = state.masterData.data!;
     const isAccessory = itemId.includes("_");
 
-    const txData: Omit<Transaction, "ID" | "timestamp"> = {
+    const txData: Omit<Transaction, "ID" | "updatedAt"> = {
       itemId,
       transactionType: delta > 0 ? "IN" : "OUT",
       amount: Math.abs(delta),

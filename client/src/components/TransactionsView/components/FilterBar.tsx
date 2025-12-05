@@ -50,7 +50,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       </div>
 
       {/* Item Type Filter */}
-      <div className="flex-1">
+      <div>
         <label className="block text-sm font-semibold text-slate-300 mb-2">
           Item Type
         </label>

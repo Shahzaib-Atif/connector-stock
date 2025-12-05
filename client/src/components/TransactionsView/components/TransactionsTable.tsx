@@ -1,5 +1,6 @@
 import React from "react";
 import { Transaction } from "@/types";
+import { Link } from "react-router-dom";
 
 interface TransactionsTableProps {
   transactions: Transaction[];
@@ -9,6 +10,8 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
   transactions,
 }) => {
   const formatDate = (timestamp: number) => {
+    if (!timestamp) return "";
+
     return new Date(timestamp).toLocaleString("en-GB", {
       day: "2-digit",
       month: "2-digit",
@@ -62,8 +65,15 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                 <td className="px-4 py-3 text-slate-300 font-mono text-xs">
                   {index}
                 </td>
-                <td className="px-4 py-3 text-slate-200 font-mono">
-                  {tx.itemId}
+                <td className="px-4 py-3">
+                  <Link
+                    to={`/${tx.itemType}/${tx.itemId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 font-mono underline decoration-dotted underline-offset-2 transition-colors"
+                  >
+                    {tx.itemId}
+                  </Link>
                 </td>
                 <td className="px-4 py-3">
                   <span
@@ -86,7 +96,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                   {tx.department || "—"}
                 </td>
                 <td className="px-4 py-3 text-slate-400 text-xs">
-                  {formatDate(tx.timestamp)}
+                  {formatDate(tx.updatedAt)}
                 </td>
               </tr>
             ))

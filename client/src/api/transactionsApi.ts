@@ -2,7 +2,7 @@ import { Transaction } from "@/types";
 import { API } from "@/utils/api";
 
 export const createTransaction = async (
-  transaction: Omit<Transaction, "ID" | "timestamp">
+  transaction: Omit<Transaction, "ID" | "updatedAt">
 ): Promise<Transaction> => {
   const response = await fetch(API.transactions, {
     method: "POST",

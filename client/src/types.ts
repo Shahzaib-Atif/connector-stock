@@ -43,7 +43,7 @@ export interface Transaction {
   amount: number;
   itemType: "connector" | "accessory";
   department?: string;
-  timestamp: number;
+  updatedAt?: number;
 }
 
 export interface MasterData {
