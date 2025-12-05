@@ -70,6 +70,8 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
           {/* QR Option - only shows when showQR and handleQRClick are provided */}
           {showQR && handleQRClick && (
             <button
+              id="qr-code-btn"
+              title="Show QR code"
               onClick={handleQRClick}
               className="p-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg"
               aria-label="Show accessory QR"
@@ -80,6 +82,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
 
           {/* Transactions button */}
           <button
+            id="view-transactions-btn"
             onClick={() => navigate("/transactions")}
             className="p-2 text-slate-400 hover:text-white transition-colors rounded-lg"
             title="View Transactions"
@@ -89,6 +92,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
 
           {/* Logout button */}
           <button
+            id="logout-btn"
             onClick={() => dispatch(logout())}
             className="p-2 text-slate-400 hover:text-white flex items-center gap-2 transition-colors rounded-lg"
             title="Logout"
