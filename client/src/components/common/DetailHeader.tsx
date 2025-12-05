@@ -1,7 +1,9 @@
 import React from "react";
-import { ArrowRight, QrCode } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowRight, QrCode, Receipt, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import BrandLogo from "./BrandLogo";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { logout } from "@/store/slices/authSlice";
 
 interface DetailHeaderProps {
   label: string;
@@ -18,6 +20,10 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
   handleQRClick,
   showQR = true,
 }) => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
+
   return (
     <header
       id="detail-header"
@@ -46,18 +52,38 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
           </div>
         </div>
 
-        {/* QR Option */}
-        {showQR && handleQRClick && (
-          <div className="flex flex-none items-center justify-end flex-shrink-0 sm:min-w-[100px]">
+        {/* Right side actions */}
+        <div className="flex flex-none items-center justify-end gap-1 flex-shrink-0 sm:min-w-[100px]">
+          {/* QR Option - only shows when showQR and handleQRClick are provided */}
+          {showQR && handleQRClick && (
             <button
               onClick={handleQRClick}
-              className="p-2 -mr-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg"
+              className="p-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg"
               aria-label="Show accessory QR"
             >
               <QrCode className="w-6 h-6" />
             </button>
-          </div>
-        )}
+          )}
+
+          {/* Transactions button */}
+          <button
+            onClick={() => navigate("/transactions")}
+            className="p-2 text-slate-400 hover:text-white transition-colors rounded-lg"
+            title="View Transactions"
+          >
+            <Receipt className="w-5 h-5" />
+          </button>
+
+          {/* Logout button */}
+          <button
+            onClick={() => dispatch(logout())}
+            className="p-2 text-slate-400 hover:text-white flex items-center gap-2 transition-colors rounded-lg"
+            title="Logout"
+          >
+            <span className="text-sm font-mono hidden sm:inline">{user}</span>
+            <LogOut className="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </header>
   );
