@@ -23,7 +23,7 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data">{sample.Cliente || "-"}</td>
       <td className="table-data">{sample.Projeto || "-"}</td>
       <td className="table-data font-mono">{sample.EncDivmac || "-"}</td>
-      <td className="table-data">{sample.Ref_Descricao || "-"}</td>
+      <td className="table-data break-all">{sample.Ref_Descricao || "-"}</td>
       <td className="table-data font-mono">{sample.Amostra || "-"}</td>
       <td className="table-data text-slate-400">
         {sample.Data_do_pedido || "-"}

@@ -16,7 +16,7 @@ export const SamplesTable: React.FC<SamplesTableProps> = ({
 }) => {
   return (
     <div className="overflow-x-auto rounded-xl border border-slate-700 bg-slate-800/50">
-      <table className="w-full text-sm">
+      <table className="w-full text-sm table-fixed">
         <TableHeader />
         <tbody>
           {samples.length === 0 ? (

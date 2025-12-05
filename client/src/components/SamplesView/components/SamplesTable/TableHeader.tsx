@@ -4,19 +4,20 @@ const TableHeader: React.FC = () => {
   return (
     <thead className="bg-slate-700/50 text-slate-300 uppercase text-xs">
       <tr>
-        <th className="table-header">ID</th>
-        <th className="table-header">Cliente</th>
-        <th className="table-header">Projeto</th>
-        <th className="table-header">EncDivmac</th>
-        <th className="table-header">Ref. Descrição</th>
-        <th className="table-header">Amostra</th>
-        <th className="table-header">Data Pedido</th>
-        <th className="table-header">Data Receção</th>
-        <th className="table-header">Entregue A</th>
-        <th className="table-header text-center">Actions</th>
+        <th className="table-header w-16">ID</th>
+        <th className="table-header w-40">Cliente</th>
+        <th className="table-header w-36">Projeto</th>
+        <th className="table-header w-28">EncDivmac</th>
+        <th className="table-header w-48">Ref. Descrição</th>
+        <th className="table-header w-28">Amostra</th>
+        <th className="table-header w-28">Data Pedido</th>
+        <th className="table-header w-28">Data Receção</th>
+        <th className="table-header w-32">Entregue A</th>
+        <th className="table-header w-20 text-center">Actions</th>
       </tr>
     </thead>
   );
 };
 
 export default TableHeader;
+
