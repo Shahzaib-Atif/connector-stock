@@ -27,9 +27,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     >
       {/* Cliente Filter */}
       <div className="max-w-sm">
-        <label className="block text-sm font-semibold text-slate-300 mb-2">
-          Cliente
-        </label>
         <input
           type="text"
           value={clienteFilter}
@@ -41,9 +38,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
       {/* Ref_Descricao Filter */}
       <div className="max-w-sm">
-        <label className="block text-sm font-semibold text-slate-300 mb-2">
-          Ref. Descrição
-        </label>
         <input
           type="text"
           value={refDescricaoFilter}
@@ -55,9 +49,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
       {/* EncDivmac Filter */}
       <div className="max-w-sm">
-        <label className="block text-sm font-semibold text-slate-300 mb-2">
-          EncDivmac
-        </label>
         <input
           type="text"
           value={encDivmacFilter}

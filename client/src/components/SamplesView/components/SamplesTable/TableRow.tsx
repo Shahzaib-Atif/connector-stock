@@ -1,4 +1,5 @@
 import React from "react";
+import { Pencil, Trash2 } from "lucide-react";
 import { Sample } from "@/types";
 
 interface TableRowProps {
@@ -35,15 +36,17 @@ const TableRow: React.FC<TableRowProps> = ({
         <div className="flex justify-center gap-2">
           <button
             onClick={() => onEdit(sample)}
-            className="px-3 py-1 text-xs bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors"
+            title="Edit"
+            className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-slate-700 rounded transition-colors"
           >
-            Edit
+            <Pencil className="w-4 h-4" />
           </button>
           <button
             onClick={() => onDelete(sample)}
-            className="px-3 py-1 text-xs bg-red-600 hover:bg-red-500 text-white rounded transition-colors"
+            title="Delete"
+            className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-slate-700 rounded transition-colors"
           >
-            Delete
+            <Trash2 className="w-4 h-4" />
           </button>
         </div>
       </td>
@@ -52,3 +55,4 @@ const TableRow: React.FC<TableRowProps> = ({
 };
 
 export default TableRow;
+

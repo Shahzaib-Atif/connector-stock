@@ -99,7 +99,7 @@ export const SamplesView: React.FC = () => {
         onBack={() => navigate("/")}
       />
 
-      <div className="max-w-fit mx-auto p-4 space-y-4">
+      <div className="max-w-full mx-auto p-4 space-y-4">
         {/* Action Bar */}
         <div className="flex justify-end">
           <button
