@@ -92,55 +92,63 @@ export const SamplesView: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 pb-8 text-slate-200">
+    <div className="min-h-screen h-screen bg-gradient-to-br from-slate-800 to-slate-900 text-slate-200 flex flex-col overflow-hidden">
       <DetailHeader
         label="Samples"
         title="REG Amostras"
         onBack={() => navigate("/")}
       />
 
-      <div className="max-w-full mx-auto p-4 space-y-4">
-        {/* Action Bar */}
-        <div className="flex justify-end">
-          <button
-            onClick={handleCreateNew}
-            className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-green-600/30"
-          >
-            + New Sample
-          </button>
-        </div>
+      <div className="flex-1 overflow-hidden">
+        <div className="max-w-full mx-auto h-full p-4 flex flex-col gap-4">
+          {/* Action Bar */}
+          <div className="flex justify-end flex-none">
+            <button
+              onClick={handleCreateNew}
+              className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-green-600/30"
+            >
+              + New Sample
+            </button>
+          </div>
 
-        <FilterBar
-          clienteFilter={filters.cliente}
-          refDescricaoFilter={filters.refDescricao}
-          encDivmacFilter={filters.encDivmac}
-          onClienteChange={setCliente}
-          onRefDescricaoChange={setRefDescricao}
-          onEncDivmacChange={setEncDivmac}
-        />
+          <FilterBar
+            clienteFilter={filters.cliente}
+            refDescricaoFilter={filters.refDescricao}
+            encDivmacFilter={filters.encDivmac}
+            onClienteChange={setCliente}
+            onRefDescricaoChange={setRefDescricao}
+            onEncDivmacChange={setEncDivmac}
+          />
 
-        {error ? (
-          <div className="text-center py-8 text-red-400">{error}</div>
-        ) : (
-          <>
-            <SamplesTable
-              samples={paginatedSamples}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
+          <div className="flex-1 min-h-0">
+            {error ? (
+              <div className="h-full flex items-center justify-center text-red-400 text-center px-4">
+                {error}
+              </div>
+            ) : (
+              <div className="flex h-full flex-col gap-4">
+                <div className="flex-1 min-h-0">
+                  <SamplesTable
+                    samples={paginatedSamples}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                </div>
 
-            {totalItems > 0 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                itemsPerPage={itemsPerPage}
-                totalItems={totalItems}
-                setCurrentPage={setCurrentPage}
-                setItemsPerPage={setItemsPerPage}
-              />
+                {totalItems > 0 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    itemsPerPage={itemsPerPage}
+                    totalItems={totalItems}
+                    setCurrentPage={setCurrentPage}
+                    setItemsPerPage={setItemsPerPage}
+                  />
+                )}
+              </div>
             )}
-          </>
-        )}
+          </div>
+        </div>
       </div>
 
       {isModalOpen && (

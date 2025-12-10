@@ -61,33 +61,37 @@ export const TransactionsView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 pb-8 text-slate-200">
+    <div className="min-h-screen h-screen bg-gradient-to-br from-slate-800 to-slate-900 text-slate-200 flex flex-col overflow-hidden">
       <DetailHeader
         label="Transactions"
         title="Transaction History"
         onBack={() => navigate("/")}
       />
 
-      <div className="max-w-7xl mx-auto p-4 space-y-4">
-        <FilterBar
-          transactionType={transactionType}
-          itemType={itemType}
-          onTransactionTypeChange={handleTransactionTypeChange}
-          onItemTypeChange={handleItemTypeChange}
-        />
-
-        <TransactionsTable transactions={paginatedTransactions} />
-
-        {filteredTransactions.length > 0 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            itemsPerPage={itemsPerPage}
-            totalItems={filteredTransactions.length}
-            onPageChange={handlePageChange}
-            onItemsPerPageChange={handleItemsPerPageChange}
+      <div className="flex-1 overflow-hidden">
+        <div className="max-w-7xl mx-auto h-full p-4 flex flex-col gap-4">
+          <FilterBar
+            transactionType={transactionType}
+            itemType={itemType}
+            onTransactionTypeChange={handleTransactionTypeChange}
+            onItemTypeChange={handleItemTypeChange}
           />
-        )}
+
+          <div className="flex-1 min-h-0">
+            <TransactionsTable transactions={paginatedTransactions} />
+          </div>
+
+          {filteredTransactions.length > 0 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              itemsPerPage={itemsPerPage}
+              totalItems={filteredTransactions.length}
+              onPageChange={handlePageChange}
+              onItemsPerPageChange={handleItemsPerPageChange}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

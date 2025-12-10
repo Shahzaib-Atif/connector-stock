@@ -12,7 +12,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
   transactions,
 }) => {
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-700 bg-slate-800/50">
+    <div className="h-full overflow-auto rounded-xl border border-slate-700 bg-slate-800/50">
       <table className="w-full text-sm">
         <TableHeader />
         <tbody>
