@@ -133,13 +133,14 @@ export interface AccessoryApiResponse {
 }
 
 export enum Department {
-  GT = "GT",
-  Montagem = "Montagem",
-  Maquinacao = "Maquinacao",
   Comercial = "Comercial",
+  GT = "GT",
   ID = "ID",
-  RH = "RH",
+  MTS = "MTS",
+  Maquinacao = "Maquinacao",
+  Montagem = "Montagem",
   Planamento = "Planamento",
+  RH = "RH",
 }
 
 export type suggestion = {
