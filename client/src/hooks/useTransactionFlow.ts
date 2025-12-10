@@ -23,18 +23,38 @@ export const useTransactionFlow = () => {
     setTargetId(undefined);
   };
 
-  const handleSubmit = async (amount: number, department?: Department) => {
+  const handleSubmit = async (
+    amount: number,
+    department?: Department,
+    associatedItemIds: string[] = []
+  ) => {
     if (!targetId || !masterData) return;
 
     const delta = txType === "IN" ? amount : -amount;
     try {
-      dispatch(
+      // Main item transaction
+      await dispatch(
         performTransactionThunk({
           itemId: targetId,
           delta,
           department,
         })
       );
+
+      // Associated accessories transactions
+      if (associatedItemIds.length > 0) {
+        await Promise.all(
+          associatedItemIds.map((accId) =>
+            dispatch(
+              performTransactionThunk({
+                itemId: accId,
+                delta,
+                department,
+              })
+            )
+          )
+        );
+      }
 
       closeTransaction();
     } catch (error) {

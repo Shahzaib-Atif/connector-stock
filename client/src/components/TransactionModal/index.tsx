@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo, useEffect } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEscKeyDown } from "@/hooks/useEscKeyDown";
@@ -6,12 +6,18 @@ import { Department } from "@/types";
 import { DepartmentSelector } from "./components/DepartmentSelector";
 import { QuantitySelector } from "./components/QuantitySelector";
 import { TransactionHeader } from "./components/TransactionHeader";
+import { useAssociatedAccessories } from "@/hooks/useAssociatedAccessories";
+import AccessoryChecklist from "./components/AccessoryChecklist";
 
 interface TransactionModalProps {
   type: "IN" | "OUT";
   targetId: string;
   onClose: () => void;
-  onConfirm: (amount: number, department?: Department) => void;
+  onConfirm: (
+    amount: number,
+    department?: Department,
+    associatedItemIds?: string[]
+  ) => void;
 }
 
 export const TransactionModal: React.FC<TransactionModalProps> = ({
@@ -22,6 +28,11 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 }) => {
   const [amount, setAmount] = useState(1);
   const [dept, setDept] = useState<Department>(Department.GT);
+  const {
+    selectedAccessoryIds,
+    associatedAccessories,
+    setSelectedAccessoryIds,
+  } = useAssociatedAccessories(targetId);
 
   const ref = useRef(null);
   useClickOutside(ref, onClose);
@@ -36,10 +47,17 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         ref={ref}
         className="flex flex-col gap-8 sm:gap-12 bg-slate-800 w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl border border-slate-700 animate-in slide-in-from-bottom-10 duration-300"
       >
-        <TransactionHeader type={type} onClose={onClose} />
+        <TransactionHeader type={type} onClose={onClose} targetId={targetId} />
 
         <div className="space-y-6 sm:space-y-10">
           <QuantitySelector amount={amount} onChange={setAmount} />
+
+          {/* Associated Accessories Checklist */}
+          <AccessoryChecklist
+            associatedAccessories={associatedAccessories}
+            selectedAccessoryIds={selectedAccessoryIds}
+            setSelectedAccessoryIds={setSelectedAccessoryIds}
+          />
 
           {type === "OUT" && (
             <DepartmentSelector value={dept} onChange={setDept} />
@@ -48,7 +66,11 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           <button
             onClick={() => {
               if (amount > 0) {
-                onConfirm(amount, type === "OUT" ? dept : undefined);
+                onConfirm(
+                  amount,
+                  type === "OUT" ? dept : undefined,
+                  selectedAccessoryIds
+                );
               }
             }}
             className={`w-full py-4 rounded-xl font-bold text-base sm:text-lg shadow-lg transition-transform active:scale-[0.98] ${
