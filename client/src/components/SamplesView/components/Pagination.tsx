@@ -1,21 +1,15 @@
+import { PaginatedData } from "@/types";
 import React from "react";
 
-interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  itemsPerPage: number;
-  totalItems: number;
-  onPageChange: (page: number) => void;
-  onItemsPerPageChange: (itemsPerPage: number) => void;
-}
-
-export const Pagination: React.FC<PaginationProps> = ({
+export const Pagination: React.FC<
+  Omit<PaginatedData<any>, "paginatedItems" | "resetPage">
+> = ({
   currentPage,
   totalPages,
   itemsPerPage,
   totalItems,
-  onPageChange,
-  onItemsPerPageChange,
+  setCurrentPage: onPageChange,
+  setItemsPerPage: onItemsPerPageChange,
 }) => {
   const buttonClass = (isActive: boolean, isDisabled: boolean) =>
     `px-3 py-1.5 rounded-lg font-medium text-sm transition-all ${

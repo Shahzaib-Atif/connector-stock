@@ -147,3 +147,14 @@ export type suggestion = {
   id: string;
   type: "box" | "connector" | "accessory";
 };
+
+export interface PaginatedData<T> {
+  paginatedItems: T[];
+  currentPage: number;
+  totalPages: number;
+  itemsPerPage: number;
+  totalItems: number;
+  setCurrentPage: (page: number) => void;
+  setItemsPerPage: (count: number) => void;
+  resetPage: () => void;
+}

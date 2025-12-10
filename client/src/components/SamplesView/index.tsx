@@ -135,8 +135,8 @@ export const SamplesView: React.FC = () => {
                 totalPages={totalPages}
                 itemsPerPage={itemsPerPage}
                 totalItems={totalItems}
-                onPageChange={setCurrentPage}
-                onItemsPerPageChange={setItemsPerPage}
+                setCurrentPage={setCurrentPage}
+                setItemsPerPage={setItemsPerPage}
               />
             )}
           </>
