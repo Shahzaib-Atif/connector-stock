@@ -8,7 +8,7 @@ interface Props<T> {
 
 export function usePagination<T>({
   items,
-  initialItemsPerPage = 5,
+  initialItemsPerPage = 10,
 }: Props<T>): PaginatedData<T> {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
