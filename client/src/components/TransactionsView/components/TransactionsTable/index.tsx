@@ -12,13 +12,13 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
   transactions,
 }) => {
   return (
-    <div className="h-full overflow-auto rounded-xl border border-slate-700 bg-slate-800/50">
+    <div id="transactions-table" className="table-container">
       <table className="w-full text-sm">
         <TableHeader />
         <tbody>
           {transactions.length === 0 ? (
             <tr>
-              <td colSpan={7} className="px-4 py-8 text-center text-slate-400">
+              <td colSpan={7} className="table-row-not-found">
                 No transactions found
               </td>
             </tr>

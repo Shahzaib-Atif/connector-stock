@@ -26,6 +26,12 @@ export default {
           '.table-view-content': {
           '@apply flex-1 overflow-hidden': {},
         },
+          '.table-container': {
+          '@apply h-full overflow-auto rounded-xl border border-slate-700 bg-slate-800/50': {},
+        },
+        '.table-row-not-found': {
+          '@apply px-4 py-8 text-center text-slate-400' : {},
+        }
      })
     }
   ],

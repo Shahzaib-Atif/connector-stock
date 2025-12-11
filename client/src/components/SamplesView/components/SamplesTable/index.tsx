@@ -15,13 +15,13 @@ export const SamplesTable: React.FC<SamplesTableProps> = ({
   onDelete,
 }) => {
   return (
-    <div className="h-full overflow-auto rounded-xl border border-slate-700 bg-slate-800/50">
+    <div id="samples-table" className="table-container">
       <table className="w-full text-sm table-fixed">
         <TableHeader />
         <tbody>
           {samples.length === 0 ? (
             <tr>
-              <td colSpan={10} className="px-4 py-8 text-center text-slate-400">
+              <td colSpan={10} className="table-row-not-found">
                 No samples found
               </td>
             </tr>
