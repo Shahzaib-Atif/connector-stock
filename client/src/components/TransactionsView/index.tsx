@@ -6,10 +6,12 @@ import { TransactionsTable } from "./components/TransactionsTable";
 import { FilterBar } from "./components/FilterBar";
 import { Pagination } from "./components/Pagination";
 import { UseTransactionsFilter } from "@/hooks/useTransactionsFilters";
+import { usePagination } from "@/hooks/usePagination";
+import Spinner from "../common/Spinner";
 
 export const TransactionsView: React.FC = () => {
   const navigate = useNavigate();
-  const transactions = useAppSelector((state) => state.txData.transactions);
+  const { transactions, loading } = useAppSelector((state) => state.txData);
 
   const {
     filteredTransactions,
@@ -19,17 +21,16 @@ export const TransactionsView: React.FC = () => {
     setTransactionType,
   } = UseTransactionsFilter(transactions);
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-
-  // Apply pagination
-  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
-  const paginatedTransactions = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return filteredTransactions.slice(startIndex, endIndex);
-  }, [filteredTransactions, currentPage, itemsPerPage]);
+  const {
+    paginatedItems: paginatedTransactions,
+    currentPage,
+    totalPages,
+    itemsPerPage,
+    totalItems,
+    setCurrentPage,
+    setItemsPerPage,
+    resetPage,
+  } = usePagination({ items: filteredTransactions });
 
   // Reset to page 1 when filters change
   const handleTransactionTypeChange = (type: "all" | "IN" | "OUT") => {
@@ -51,8 +52,13 @@ export const TransactionsView: React.FC = () => {
     setCurrentPage(page);
   };
 
+  // Show spinner only when loading
+  if (loading && transactions.length === 0) {
+    return <Spinner />;
+  }
+
   return (
-    <div className="min-h-screen h-screen bg-gradient-to-br from-slate-800 to-slate-900 text-slate-200 flex flex-col overflow-hidden">
+    <div className="table-view-wrapper">
       <DetailHeader
         label="Transactions"
         title="Transaction History"

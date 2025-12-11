@@ -20,6 +20,9 @@ export default {
         '.table-data': {
           '@apply px-4 py-3': {},
         },
+          '.table-view-wrapper': {
+          '@apply min-h-screen h-screen bg-gradient-to-br from-slate-800 to-slate-900 text-slate-200 flex flex-col overflow-hidden': {},
+        },
      })
     }
   ],

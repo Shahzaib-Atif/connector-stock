@@ -13,6 +13,7 @@ import { SamplesTable } from "./components/SamplesTable";
 import { FilterBar } from "./components/FilterBar";
 import { Pagination } from "./components/Pagination";
 import { SampleFormModal } from "./components/SampleFormModal";
+import Spinner from "../common/Spinner";
 
 export const SamplesView: React.FC = () => {
   const navigate = useNavigate();
@@ -82,15 +83,11 @@ export const SamplesView: React.FC = () => {
 
   // Show spinner only when loading
   if (loading && samples.length === 0) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
+    return <Spinner />;
   }
 
   return (
-    <div className="min-h-screen h-screen bg-gradient-to-br from-slate-800 to-slate-900 text-slate-200 flex flex-col overflow-hidden">
+    <div className="table-view-wrapper">
       <DetailHeader
         label="Samples"
         title="REG Amostras"
