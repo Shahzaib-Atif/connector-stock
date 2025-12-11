@@ -5,32 +5,23 @@ import { DetailHeader } from "../common/DetailHeader";
 import { TransactionsTable } from "./components/TransactionsTable";
 import { FilterBar } from "./components/FilterBar";
 import { Pagination } from "./components/Pagination";
+import { UseTransactionsFilter } from "@/hooks/useTransactionsFilters";
 
 export const TransactionsView: React.FC = () => {
   const navigate = useNavigate();
   const transactions = useAppSelector((state) => state.txData.transactions);
 
-  // Filter state
-  const [transactionType, setTransactionType] = useState<"all" | "IN" | "OUT">(
-    "all"
-  );
-  const [itemType, setItemType] = useState<"all" | "connector" | "accessory">(
-    "all"
-  );
+  const {
+    filteredTransactions,
+    itemType,
+    transactionType,
+    setItemType,
+    setTransactionType,
+  } = UseTransactionsFilter(transactions);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-
-  // Apply filters
-  const filteredTransactions = useMemo(() => {
-    return transactions.filter((tx) => {
-      const matchesTransactionType =
-        transactionType === "all" || tx.transactionType === transactionType;
-      const matchesItemType = itemType === "all" || tx.itemType === itemType;
-      return matchesTransactionType && matchesItemType;
-    });
-  }, [transactions, transactionType, itemType]);
 
   // Apply pagination
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);

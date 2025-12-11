@@ -17,11 +17,9 @@ import { SampleFormModal } from "./components/SampleFormModal";
 export const SamplesView: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  // Redux state
   const { samples, loading, error } = useAppSelector((state) => state.samples);
 
-  // Custom hooks
+  // Custom hook for filters
   const {
     filters,
     setCliente,

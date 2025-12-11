@@ -12,7 +12,7 @@ const TableHeader: React.FC = () => {
         <th className="table-header w-28">Amostra</th>
         <th className="table-header w-40">N_Envio</th>
         <th className="table-header w-28">Data Receção</th>
-        <th className="table-header w-28">Entregue A</th>
+        <th className="table-header w-28">Entregue_A</th>
         <th className="table-header w-20 text-center">Actions</th>
       </tr>
     </thead>
