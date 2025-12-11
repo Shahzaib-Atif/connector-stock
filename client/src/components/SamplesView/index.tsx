@@ -11,7 +11,7 @@ import { useSampleFilters } from "@/hooks/useSampleFilters";
 import { DetailHeader } from "../common/DetailHeader";
 import { SamplesTable } from "./components/SamplesTable";
 import { FilterBar } from "./components/FilterBar";
-import { Pagination } from "./components/Pagination";
+import { Pagination } from "../common/Pagination";
 import { SampleFormModal } from "./components/SampleFormModal";
 import Spinner from "../common/Spinner";
 
@@ -36,7 +36,6 @@ export const SamplesView: React.FC = () => {
     itemsPerPage,
     setCurrentPage,
     setItemsPerPage,
-    resetPage,
   } = usePagination({ items: filteredSamples });
 
   // Modal state
@@ -52,8 +51,8 @@ export const SamplesView: React.FC = () => {
 
   // Reset page when filters change
   useEffect(() => {
-    resetPage();
-  }, [filters, resetPage]);
+    setCurrentPage(1);
+  }, [filters]);
 
   const handleCreateNew = () => {
     setEditingSample(null);

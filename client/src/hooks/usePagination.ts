@@ -27,18 +27,13 @@ export function usePagination<T>({
     setCurrentPage(1);
   }, []);
 
-  const resetPage = useCallback(() => {
-    setCurrentPage(1);
-  }, []);
-
   return {
     paginatedItems,
     currentPage,
     totalPages,
     itemsPerPage,
-    totalItems,
     setCurrentPage,
     setItemsPerPage: handleSetItemsPerPage,
-    resetPage,
+    totalItems,
   };
 }

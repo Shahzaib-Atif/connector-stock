@@ -156,5 +156,4 @@ export interface PaginatedData<T> {
   totalItems: number;
   setCurrentPage: (page: number) => void;
   setItemsPerPage: (count: number) => void;
-  resetPage: () => void;
 }

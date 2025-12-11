@@ -4,15 +4,16 @@ import { useAppSelector } from "@/store/hooks";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionsTable } from "./components/TransactionsTable";
 import { FilterBar } from "./components/FilterBar";
-import { Pagination } from "./components/Pagination";
 import { UseTransactionsFilter } from "@/hooks/useTransactionsFilters";
 import { usePagination } from "@/hooks/usePagination";
 import Spinner from "../common/Spinner";
+import { Pagination } from "../common/Pagination";
 
 export const TransactionsView: React.FC = () => {
   const navigate = useNavigate();
   const { transactions, loading } = useAppSelector((state) => state.txData);
 
+  // filter
   const {
     filteredTransactions,
     itemType,
@@ -21,15 +22,14 @@ export const TransactionsView: React.FC = () => {
     setTransactionType,
   } = UseTransactionsFilter(transactions);
 
+  // pagination
   const {
     paginatedItems: paginatedTransactions,
     currentPage,
     totalPages,
     itemsPerPage,
-    totalItems,
     setCurrentPage,
     setItemsPerPage,
-    resetPage,
   } = usePagination({ items: filteredTransactions });
 
   // Reset to page 1 when filters change
@@ -41,15 +41,6 @@ export const TransactionsView: React.FC = () => {
   const handleItemTypeChange = (type: "all" | "connector" | "accessory") => {
     setItemType(type);
     setCurrentPage(1);
-  };
-
-  const handleItemsPerPageChange = (newItemsPerPage: number) => {
-    setItemsPerPage(newItemsPerPage);
-    setCurrentPage(1);
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
   };
 
   // Show spinner only when loading
@@ -84,8 +75,8 @@ export const TransactionsView: React.FC = () => {
               totalPages={totalPages}
               itemsPerPage={itemsPerPage}
               totalItems={filteredTransactions.length}
-              onPageChange={handlePageChange}
-              onItemsPerPageChange={handleItemsPerPageChange}
+              setCurrentPage={setCurrentPage}
+              setItemsPerPage={setItemsPerPage}
             />
           )}
         </div>
