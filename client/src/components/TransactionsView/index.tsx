@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/store/hooks";
 import { DetailHeader } from "../common/DetailHeader";
@@ -20,6 +20,10 @@ export const TransactionsView: React.FC = () => {
     transactionType,
     setItemType,
     setTransactionType,
+    itemIdQuery,
+    setItemIdQuery,
+    department,
+    setDepartment,
   } = UseTransactionsFilter(transactions);
 
   // pagination
@@ -32,7 +36,6 @@ export const TransactionsView: React.FC = () => {
     setItemsPerPage,
   } = usePagination({ items: filteredTransactions });
 
-  // Reset to page 1 when filters change
   const handleTransactionTypeChange = (type: "all" | "IN" | "OUT") => {
     setTransactionType(type);
     setCurrentPage(1);
@@ -43,13 +46,23 @@ export const TransactionsView: React.FC = () => {
     setCurrentPage(1);
   };
 
+  const handleItemIdQueryChange = (query: string) => {
+    setItemIdQuery(query);
+    setCurrentPage(1);
+  };
+
+  const handleDepartmentChange = (value: string) => {
+    setDepartment(value);
+    setCurrentPage(1);
+  };
+
   // Show spinner only when loading
   if (loading && transactions.length === 0) {
     return <Spinner />;
   }
 
   return (
-    <div className="table-view-wrapper">
+    <div id="transactions-page" className="table-view-wrapper">
       <DetailHeader
         label="Transactions"
         title="Transaction History"
@@ -63,6 +76,10 @@ export const TransactionsView: React.FC = () => {
             itemType={itemType}
             onTransactionTypeChange={handleTransactionTypeChange}
             onItemTypeChange={handleItemTypeChange}
+            itemIdQuery={itemIdQuery}
+            onSearchItemIdChange={handleItemIdQueryChange}
+            department={department}
+            onDepartmentChange={handleDepartmentChange}
           />
 
           <div className="flex-1 min-h-0">

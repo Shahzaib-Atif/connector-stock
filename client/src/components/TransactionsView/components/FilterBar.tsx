@@ -1,79 +1,91 @@
+import { Department } from "@/types";
 import React from "react";
 
-interface FilterBarProps {
+interface Props {
   transactionType: "all" | "IN" | "OUT";
   itemType: "all" | "connector" | "accessory";
   onTransactionTypeChange: (type: "all" | "IN" | "OUT") => void;
   onItemTypeChange: (type: "all" | "connector" | "accessory") => void;
+  itemIdQuery: string;
+  onSearchItemIdChange: (value: string) => void;
+  department: string;
+  onDepartmentChange: (value: string) => void;
 }
 
-export const FilterBar: React.FC<FilterBarProps> = ({
+export const FilterBar: React.FC<Props> = ({
   transactionType,
   itemType,
   onTransactionTypeChange,
   onItemTypeChange,
+  itemIdQuery,
+  onSearchItemIdChange,
+  department,
+  onDepartmentChange,
 }) => {
-  const filterButtonClass = (isActive: boolean) =>
-    `px-4 py-2 rounded-lg font-medium text-sm transition-all ${
-      isActive
-        ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
-        : "bg-slate-700 text-slate-300 hover:bg-slate-600"
-    }`;
+  const labelStyle = "block text-sm font-semibold text-slate-300 mb-2";
+  const selectStyle =
+    "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700">
+      {/* Search Item ID */}
+      <div className="w-full">
+        <label className={labelStyle}>Search Item ID</label>
+        <input
+          type="text"
+          value={itemIdQuery}
+          onChange={(e) => onSearchItemIdChange(e.target.value)}
+          placeholder="Enter item ID"
+          className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
       {/* Transaction Type Filter */}
-      <div className="flex-1">
-        <label className="block text-sm font-semibold text-slate-300 mb-2">
-          Transaction Type
-        </label>
-        <div className="flex gap-2">
-          <button
-            onClick={() => onTransactionTypeChange("all")}
-            className={filterButtonClass(transactionType === "all")}
-          >
-            All
-          </button>
-          <button
-            onClick={() => onTransactionTypeChange("IN")}
-            className={filterButtonClass(transactionType === "IN")}
-          >
-            IN
-          </button>
-          <button
-            onClick={() => onTransactionTypeChange("OUT")}
-            className={filterButtonClass(transactionType === "OUT")}
-          >
-            OUT
-          </button>
-        </div>
+      <div className="w-full">
+        <label className={labelStyle}>Transaction Type</label>
+        <select
+          value={transactionType}
+          onChange={(e) =>
+            onTransactionTypeChange(e.target.value as "all" | "IN" | "OUT")
+          }
+          className={selectStyle}
+        >
+          <option value="all">All</option>
+          <option value="IN">IN</option>
+          <option value="OUT">OUT</option>
+        </select>
       </div>
 
       {/* Item Type Filter */}
-      <div>
-        <label className="block text-sm font-semibold text-slate-300 mb-2">
-          Item Type
-        </label>
-        <div className="flex gap-2">
-          <button
-            onClick={() => onItemTypeChange("all")}
-            className={filterButtonClass(itemType === "all")}
-          >
-            All
-          </button>
-          <button
-            onClick={() => onItemTypeChange("connector")}
-            className={filterButtonClass(itemType === "connector")}
-          >
-            Connector
-          </button>
-          <button
-            onClick={() => onItemTypeChange("accessory")}
-            className={filterButtonClass(itemType === "accessory")}
-          >
-            Accessory
-          </button>
-        </div>
+      <div className="w-full">
+        <label className={labelStyle}>Item Type</label>
+        <select
+          value={itemType}
+          onChange={(e) =>
+            onItemTypeChange(
+              e.target.value as "all" | "connector" | "accessory"
+            )
+          }
+          className={selectStyle}
+        >
+          <option value="all">All</option>
+          <option value="connector">Connector</option>
+          <option value="accessory">Accessory</option>
+        </select>
+      </div>
+
+      {/* Department Filter */}
+      <div className="w-full">
+        <label className={labelStyle}>Department</label>
+        <select
+          value={department}
+          onChange={(e) => onDepartmentChange(e.target.value)}
+          className={selectStyle}
+        >
+          {Object.values(Department).map((d) => (
+            <option value={d}>{d}</option>
+          ))}
+        </select>
       </div>
     </div>
   );
