@@ -1,22 +1,30 @@
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { DetailHeader } from "./DetailHeader";
+import { useAppSelector } from "@/store/hooks";
 
 interface NotFoundPageProps {
   label: string;
   icon: LucideIcon;
-  title: string;
-  message: string;
   onBack: () => void;
 }
 
 export const NotFoundPage: React.FC<NotFoundPageProps> = ({
   label,
   icon: Icon,
-  title,
-  message,
   onBack,
 }) => {
+  const masterData = useAppSelector((state) => state.masterData);
+  const itemType = label?.toLowerCase();
+  const title = `${label} Not Found`;
+  let message = "";
+
+  if (!masterData.data || masterData.error)
+    message =
+      "Error while fetching data from server! Please contact your website administrator if this error persists.";
+  else
+    message = `The ${itemType} you are looking for does not exist in the system`;
+
   return (
     <div className="min-h-screen bg-slate-900 text-slate-200">
       <DetailHeader

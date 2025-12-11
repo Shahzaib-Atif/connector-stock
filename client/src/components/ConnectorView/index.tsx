@@ -38,15 +38,7 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
   useGlobalBackNavigation(goBack);
 
   if (!connector) {
-    return (
-      <NotFoundPage
-        label="Connector"
-        icon={Wrench}
-        title="Connector Not Found"
-        message="The connector you are looking for does not exist in the system."
-        onBack={goBack}
-      />
-    );
+    return <NotFoundPage label="Connector" icon={Wrench} onBack={goBack} />;
   }
 
   const handleAccessoryInspect = (accessoryId: string) => {

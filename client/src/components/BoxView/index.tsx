@@ -33,15 +33,7 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
 
   // show not found page if box not found
   if (!box || box.ch === "?" || box.cv === "?") {
-    return (
-      <NotFoundPage
-        label="Box Storage"
-        icon={MapPin}
-        title="Box Not Found"
-        message="The box you are looking for does not exist in the system."
-        onBack={goBack}
-      />
-    );
+    return <NotFoundPage label="Box" icon={MapPin} onBack={goBack} />;
   }
 
   const handleConnectorScan = (connectorId: string) => {

@@ -56,15 +56,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
 
   // If the resolver returned null (accessory not found), show error
   if (!accessory) {
-    return (
-      <NotFoundPage
-        label="Accessory"
-        icon={Wrench}
-        title="Accessory Not Found"
-        message="The accessory you are looking for does not exist in the system."
-        onBack={goBack}
-      />
-    );
+    return <NotFoundPage label="Accessory" icon={Wrench} onBack={goBack} />;
   }
 
   const imageUrl = API.accessoryImages(accessory.id);
