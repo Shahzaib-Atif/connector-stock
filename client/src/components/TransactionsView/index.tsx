@@ -65,7 +65,7 @@ export const TransactionsView: React.FC = () => {
         onBack={() => navigate("/")}
       />
 
-      <div className="flex-1 overflow-hidden">
+      <div id="transactions-content" className="table-view-content">
         <div className="max-w-7xl mx-auto h-full p-4 flex flex-col gap-4">
           <FilterBar
             transactionType={transactionType}

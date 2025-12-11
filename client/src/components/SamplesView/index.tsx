@@ -34,7 +34,6 @@ export const SamplesView: React.FC = () => {
     currentPage,
     totalPages,
     itemsPerPage,
-    totalItems,
     setCurrentPage,
     setItemsPerPage,
     resetPage,
@@ -94,7 +93,7 @@ export const SamplesView: React.FC = () => {
         onBack={() => navigate("/")}
       />
 
-      <div className="flex-1 overflow-hidden">
+      <div id="samples-content" className="table-view-content">
         <div className="max-w-full mx-auto h-full p-4 flex flex-col gap-4">
           {/* Action Bar */}
           <div className="flex justify-end flex-none">
@@ -130,12 +129,12 @@ export const SamplesView: React.FC = () => {
                   />
                 </div>
 
-                {totalItems > 0 && (
+                {filteredSamples.length > 0 && (
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     itemsPerPage={itemsPerPage}
-                    totalItems={totalItems}
+                    totalItems={filteredSamples.length}
                     setCurrentPage={setCurrentPage}
                     setItemsPerPage={setItemsPerPage}
                   />
