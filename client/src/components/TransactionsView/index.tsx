@@ -8,6 +8,7 @@ import { useTransactionsFilter } from "@/hooks/useTransactionsFilters";
 import { usePagination } from "@/hooks/usePagination";
 import Spinner from "../common/Spinner";
 import { Pagination } from "../common/Pagination";
+import { Department } from "@/types";
 
 export const TransactionsView: React.FC = () => {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ export const TransactionsView: React.FC = () => {
     setCurrentPage(1);
   };
 
-  const handleDepartmentChange = (value: string) => {
+  const handleDepartmentChange = (value: Department | "all") => {
     setDepartment(value);
     setCurrentPage(1);
   };

@@ -1,4 +1,4 @@
-import { Transaction } from "@/types";
+import { Department, Transaction } from "@/types";
 import { useState, useMemo } from "react";
 
 export function useTransactionsFilter(transactions: Transaction[]) {
@@ -9,21 +9,26 @@ export function useTransactionsFilter(transactions: Transaction[]) {
     "all"
   );
   const [itemIdQuery, setItemIdQuery] = useState("");
-  const [department, setDepartment] = useState<string>("all");
+  const [department, setDepartment] = useState<Department | "all">("all");
 
   const filteredTransactions = useMemo(() => {
+    // Normalize search inputs for case-insensitive matching
     const normalizedQuery = itemIdQuery.trim().toLowerCase();
     const normalizedDepartment = department.toLowerCase();
 
+    // Apply all active filters to transaction list
     return transactions.filter((tx) => {
       const matchesTransactionType =
         transactionType === "all" || tx.transactionType === transactionType;
+
       const matchesItemType = itemType === "all" || tx.itemType === itemType;
+
       const matchesItemId =
         !normalizedQuery || tx.itemId.toLowerCase().includes(normalizedQuery);
+
+      const txDepartment = tx.department?.toLowerCase();
       const matchesDepartment =
-        normalizedDepartment === "all" ||
-        (tx.department || "").toLowerCase() === normalizedDepartment;
+        normalizedDepartment === "all" || txDepartment === normalizedDepartment;
 
       return (
         matchesTransactionType &&

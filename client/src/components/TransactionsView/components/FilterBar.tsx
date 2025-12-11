@@ -82,8 +82,11 @@ export const FilterBar: React.FC<Props> = ({
           onChange={(e) => onDepartmentChange(e.target.value)}
           className={selectStyle}
         >
+          <option value="all">All</option>
           {Object.values(Department).map((d) => (
-            <option value={d}>{d}</option>
+            <option key={d} value={d}>
+              {d}
+            </option>
           ))}
         </select>
       </div>
