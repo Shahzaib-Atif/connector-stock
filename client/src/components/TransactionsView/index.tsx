@@ -4,7 +4,7 @@ import { useAppSelector } from "@/store/hooks";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionsTable } from "./components/TransactionsTable";
 import { FilterBar } from "./components/FilterBar";
-import { UseTransactionsFilter } from "@/hooks/useTransactionsFilters";
+import { useTransactionsFilter } from "@/hooks/useTransactionsFilters";
 import { usePagination } from "@/hooks/usePagination";
 import Spinner from "../common/Spinner";
 import { Pagination } from "../common/Pagination";
@@ -24,7 +24,7 @@ export const TransactionsView: React.FC = () => {
     setItemIdQuery,
     department,
     setDepartment,
-  } = UseTransactionsFilter(transactions);
+  } = useTransactionsFilter(transactions);
 
   // pagination
   const {
@@ -70,7 +70,7 @@ export const TransactionsView: React.FC = () => {
       />
 
       <div id="transactions-content" className="table-view-content">
-        <div className="max-w-7xl mx-auto h-full p-4 flex flex-col gap-4">
+        <div className="table-view-inner-content">
           <FilterBar
             transactionType={transactionType}
             itemType={itemType}
@@ -82,7 +82,7 @@ export const TransactionsView: React.FC = () => {
             onDepartmentChange={handleDepartmentChange}
           />
 
-          <div className="flex-1 min-h-0">
+          <div className="table-container-outer">
             <TransactionsTable transactions={paginatedTransactions} />
           </div>
 

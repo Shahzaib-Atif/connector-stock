@@ -15,7 +15,7 @@ export const SamplesTable: React.FC<SamplesTableProps> = ({
   onDelete,
 }) => {
   return (
-    <div id="samples-table" className="table-container">
+    <div id="samples-table" className="table-container-inner">
       <table className="w-full text-sm table-fixed">
         <TableHeader />
         <tbody>

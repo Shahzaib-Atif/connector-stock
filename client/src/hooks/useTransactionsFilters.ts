@@ -1,7 +1,7 @@
 import { Transaction } from "@/types";
 import { useState, useMemo } from "react";
 
-export function UseTransactionsFilter(transactions: Transaction[]) {
+export function useTransactionsFilter(transactions: Transaction[]) {
   const [transactionType, setTransactionType] = useState<"all" | "IN" | "OUT">(
     "all"
   );

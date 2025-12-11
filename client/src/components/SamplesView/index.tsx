@@ -93,7 +93,7 @@ export const SamplesView: React.FC = () => {
       />
 
       <div id="samples-content" className="table-view-content">
-        <div className="max-w-full mx-auto h-full p-4 flex flex-col gap-4">
+        <div className="table-view-inner-content">
           {/* Action Bar */}
           <div className="flex justify-end flex-none">
             <button
@@ -113,34 +113,24 @@ export const SamplesView: React.FC = () => {
             onEncDivmacChange={setEncDivmac}
           />
 
-          <div className="flex-1 min-h-0">
-            {error ? (
-              <div className="h-full flex items-center justify-center text-red-400 text-center px-4">
-                {error}
-              </div>
-            ) : (
-              <div className="flex h-full flex-col gap-4">
-                <div className="flex-1 min-h-0">
-                  <SamplesTable
-                    samples={paginatedSamples}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
-                </div>
-
-                {filteredSamples.length > 0 && (
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    itemsPerPage={itemsPerPage}
-                    totalItems={filteredSamples.length}
-                    setCurrentPage={setCurrentPage}
-                    setItemsPerPage={setItemsPerPage}
-                  />
-                )}
-              </div>
-            )}
+          <div className="table-container-outer">
+            <SamplesTable
+              samples={paginatedSamples}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           </div>
+
+          {filteredSamples.length > 0 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              itemsPerPage={itemsPerPage}
+              totalItems={filteredSamples.length}
+              setCurrentPage={setCurrentPage}
+              setItemsPerPage={setItemsPerPage}
+            />
+          )}
         </div>
       </div>
 

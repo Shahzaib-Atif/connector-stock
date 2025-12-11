@@ -12,7 +12,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
   transactions,
 }) => {
   return (
-    <div id="transactions-table" className="table-container">
+    <div id="transactions-table" className="table-container-inner">
       <table className="w-full text-sm">
         <TableHeader />
         <tbody>

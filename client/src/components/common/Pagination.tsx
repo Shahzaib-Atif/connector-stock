@@ -42,7 +42,7 @@ export const Pagination: React.FC<
       </div>
 
       {/* Item count display */}
-      <div className="text-sm text-slate-400">
+      <div className="text-sm text-slate-400 hidden sm:block">
         Showing {startItem}-{endItem} of {totalItems} items
       </div>
 
