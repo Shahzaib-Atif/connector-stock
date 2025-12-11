@@ -38,7 +38,7 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
         label="Box Storage"
         icon={MapPin}
         title="Box Not Found"
-        message="The box you are looking for does not exist in the master data."
+        message="The box you are looking for does not exist in the system."
         onBack={goBack}
       />
     );

@@ -1,6 +1,5 @@
 import { fetchMasterData } from "@/api";
 import {
-  Accessory,
   AccessoryApiResponse,
   ConnectorReferenceApiResponse,
   MasterData,

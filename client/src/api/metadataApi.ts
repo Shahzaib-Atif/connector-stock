@@ -54,27 +54,22 @@ export const fetchVias = async (): Promise<Record<string, string>> => {
 export const fetchPositions = async (): Promise<
   Record<string, { cv: string; ch: string }>
 > => {
-  try {
-    const response = await fetch(API.positions);
-    if (!response.ok) {
-      throw new Error("Failed to fetch positions");
-    }
-    const data: PositionApiResponse[] = await response.json();
-
-    const positions: Record<string, { cv: string; ch: string }> = {};
-    data.forEach((item) => {
-      if (item.CON) {
-        const key = item.CON.trim();
-        positions[key] = {
-          cv: String(item.CV).trim(),
-          ch: String(item.CH).trim(),
-        };
-      }
-    });
-
-    return positions;
-  } catch (error) {
-    console.error("Error fetching positions:", error);
-    return {};
+  const response = await fetch(API.positions);
+  if (!response.ok) {
+    throw new Error("Failed to fetch positions");
   }
+  const data: PositionApiResponse[] = await response.json();
+
+  const positions: Record<string, { cv: string; ch: string }> = {};
+  data.forEach((item) => {
+    if (item.CON) {
+      const key = item.CON.trim();
+      positions[key] = {
+        cv: String(item.CV).trim(),
+        ch: String(item.CH).trim(),
+      };
+    }
+  });
+
+  return positions;
 };

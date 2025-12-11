@@ -43,7 +43,7 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
         label="Connector"
         icon={Wrench}
         title="Connector Not Found"
-        message="The connector you are looking for does not exist in the master data."
+        message="The connector you are looking for does not exist in the system."
         onBack={goBack}
       />
     );

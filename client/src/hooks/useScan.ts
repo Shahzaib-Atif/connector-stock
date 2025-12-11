@@ -5,14 +5,14 @@ import { getBoxDetails, parseConnector } from "../services/connectorService";
 
 export const useScan = () => {
   const navigate = useNavigate();
-  const masterData = useAppSelector((state) => state.masterData.data);
+  const masterData = useAppSelector((state) => state.masterData);
   const [error, setError] = useState<string | null>(null);
 
   const handleScan = (inputCode: string) => {
     setError(null);
 
-    if (!masterData) {
-      console.warn("Redux data not loaded yet");
+    if (!masterData.data || masterData.error) {
+      setError("Error while fetching data from server!");
       return;
     }
 
@@ -28,14 +28,14 @@ export const useScan = () => {
 
   //#region -- Helper functions
   const handleConnectorNav = (upperCode: string) => {
-    const connector = parseConnector(upperCode, masterData);
+    const connector = parseConnector(upperCode, masterData.data);
 
     if (connector) navigate(`/connector/${upperCode}`);
     else setError("Connector not found!");
   };
 
   const handleBoxNav = (upperCode: string) => {
-    const box = getBoxDetails(upperCode, masterData);
+    const box = getBoxDetails(upperCode, masterData.data);
 
     if (box) navigate(`/box/${upperCode}`);
     else setError("Box not found!");
@@ -43,12 +43,12 @@ export const useScan = () => {
 
   const handleAccessoryNav = (id: string) => {
     // Search for accessory by RefClient (clientRef field)
-    if (!masterData.accessories) {
+    if (!masterData.data.accessories) {
       setError("Accessory not found!");
       return;
     }
 
-    const accessory = masterData.accessories[id];
+    const accessory = masterData.data.accessories[id];
 
     if (accessory) navigate(`/accessory/${id}`);
     else setError("Invalid code. Unable to find this item!");

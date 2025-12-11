@@ -61,7 +61,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
         label="Accessory"
         icon={Wrench}
         title="Accessory Not Found"
-        message="The accessory you are looking for does not exist in the master data."
+        message="The accessory you are looking for does not exist in the system."
         onBack={goBack}
       />
     );
