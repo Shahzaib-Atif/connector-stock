@@ -1,15 +1,49 @@
-import LogoSvg from "@/icons/LogoSvg";
 import { Link } from "react-router-dom";
 
 function BrandLogo() {
   return (
     <Link
       to="/"
-      className="hidden sm:flex items-center gap-2 px-2 py-1 text-slate-400 hover:text-white transition-colors rounded-lg"
+      className="group transition-all duration-300 rounded-lg hover:scale-105"
       aria-label="Go home"
     >
-      <LogoSvg />
-      <span className="text-base md:text-xl font-bold">divmac</span>
+      <svg
+        viewBox="0 0 90 32"
+        className="h-8 w-auto"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* "divmac" text - clean and bold */}
+        <text
+          x="4"
+          y="22"
+          fontFamily="system-ui, -apple-system, sans-serif"
+          fontSize="20"
+          fontWeight="700"
+          letterSpacing="0.5"
+          fill="#f1f5f9"
+          className="group-hover:fill-white transition-all"
+        >
+          divmac
+        </text>
+        
+        {/* Red accent underline - matching brand */}
+        <rect
+          x="4"
+          y="26"
+          width="0"
+          height="2.5"
+          rx="1"
+          fill="#ef4444"
+        >
+          <animate
+            attributeName="width"
+            from="0"
+            to="78"
+            dur="0.5s"
+            fill="freeze"
+          />
+        </rect>
+      </svg>
     </Link>
   );
 }
