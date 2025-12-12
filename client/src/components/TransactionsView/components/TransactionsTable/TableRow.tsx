@@ -8,10 +8,7 @@ interface Props {
 }
 function TableRow({ tx, index }: Props) {
   return (
-    <tr
-      key={tx.ID}
-      className="border-b border-slate-700/50 hover:bg-slate-700/30 transition-colors"
-    >
+    <tr key={tx.ID} className="table-row-bg">
       <td className="table-data text-slate-300 font-mono text-xs">{index}</td>
       <td className="table-data">
         <Link
@@ -34,12 +31,10 @@ function TableRow({ tx, index }: Props) {
           {tx.transactionType}
         </span>
       </td>
-      <td className="table-data text-slate-300 capitalize">{tx.itemType}</td>
-      <td className="table-data text-slate-200 font-semibold">{tx.amount}</td>
-      <td className="table-data text-slate-300">{tx.department || "—"}</td>
-      <td className="table-data text-slate-400 text-xs">
-        {formatDate(tx.updatedAt)}
-      </td>
+      <td className="table-data capitalize">{tx.itemType}</td>
+      <td className="table-data font-semibold">{tx.amount}</td>
+      <td className="table-data">{tx.department || ""}</td>
+      <td className="table-data text-xs">{formatDate(tx.updatedAt)}</td>
     </tr>
   );
 }

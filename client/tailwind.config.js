@@ -36,6 +36,9 @@ export default {
         ".table-row-not-found": {
           "@apply px-4 py-8 text-center text-slate-400": {},
         },
+        ".table-row-bg": {
+          "@apply even:bg-slate-800/90 odd:bg-slate-800/10 hover:bg-slate-700/50 transition-colors break-normal text-slate-300": {},
+        },
       });
     },
   ],

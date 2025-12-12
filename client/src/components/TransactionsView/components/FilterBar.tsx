@@ -27,11 +27,14 @@ export const FilterBar: React.FC<Props> = ({
     "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700">
+    <div className="grid grid-cols-2 lg:flex gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700">
       {/* Search Item ID */}
-      <div className="w-full">
-        <label className={labelStyle}>Search Item ID</label>
+      <div className="w-full sm:w-64">
+        <label htmlFor="ItemID" className={labelStyle}>
+          Search Item ID
+        </label>
         <input
+          id="ItemID"
           type="text"
           value={itemIdQuery}
           onChange={(e) => onSearchItemIdChange(e.target.value)}
@@ -41,9 +44,12 @@ export const FilterBar: React.FC<Props> = ({
       </div>
 
       {/* Transaction Type Filter */}
-      <div className="w-full">
-        <label className={labelStyle}>Transaction Type</label>
+      <div className="w-full sm:w-64">
+        <label htmlFor="TransactionType" className={labelStyle}>
+          Transaction Type
+        </label>
         <select
+          id="TransactionType"
           value={transactionType}
           onChange={(e) =>
             onTransactionTypeChange(e.target.value as "all" | "IN" | "OUT")
@@ -57,9 +63,12 @@ export const FilterBar: React.FC<Props> = ({
       </div>
 
       {/* Item Type Filter */}
-      <div className="w-full">
-        <label className={labelStyle}>Item Type</label>
+      <div className="w-full sm:w-64">
+        <label htmlFor="ItemType" className={labelStyle}>
+          Item Type
+        </label>
         <select
+          id="ItemType"
           value={itemType}
           onChange={(e) =>
             onItemTypeChange(
@@ -75,9 +84,12 @@ export const FilterBar: React.FC<Props> = ({
       </div>
 
       {/* Department Filter */}
-      <div className="w-full">
-        <label className={labelStyle}>Department</label>
+      <div className="w-full sm:w-64">
+        <label htmlFor="Department" className={labelStyle}>
+          Department
+        </label>
         <select
+          id="Department"
           value={department}
           onChange={(e) => onDepartmentChange(e.target.value)}
           className={selectStyle}

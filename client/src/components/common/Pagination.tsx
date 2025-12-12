@@ -29,6 +29,7 @@ export const Pagination: React.FC<
       <div className="flex items-center gap-2 text-sm text-slate-300">
         <span>Show</span>
         <select
+          id="itemsPerPage"
           value={itemsPerPage}
           onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
           className="bg-slate-700 border border-slate-600 rounded-lg px-2 py-1 text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
