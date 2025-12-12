@@ -46,10 +46,10 @@ export default {
           "@apply even:bg-slate-800/90 odd:bg-slate-800/10 hover:bg-slate-700/50": {},
         },
         ".sidebar-btn": {
-          "@apply w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-3": {},
+          "@apply w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-3 text-sm sm:text-base": {},
         },
         ".sidebar-btn-icon": {
-          "@apply w-5 h-5": {},
+          "@apply w-4 sm:w-5 w-4 sm:h-5": {},
         },
       });
     },
