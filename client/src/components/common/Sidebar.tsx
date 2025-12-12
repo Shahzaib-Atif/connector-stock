@@ -1,7 +1,7 @@
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
-import { Beaker, Home, LogOut, Receipt, X } from "lucide-react";
+import { Beaker, Cable, Home, LogOut, Receipt, Wrench, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -79,6 +79,24 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
         >
           <Beaker className="sidebar-btn-icon" />
           <span>View Samples</span>
+        </button>
+
+        <button
+          id="view-connectors-btn"
+          onClick={() => handleMenuAction(() => navigate("/connectors"))}
+          className="sidebar-btn"
+        >
+          <Cable className="sidebar-btn-icon" />
+          <span>View Connectors</span>
+        </button>
+
+        <button
+          id="view-accessories-btn"
+          onClick={() => handleMenuAction(() => navigate("/accessories"))}
+          className="sidebar-btn"
+        >
+          <Wrench className="sidebar-btn-icon" />
+          <span>View Accessories</span>
         </button>
       </nav>
 

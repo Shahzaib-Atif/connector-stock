@@ -6,6 +6,8 @@ import { BoxView } from "./BoxView";
 import { AccessoryView } from "./AccessoryView";
 import { TransactionsView } from "./TransactionsView";
 import { SamplesView } from "./SamplesView";
+import { ConnectorsListView } from "./ConnectorsListView";
+import { AccessoriesListView } from "./AccessoriesListView";
 
 interface AppRoutesProps {
   onScan: (code: string) => void;
@@ -49,6 +51,8 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({
       />
       <Route path="/transactions" element={<TransactionsView />} />
       <Route path="/samples" element={<SamplesView />} />
+      <Route path="/connectors" element={<ConnectorsListView />} />
+      <Route path="/accessories" element={<AccessoriesListView />} />
     </Routes>
   );
 };
