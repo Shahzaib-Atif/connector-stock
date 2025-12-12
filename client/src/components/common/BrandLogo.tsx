@@ -14,7 +14,7 @@ function BrandLogo() {
       >
         {/* "divmac" text - clean and bold */}
         <text
-          x="4"
+          x="7"
           y="22"
           fontFamily="system-ui, -apple-system, sans-serif"
           fontSize="20"
@@ -25,16 +25,9 @@ function BrandLogo() {
         >
           divmac
         </text>
-        
+
         {/* Red accent underline - matching brand */}
-        <rect
-          x="4"
-          y="26"
-          width="0"
-          height="2.5"
-          rx="1"
-          fill="#ef4444"
-        >
+        <rect x="4" y="26" width="0" height="2" rx="1" fill="#ef4444">
           <animate
             attributeName="width"
             from="0"
