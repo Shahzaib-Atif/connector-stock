@@ -45,7 +45,7 @@ export interface Sample {
   Ref_Fornecedor?: string;
   Amostra?: string;
   Data_do_pedido?: string;
-  Data_recepcao?: string;
+  Data_recepcao?: number;
   Entregue_a?: string;
   N_Envio?: string;
   Quantidade?: string;

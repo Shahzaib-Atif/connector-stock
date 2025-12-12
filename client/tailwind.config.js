@@ -11,7 +11,10 @@ export default {
           "@apply bg-blue-600 hover:bg-blue-500 text-white": {},
         },
         ".table-header": {
-          "@apply px-4 py-3 text-left font-semibold text-slate-300": {},
+          "@apply border-b border-slate-700 bg-slate-800 uppercase text-xs": {},
+        },
+        ".table-header-cell": {
+          "@apply px-4 py-3 text-left font-semibold text-slate-300 w-32": {},
         },
         ".table-data": {
           "@apply px-4 py-3": {},
@@ -36,8 +39,11 @@ export default {
         ".table-row-not-found": {
           "@apply px-4 py-8 text-center text-slate-400": {},
         },
-        ".table-row-bg": {
-          "@apply even:bg-slate-800/90 odd:bg-slate-800/10 hover:bg-slate-700/50 transition-colors break-normal text-slate-300 text-sm": {},
+        ".table-row": {
+          "@apply transition-colors break-normal text-slate-300 text-sm overflow-hidden text-ellipsis": {},
+        },
+          ".table-row-bg": {
+          "@apply even:bg-slate-800/90 odd:bg-slate-800/10 hover:bg-slate-700/50": {},
         },
       });
     },

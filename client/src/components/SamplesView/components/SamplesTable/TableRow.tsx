@@ -1,6 +1,7 @@
 import React from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { Sample } from "@/types";
+import { formatDate } from "@/utils/formatDate";
 
 interface TableRowProps {
   sample: Sample;
@@ -27,7 +28,7 @@ const TableRow: React.FC<TableRowProps> = ({
   } = sample;
 
   return (
-    <tr className={"table-row-bg"} key={sample.ID}>
+    <tr className={"table-row table-row-bg"} key={sample.ID}>
       <td className="table-data font-mono">{sample.ID}</td>
       <td className="table-data">{Cliente || "-"}</td>
       <td className="table-data">{Projeto || "-"}</td>
@@ -35,10 +36,10 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data break-all">{Ref_Descricao || "-"}</td>
       <td className="table-data">{Amostra || "-"}</td>
       <td className="table-data">{N_Envio || "-"}</td>
-      <td className="table-data">{Data_recepcao || "-"}</td>
       <td className="table-data break-all" title={Entregue_a}>
         {Entregue_a || "-"}
       </td>
+      <td className="table-data font-mono">{formatDate(Data_recepcao)}</td>
       {/* Action buttons */}
       <td className="table-data">
         <div className="flex justify-center gap-2">
