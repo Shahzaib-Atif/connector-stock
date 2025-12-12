@@ -1,23 +1,31 @@
 import { Transaction } from "@/types";
 import { formatDate } from "@/utils/formatDate";
-import { Link } from "react-router-dom";
+import { ExternalLink } from "lucide-react";
 
 interface Props {
   tx: Transaction;
   index: number;
 }
 function TableRow({ tx, index }: Props) {
+  const handleOpenLink = () => {
+    const url = `/${tx.itemType}/${tx.itemId}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <tr key={tx.ID} className="table-row table-row-bg">
       <td className="table-data text-slate-300 font-mono text-xs">{index}</td>
       <td className="table-data">
-        <Link
-          to={`/${tx.itemType}/${tx.itemId}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {tx.itemId}
-        </Link>
+        <div className="flex items-center gap-2">
+          <span className="text-slate-300 font-mono">{tx.itemId}</span>
+          <button
+            onClick={handleOpenLink}
+            className="text-slate-400 hover:text-blue-400 transition-colors p-1"
+            title={`Open ${tx.itemId} in new tab`}
+          >
+            <ExternalLink className="w-4 h-4" />
+          </button>
+        </div>
       </td>
       <td className="table-data">
         <span
