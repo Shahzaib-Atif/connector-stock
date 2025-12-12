@@ -10,12 +10,7 @@ interface TableRowProps {
   onDelete: (sample: Sample) => void;
 }
 
-const TableRow: React.FC<TableRowProps> = ({
-  sample,
-  index,
-  onEdit,
-  onDelete,
-}) => {
+const TableRow: React.FC<TableRowProps> = ({ sample, onEdit, onDelete }) => {
   const {
     Cliente,
     Projeto,

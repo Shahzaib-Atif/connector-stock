@@ -19,34 +19,15 @@ const TableRow: React.FC<TableRowProps> = ({ connector, index }) => {
   };
 
   return (
-    <tr
-      onClick={handleClick}
-      className={`table-row cursor-pointer hover:bg-slate-700/50 ${
-        index % 2 === 0 ? "bg-slate-800/30" : "bg-slate-800/10"
-      }`}
-    >
-      <td className="table-cell font-mono font-semibold text-blue-400">
-        {connector.id}
-      </td>
-      <td className="table-cell text-slate-300">
-        {connector.Pos_ID || "-"}
-      </td>
-      <td className="table-cell text-slate-300">
-        {connector.Cor || "-"}
-      </td>
-      <td className="table-cell text-slate-300">
-        {connector.Vias || "-"}
-      </td>
-      <td className="table-cell text-slate-300">
-        {connector.ConnType || "-"}
-      </td>
-      <td className="table-cell text-slate-300">
-        {connector.Fabricante || "-"}
-      </td>
-      <td className="table-cell text-slate-300 truncate">
-        {connector.Refabricante || "-"}
-      </td>
-      <td className="table-cell text-center font-semibold text-emerald-400">
+    <tr className={"table-row table-row-bg"} key={connector.id}>
+      <td className="table-data font-mono">{connector.id}</td>
+      <td className="table-data">{connector.Pos_ID || "-"}</td>
+      <td className="table-data">{connector.Cor || "-"}</td>
+      <td className="table-data">{connector.Vias || "-"}</td>
+      <td className="table-data">{connector.ConnType || "-"}</td>
+      <td className="table-data">{connector.Fabricante || "-"}</td>
+      <td className="table-data break-all">{connector.Refabricante || "-"}</td>
+      <td className="table-data text-center text-emerald-200">
         {connector.Qty ?? 0}
       </td>
     </tr>

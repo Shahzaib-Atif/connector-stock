@@ -29,7 +29,7 @@ export const ConnectorsListView: React.FC = () => {
     itemsPerPage,
     setCurrentPage,
     setItemsPerPage,
-  } = usePagination({ items: filteredConnectors });
+  } = usePagination({ items: filteredConnectors, initialItemsPerPage: 25 });
 
   // Reset page when filters change
   useEffect(() => {

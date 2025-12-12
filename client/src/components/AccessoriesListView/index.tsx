@@ -29,7 +29,7 @@ export const AccessoriesListView: React.FC = () => {
     itemsPerPage,
     setCurrentPage,
     setItemsPerPage,
-  } = usePagination({ items: filteredAccessories });
+  } = usePagination({ items: filteredAccessories, initialItemsPerPage: 25 });
 
   // Reset page when filters change
   useEffect(() => {
