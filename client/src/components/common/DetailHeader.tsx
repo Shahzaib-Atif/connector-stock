@@ -1,8 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { QrCode, Menu } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import BrandLogo from "./BrandLogo";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import Sidebar from "./Sidebar";
 
 interface DetailHeaderProps {

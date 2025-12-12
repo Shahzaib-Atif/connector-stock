@@ -40,7 +40,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
           className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
           aria-label="Close menu"
         >
-          <X className="w-5 h-5" />
+          <X className="sidebar-btn-icon" />
         </button>
       </div>
 
@@ -57,27 +57,27 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
         <button
           id="home-btn"
           onClick={() => handleMenuAction(() => navigate("/"))}
-          className="w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-3"
+          className="sidebar-btn"
         >
-          <Home className="w-5 h-5" />
+          <Home className="sidebar-btn-icon" />
           <span>Home</span>
         </button>
 
         <button
           id="view-transactions-btn"
           onClick={() => handleMenuAction(() => navigate("/transactions"))}
-          className="w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-3"
+          className="sidebar-btn"
         >
-          <Receipt className="w-5 h-5" />
+          <Receipt className="sidebar-btn-icon" />
           <span>View Transactions</span>
         </button>
 
         <button
           id="view-samples-btn"
           onClick={() => handleMenuAction(() => navigate("/samples"))}
-          className="w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-3"
+          className="sidebar-btn"
         >
-          <Beaker className="w-5 h-5" />
+          <Beaker className="sidebar-btn-icon" />
           <span>View Samples</span>
         </button>
       </nav>
@@ -87,9 +87,9 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
         <button
           id="logout-btn"
           onClick={() => handleMenuAction(() => dispatch(logout()))}
-          className="w-full px-4 py-3 text-left text-slate-300 hover:bg-red-500/10 hover:text-red-400 transition-colors flex items-center gap-3 rounded-lg"
+          className="sidebar-btn hover:text-red-300"
         >
-          <LogOut className="w-5 h-5" />
+          <LogOut className="sidebar-btn-icon" />
           <span>Logout</span>
         </button>
       </div>
