@@ -71,7 +71,7 @@ export const TransactionsView: React.FC = () => {
       />
 
       <div id="transactions-content" className="table-view-content">
-        <div className="table-view-inner-content">
+        <div className="table-view-inner-content max-w-xl md:max-w-5xl">
           <FilterBar
             transactionType={transactionType}
             itemType={itemType}
