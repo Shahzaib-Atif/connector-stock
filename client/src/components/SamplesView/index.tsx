@@ -23,9 +23,8 @@ export const SamplesView: React.FC = () => {
   // Custom hook for filters
   const {
     filters,
-    setCliente,
-    setRefDescricao,
-    setEncDivmac,
+    setFilterColumn,
+    setSearchQuery,
     filteredSamples,
   } = useSampleFilters(samples);
 
@@ -105,12 +104,10 @@ export const SamplesView: React.FC = () => {
           </div>
 
           <FilterBar
-            clienteFilter={filters.cliente}
-            refDescricaoFilter={filters.refDescricao}
-            encDivmacFilter={filters.encDivmac}
-            onClienteChange={setCliente}
-            onRefDescricaoChange={setRefDescricao}
-            onEncDivmacChange={setEncDivmac}
+            filterColumn={filters.filterColumn}
+            searchQuery={filters.searchQuery}
+            onFilterColumnChange={setFilterColumn}
+            onSearchQueryChange={setSearchQuery}
           />
 
           <div className="table-container-outer">

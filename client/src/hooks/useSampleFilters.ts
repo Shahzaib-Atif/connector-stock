@@ -1,71 +1,87 @@
 import { useState, useMemo, useCallback } from "react";
 import { Sample } from "@/types";
 
+export type FilterColumn =
+  | "all"
+  | "cliente"
+  | "refDescricao"
+  | "encDivmac"
+  | "amostra";
+
 interface SampleFilters {
-  cliente: string;
-  refDescricao: string;
-  encDivmac: string;
+  filterColumn: FilterColumn;
+  searchQuery: string;
 }
 
-interface UseSampleFiltersReturn {
+interface useSampleFiltersReturn {
   filters: SampleFilters;
-  setCliente: (value: string) => void;
-  setRefDescricao: (value: string) => void;
-  setEncDivmac: (value: string) => void;
+  setFilterColumn: (column: FilterColumn) => void;
+  setSearchQuery: (query: string) => void;
   filteredSamples: Sample[];
   clearFilters: () => void;
 }
 
-export function useSampleFilters(samples: Sample[]): UseSampleFiltersReturn {
+export function useSampleFilters(samples: Sample[]): useSampleFiltersReturn {
   const [filters, setFilters] = useState<SampleFilters>({
-    cliente: "",
-    refDescricao: "",
-    encDivmac: "",
+    filterColumn: "all",
+    searchQuery: "",
   });
 
-  const setCliente = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, cliente: value }));
+  const setFilterColumn = useCallback((column: FilterColumn) => {
+    setFilters((prev) => ({ ...prev, filterColumn: column }));
   }, []);
 
-  const setRefDescricao = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, refDescricao: value }));
-  }, []);
-
-  const setEncDivmac = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, encDivmac: value }));
+  const setSearchQuery = useCallback((query: string) => {
+    setFilters((prev) => ({ ...prev, searchQuery: query }));
   }, []);
 
   const clearFilters = useCallback(() => {
-    setFilters({ cliente: "", refDescricao: "", encDivmac: "" });
+    setFilters({ filterColumn: "all", searchQuery: "" });
   }, []);
 
   const filteredSamples = useMemo(() => {
+    const normalizedQuery = filters.searchQuery.trim().toLowerCase();
+
+    if (!normalizedQuery) {
+      return samples;
+    }
+
     return samples.filter((sample) => {
-      const matchesCliente =
-        !filters.cliente ||
-        (sample.Cliente?.toLowerCase() || "").includes(
-          filters.cliente.toLowerCase()
-        );
-      const matchesRefDescricao =
-        !filters.refDescricao ||
-        (sample.Ref_Descricao?.toLowerCase() || "").includes(
-          filters.refDescricao.toLowerCase()
-        );
-      const matchesEncDivmac =
-        !filters.encDivmac ||
-        (sample.EncDivmac?.toLowerCase() || "").includes(
-          filters.encDivmac.toLowerCase()
-        );
-      return matchesCliente && matchesRefDescricao && matchesEncDivmac;
+      if (filters.filterColumn === "all") {
+        return matchesAnyField(sample, normalizedQuery); // Search across all columns
+      } else {
+        // Search only in selected column
+        const columnValue = getColumnValue(sample, filters.filterColumn);
+        return columnValue.includes(normalizedQuery);
+      }
     });
   }, [samples, filters]);
 
   return {
     filters,
-    setCliente,
-    setRefDescricao,
-    setEncDivmac,
+    setFilterColumn,
+    setSearchQuery,
     filteredSamples,
     clearFilters,
   };
 }
+
+function matchesAnyField(sample: Sample, normalizedQuery: string) {
+  return Object.values(sample).some(
+    (value) =>
+      typeof value === "string" && value.toLowerCase().includes(normalizedQuery)
+  );
+}
+
+const getColumnValue = (sample: Sample, column: string) => {
+  switch (column) {
+    case "cliente":
+      return sample.Cliente?.toLowerCase() ?? "";
+    case "refDescricao":
+      return sample.Ref_Descricao?.toLowerCase() ?? "";
+    case "encDivmac":
+      return sample.EncDivmac?.toLowerCase() ?? "";
+    case "amostra":
+      return sample.Amostra?.toLowerCase() ?? "";
+  }
+};
