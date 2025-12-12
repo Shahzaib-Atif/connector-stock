@@ -1,7 +1,6 @@
 import { useAppSelector } from "@/store/hooks";
 import { suggestion } from "@/types";
 import { useEffect, useState } from "react";
-import { constructAccessoryId } from "@/services/connectorService";
 
 export function useSuggestions(
   searchQuery: string,

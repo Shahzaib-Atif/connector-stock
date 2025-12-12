@@ -9,10 +9,10 @@ const TableHeader: React.FC = () => {
         <th className="table-header w-36">Projeto</th>
         <th className="table-header w-24">EncDivmac</th>
         <th className="table-header w-40">Ref. Descrição</th>
-        <th className="table-header w-28">Amostra</th>
+        <th className="table-header w-32">Amostra</th>
         <th className="table-header w-40">N_Envio</th>
         <th className="table-header w-28">Data Receção</th>
-        <th className="table-header w-28">Entregue_A</th>
+        <th className="table-header w-32">Entregue_A</th>
         <th className="table-header w-20 text-center">Actions</th>
       </tr>
     </thead>

@@ -31,12 +31,12 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data font-mono">{sample.ID}</td>
       <td className="table-data">{Cliente || "-"}</td>
       <td className="table-data">{Projeto || "-"}</td>
-      <td className="table-data font-mono">{EncDivmac || "-"}</td>
+      <td className="table-data">{EncDivmac || "-"}</td>
       <td className="table-data break-all">{Ref_Descricao || "-"}</td>
-      <td className="table-data font-mono">{Amostra || "-"}</td>
+      <td className="table-data">{Amostra || "-"}</td>
       <td className="table-data">{N_Envio || "-"}</td>
       <td className="table-data">{Data_recepcao || "-"}</td>
-      <td className="table-data text-ellipsis overflow-clip" title={Entregue_a}>
+      <td className="table-data break-all" title={Entregue_a}>
         {Entregue_a || "-"}
       </td>
       {/* Action buttons */}

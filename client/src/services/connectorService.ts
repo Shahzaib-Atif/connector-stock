@@ -60,8 +60,6 @@ export const getBoxDetails = (
   const coords = getCoordinates(boxId, masterData);
   if (!coords) return null;
 
-  const stockMap = {};
-
   const connectors: Connector[] = [];
 
   // find all connectors that belong to this box (Pos_ID matches boxId)
@@ -95,7 +93,6 @@ export const searchConnectors = (
   masterData: MasterData
 ): Connector[] => {
   const results: Connector[] = [];
-  const stockMap = {};
   const normalizedQuery = query.trim().toUpperCase();
 
   // 1. Direct Connector ID Match (using references key)
