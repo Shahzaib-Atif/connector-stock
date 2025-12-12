@@ -1,0 +1,100 @@
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { logout } from "@/store/slices/authSlice";
+import { Beaker, Home, LogOut, Receipt, X } from "lucide-react";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+interface Props {
+  isMenuOpen: boolean;
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
+  const user = useAppSelector((state) => state.auth.user);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  // Close menu when clicking outside
+  const menuRef = useRef<HTMLDivElement>(null);
+  useClickOutside(menuRef, () => setIsMenuOpen(false));
+
+  // Handle menu actions
+  const handleMenuAction = (action: () => void) => {
+    action();
+    setIsMenuOpen(false);
+  };
+
+  return (
+    <div
+      ref={menuRef}
+      className={`fixed top-0 left-0 h-full w-64 bg-slate-800 border-r border-slate-700 shadow-2xl z-50 transform transition-transform duration-300 ease-out ${
+        isMenuOpen ? "translate-x-0" : "-translate-x-full"
+      }`}
+    >
+      {/* Sidebar Header with close button */}
+      <div className="flex items-center justify-between px-4 py-4 border-b border-slate-700">
+        <span className="text-lg font-semibold text-white">Menu</span>
+        <button
+          onClick={() => setIsMenuOpen(false)}
+          className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
+          aria-label="Close menu"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* User info */}
+      <div className="px-4 py-4 border-b border-slate-700">
+        <p className="text-xs text-slate-500 uppercase tracking-wider">
+          Logged in as
+        </p>
+        <p className="text-white font-mono font-semibold mt-1">{user}</p>
+      </div>
+
+      {/* Menu items */}
+      <nav className="py-2">
+        <button
+          id="home-btn"
+          onClick={() => handleMenuAction(() => navigate("/"))}
+          className="w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-3"
+        >
+          <Home className="w-5 h-5" />
+          <span>Home</span>
+        </button>
+
+        <button
+          id="view-transactions-btn"
+          onClick={() => handleMenuAction(() => navigate("/transactions"))}
+          className="w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-3"
+        >
+          <Receipt className="w-5 h-5" />
+          <span>View Transactions</span>
+        </button>
+
+        <button
+          id="view-samples-btn"
+          onClick={() => handleMenuAction(() => navigate("/samples"))}
+          className="w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-3"
+        >
+          <Beaker className="w-5 h-5" />
+          <span>View Samples</span>
+        </button>
+      </nav>
+
+      {/* Logout at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 border-t border-slate-700 p-2">
+        <button
+          id="logout-btn"
+          onClick={() => handleMenuAction(() => dispatch(logout()))}
+          className="w-full px-4 py-3 text-left text-slate-300 hover:bg-red-500/10 hover:text-red-400 transition-colors flex items-center gap-3 rounded-lg"
+        >
+          <LogOut className="w-5 h-5" />
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default Sidebar;
