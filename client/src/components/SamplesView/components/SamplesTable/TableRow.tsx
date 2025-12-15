@@ -34,7 +34,7 @@ const TableRow: React.FC<TableRowProps> = ({ sample, onEdit, onDelete }) => {
       <td className="table-data break-all" title={Entregue_a}>
         {Entregue_a || "-"}
       </td>
-      <td className="table-data font-mono">{formatDate(Data_recepcao)}</td>
+      <td className="table-data font-mono">{Data_recepcao || "-"}</td>
       {/* Action buttons */}
       <td className="table-data">
         <div className="flex justify-center gap-2">

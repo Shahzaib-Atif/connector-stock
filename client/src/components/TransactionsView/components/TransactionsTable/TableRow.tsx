@@ -41,7 +41,7 @@ function TableRow({ tx, index }: Props) {
       <td className="table-data capitalize">{tx.itemType}</td>
       <td className="table-data font-semibold">{tx.amount}</td>
       <td className="table-data">{tx.department || ""}</td>
-      <td className="table-data font-mono">{formatDate(tx.updatedAt)}</td>
+      <td className="table-data font-mono">{tx.updatedAt || "-"}</td>
     </tr>
   );
 }
