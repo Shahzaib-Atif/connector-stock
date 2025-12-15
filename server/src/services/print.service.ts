@@ -4,13 +4,9 @@ import { promisify } from 'util';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+import { PrintLabelDto } from 'src/dtos/PrintLabelDto';
 
 const execAsync = promisify(exec);
-
-export interface PrintLabelDto {
-  itemId: string;
-  itemUrl: string;
-}
 
 @Injectable()
 export class PrintService {
@@ -24,6 +20,12 @@ export class PrintService {
   // Label dimensions: 45x28mm @ 203 DPI (8 dots/mm)
   private readonly labelWidthMm = 45;
   private readonly labelHeightMm = 28;
+  private readonly qrCode_X = 20;
+  private readonly qrCode_Y = 40;
+  private readonly text_X = 200;
+  private readonly itemId_Y = 50;
+  private readonly refCliente_Y = 120;
+  private readonly encomenda_Y = 160;
 
   async printLabel(
     dto: PrintLabelDto,
@@ -60,9 +62,10 @@ export class PrintService {
         'GAP 2 mm, 0',
         'CLS',
         'DIRECTION 1,0',
-        `QRCODE 20,30,L,4,A,0,M2,S7,"${itemUrl}"`,
-        `TEXT 180,50,"3",0,1,2,"${itemId}"`,
-        `TEXT 180,120,"2",0,1,1,"divmac stock"`,
+        `QRCODE ${this.qrCode_X},${this.qrCode_Y},L,5,A,0,M2,S7,"${itemUrl}"`,
+        `TEXT ${this.text_X},${this.itemId_Y},"3",0,1,2,"${itemId}"`,
+        `TEXT ${this.text_X},${this.refCliente_Y},"2",0,1,1,"refCliente_Y"`,
+        `TEXT ${this.text_X},${this.encomenda_Y},"2",0,1,1,"encomenda_Y"`,
         'PRINT 1,1',
       ].join('\r\n') + '\r\n'
     );
