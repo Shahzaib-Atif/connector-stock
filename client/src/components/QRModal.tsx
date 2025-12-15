@@ -1,6 +1,8 @@
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEscKeyDown } from "@/hooks/useEscKeyDown";
-import React, { useRef } from "react";
+import { API } from "@/utils/api";
+import { Printer, Loader2 } from "lucide-react";
+import React, { useRef, useState } from "react";
 
 interface QRModalProps {
   itemId: string;
@@ -10,9 +12,50 @@ interface QRModalProps {
 export const QRModal: React.FC<QRModalProps> = ({ itemId, onClose }) => {
   const itemIdLink = getItemIdLink(itemId);
   const ref = useRef(null);
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [printStatus, setPrintStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
   useClickOutside(ref, onClose);
   useEscKeyDown(ref, onClose);
+
+  const handlePrint = async () => {
+    setIsPrinting(true);
+    setPrintStatus(null);
+
+    try {
+      const response = await fetch(API.printLabel, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          itemId,
+          itemUrl: itemIdLink,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setPrintStatus({ type: "success", message: "Label sent to printer!" });
+      } else {
+        setPrintStatus({
+          type: "error",
+          message: result.message || "Print failed",
+        });
+      }
+    } catch (error) {
+      setPrintStatus({
+        type: "error",
+        message: "Could not connect to print server",
+      });
+    } finally {
+      setIsPrinting(false);
+    }
+  };
 
   return (
     <div
@@ -40,12 +83,43 @@ export const QRModal: React.FC<QRModalProps> = ({ itemId, onClose }) => {
           {itemId}
         </div>
 
-        <button
-          onClick={onClose}
-          className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-colors border border-slate-600"
-        >
-          Close
-        </button>
+        {printStatus && (
+          <div
+            className={`mb-4 p-3 rounded-lg text-sm font-medium ${
+              printStatus.type === "success"
+                ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                : "bg-red-500/20 text-red-400 border border-red-500/30"
+            }`}
+          >
+            {printStatus.message}
+          </div>
+        )}
+
+        <div className="flex gap-3">
+          <button
+            onClick={handlePrint}
+            disabled={isPrinting}
+            className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/50 text-white font-bold rounded-xl transition-colors border border-blue-500 flex items-center justify-center gap-2"
+          >
+            {isPrinting ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Printing...
+              </>
+            ) : (
+              <>
+                <Printer className="w-5 h-5" />
+                Print Label
+              </>
+            )}
+          </button>
+          <button
+            onClick={onClose}
+            className="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-colors border border-slate-600"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -65,3 +139,4 @@ function getItemIdLink(itemId: string) {
 
   return itemId;
 }
+

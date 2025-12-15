@@ -19,10 +19,16 @@ const metadata = {
   positions: `${API_BASE_URL}/positions`,
 };
 
+const print = {
+  printLabel: `${API_BASE_URL}/print/label`,
+};
+
 export const API = {
   ...connectors,
   ...accessories,
   ...metadata,
+  ...print,
   transactions: `${API_BASE_URL}/transactions`,
   samples: `${API_BASE_URL}/samples`,
 };
+

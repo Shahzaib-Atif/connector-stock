@@ -1,0 +1,8 @@
+SIZE 45 mm, 28 mm
+GAP 2 mm, 0
+CLS
+DIRECTION 1,0
+QRCODE 20,30,L,4,A,0,M2,S7,"http://10.2.2.73:3000/connector/A288PI"
+TEXT 180,50,"3",0,1,2,"A288PI"
+TEXT 180,120,"2",0,1,1,"divmac stock"
+PRINT 1,1
