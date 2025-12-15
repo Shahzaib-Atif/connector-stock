@@ -39,7 +39,6 @@ export class PrintService {
       // Write to temp file
       const tempFile = path.join(os.tmpdir(), `label_${Date.now()}.prn`);
       fs.writeFileSync(tempFile, tsplCommands, { encoding: 'ascii' });
-      this.logger.log(`TSPL file: ${tempFile}`);
 
       // Send to printer
       await this.sendToPrinter(tempFile);
