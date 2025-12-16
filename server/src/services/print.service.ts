@@ -76,32 +76,46 @@ export class PrintService {
       `QRCODE ${qrCode.x},${qrCode.y},L,5,A,0,M2,S7,"${itemUrl}"`,
     ];
 
-    if (!refCliente && !encomenda) {
-      // Center itemId if no additional info
-      lines.push(`TEXT ${text_X + 10},100,"3",0,1,2,"${itemId}"`);
+    const hasAdditionalInfo = refCliente || encomenda;
+    if (!hasAdditionalInfo) {
+      // Center itemId
+      lines.push(`TEXT ${text_X + 10},90,"3",0,1,2,"${itemId}"`);
     } else {
-      lines.push(`TEXT ${text_X},${itemId_Y},"2",0,1,1,${itemId}`); // Standard itemId position
+      // Standard position for itemId
+      lines.push(`TEXT ${text_X},${itemId_Y},"2",0,1,1,${itemId}`);
 
-      // if refcliente length > 10, split into two lines
-      if (refCliente.length > 10) {
-        const firstLine = refCliente.slice(0, 10);
-        const secondLine = refCliente.slice(10);
-        lines.push(`TEXT ${text_X},${refCliente_Y - 5},"2",0,1,1,${firstLine}`);
-        lines.push(
-          `TEXT ${text_X},${refCliente_Y + 10},"2",0,1,1,${secondLine}`,
-        );
-      } else {
-        // Single line refcliente
-        lines.push(`TEXT ${text_X},${refCliente_Y},"2",0,1,1,${refCliente}`);
-      }
+      // RefCliente line
+      if (refCliente)
+        this.addRefClientText(lines, refCliente, text_X, refCliente_Y);
 
       // Encomenda line
-      lines.push(`TEXT ${text_X},${encomenda_Y},"2",0,1,1,${encomenda}`);
+      if (encomenda)
+        lines.push(`TEXT ${text_X},${encomenda_Y},"2",0,1,1,${encomenda}`);
     }
 
     // Finalize
     lines.push('PRINT 1,1');
     return lines.join('\r\n') + '\r\n';
+  }
+
+  private addRefClientText(
+    lines: string[],
+    refCliente: string,
+    x: number,
+    y: number,
+  ): void {
+    const MAX_LENGTH = 10;
+
+    if (refCliente.length > MAX_LENGTH) {
+      // Split into two lines
+      const firstLine = refCliente.slice(0, 10);
+      const secondLine = refCliente.slice(10);
+      lines.push(`TEXT ${x},${y - 5},"2",0,1,1,${firstLine}`);
+      lines.push(`TEXT ${x},${y + 10},"2",0,1,1,${secondLine}`);
+    } else {
+      // Single line refcliente
+      lines.push(`TEXT ${x},${y},"2",0,1,1,${refCliente}`);
+    }
   }
 
   private async sendToPrinter(filePath: string): Promise<void> {
