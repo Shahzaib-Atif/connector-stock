@@ -3,4 +3,5 @@ export interface PrintLabelDto {
   itemUrl: string;
   refCliente?: string;
   encomenda?: string;
+  source?: 'box' | 'connector' | 'sample';
 }

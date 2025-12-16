@@ -1,6 +1,6 @@
 import React from "react";
 import { Wrench, QrCode } from "lucide-react";
-import { Connector } from "../../types";
+import { Connector, QRData } from "../../types";
 import { parseConnector } from "../../services/connectorService";
 import { CollapsibleSection } from "../common/CollapsibleSection";
 import { DetailHeader } from "../common/DetailHeader";
@@ -15,7 +15,7 @@ import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 
 interface ConnectorViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
-  onOpenQR: (id: string) => void;
+  onOpenQR: (qrData: QRData) => void;
 }
 
 const connectorResolver: EntityResolver<Connector> = (
@@ -55,7 +55,9 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
         label="Connector"
         title={connector.id}
         onBack={goBack}
-        handleQRClick={() => onOpenQR(connector.id)}
+        handleQRClick={() =>
+          onOpenQR({ id: connector.id, source: "connector" })
+        }
       />
 
       <div className="max-w-3xl mx-auto p-4 space-y-4">

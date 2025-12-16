@@ -1,6 +1,6 @@
 import React from "react";
 import { MapPin, CircuitBoard, Wrench, QrCode } from "lucide-react";
-import { Box } from "../../types";
+import { Box, QRData } from "../../types";
 import { getBoxDetails } from "../../services/connectorService";
 import { CollapsibleSection } from "../common/CollapsibleSection";
 import { DetailHeader } from "../common/DetailHeader";
@@ -15,7 +15,7 @@ import AccessoryInfo from "./components/AccessoryInfo";
 import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 
 interface BoxViewProps {
-  onOpenQR: (id: string) => void;
+  onOpenQR: (qrData: QRData) => void;
 }
 
 const boxResolver: EntityResolver<Box> = (boxId, { masterData }) => {
@@ -51,7 +51,7 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
         label="Box Storage"
         title={box.id}
         onBack={goBack}
-        handleQRClick={() => onOpenQR(box.id)}
+        handleQRClick={() => onOpenQR({ id: box.id, source: "box" })}
       />
 
       <div className="max-w-3xl mx-auto p-4 space-y-6">

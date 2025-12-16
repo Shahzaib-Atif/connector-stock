@@ -1,15 +1,19 @@
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEscKeyDown } from "@/hooks/useEscKeyDown";
+import { QRData } from "@/types";
 import { API } from "@/utils/api";
 import { Printer, Loader2 } from "lucide-react";
 import React, { useRef, useState } from "react";
 
 interface QRModalProps {
-  itemId: string;
+  qrData: QRData;
   onClose: () => void;
 }
 
-export const QRModal: React.FC<QRModalProps> = ({ itemId, onClose }) => {
+export const QRModal: React.FC<QRModalProps> = ({
+  qrData: { id: itemId, source, refCliente, encomenda },
+  onClose,
+}) => {
   const itemIdLink = getItemIdLink(itemId);
   const ref = useRef(null);
   const [isPrinting, setIsPrinting] = useState(false);
@@ -34,6 +38,9 @@ export const QRModal: React.FC<QRModalProps> = ({ itemId, onClose }) => {
         body: JSON.stringify({
           itemId,
           itemUrl: itemIdLink,
+          source,
+          refCliente,
+          encomenda,
         }),
       });
 

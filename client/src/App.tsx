@@ -10,13 +10,14 @@ import { AppRoutes } from "./components/AppRoutes";
 import { useScan } from "./hooks/useScan";
 import { TransactionModal } from "./components/TransactionModal";
 import { initTransactionsData } from "./store/slices/transactionsSlice";
+import { QRData } from "./types";
 
+// Main App Component
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { loading } = useAppSelector((state) => state.masterData);
-  const [qrModalOpen, setQrModalOpen] = useState(false);
-  const [activeItemId, setActiveItemId] = useState("");
+  const [qrData, setQrData] = useState<QRData | null>(null);
   const { handleScan, error, clearError } = useScan();
 
   const tx = useTransactionFlow();
@@ -26,9 +27,8 @@ const App: React.FC = () => {
     dispatch(initTransactionsData());
   }, [dispatch]);
 
-  const handleOpenQR = (id: string) => {
-    setActiveItemId(id);
-    setQrModalOpen(true);
+  const handleOpenQR = (qrData: QRData) => {
+    setQrData(qrData);
   };
 
   if (!isAuthenticated) {
@@ -53,9 +53,7 @@ const App: React.FC = () => {
         onTransaction={tx.openTransaction}
       />
 
-      {qrModalOpen && (
-        <QRModal itemId={activeItemId} onClose={() => setQrModalOpen(false)} />
-      )}
+      {qrData && <QRModal qrData={qrData} onClose={() => setQrData(null)} />}
 
       {tx.isOpen && (
         <TransactionModal

@@ -21,8 +21,8 @@ export class PrintService {
   private readonly labelConfig = {
     widthMm: 45,
     heightMm: 28,
-    qrCode: { x: 20, y: 40 },
-    text_X: 190,
+    qrCodePos: { x: 20, y: 40 },
+    center_X: 180, // (45*8)/2 = 180 dots
     itemId_Y: 50,
     refCliente_Y: 120,
     encomenda_Y: 160,
@@ -56,16 +56,9 @@ export class PrintService {
   }
 
   private generateTsplCommands(dto: PrintLabelDto): string {
-    const { itemId, itemUrl, refCliente, encomenda } = dto;
-    const {
-      widthMm,
-      heightMm,
-      qrCode,
-      text_X,
-      itemId_Y,
-      refCliente_Y,
-      encomenda_Y,
-    } = this.labelConfig;
+    const { itemId, itemUrl, refCliente, encomenda, source } = dto;
+    const { widthMm, heightMm, qrCodePos, center_X, itemId_Y, encomenda_Y } =
+      this.labelConfig;
 
     // Start building TSPL commands
     const lines = [
@@ -73,24 +66,53 @@ export class PrintService {
       'GAP 2 mm, 0',
       'CLS',
       'DIRECTION 1,0',
-      `QRCODE ${qrCode.x},${qrCode.y},L,5,A,0,M2,S7,"${itemUrl}"`,
     ];
 
-    const hasAdditionalInfo = refCliente || encomenda;
-    if (!hasAdditionalInfo) {
-      // Center itemId
-      lines.push(`TEXT ${text_X + 10},90,"3",0,1,2,"${itemId}"`);
-    } else {
-      // Standard position for itemId
-      lines.push(`TEXT ${text_X},${itemId_Y},"2",0,1,1,${itemId}`);
+    switch (source) {
+      case 'sample': {
+        const { x, y } = qrCodePos;
+        // add QR code and itemId
+        lines.push(`QRCODE ${x},${y},L,5,A,0,M2,S7,"${itemUrl}"`);
+        lines.push(
+          `TEXT ${center_X + 10},${itemId_Y - 10},"2",0,1,2,"${itemId}"`,
+        );
 
-      // RefCliente line
-      if (refCliente)
-        this.addRefClientText(lines, refCliente, text_X, refCliente_Y);
+        // Add refCliente and encomenda if provided
+        if (refCliente) this.addRefClientText(lines, refCliente);
+        if (encomenda)
+          lines.push(
+            `TEXT ${center_X},${encomenda_Y},"2",0,1,1,"${encomenda}"`,
+          );
 
-      // Encomenda line
-      if (encomenda)
-        lines.push(`TEXT ${text_X},${encomenda_Y},"2",0,1,1,${encomenda}`);
+        break;
+      }
+      case 'box': {
+        break;
+      }
+
+      default: {
+        // Box/Connector default logic (Backward compatibility)
+        const hasAdditionalInfo = refCliente || encomenda;
+
+        if (!hasAdditionalInfo) {
+          // Center itemId
+          lines.push(`TEXT ${center_X + 10},90,"3",0,1,2,"${itemId}"`);
+        } else {
+          // Standard position for itemId
+          lines.push(`TEXT ${center_X},${itemId_Y},"2",0,1,1,"${itemId}"`);
+
+          if (refCliente) {
+            // this.addRefClientText(lines, refCliente, center_X, refCliente_Y);
+          }
+
+          if (encomenda) {
+            lines.push(
+              `TEXT ${center_X},${encomenda_Y},"2",0,1,1,"${encomenda}"`,
+            );
+          }
+        }
+        break;
+      }
     }
 
     // Finalize
@@ -98,24 +120,33 @@ export class PrintService {
     return lines.join('\r\n') + '\r\n';
   }
 
-  private addRefClientText(
-    lines: string[],
-    refCliente: string,
-    x: number,
-    y: number,
-  ): void {
+  private addRefClientText(lines: string[], refCliente: string): void {
     const MAX_LENGTH = 10;
+    const MAX_LINES = 3;
+    const LINE_HEIGHT = 20;
 
-    if (refCliente.length > MAX_LENGTH) {
-      // Split into two lines
-      const firstLine = refCliente.slice(0, 10);
-      const secondLine = refCliente.slice(10);
-      lines.push(`TEXT ${x},${y - 5},"2",0,1,1,${firstLine}`);
-      lines.push(`TEXT ${x},${y + 10},"2",0,1,1,${secondLine}`);
-    } else {
-      // Single line refcliente
-      lines.push(`TEXT ${x},${y},"2",0,1,1,${refCliente}`);
+    // Split into chunks of MAX_LENGTH, but cap to MAX_LINES
+    const chunks: string[] = [];
+    const refClienteModified = refCliente.replace(/\s+/g, '').trim();
+    for (
+      let i = 0;
+      i < refClienteModified.length && chunks.length < MAX_LINES;
+      i += MAX_LENGTH
+    ) {
+      // replace empty space with nothing
+      chunks.push(refClienteModified.slice(i, i + MAX_LENGTH));
     }
+
+    // Calculate starting Y position
+    const { center_X } = this.labelConfig;
+    const y = 110; // Starting Y position for refCliente
+    const startY = y - ((chunks.length - 1) * LINE_HEIGHT) / 2;
+
+    // Add each chunk as a separate line
+    chunks.forEach((text, index) => {
+      const lineY = startY + index * LINE_HEIGHT;
+      lines.push(`TEXT ${center_X + 15},${lineY},"2",0,1,1,"${text}"`);
+    });
   }
 
   private async sendToPrinter(filePath: string): Promise<void> {

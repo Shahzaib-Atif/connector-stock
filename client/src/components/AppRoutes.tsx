@@ -8,12 +8,13 @@ import { TransactionsView } from "./TransactionsView";
 import { SamplesView } from "./SamplesView";
 import { ConnectorsListView } from "./ConnectorsListView";
 import { AccessoriesListView } from "./AccessoriesListView";
+import { QRData } from "@/types";
 
 interface AppRoutesProps {
   onScan: (code: string) => void;
   scanError: string | null;
   onClearScanError: () => void;
-  onOpenQR: (id: string) => void;
+  onOpenQR: (qrData: QRData) => void;
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
 }
 
@@ -50,7 +51,7 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({
         }
       />
       <Route path="/transactions" element={<TransactionsView />} />
-      <Route path="/samples" element={<SamplesView />} />
+      <Route path="/samples" element={<SamplesView onOpenQR={onOpenQR} />} />
       <Route path="/connectors" element={<ConnectorsListView />} />
       <Route path="/accessories" element={<AccessoriesListView />} />
     </Routes>

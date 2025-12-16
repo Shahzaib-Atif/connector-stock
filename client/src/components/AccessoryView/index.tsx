@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Wrench } from "lucide-react";
-import { Accessory } from "../../types";
+import { QRData, Accessory } from "@/types";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
 import { NotFoundPage } from "../common/NotFoundPage";
@@ -17,7 +17,7 @@ import { parseAccessory } from "@/services/accessoryService";
 
 interface AccessoryViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
-  onOpenQR: (id: string) => void;
+  onOpenQR?: (qrData: QRData) => void;
 }
 
 /**
@@ -44,7 +44,6 @@ const accessoryResolver: EntityResolver<Accessory> = (
 
 export const AccessoryView: React.FC<AccessoryViewProps> = ({
   onTransaction,
-  onOpenQR,
 }) => {
   // Gets ID from URL, calls resolver to convert ID to Accessory object
   const { entity: accessory } = useEntityDetails<Accessory>(accessoryResolver);
@@ -83,11 +82,6 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
 
           {/* Accessory Details */}
           <AccessoryMetadata accessory={accessory} />
-
-          {/* <ClientReference
-            clientName={accessory.clientName}
-            clientRef={accessory.clientRef}
-          /> */}
         </div>
 
         {/* View Box option */}

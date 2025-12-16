@@ -1,5 +1,5 @@
 import React from "react";
-import { Sample } from "@/types";
+import { QRData, Sample } from "@/types";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 
@@ -7,12 +7,14 @@ interface SamplesTableProps {
   samples: Sample[];
   onEdit: (sample: Sample) => void;
   onDelete: (sample: Sample) => void;
+  onOpenQR?: (qrData: QRData) => void;
 }
 
 export const SamplesTable: React.FC<SamplesTableProps> = ({
   samples,
   onEdit,
   onDelete,
+  onOpenQR,
 }) => {
   return (
     <div id="samples-table" className="table-container-inner">
@@ -33,6 +35,7 @@ export const SamplesTable: React.FC<SamplesTableProps> = ({
                 index={index}
                 onEdit={onEdit}
                 onDelete={onDelete}
+                onOpenQR={onOpenQR}
               />
             ))
           )}

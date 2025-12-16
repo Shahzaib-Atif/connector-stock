@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sample } from "@/types";
+import { QRData, Sample } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   fetchSamplesThunk,
@@ -15,18 +15,18 @@ import { Pagination } from "../common/Pagination";
 import { SampleFormModal } from "./components/SampleFormModal";
 import Spinner from "../common/Spinner";
 
-export const SamplesView: React.FC = () => {
+interface SamplesViewProps {
+  onOpenQR?: (qrData: QRData) => void;
+}
+
+export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { samples, loading, error } = useAppSelector((state) => state.samples);
 
   // Custom hook for filters
-  const {
-    filters,
-    setFilterColumn,
-    setSearchQuery,
-    filteredSamples,
-  } = useSampleFilters(samples);
+  const { filters, setFilterColumn, setSearchQuery, filteredSamples } =
+    useSampleFilters(samples);
 
   const {
     paginatedItems: paginatedSamples,
@@ -115,6 +115,7 @@ export const SamplesView: React.FC = () => {
               samples={paginatedSamples}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              onOpenQR={onOpenQR}
             />
           </div>
 

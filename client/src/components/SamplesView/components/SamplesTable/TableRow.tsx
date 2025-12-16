@@ -1,6 +1,6 @@
 import React from "react";
-import { Pencil, Trash2 } from "lucide-react";
-import { Sample } from "@/types";
+import { Pencil, Trash2, Printer } from "lucide-react";
+import { QRData, Sample } from "@/types";
 import { formatDate } from "@/utils/formatDate";
 
 interface TableRowProps {
@@ -8,9 +8,15 @@ interface TableRowProps {
   index: number;
   onEdit: (sample: Sample) => void;
   onDelete: (sample: Sample) => void;
+  onOpenQR?: (qrData: QRData) => void;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ sample, onEdit, onDelete }) => {
+const TableRow: React.FC<TableRowProps> = ({
+  sample,
+  onEdit,
+  onDelete,
+  onOpenQR,
+}) => {
   const {
     Cliente,
     Projeto,
@@ -38,6 +44,22 @@ const TableRow: React.FC<TableRowProps> = ({ sample, onEdit, onDelete }) => {
       {/* Action buttons */}
       <td className="table-data">
         <div className="flex justify-center gap-2">
+          {onOpenQR && (
+            <button
+              onClick={() =>
+                onOpenQR({
+                  id: Amostra,
+                  source: "sample",
+                  refCliente: Ref_Descricao,
+                  encomenda: EncDivmac,
+                })
+              }
+              title="Print Label"
+              className="p-1.5 text-slate-400 hover:text-green-400 hover:bg-slate-700 rounded transition-colors"
+            >
+              <Printer className="w-4 h-4" />
+            </button>
+          )}
           <button
             onClick={() => onEdit(sample)}
             title="Edit"
