@@ -7,7 +7,7 @@ import {
 } from "@/store/slices/samplesSlice";
 import { useSampleForm } from "@/hooks/useSampleForm";
 import { FormField } from "./FormField";
-import { FORM_FIELDS } from "./SampleFormFields";
+import { FORM_FIELDS, inputClass, labelClass } from "./SampleFormFields";
 
 interface SampleFormModalProps {
   sample: Sample | null;
@@ -21,26 +21,59 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
   onSuccess,
 }) => {
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state) => state.samples);
+  const { loading, error: reduxError } = useAppSelector(
+    (state) => state.samples
+  );
+  const { data: masterData } = useAppSelector((state) => state.masterData);
+  const { user } = useAppSelector((state) => state.auth);
   const isEditing = !!sample;
   const { formData, handleChange } = useSampleForm(sample);
+  const [formError, setFormError] = React.useState<string | null>(null);
+
+  // Get connector options for autocomplete
+  const connectorOptions = React.useMemo(() => {
+    if (!masterData?.connectors) return [];
+    return Object.keys(masterData.connectors).sort();
+  }, [masterData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
+
+    // Manual Validation
+    const requiredFields = FORM_FIELDS.filter((f) => f.required);
+    const missing = requiredFields.filter((f) => !formData[f.name]);
+    if (missing.length > 0) {
+      setFormError(
+        `Please fill in all mandatory fields: ${missing
+          .map((f) => f.label)
+          .join(", ")}`
+      );
+      return;
+    }
 
     try {
+      const currentUser = user || "system";
+
       if (isEditing && sample) {
         await dispatch(
           updateSampleThunk({
             id: sample.ID,
             data: {
               ...formData,
-              LasUpdateBy: formData.ActualUser || "system",
+              LasUpdateBy: currentUser,
+              ActualUser: currentUser,
             },
           })
         ).unwrap();
       } else {
-        await dispatch(createSampleThunk(formData)).unwrap();
+        await dispatch(
+          createSampleThunk({
+            ...formData,
+            CreatedBy: currentUser,
+            ActualUser: currentUser,
+          })
+        ).unwrap();
       }
       onSuccess();
     } catch (err) {
@@ -48,11 +81,13 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
     }
   };
 
+  const errorMessage = formError || reduxError;
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-slate-800 rounded-xl border border-slate-700 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-slate-800 px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+        <div className="sticky top-0 bg-slate-800 px-6 py-4 border-b border-slate-700 flex justify-between items-center z-10">
           <h2 className="text-xl font-semibold text-slate-100">
             {isEditing ? "Edit Sample" : "Create New Sample"}
           </h2>
@@ -66,9 +101,9 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6">
-          {error && (
+          {errorMessage && (
             <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300">
-              {error}
+              {errorMessage}
             </div>
           )}
 
@@ -84,8 +119,25 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
                 disabled={field.disabledOnEdit && isEditing}
                 type={field.type}
                 fullWidth={field.fullWidth}
+                required={field.required}
+                options={
+                  field.name === "Amostra" ? connectorOptions : field.options
+                }
               />
             ))}
+          </div>
+
+          {/* observation textarea*/}
+          <div className="mt-4">
+            <label className={labelClass}>Observações</label>
+            <textarea
+              name="Observacoes"
+              value={formData.Observacoes}
+              onChange={handleChange}
+              rows={2}
+              className={inputClass}
+              placeholder="Notes and observations"
+            />
           </div>
 
           {/* Action buttons */}

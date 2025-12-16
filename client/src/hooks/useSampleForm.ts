@@ -27,10 +27,10 @@ const initialFormData: SampleFormData = {
   Ref_Fornecedor: "",
   Amostra: "",
   Data_do_pedido: "",
-  Data_recepcao: "",
+  Data_recepcao: new Date().toISOString().split("T")[0],
   Entregue_a: "",
   N_Envio: "",
-  Quantidade: "",
+  Quantidade: "1",
   Observacoes: "",
   NumORC: "",
   CreatedBy: "",
@@ -65,7 +65,7 @@ export function useSampleForm(sample: Sample | null) {
   }, [sample]);
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
       setFormData((prev) => ({ ...prev, [name]: value }));
     },

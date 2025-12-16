@@ -1,20 +1,20 @@
 import React from "react";
+import { labelClass, inputClass } from "./SampleFormFields";
 
 interface FormFieldProps {
   label: string;
   name: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   placeholder?: string;
   disabled?: boolean;
-  type?: "text" | "textarea";
+  type?: "text" | "number" | "date" | "autocomplete" | "select";
   fullWidth?: boolean;
+  required?: boolean;
+  options?: string[]; // For autocomplete
 }
-
-const inputClass =
-  "w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
-
-const labelClass = "block text-sm font-medium text-slate-300 mb-1";
 
 export const FormField: React.FC<FormFieldProps> = ({
   label,
@@ -25,29 +25,45 @@ export const FormField: React.FC<FormFieldProps> = ({
   disabled = false,
   type = "text",
   fullWidth = false,
+  required = false,
+  options = [],
 }) => {
   return (
     <div className={fullWidth ? "md:col-span-2" : ""}>
-      <label className={labelClass}>{label}</label>
-      {type === "textarea" ? (
-        <textarea
-          name={name}
-          value={value}
-          onChange={onChange}
-          rows={3}
-          className={inputClass}
-          placeholder={placeholder}
-          disabled={disabled}
-        />
+      <label className={labelClass}>
+        {label} {required && <span className="text-red-400">*</span>}
+      </label>
+
+      {type === "autocomplete" ? (
+        <>
+          <input
+            type="text"
+            name={name}
+            value={value}
+            onChange={onChange}
+            className={inputClass}
+            placeholder={placeholder}
+            disabled={disabled}
+            list={`list-${name}`}
+            required={required}
+          />
+          <datalist id={`list-${name}`}>
+            {options.map((opt) => (
+              <option key={opt} value={opt} />
+            ))}
+          </datalist>
+        </>
       ) : (
         <input
-          type="text"
+          type={type}
           name={name}
           value={value}
           onChange={onChange}
           className={inputClass}
           placeholder={placeholder}
           disabled={disabled}
+          required={required}
+          min={type === "number" ? 1 : undefined}
         />
       )}
     </div>
