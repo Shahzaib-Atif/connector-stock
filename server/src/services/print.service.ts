@@ -71,7 +71,7 @@ export class PrintService {
     switch (source) {
       case 'sample': {
         // QR Code
-        lines.push(`QRCODE ${qr_x},${qr_y},L,5,A,0,M2,S7,"${itemUrl}"`);
+        lines.push(`QRCODE ${qr_x},${qr_y},L,4,A,0,M2,S7,"${itemUrl}"`);
 
         const textX = center_X + 15;
         const textY = 200; // Near bottom edge

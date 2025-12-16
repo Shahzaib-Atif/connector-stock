@@ -141,8 +141,5 @@ function getItemIdLink(itemId: string) {
   const upper = code.toUpperCase();
 
   if (upper.length === 4) return `${networkUrl}/box/${itemId}`;
-  else if (upper.length === 6) return `${networkUrl}/connector/${itemId}`;
-  else if (upper.includes("_")) return `${networkUrl}/accessory/${itemId}`;
-
-  return itemId;
+  else return `${networkUrl}/connector/${itemId}`;
 }
