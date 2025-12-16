@@ -68,11 +68,11 @@ export class PrintService {
       'DIRECTION 1,0',
     ];
 
+    const { x: qr_x, y: qr_y } = qrCodePos;
     switch (source) {
       case 'sample': {
-        const { x, y } = qrCodePos;
         // add QR code and itemId
-        lines.push(`QRCODE ${x},${y},L,5,A,0,M2,S7,"${itemUrl}"`);
+        lines.push(`QRCODE ${qr_x},${qr_y},L,5,A,0,M2,S7,"${itemUrl}"`);
         lines.push(
           `TEXT ${center_X + 10},${itemId_Y - 10},"2",0,1,2,"${itemId}"`,
         );
@@ -87,6 +87,10 @@ export class PrintService {
         break;
       }
       case 'box': {
+        // add QR code and itemId
+        lines.push(`QRCODE ${qr_x},${qr_y + 20},L,5,A,0,M2,S7,"${itemUrl}"`);
+        lines.push(`TEXT ${qr_x},${qr_y - 10},"2",0,1,1,"${itemId}"`);
+        lines.push(`TEXT ${center_X + 20},90,"3",0,1,2,"${itemId}"`);
         break;
       }
 
