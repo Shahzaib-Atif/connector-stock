@@ -139,4 +139,3 @@ function getItemIdLink(itemId: string) {
 
   return itemId;
 }
-
