@@ -157,3 +157,10 @@ export interface PaginatedData<T> {
   setCurrentPage: (page: number) => void;
   setItemsPerPage: (count: number) => void;
 }
+
+export interface QRData {
+  id: string;
+  source?: "box" | "connector" | "sample";
+  refCliente?: string;
+  encomenda?: string;
+}
