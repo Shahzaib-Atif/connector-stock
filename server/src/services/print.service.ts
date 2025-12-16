@@ -59,6 +59,7 @@ export class PrintService {
     const { itemId, itemUrl, refCliente, encomenda, source } = dto;
     const { widthMm, heightMm, qrCodePos, center_X, itemId_Y, encomenda_Y } =
       this.labelConfig;
+    const { x: qr_x, y: qr_y } = qrCodePos;
 
     // Start building TSPL commands
     const lines = [
@@ -68,7 +69,6 @@ export class PrintService {
       'DIRECTION 1,0',
     ];
 
-    const { x: qr_x, y: qr_y } = qrCodePos;
     switch (source) {
       case 'sample': {
         // add QR code and itemId
@@ -86,6 +86,7 @@ export class PrintService {
 
         break;
       }
+
       case 'box': {
         // add QR code and itemId
         lines.push(`QRCODE ${qr_x},${qr_y + 20},L,5,A,0,M2,S7,"${itemUrl}"`);
@@ -94,27 +95,14 @@ export class PrintService {
         break;
       }
 
+      case 'connector': {
+        // add QR code and itemId
+        lines.push(`QRCODE ${qr_x},${qr_y + 20},L,4,A,0,M2,S7,"${itemUrl}"`);
+        lines.push(`TEXT ${center_X + 10},90,"3",0,1,2,"${itemId}"`);
+        break;
+      }
+
       default: {
-        // Box/Connector default logic (Backward compatibility)
-        const hasAdditionalInfo = refCliente || encomenda;
-
-        if (!hasAdditionalInfo) {
-          // Center itemId
-          lines.push(`TEXT ${center_X + 10},90,"3",0,1,2,"${itemId}"`);
-        } else {
-          // Standard position for itemId
-          lines.push(`TEXT ${center_X},${itemId_Y},"2",0,1,1,"${itemId}"`);
-
-          if (refCliente) {
-            // this.addRefClientText(lines, refCliente, center_X, refCliente_Y);
-          }
-
-          if (encomenda) {
-            lines.push(
-              `TEXT ${center_X},${encomenda_Y},"2",0,1,1,"${encomenda}"`,
-            );
-          }
-        }
         break;
       }
     }
