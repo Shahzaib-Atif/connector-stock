@@ -8,14 +8,12 @@ interface DetailHeaderProps {
   title?: React.ReactNode;
   onBack?: () => void;
   handleQRClick?: () => void;
-  showQR?: boolean;
 }
 
 export const DetailHeader: React.FC<DetailHeaderProps> = ({
   label,
   title,
   handleQRClick,
-  showQR = true,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const showCenterSection = label || title;
@@ -62,7 +60,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
 
           {/* Right side - QR button */}
           <div className="flex items-center">
-            {showQR && handleQRClick && (
+            {handleQRClick && (
               <button
                 id="qr-code-btn"
                 title="Show QR code"

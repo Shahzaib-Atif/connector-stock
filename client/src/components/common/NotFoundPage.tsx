@@ -27,13 +27,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-200">
-      <DetailHeader
-        label={label}
-        title="Not Found"
-        onBack={onBack}
-        handleQRClick={() => {}}
-        showQR={false}
-      />
+      <DetailHeader label={label} title="Not Found" onBack={onBack} />
       <div className="flex flex-col items-center justify-center h-[60vh] text-center p-8">
         <div className="bg-slate-800 p-6 rounded-full mb-4">
           <Icon className="w-12 h-12 text-slate-600" />

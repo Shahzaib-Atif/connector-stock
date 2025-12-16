@@ -70,7 +70,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
       className="min-h-screen flex flex-col bg-gradient-to-br from-slate-800 to-slate-900 text-white"
     >
       {/* Header */}
-      <DetailHeader showQR={false} />
+      <DetailHeader />
 
       {/* Main content - centered */}
       <div className="flex-1 flex items-center justify-center p-6">
@@ -80,7 +80,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <div className="w-20 h-20 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-6">
               <Scan className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-3xl font-bold tracking-tight">Connector Stock</h1>
+            <h1 className="text-3xl font-bold tracking-tight">
+              Connector Stock
+            </h1>
             <p className="text-slate-400">
               Search for Box, Connector or Client Reference
             </p>
