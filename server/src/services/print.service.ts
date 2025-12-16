@@ -57,8 +57,7 @@ export class PrintService {
 
   private generateTsplCommands(dto: PrintLabelDto): string {
     const { itemId, itemUrl, refCliente, encomenda, source } = dto;
-    const { widthMm, heightMm, qrCodePos, center_X, itemId_Y, encomenda_Y } =
-      this.labelConfig;
+    const { widthMm, heightMm, qrCodePos, center_X } = this.labelConfig;
     const { x: qr_x, y: qr_y } = qrCodePos;
 
     // Start building TSPL commands
@@ -71,18 +70,32 @@ export class PrintService {
 
     switch (source) {
       case 'sample': {
-        // add QR code and itemId
+        // QR Code
         lines.push(`QRCODE ${qr_x},${qr_y},L,5,A,0,M2,S7,"${itemUrl}"`);
-        lines.push(
-          `TEXT ${center_X + 10},${itemId_Y - 10},"2",0,1,2,"${itemId}"`,
-        );
 
-        // Add refCliente and encomenda if provided
-        if (refCliente) this.addRefClientText(lines, refCliente);
-        if (encomenda)
-          lines.push(
-            `TEXT ${center_X},${encomenda_Y},"2",0,1,1,"${encomenda}"`,
+        const textX = center_X + 15;
+        const textY = 200; // Near bottom edge
+
+        // ItemId
+        lines.push(`TEXT ${textX},${textY},"2",270,2,1,"${itemId}"`);
+
+        // RefCliente
+        let currentX = textX + 45; // Spacing for next line
+        if (refCliente) {
+          currentX = this.addRefClientTextVertical(
+            lines,
+            refCliente,
+            currentX,
+            textY,
           );
+        }
+
+        // Encomenda
+        if (encomenda) {
+          lines.push(
+            `TEXT ${currentX + 15},${textY},"2",270,1,1,"${encomenda}"`,
+          );
+        }
 
         break;
       }
@@ -112,33 +125,36 @@ export class PrintService {
     return lines.join('\r\n') + '\r\n';
   }
 
-  private addRefClientText(lines: string[], refCliente: string): void {
-    const MAX_LENGTH = 10;
+  private addRefClientTextVertical(
+    lines: string[],
+    refCliente: string,
+    startX: number,
+    startY: number,
+  ): number {
+    const MAX_LENGTH = 12; // Shorter length due to restricted height (28mm)
     const MAX_LINES = 3;
-    const LINE_HEIGHT = 20;
+    const LINE_SPACING = 25;
 
-    // Split into chunks of MAX_LENGTH, but cap to MAX_LINES
+    // Split into chunks
     const chunks: string[] = [];
-    const refClienteModified = refCliente.replace(/\s+/g, '').trim();
+    const cleanRef = refCliente.replace(/\s+/g, ' ').trim(); // keep single spaces maybe? or remove all spaces?
+    const refClienteModified = cleanRef.replace(/\s+/g, '');
+
     for (
       let i = 0;
       i < refClienteModified.length && chunks.length < MAX_LINES;
       i += MAX_LENGTH
     ) {
-      // replace empty space with nothing
       chunks.push(refClienteModified.slice(i, i + MAX_LENGTH));
     }
 
-    // Calculate starting Y position
-    const { center_X } = this.labelConfig;
-    const y = 110; // Starting Y position for refCliente
-    const startY = y - ((chunks.length - 1) * LINE_HEIGHT) / 2;
-
-    // Add each chunk as a separate line
     chunks.forEach((text, index) => {
-      const lineY = startY + index * LINE_HEIGHT;
-      lines.push(`TEXT ${center_X + 15},${lineY},"2",0,1,1,"${text}"`);
+      lines.push(
+        `TEXT ${startX + index * LINE_SPACING},${startY},"2",270,1,1,"${text}"`,
+      );
     });
+
+    return startX + chunks.length * LINE_SPACING; // Return next X position
   }
 
   private async sendToPrinter(filePath: string): Promise<void> {
