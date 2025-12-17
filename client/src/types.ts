@@ -113,7 +113,7 @@ export interface PositionApiResponse {
 }
 
 export interface ConnectorReferenceApiResponse {
-  Pos_ID: string;
+  PosId: string;
   Cor: string;
   Vias: string;
   CODIVMAC: string;

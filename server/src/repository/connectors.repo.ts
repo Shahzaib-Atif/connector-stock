@@ -16,16 +16,20 @@ export class ConnectorRepo {
 
   async getConnectors() {
     try {
-      return await this.prisma.referencias_test.findMany({
+      return await this.prisma.connectors_Main.findMany({
         select: {
-          Pos_ID: true,
+          PosId: true,
           Cor: true,
           Vias: true,
           CODIVMAC: true,
           ConnType: true,
-          Fabricante: true,
-          Refabricante: true,
           Qty: true,
+          Connectors_Details: {
+            select: {
+              Fabricante: true,
+              Refabricante: true,
+            },
+          },
         },
       });
     } catch (ex: any) {

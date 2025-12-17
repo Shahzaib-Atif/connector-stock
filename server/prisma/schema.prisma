@@ -202,3 +202,55 @@ model Transactions {
   updatedAt       DateTime? @default(now(), map: "DF__Transacti__updat__531856C7") @db.DateTime
   itemType        String    @db.VarChar(11)
 }
+
+model Connectors_Comps {
+  ConnId          String          @id(map: "Connectors_Comps_PK") @db.NVarChar(8)
+  Clip            Boolean?        @default(false, map: "DF__Connectors__Clip__5CA1C101")
+  Spacer          Boolean?        @default(false, map: "DF__Connector__Space__5D95E53A")
+  Vedante         Boolean?        @default(false, map: "DF__Connector__Vedan__5E8A0973")
+  Tampa           Boolean?        @default(false, map: "DF__Connector__Tampa__5F7E2DAC")
+  Mola            Boolean?        @default(false, map: "DF__Connectors__Mola__607251E5")
+  Moldagem        Boolean?        @default(false, map: "DF__Connector__Molda__6166761E")
+  Trav_o          Boolean?        @default(false, map: "DF__Connector__Travã__625A9A57") @map("Travão")
+  Abracadeira     Boolean?        @default(false, map: "DF__Connector__Abrac__634EBE90")
+  Linguetes       Boolean?        @default(false, map: "DF__Connector__Lingu__6442E2C9")
+  Outros          Boolean?        @default(false, map: "DF__Connector__Outro__65370702")
+  Amostra         Boolean?        @default(false, map: "DF__Connector__Amost__662B2B3B")
+  Olhal           Boolean?        @default(false, map: "DF__Connector__Olhal__671F4F74")
+  Connectors_Main Connectors_Main @relation(fields: [ConnId], references: [CODIVMAC], onDelete: Cascade, onUpdate: NoAction, map: "FK_Connectors_Comps")
+}
+
+model Connectors_Details {
+  ConnId          String          @id(map: "Connectors_Details_PK") @db.NVarChar(8)
+  Designa__o      String?         @map("Designação") @db.NVarChar(30)
+  Fabricante      String?         @db.NVarChar(50)
+  Refabricante    String?         @db.NVarChar(100)
+  OBS             String?         @db.NVarChar(Max)
+  ClipColor       String?         @db.VarChar(100)
+  CapotAngle      String?         @db.VarChar(100)
+  Connectors_Main Connectors_Main @relation(fields: [ConnId], references: [CODIVMAC], onDelete: Cascade, onUpdate: NoAction, map: "FK_Connector_Details")
+}
+
+model Connectors_Dimensions {
+  ConnId           String          @id(map: "Connectors_Dimensions_PK") @db.NVarChar(8)
+  InternalDiameter Int?
+  ExternalDiameter Int?
+  Thickness        Int?
+  Connectors_Main  Connectors_Main @relation(fields: [ConnId], references: [CODIVMAC], onDelete: Cascade, onUpdate: NoAction, map: "FK_Connectors_Dimensions")
+}
+
+model Connectors_Main {
+  PosId                 String                 @db.NVarChar(4)
+  Cor                   String                 @db.NVarChar(1)
+  Vias                  String                 @db.NVarChar(1)
+  CODIVMAC              String                 @id(map: "PK_Connector_Main") @db.NVarChar(8)
+  Qty                   Int                    @default(0, map: "DF__Connectors___Qty__55F4C372")
+  ESTADO                Boolean                @default(true, map: "DF__Connector__ESTAD__56E8E7AB")
+  Imagem                String?                @db.NVarChar(Max)
+  ConnType              String?                @db.NVarChar(100)
+  LastChangeBy          String?                @db.NVarChar(50)
+  LastUpdateDate        DateTime?
+  Connectors_Comps      Connectors_Comps?
+  Connectors_Details    Connectors_Details?
+  Connectors_Dimensions Connectors_Dimensions?
+}

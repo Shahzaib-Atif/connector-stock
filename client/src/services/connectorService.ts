@@ -12,7 +12,7 @@ export const parseConnector = (
     return null;
   }
 
-  const posId = reference.Pos_ID;
+  const posId = reference.PosId;
   const colorCode = reference.Cor;
   const viasCode = reference.Vias;
   const type = reference.ConnType;
@@ -65,7 +65,7 @@ export const getBoxDetails = (
   // find all connectors that belong to this box (Pos_ID matches boxId)
   if (masterData.connectors) {
     Object.values(masterData.connectors).forEach((ref) => {
-      if (ref.Pos_ID === boxId) {
+      if (ref.PosId === boxId) {
         const conn = parseConnector(ref.CODIVMAC, masterData);
         if (conn) connectors.push(conn);
       }
@@ -109,7 +109,7 @@ export const searchConnectors = (
         // Skip if already found by direct ID match
         if (refItem.CODIVMAC === normalizedQuery) return;
 
-        if (refItem.Pos_ID === normalizedQuery) {
+        if (refItem.PosId === normalizedQuery) {
           const conn = parseConnector(refItem.CODIVMAC, masterData);
           if (conn) results.push(conn);
         }

@@ -21,7 +21,7 @@ const TableRow: React.FC<TableRowProps> = ({ connector, index }) => {
   return (
     <tr className={"table-row table-row-bg"} key={connector.id}>
       <td className="table-data font-mono">{connector.id}</td>
-      <td className="table-data">{connector.Pos_ID || "-"}</td>
+      <td className="table-data">{connector.PosId || "-"}</td>
       <td className="table-data">{connector.Cor || "-"}</td>
       <td className="table-data">{connector.Vias || "-"}</td>
       <td className="table-data">{connector.ConnType || "-"}</td>
