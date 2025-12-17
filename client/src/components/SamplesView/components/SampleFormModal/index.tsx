@@ -13,12 +13,14 @@ interface SampleFormModalProps {
   sample: Sample | null;
   onClose: () => void;
   onSuccess: () => void;
+  forceCreate?: boolean;
 }
 
 export const SampleFormModal: React.FC<SampleFormModalProps> = ({
   sample,
   onClose,
   onSuccess,
+  forceCreate = false,
 }) => {
   const dispatch = useAppDispatch();
   const { loading, error: reduxError } = useAppSelector(
@@ -26,7 +28,7 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
   );
   const { data: masterData } = useAppSelector((state) => state.masterData);
   const { user } = useAppSelector((state) => state.auth);
-  const isEditing = !!sample;
+  const isEditing = !!sample && !forceCreate;
   const { formData, handleChange } = useSampleForm(sample);
   const [formError, setFormError] = React.useState<string | null>(null);
 

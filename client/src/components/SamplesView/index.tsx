@@ -42,6 +42,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSample, setEditingSample] = useState<Sample | null>(null);
+  const [duplicateSample, setDuplicateSample] = useState<Sample | null>(null);
 
   // Fetch samples on mount (only if not already loaded)
   useEffect(() => {
@@ -57,11 +58,19 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
 
   const handleCreateNew = () => {
     setEditingSample(null);
+    setDuplicateSample(null);
     setIsModalOpen(true);
   };
 
   const handleEdit = (sample: Sample) => {
     setEditingSample(sample);
+    setDuplicateSample(null);
+    setIsModalOpen(true);
+  };
+
+  const handleClone = (sample: Sample) => {
+    setDuplicateSample(sample);
+    setEditingSample(null);
     setIsModalOpen(true);
   };
 
@@ -73,6 +82,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   const handleModalClose = () => {
     setIsModalOpen(false);
     setEditingSample(null);
+    setDuplicateSample(null);
   };
 
   const handleSaveSuccess = () => {
@@ -117,6 +127,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
               onEdit={handleEdit}
               onDelete={handleDelete}
               onOpenQR={onOpenQR}
+              onClone={handleClone}
             />
           </div>
 
@@ -135,9 +146,10 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
 
       {isModalOpen && (
         <SampleFormModal
-          sample={editingSample}
+          sample={editingSample ?? duplicateSample}
           onClose={handleModalClose}
           onSuccess={handleSaveSuccess}
+          forceCreate={!!duplicateSample}
         />
       )}
 

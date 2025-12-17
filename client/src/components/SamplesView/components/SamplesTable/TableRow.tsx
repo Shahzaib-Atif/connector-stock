@@ -9,6 +9,7 @@ interface TableRowProps {
   onEdit: (sample: Sample) => void;
   onDelete: (sample: Sample) => void;
   onOpenQR?: (qrData: QRData) => void;
+  onClone?: (sample: Sample) => void;
 }
 
 const TableRow: React.FC<TableRowProps> = ({
@@ -16,6 +17,7 @@ const TableRow: React.FC<TableRowProps> = ({
   onEdit,
   onDelete,
   onOpenQR,
+  onClone,
 }) => {
   const {
     Cliente,
@@ -65,6 +67,15 @@ const TableRow: React.FC<TableRowProps> = ({
               className="p-1.5 text-slate-400 hover:text-green-400 hover:bg-slate-700 rounded transition-colors"
             >
               <Printer className="w-4 h-4" />
+            </button>
+          )}
+          {onClone && (
+            <button
+              onClick={() => onClone(sample)}
+              title="Duplicate"
+              className="p-1.5 text-slate-400 hover:text-amber-400 hover:bg-slate-700 rounded transition-colors"
+            >
+              ⧉
             </button>
           )}
           <button

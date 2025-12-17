@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { Beaker, Cable, Home, LogOut, Receipt, Wrench, X } from "lucide-react";
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Props {
   isMenuOpen: boolean;
@@ -19,10 +19,13 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
   const menuRef = useRef<HTMLDivElement>(null);
   useClickOutside(menuRef, () => setIsMenuOpen(false));
 
-  // Handle menu actions
-  const handleMenuAction = (action: () => void) => {
-    action();
-    setIsMenuOpen(false);
+  // close menu
+  const closeMenu = () => setIsMenuOpen(false);
+
+  // Handle logout
+  const handleLogout = () => {
+    dispatch(logout());
+    closeMenu();
   };
 
   return (
@@ -54,49 +57,49 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
 
       {/* Menu items */}
       <nav className="py-2">
-        <button
-          id="home-btn"
-          onClick={() => handleMenuAction(() => navigate("/"))}
-          className="sidebar-btn"
-        >
+        <button id="home-btn" onClick={closeMenu} className="sidebar-btn">
           <Home className="sidebar-btn-icon" />
-          <span>Home</span>
+          <Link to="/">Home</Link>
         </button>
 
+        {/* View Transactions */}
         <button
           id="view-transactions-btn"
-          onClick={() => handleMenuAction(() => navigate("/transactions"))}
+          onClick={closeMenu}
           className="sidebar-btn"
         >
           <Receipt className="sidebar-btn-icon" />
-          <span>View Transactions</span>
+          <Link to="/transactions">View Transactions</Link>
         </button>
 
+        {/* View Samples */}
         <button
           id="view-samples-btn"
-          onClick={() => handleMenuAction(() => navigate("/samples"))}
+          onClick={closeMenu}
           className="sidebar-btn"
         >
           <Beaker className="sidebar-btn-icon" />
-          <span>View Samples</span>
+          <Link to="/samples">View Samples</Link>
         </button>
 
+        {/* View Connectors */}
         <button
           id="view-connectors-btn"
-          onClick={() => handleMenuAction(() => navigate("/connectors"))}
+          onClick={closeMenu}
           className="sidebar-btn"
         >
           <Cable className="sidebar-btn-icon" />
-          <span>View Connectors</span>
+          <Link to="/connectors">View Connectors</Link>
         </button>
 
+        {/* View Accessories */}
         <button
           id="view-accessories-btn"
-          onClick={() => handleMenuAction(() => navigate("/accessories"))}
+          onClick={closeMenu}
           className="sidebar-btn"
         >
           <Wrench className="sidebar-btn-icon" />
-          <span>View Accessories</span>
+          <Link to="/accessories">View Accessories</Link>
         </button>
       </nav>
 
@@ -104,7 +107,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
       <div className="absolute bottom-0 left-0 right-0 border-t border-slate-700 p-2">
         <button
           id="logout-btn"
-          onClick={() => handleMenuAction(() => dispatch(logout()))}
+          onClick={handleLogout}
           className="sidebar-btn hover:text-red-300"
         >
           <LogOut className="sidebar-btn-icon" />

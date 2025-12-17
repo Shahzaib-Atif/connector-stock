@@ -51,6 +51,7 @@ export const FORM_FIELDS: {
     label: "Quantidade",
     placeholder: "Quantity",
     type: "number",
+    required: true,
   },
   {
     name: "com_fio",

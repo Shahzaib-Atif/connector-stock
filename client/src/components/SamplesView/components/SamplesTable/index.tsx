@@ -8,6 +8,7 @@ interface SamplesTableProps {
   onEdit: (sample: Sample) => void;
   onDelete: (sample: Sample) => void;
   onOpenQR?: (qrData: QRData) => void;
+  onClone?: (sample: Sample) => void;
 }
 
 export const SamplesTable: React.FC<SamplesTableProps> = ({
@@ -15,6 +16,7 @@ export const SamplesTable: React.FC<SamplesTableProps> = ({
   onEdit,
   onDelete,
   onOpenQR,
+  onClone,
 }) => {
   return (
     <div id="samples-table" className="table-container-inner">
@@ -36,6 +38,7 @@ export const SamplesTable: React.FC<SamplesTableProps> = ({
                 onEdit={onEdit}
                 onDelete={onDelete}
                 onOpenQR={onOpenQR}
+                onClone={onClone}
               />
             ))
           )}

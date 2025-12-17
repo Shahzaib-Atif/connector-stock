@@ -7,17 +7,17 @@ export type CreateTransactionsDto = {
 };
 
 export type CreateSampleDto = {
-  Cliente?: string;
+  Cliente: string;
+  EncDivmac: string;
+  Ref_Descricao: string;
+  Amostra: string;
+  Quantidade: string;
   Projeto?: string;
-  EncDivmac?: string;
-  Ref_Descricao?: string;
   Ref_Fornecedor?: string;
-  Amostra?: string;
   Data_do_pedido?: string;
   Data_recepcao?: string;
   Entregue_a?: string;
   N_Envio?: string;
-  Quantidade?: string;
   Observacoes?: string;
   NumORC?: string;
   CreatedBy?: string;
@@ -25,6 +25,6 @@ export type CreateSampleDto = {
   com_fio?: boolean;
 };
 
-export type UpdateSampleDto = Partial<CreateSampleDto> & {
+export type UpdateSampleDto = CreateSampleDto & {
   LasUpdateBy?: string;
 };
