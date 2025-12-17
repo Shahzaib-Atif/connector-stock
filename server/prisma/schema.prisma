@@ -150,7 +150,7 @@ model Referencias_test {
   ClipColor        String?   @db.VarChar(100)
   CapotAngle       String?   @db.VarChar(100)
   Olhal            Boolean?
-  Qty              Int       @default(0)
+  Qty              Int       @default(0, map: "DF__Referências__Qty__51300E55")
 
   @@map("Referências_test")
 }
@@ -164,7 +164,7 @@ model REG_AccessoriesSamples {
   AccImagePath    String   @unique(map: "REG_AccessoriesSamples_UNIQUE") @db.VarChar(500)
   InsertDate      DateTime @default(now(), map: "DF__REG_Acces__Inser__2BFE89A6") @db.DateTime
   RefClient       String?  @db.VarChar(100)
-  Qty             Int      @default(0)
+  Qty             Int      @default(0, map: "DF__REG_Accesso__Qty__5224328E")
   RefDV           String?  @db.VarChar(100)
   ColorAssociated Boolean?
 }
@@ -190,6 +190,7 @@ model REG_Amostras {
   ActualUser       String?   @db.NVarChar(100)
   NumORC           String?   @db.VarChar(100)
   Ref_Fornecedor   String?   @db.NVarChar(100)
+  com_fio          Boolean?
 }
 
 model Transactions {
@@ -197,7 +198,7 @@ model Transactions {
   itemId          String    @db.VarChar(30)
   transactionType String    @db.VarChar(3)
   amount          Int
-  itemType        String    @db.VarChar(11)
   department      String?   @db.VarChar(20)
-  updatedAt       DateTime?
+  updatedAt       DateTime? @default(now(), map: "DF__Transacti__updat__531856C7") @db.DateTime
+  itemType        String    @db.VarChar(11)
 }
