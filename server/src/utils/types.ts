@@ -22,6 +22,7 @@ export type CreateSampleDto = {
   NumORC?: string;
   CreatedBy?: string;
   ActualUser?: string;
+  com_fio?: boolean;
 };
 
 export type UpdateSampleDto = Partial<CreateSampleDto> & {

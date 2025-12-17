@@ -57,6 +57,7 @@ export interface Sample {
   DateOfLastUpdate?: string;
   IsActive: boolean;
   ActualUser?: string;
+  com_fio?: boolean;
 }
 
 export interface Transaction {

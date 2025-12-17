@@ -23,8 +23,11 @@ const TableRow: React.FC<TableRowProps> = ({
     EncDivmac,
     Ref_Descricao,
     Amostra,
+    Quantidade,
     N_Envio,
     Data_recepcao,
+    com_fio,
+    Observacoes,
     Entregue_a,
   } = sample;
 
@@ -36,11 +39,15 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data">{EncDivmac || "-"}</td>
       <td className="table-data break-all">{Ref_Descricao || "-"}</td>
       <td className="table-data">{Amostra || "-"}</td>
+      <td className="table-data">{Quantidade || "-"}</td>
       <td className="table-data">{N_Envio || "-"}</td>
       <td className="table-data break-all" title={Entregue_a}>
         {Entregue_a || "-"}
       </td>
       <td className="table-data font-mono">{Data_recepcao || "-"}</td>
+      <td className="table-data font-mono">
+        {getObservation(Observacoes, com_fio)}
+      </td>
       {/* Action buttons */}
       <td className="table-data">
         <div className="flex justify-center gap-2">
@@ -79,5 +86,12 @@ const TableRow: React.FC<TableRowProps> = ({
     </tr>
   );
 };
+
+function getObservation(Observacoes: string, com_fio: boolean) {
+  let obs = com_fio ? "c/fio" : "s/fio";
+  if (Observacoes && Observacoes.trim() !== "") obs += ` - ${Observacoes}`;
+
+  return obs;
+}
 
 export default TableRow;

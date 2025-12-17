@@ -10,7 +10,7 @@ export const FORM_FIELDS: {
   label: string;
   placeholder: string;
   disabledOnEdit?: boolean;
-  type?: "text" | "number" | "date" | "autocomplete" | "select";
+  type?: "text" | "number" | "date" | "autocomplete" | "select" | "checkbox";
   fullWidth?: boolean;
   required?: boolean;
   options?: string[];
@@ -28,7 +28,6 @@ export const FORM_FIELDS: {
     placeholder: "EncDivmac",
     required: true,
   },
-  { name: "NumORC", label: "NumORC", placeholder: "ORC Number" },
   {
     name: "Ref_Descricao",
     label: "Ref. Descrição",
@@ -54,6 +53,13 @@ export const FORM_FIELDS: {
     type: "number",
   },
   {
+    name: "com_fio",
+    label: "Com fio",
+    placeholder: "",
+    type: "checkbox",
+  },
+  { name: "NumORC", label: "NumORC", placeholder: "ORC Number" },
+  {
     name: "Data_do_pedido",
     label: "Data do Pedido",
     placeholder: "Request date",
@@ -70,7 +76,7 @@ export const FORM_FIELDS: {
     label: "Entregue A",
     placeholder: "Delivered to",
     type: "select",
-    options: ["vivianni.azevedo", "joana.conceicao", "Anashia_connectors"],
+    options: ["vivianni.azevedo", "joana.conceicao", "anashia.nazim"],
   },
   { name: "N_Envio", label: "N. Envio", placeholder: "Shipping number" },
 ];

@@ -17,6 +17,7 @@ export type SampleFormData = {
   NumORC: string;
   CreatedBy: string;
   ActualUser: string;
+  com_fio: boolean;
 };
 
 const initialFormData: SampleFormData = {
@@ -35,6 +36,7 @@ const initialFormData: SampleFormData = {
   NumORC: "",
   CreatedBy: "",
   ActualUser: "",
+  com_fio: false,
 };
 
 export function useSampleForm(sample: Sample | null) {
@@ -58,6 +60,7 @@ export function useSampleForm(sample: Sample | null) {
         NumORC: sample.NumORC || "",
         CreatedBy: sample.CreatedBy || "",
         ActualUser: sample.ActualUser || "",
+        com_fio: sample.com_fio ?? false,
       });
     } else {
       setFormData(initialFormData);
@@ -65,9 +68,19 @@ export function useSampleForm(sample: Sample | null) {
   }, [sample]);
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-      const { name, value } = e.target;
-      setFormData((prev) => ({ ...prev, [name]: value }));
+    (
+      e:
+        | React.ChangeEvent<HTMLInputElement>
+        | React.ChangeEvent<HTMLTextAreaElement>
+        | React.ChangeEvent<HTMLSelectElement>
+    ) => {
+      const { name, value, type } = e.target;
+      const parsedValue =
+        type === "checkbox" && "checked" in e.target
+          ? (e.target as HTMLInputElement).checked
+          : value;
+
+      setFormData((prev) => ({ ...prev, [name]: parsedValue }));
     },
     []
   );
