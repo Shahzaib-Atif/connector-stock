@@ -14,6 +14,7 @@ import { FilterBar } from "./components/FilterBar";
 import { Pagination } from "../common/Pagination";
 import { SampleFormModal } from "./components/SampleFormModal";
 import Spinner from "../common/Spinner";
+import DeleteDialog from "../common/DeleteDialog";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -22,7 +23,8 @@ interface SamplesViewProps {
 export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { samples, loading, error } = useAppSelector((state) => state.samples);
+  const { samples, loading } = useAppSelector((state) => state.samples);
+  const [openDltDlg, setOpenDltDlg] = useState(false);
 
   // Custom hook for filters
   const { filters, setFilterColumn, setSearchQuery, filteredSamples } =
@@ -64,9 +66,8 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   };
 
   const handleDelete = async (sample: Sample) => {
-    if (window.confirm(`Are you sure you want to delete this sample?`)) {
-      dispatch(deleteSampleThunk(sample.ID));
-    }
+    setEditingSample(sample);
+    setOpenDltDlg(true);
   };
 
   const handleModalClose = () => {
@@ -137,6 +138,16 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
           sample={editingSample}
           onClose={handleModalClose}
           onSuccess={handleSaveSuccess}
+        />
+      )}
+
+      {!isModalOpen && (
+        <DeleteDialog
+          open={openDltDlg}
+          setOpen={setOpenDltDlg}
+          msg="Are you sure you want to delete this sample?"
+          title="Delete Sample"
+          onDelete={() => dispatch(deleteSampleThunk(editingSample.ID))}
         />
       )}
     </div>
