@@ -55,13 +55,6 @@ npm run build
 npm run start:prod
 ```
 
-## Tests
-
-```bash
-npm run test
-npm run test:e2e
-```
-
 ## Where to look in this repo
 
 - API controllers: `src/controllers`
@@ -73,5 +66,3 @@ npm run test:e2e
 
 - NestJS docs: https://docs.nestjs.com
 - Prisma introspection docs: https://www.prisma.io/docs/concepts/components/introspection
-
-If you want, I can also add a small scripts entry or an npm script to run the Prisma pull + generate sequence automatically.
