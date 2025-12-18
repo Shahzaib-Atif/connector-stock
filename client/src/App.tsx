@@ -11,7 +11,7 @@ import { useScan } from "./hooks/useScan";
 import { TransactionModal } from "./components/TransactionModal";
 import { initTransactionsData } from "./store/slices/transactionsSlice";
 import { QRData } from "./types";
-import { logout } from "./store/slices/authSlice";
+import { initUsersList, logout } from "./store/slices/authSlice";
 
 // Main App Component
 const App: React.FC = () => {
@@ -26,6 +26,7 @@ const App: React.FC = () => {
   useEffect(() => {
     dispatch(initMasterData());
     dispatch(initTransactionsData());
+    dispatch(initUsersList());
   }, [dispatch]);
 
   const handleOpenQR = (qrData: QRData) => {

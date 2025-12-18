@@ -9,7 +9,7 @@ export interface User {
 
 @Injectable()
 export class AuthService {
-  // Hardcoded fake list of users
+  // Hardcoded list of users
   private users: User[] = [
     {
       id: '1',
