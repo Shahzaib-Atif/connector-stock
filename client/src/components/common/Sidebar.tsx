@@ -37,6 +37,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
   const handleLogout = () => {
     dispatch(logout());
     closeMenu();
+    navigate("/login");
   };
 
   return (
@@ -80,55 +81,60 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
         </button>
 
         {/* View Transactions */}
-        <button
+        <Link
+          to="/transactions"
           id="view-transactions-btn"
           onClick={closeMenu}
           className="sidebar-btn"
         >
           <Receipt className="sidebar-btn-icon" />
-          <Link to="/transactions">View Transactions</Link>
-        </button>
+          <span>View Transactions</span>
+        </Link>
 
         {/* View Samples */}
-        <button
+        <Link
+          to="/samples"
           id="view-samples-btn"
           onClick={closeMenu}
           className="sidebar-btn"
         >
           <Beaker className="sidebar-btn-icon" />
-          <Link to="/samples">View Samples</Link>
-        </button>
+          <span>View Samples</span>
+        </Link>
 
         {/* View Connectors */}
-        <button
+        <Link
+          to="/connectors"
           id="view-connectors-btn"
           onClick={closeMenu}
           className="sidebar-btn"
         >
           <Cable className="sidebar-btn-icon" />
-          <Link to="/connectors">View Connectors</Link>
-        </button>
+          <span>View Connectors</span>
+        </Link>
 
         {/* View Accessories */}
-        <button
+        <Link
+          to="/accessories"
           id="view-accessories-btn"
           onClick={closeMenu}
           className="sidebar-btn"
         >
           <Wrench className="sidebar-btn-icon" />
-          <Link to="/accessories">View Accessories</Link>
-        </button>
+          <span>View Accessories</span>
+        </Link>
 
         {/* User Management (Master Admin only) */}
         {role === "Master Admin" && (
-          <button
+          <Link
+            to="/users"
             id="user-mgmt-btn"
             onClick={closeMenu}
             className="sidebar-btn text-blue-400 hover:text-blue-300"
           >
             <Users className="sidebar-btn-icon" />
-            <Link to="/users">Manage Users</Link>
-          </button>
+            <span>Manage Users</span>
+          </Link>
         )}
       </nav>
 
