@@ -1,6 +1,11 @@
 import { fetchConnectorTypes, fetchConnectors } from "./connectorApi";
 import { fetchAccessoryTypes, fetchAccessories } from "./accessoryApi";
-import { fetchColors, fetchVias, fetchPositions } from "./metadataApi";
+import {
+  fetchColors,
+  fetchVias,
+  fetchPositions,
+  fetchFabricantes,
+} from "./metadataApi";
 import { MasterData } from "@/types";
 
 export const fetchMasterData = async (): Promise<MasterData> => {
@@ -13,6 +18,7 @@ export const fetchMasterData = async (): Promise<MasterData> => {
       positions,
       connectors,
       accessories,
+      fabricantes,
     ] = await Promise.all([
       fetchColors(),
       fetchVias(),
@@ -21,6 +27,7 @@ export const fetchMasterData = async (): Promise<MasterData> => {
       fetchPositions(),
       fetchConnectors(),
       fetchAccessories(),
+      fetchFabricantes(),
     ]);
 
     return {
@@ -32,6 +39,7 @@ export const fetchMasterData = async (): Promise<MasterData> => {
       connectors,
       clients: {}, // Deprecated
       accessories,
+      fabricantes,
     };
   } catch (error) {
     console.error("Error fetching master data:", error);

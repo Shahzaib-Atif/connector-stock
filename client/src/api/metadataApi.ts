@@ -73,3 +73,13 @@ export const fetchPositions = async (): Promise<
 
   return positions;
 };
+
+export const fetchFabricantes = async (): Promise<string[]> => {
+  const response = await fetch(API.fabricantes);
+  if (!response.ok) {
+    throw new Error("Failed to fetch fabricantes");
+  }
+  const data: { Fabricante: string }[] = await response.json();
+  const fabricantes: string[] = data.map((item) => item.Fabricante.trim());
+  return fabricantes;
+};

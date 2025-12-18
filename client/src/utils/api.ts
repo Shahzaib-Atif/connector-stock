@@ -17,6 +17,7 @@ const metadata = {
   cors: `${API_BASE_URL}/cors`,
   vias: `${API_BASE_URL}/vias`,
   positions: `${API_BASE_URL}/positions`,
+  fabricantes: `${API_BASE_URL}/fabricantes`,
 };
 
 const print = {
@@ -37,4 +38,3 @@ export const API = {
   transactions: `${API_BASE_URL}/transactions`,
   samples: `${API_BASE_URL}/samples`,
 };
-

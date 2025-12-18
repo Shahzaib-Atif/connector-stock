@@ -34,4 +34,17 @@ export class MetadataRepo {
       return [];
     }
   }
+
+  async getFabricante() {
+    //Fabricante
+    try {
+      return await this.prisma.$queryRaw`
+      Select Fabricante from Fabricantes 
+      WHERE Fabricante is not NULL 
+      `;
+    } catch (ex: any) {
+      console.error(ex.message);
+      return [];
+    }
+  }
 }

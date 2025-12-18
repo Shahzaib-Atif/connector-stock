@@ -21,4 +21,9 @@ export class MetadataController {
   async getCord_CON() {
     return await this.repo.getCord_CON();
   }
+
+  @Get('fabricantes')
+  async getFabricante() {
+    return await this.repo.getFabricante();
+  }
 }

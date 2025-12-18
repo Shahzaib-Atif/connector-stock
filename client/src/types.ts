@@ -82,6 +82,7 @@ export interface MasterData {
   positions: Record<string, { cv: string; ch: string }>;
   connectors: Record<string, ConnectorReferenceApiResponse>;
   accessories: Record<string, AccessoryApiResponse>;
+  fabricantes: string[];
 }
 
 export interface ColorApiResponse {
