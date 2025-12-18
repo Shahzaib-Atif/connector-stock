@@ -23,7 +23,7 @@ const TableRow: React.FC<TableRowProps> = ({ accessory, index }) => {
       // onClick={handleClick}
       className={"table-row table-row-bg"}
     >
-      <td className="table-data font-mono">{accessory.id}</td>
+      <td className="table-data font-mono break-all">{accessory.id}</td>
       <td className="table-data">{accessory.ConnName || "-"}</td>
       <td className="table-data">{accessory.AccessoryType || "-"}</td>
       <td className="table-data break-all">{accessory.RefClient || "-"}</td>
