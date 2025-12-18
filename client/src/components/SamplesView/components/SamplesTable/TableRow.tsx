@@ -37,7 +37,7 @@ const TableRow: React.FC<TableRowProps> = ({
     <tr className={"table-row table-row-bg"} key={sample.ID}>
       <td className="table-data font-mono">{sample.ID}</td>
       <td className="table-data">{Cliente || "-"}</td>
-      <td className="table-data">{Projeto || "-"}</td>
+      <td className="table-data break-all">{Projeto || "-"}</td>
       <td className="table-data">{EncDivmac || "-"}</td>
       <td className="table-data break-all">{Ref_Descricao || "-"}</td>
       <td className="table-data">{Amostra || "-"}</td>

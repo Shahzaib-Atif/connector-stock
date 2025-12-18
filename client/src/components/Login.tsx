@@ -11,7 +11,7 @@ export const Login: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === "admin" && password === "1234") {
+    if (username === "admin" && password === "admin") {
       dispatch(login({ user: username }));
       setError("");
     } else {

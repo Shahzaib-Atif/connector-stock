@@ -6,7 +6,7 @@ const TableHeader: React.FC = () => {
       <tr>
         <th className="table-header-cell w-16">ID</th>
         <th className="table-header-cell w-48">Cliente</th>
-        <th className="table-header-cell w-40">Projeto</th>
+        <th className="table-header-cell w-48">Projeto</th>
         <th className="table-header-cell w-32">EncDivmac</th>
         <th className="table-header-cell w-40">Ref. Descrição</th>
         <th className="table-header-cell w-40">Amostra</th>
