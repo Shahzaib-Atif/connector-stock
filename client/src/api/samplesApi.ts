@@ -1,7 +1,10 @@
 import { Sample } from "@/types";
 import { API } from "@/utils/api";
 
-export const getSamples = async (): Promise<Sample[]> => {
+export const getSamples = async (): Promise<{
+  samples: Sample[];
+  projects: string[];
+}> => {
   const response = await fetch(API.samples);
   if (!response.ok) throw new Error("Failed to fetch samples");
   return response.json();
@@ -14,7 +17,10 @@ export const getSample = async (id: number): Promise<Sample> => {
 };
 
 export const createSample = async (
-  sample: Omit<Sample, "ID" | "IsActive" | "DateOfCreation" | "DateOfLastUpdate">
+  sample: Omit<
+    Sample,
+    "ID" | "IsActive" | "DateOfCreation" | "DateOfLastUpdate"
+  >
 ): Promise<Sample> => {
   const response = await fetch(API.samples, {
     method: "POST",

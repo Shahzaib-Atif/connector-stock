@@ -29,6 +29,11 @@ function SuggestionsList({
           icon: <Wrench className="w-4 h-4" />,
           className: "bg-green-500/20 text-green-400",
         };
+      default:
+        return {
+          icon: <Zap className="w-3 h-3" />,
+          className: "bg-blue-500/20 text-blue-300",
+        };
     }
   };
 
@@ -52,12 +57,12 @@ function SuggestionsList({
               {iconConfig.icon}
             </div>
             <div>
-              <div className="font-semibold text-white font-mono">
-                {suggestion.id}
-              </div>
-              <div className="text-xs text-slate-400 capitalize">
-                {suggestion.type}
-              </div>
+              <div className="text-mono text-sm">{suggestion.id}</div>
+              {suggestion.type && (
+                <div className="text-xs text-slate-400 capitalize">
+                  {suggestion.type}
+                </div>
+              )}
             </div>
           </button>
         );

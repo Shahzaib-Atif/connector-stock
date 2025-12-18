@@ -9,12 +9,14 @@ import { Sample } from "@/types";
 
 interface SamplesState {
   samples: Sample[];
+  projects: string[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: SamplesState = {
   samples: [],
+  projects: [],
   loading: false,
   error: null,
 };
@@ -31,7 +33,12 @@ export const fetchSamplesThunk = createAsyncThunk(
 // Create a new sample
 export const createSampleThunk = createAsyncThunk(
   "samples/create",
-  async (sampleData: Omit<Sample, "ID" | "IsActive" | "DateOfCreation" | "DateOfLastUpdate">) => {
+  async (
+    sampleData: Omit<
+      Sample,
+      "ID" | "IsActive" | "DateOfCreation" | "DateOfLastUpdate"
+    >
+  ) => {
     const sample = await createSample(sampleData);
     return sample;
   }
@@ -67,7 +74,8 @@ export const samplesSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchSamplesThunk.fulfilled, (state, action) => {
-        state.samples = action.payload;
+        state.samples = action.payload.samples;
+        state.projects = action.payload.projects;
         state.loading = false;
       })
       .addCase(fetchSamplesThunk.rejected, (state, action) => {

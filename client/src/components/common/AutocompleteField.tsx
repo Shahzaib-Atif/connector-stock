@@ -3,7 +3,7 @@ import { useSuggestionNavigation } from "@/hooks/useSuggestionNavigation";
 import { suggestion } from "@/types";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import SuggestionsList from "../HomeView/components/SuggestionsList";
-import { inputClass } from "../SamplesView/components/SampleFormModal/SampleFormFields";
+import { inputClass } from "../SamplesView/components/SampleFormModal/components/SampleFormFields";
 
 interface Props {
   name: string;
@@ -40,7 +40,7 @@ const AutocompleteField: React.FC<Props> = ({
     return safeOptions
       .filter((opt) => opt.toUpperCase().includes(query))
       .slice(0, 8)
-      .map((opt) => ({ id: opt, type: "connector" as const })) as suggestion[];
+      .map((opt) => ({ id: opt })) as suggestion[];
   }, [options, value]);
 
   const handleSuggestionClick = (suggestion: suggestion) => {

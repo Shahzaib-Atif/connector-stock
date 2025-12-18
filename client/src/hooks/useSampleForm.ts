@@ -43,6 +43,7 @@ export function useSampleForm(sample: Sample | null) {
   const [formData, setFormData] = useState<SampleFormData>(initialFormData);
 
   useEffect(() => {
+    // If editing an existing sample, populate fields
     if (sample) {
       setFormData({
         Cliente: sample.Cliente || "",
@@ -63,6 +64,7 @@ export function useSampleForm(sample: Sample | null) {
         com_fio: sample.com_fio ?? false,
       });
     } else {
+      // If creating new, reset to initial
       setFormData(initialFormData);
     }
   }, [sample]);

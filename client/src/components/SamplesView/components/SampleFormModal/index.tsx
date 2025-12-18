@@ -6,8 +6,13 @@ import {
   updateSampleThunk,
 } from "@/store/slices/samplesSlice";
 import { useSampleForm } from "@/hooks/useSampleForm";
-import { FormField } from "./FormField";
-import { FORM_FIELDS, inputClass, labelClass } from "./SampleFormFields";
+import {
+  FORM_FIELDS,
+  FORM_FIELDS_Type,
+  inputClass,
+  labelClass,
+} from "./components/SampleFormFields";
+import { FormField } from "./components/FormField";
 
 interface SampleFormModalProps {
   sample: Sample | null;
@@ -37,6 +42,9 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
     if (!masterData?.connectors) return [];
     return Object.keys(masterData.connectors).sort();
   }, [masterData]);
+
+  // get projects options from samples state
+  const projectsOptions = useAppSelector((state) => state.samples.projects);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,6 +91,12 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
     }
   };
 
+  function getOptions(field: FORM_FIELDS_Type): string[] {
+    if (field.name === "Projeto") return projectsOptions;
+    else if (field.name === "Amostra") return connectorOptions;
+    else return field.options;
+  }
+
   const errorMessage = formError || reduxError;
 
   return (
@@ -122,9 +136,7 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
                 type={field.type}
                 fullWidth={field.fullWidth}
                 required={field.required}
-                options={
-                  field.name === "Amostra" ? connectorOptions : field.options
-                }
+                options={getOptions(field)}
               />
             ))}
           </div>

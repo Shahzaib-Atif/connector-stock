@@ -146,7 +146,7 @@ export enum Department {
 
 export type suggestion = {
   id: string;
-  type: "box" | "connector" | "accessory";
+  type?: "box" | "connector" | "accessory";
 };
 
 export interface PaginatedData<T> {

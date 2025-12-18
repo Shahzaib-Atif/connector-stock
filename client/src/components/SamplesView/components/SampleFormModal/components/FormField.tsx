@@ -1,7 +1,7 @@
 import React from "react";
 import { Calendar } from "lucide-react";
-import { labelClass, inputClass } from "./SampleFormFields";
 import AutocompleteField from "@/components/common/AutocompleteField";
+import { inputClass, labelClass } from "./SampleFormFields";
 
 interface FormFieldProps {
   label: string;
