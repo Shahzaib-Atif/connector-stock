@@ -1,17 +1,17 @@
 import { Controller, Get } from '@nestjs/common';
-import { ConnectorRepo } from 'src/repository/connectors.repo';
+import { ConnectorsService } from 'src/services/connectors.service';
 
 @Controller('connectors')
 export class ConnectorController {
-  constructor(private readonly repo: ConnectorRepo) {}
+  constructor(private readonly service: ConnectorsService) {}
 
   @Get('/types')
   async getConnectorTypes() {
-    return await this.repo.getConnectorTypes();
+    return await this.service.getConnectorTypes();
   }
 
   @Get('')
   async getReferencias() {
-    return await this.repo.getConnectors();
+    return await this.service.getConnectors();
   }
 }

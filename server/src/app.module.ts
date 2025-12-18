@@ -15,6 +15,7 @@ import { TransactionsRepo } from './repository/transactions.repo';
 import { SamplesController } from './controllers/samples.controller';
 import { SamplesRepo } from './repository/samples.repo';
 import { SamplesService } from './services/samples.service';
+import { ConnectorsService } from './services/connectors.service';
 import { PrintController } from './controllers/print.controller';
 import { PrintService } from './services/print.service';
 
@@ -35,6 +36,7 @@ import { PrintService } from './services/print.service';
     MetadataRepo,
     AccessoryRepo,
     ConnectorRepo,
+    ConnectorsService,
     TransactionsService,
     TransactionsRepo,
     SamplesRepo,
@@ -43,4 +45,3 @@ import { PrintService } from './services/print.service';
   ],
 })
 export class AppModule {}
-
