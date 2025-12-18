@@ -1,7 +1,17 @@
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
-import { Beaker, Cable, Home, LogOut, Receipt, Wrench, X } from "lucide-react";
+import {
+  Beaker,
+  Cable,
+  Home,
+  Lock,
+  LogOut,
+  Receipt,
+  Users,
+  Wrench,
+  X,
+} from "lucide-react";
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -12,6 +22,7 @@ interface Props {
 
 export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
   const user = useAppSelector((state) => state.auth.user);
+  const role = useAppSelector((state) => state.auth.role);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -49,10 +60,16 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
 
       {/* User info */}
       <div className="px-4 py-4 border-b border-slate-700">
-        <p className="text-xs text-slate-500 uppercase tracking-wider">
-          Logged in as
-        </p>
-        <p className="text-white font-mono font-semibold mt-1">{user}</p>
+        {user ? (
+          <>
+            <p className="text-xs text-slate-500 uppercase tracking-wider">
+              Logged in as
+            </p>
+            <p className="text-white font-mono font-semibold mt-1">{user}</p>
+          </>
+        ) : (
+          <p className="text-white font-semibold">Not logged in</p>
+        )}
       </div>
 
       {/* Menu items */}
@@ -101,19 +118,44 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
           <Wrench className="sidebar-btn-icon" />
           <Link to="/accessories">View Accessories</Link>
         </button>
+
+        {/* User Management (Master Admin only) */}
+        {role === "Master Admin" && (
+          <button
+            id="user-mgmt-btn"
+            onClick={closeMenu}
+            className="sidebar-btn text-blue-400 hover:text-blue-300"
+          >
+            <Users className="sidebar-btn-icon" />
+            <Link to="/users">Manage Users</Link>
+          </button>
+        )}
       </nav>
 
-      {/* Logout at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 border-t border-slate-700 p-2">
-        <button
-          id="logout-btn"
-          onClick={handleLogout}
-          className="sidebar-btn hover:text-red-300"
-        >
-          <LogOut className="sidebar-btn-icon" />
-          <span>Logout</span>
-        </button>
-      </div>
+      {/* Login/Logout at bottom */}
+      {user ? (
+        <div className="absolute bottom-0 left-0 right-0 border-t border-slate-700 p-2">
+          <button
+            id="logout-btn"
+            onClick={handleLogout}
+            className="sidebar-btn hover:text-red-300"
+          >
+            <LogOut className="sidebar-btn-icon" />
+            <span>Logout</span>
+          </button>
+        </div>
+      ) : (
+        <div className="absolute bottom-0 left-0 right-0 border-t border-slate-700 p-2">
+          <button
+            id="login-nav-btn"
+            onClick={closeMenu}
+            className="sidebar-btn"
+          >
+            <Lock className="sidebar-btn-icon" />
+            <Link to="/login">Login</Link>
+          </button>{" "}
+        </div>
+      )}
     </div>
   );
 }

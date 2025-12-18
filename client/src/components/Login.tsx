@@ -1,21 +1,39 @@
 import React, { useState } from "react";
 import { Lock, User } from "lucide-react";
 import { useAppDispatch } from "../store/hooks";
-import { login } from "../store/slices/authSlice";
+import { useNavigate } from "react-router-dom";
+import { login, setUsersList } from "../store/slices/authSlice";
+import { loginApi, fetchUsersApi } from "../api/authApi";
 
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === "admin" && password === "admin") {
-      dispatch(login({ user: username }));
-      setError("");
-    } else {
-      setError("Invalid credentials.");
+    setIsLoading(true);
+    setError("");
+    try {
+      const data = await loginApi(username, password);
+      dispatch(login({ 
+        user: data.user.username, 
+        role: data.user.role, 
+        token: data.access_token 
+      }));
+      
+      // Fetch users list after login
+      const users = await fetchUsersApi(data.access_token);
+      dispatch(setUsersList(users));
+      
+      navigate("/");
+    } catch (err: any) {
+      setError(err.message || "Invalid credentials.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -75,9 +93,10 @@ export const Login: React.FC = () => {
           {/* submit button */}
           <button
             type="submit"
-            className="w-full py-4 btn-primary font-bold rounded-xl transition-all active:scale-[0.98] shadow-xl shadow-blue-600/20"
+            disabled={isLoading}
+            className={`w-full py-4 btn-primary font-bold rounded-xl transition-all active:scale-[0.98] shadow-xl shadow-blue-600/20 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            SIGN IN
+            {isLoading ? "SIGNING IN..." : "SIGN IN"}
           </button>
         </form>
       </div>

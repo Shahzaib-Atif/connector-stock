@@ -1,14 +1,12 @@
 import { Transaction } from "@/types";
 import { API } from "@/utils/api";
+import { fetchWithAuth } from "@/utils/fetchClient";
 
 export const createTransaction = async (
   transaction: Omit<Transaction, "ID" | "updatedAt">
 ): Promise<Transaction> => {
-  const response = await fetch(API.transactions, {
+  const response = await fetchWithAuth(API.transactions, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(transaction),
   });
 

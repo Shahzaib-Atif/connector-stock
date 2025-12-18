@@ -18,6 +18,9 @@ interface AppRoutesProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
 }
 
+import { Login } from "./Login";
+import { UsersView } from "./UsersView";
+
 export const AppRoutes: React.FC<AppRoutesProps> = ({
   onScan,
   scanError,
@@ -27,6 +30,8 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({
 }) => {
   return (
     <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/users" element={<UsersView />} />
       <Route
         path="/"
         element={

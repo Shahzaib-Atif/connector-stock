@@ -24,6 +24,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { samples, loading } = useAppSelector((state) => state.samples);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const [openDltDlg, setOpenDltDlg] = useState(false);
 
   // Custom hook for filters
@@ -106,12 +107,14 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
         <div className="table-view-inner-content">
           {/* Action Bar */}
           <div className="flex justify-end flex-none">
-            <button
-              onClick={handleCreateNew}
-              className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-green-600/30"
-            >
-              + New Sample
-            </button>
+            {isAuthenticated && (
+              <button
+                onClick={handleCreateNew}
+                className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-green-600/30"
+              >
+                + New Sample
+              </button>
+            )}
           </div>
 
           <FilterBar
@@ -128,6 +131,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
               onDelete={handleDelete}
               onOpenQR={onOpenQR}
               onClone={handleClone}
+              showActions={isAuthenticated}
             />
           </div>
 

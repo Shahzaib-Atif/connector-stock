@@ -10,6 +10,7 @@ interface TableRowProps {
   onDelete: (sample: Sample) => void;
   onOpenQR?: (qrData: QRData) => void;
   onClone?: (sample: Sample) => void;
+  showActions?: boolean;
 }
 
 const TableRow: React.FC<TableRowProps> = ({
@@ -18,6 +19,7 @@ const TableRow: React.FC<TableRowProps> = ({
   onDelete,
   onOpenQR,
   onClone,
+  showActions = true,
 }) => {
   const {
     Cliente,
@@ -51,49 +53,51 @@ const TableRow: React.FC<TableRowProps> = ({
         {getObservation(Observacoes, com_fio)}
       </td>
       {/* Action buttons */}
-      <td className="table-data">
-        <div className="flex justify-center gap-2">
-          {onOpenQR && (
+      {showActions && (
+        <td className="table-data">
+          <div className="flex justify-center gap-2">
+            {onOpenQR && (
+              <button
+                onClick={() =>
+                  onOpenQR({
+                    id: Amostra,
+                    source: "sample",
+                    refCliente: Ref_Descricao,
+                    encomenda: EncDivmac,
+                  })
+                }
+                title="Print Label"
+                className="p-1.5 text-slate-400 hover:text-green-400 hover:bg-slate-700 rounded transition-colors"
+              >
+                <Printer className="w-4 h-4" />
+              </button>
+            )}
+            {onClone && (
+              <button
+                onClick={() => onClone(sample)}
+                title="Duplicate"
+                className="p-1.5 text-slate-400 hover:text-amber-400 hover:bg-slate-700 rounded transition-colors"
+              >
+                ⧉
+              </button>
+            )}
             <button
-              onClick={() =>
-                onOpenQR({
-                  id: Amostra,
-                  source: "sample",
-                  refCliente: Ref_Descricao,
-                  encomenda: EncDivmac,
-                })
-              }
-              title="Print Label"
-              className="p-1.5 text-slate-400 hover:text-green-400 hover:bg-slate-700 rounded transition-colors"
+              onClick={() => onEdit(sample)}
+              title="Edit"
+              className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-slate-700 rounded transition-colors"
             >
-              <Printer className="w-4 h-4" />
+              <Pencil className="w-4 h-4" />
             </button>
-          )}
-          {onClone && (
             <button
-              onClick={() => onClone(sample)}
-              title="Duplicate"
-              className="p-1.5 text-slate-400 hover:text-amber-400 hover:bg-slate-700 rounded transition-colors"
+              onClick={() => onDelete(sample)}
+              title="Delete"
+              className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-slate-700 rounded transition-colors"
             >
-              ⧉
+              <Trash2 className="w-4 h-4" />
             </button>
-          )}
-          <button
-            onClick={() => onEdit(sample)}
-            title="Edit"
-            className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-slate-700 rounded transition-colors"
-          >
-            <Pencil className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => onDelete(sample)}
-            title="Delete"
-            className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-slate-700 rounded transition-colors"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        </div>
-      </td>
+          </div>
+        </td>
+      )}
     </tr>
   );
 };

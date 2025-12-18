@@ -1,5 +1,6 @@
 import { Sample } from "@/types";
 import { API } from "@/utils/api";
+import { fetchWithAuth } from "@/utils/fetchClient";
 
 export const getSamples = async (): Promise<{
   samples: Sample[];
@@ -23,9 +24,8 @@ export const createSample = async (
     "ID" | "IsActive" | "DateOfCreation" | "DateOfLastUpdate"
   >
 ): Promise<Sample> => {
-  const response = await fetch(API.samples, {
+  const response = await fetchWithAuth(API.samples, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(sample),
   });
   if (!response.ok) throw new Error("Failed to create sample");
@@ -36,9 +36,8 @@ export const updateSample = async (
   id: number,
   sample: Partial<Sample>
 ): Promise<Sample> => {
-  const response = await fetch(`${API.samples}/${id}`, {
+  const response = await fetchWithAuth(`${API.samples}/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(sample),
   });
   if (!response.ok) throw new Error("Failed to update sample");
@@ -46,7 +45,7 @@ export const updateSample = async (
 };
 
 export const deleteSample = async (id: number): Promise<Sample> => {
-  const response = await fetch(`${API.samples}/${id}`, {
+  const response = await fetchWithAuth(`${API.samples}/${id}`, {
     method: "DELETE",
   });
   if (!response.ok) throw new Error("Failed to delete sample");

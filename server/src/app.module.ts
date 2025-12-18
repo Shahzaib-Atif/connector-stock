@@ -19,8 +19,10 @@ import { ConnectorsService } from './services/connectors.service';
 import { PrintController } from './controllers/print.controller';
 import { PrintService } from './services/print.service';
 
+import { AuthModule } from './auth/auth.module';
+
 @Module({
-  imports: [ConfigModule.forRoot()],
+  imports: [ConfigModule.forRoot(), AuthModule],
   controllers: [
     ImageController,
     MetadataController,

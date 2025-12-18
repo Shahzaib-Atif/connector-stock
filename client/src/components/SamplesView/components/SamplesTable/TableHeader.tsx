@@ -1,6 +1,10 @@
 import React from "react";
 
-const TableHeader: React.FC = () => {
+interface TableHeaderProps {
+  showActions?: boolean;
+}
+
+const TableHeader: React.FC<TableHeaderProps> = ({ showActions = true }) => {
   return (
     <thead className="table-header">
       <tr>
@@ -15,7 +19,7 @@ const TableHeader: React.FC = () => {
         <th className="table-header-cell">Entregue_A</th>
         <th className="table-header-cell">Data Receção</th>
         <th className="table-header-cell w-32">Observacoes</th>
-        <th className="table-header-cell text-center">Actions</th>
+        {showActions && <th className="table-header-cell text-center">Actions</th>}
       </tr>
     </thead>
   );

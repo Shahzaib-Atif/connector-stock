@@ -9,6 +9,7 @@ interface SamplesTableProps {
   onDelete: (sample: Sample) => void;
   onOpenQR?: (qrData: QRData) => void;
   onClone?: (sample: Sample) => void;
+  showActions?: boolean;
 }
 
 export const SamplesTable: React.FC<SamplesTableProps> = ({
@@ -17,15 +18,16 @@ export const SamplesTable: React.FC<SamplesTableProps> = ({
   onDelete,
   onOpenQR,
   onClone,
+  showActions = true,
 }) => {
   return (
     <div id="samples-table" className="table-container-inner">
       <table className="w-full text-sm table-fixed">
-        <TableHeader />
+        <TableHeader showActions={showActions} />
         <tbody>
           {samples.length === 0 ? (
             <tr>
-              <td colSpan={10} className="table-row-not-found">
+              <td colSpan={showActions ? 10 : 9} className="table-row-not-found">
                 No samples found
               </td>
             </tr>
@@ -39,6 +41,7 @@ export const SamplesTable: React.FC<SamplesTableProps> = ({
                 onDelete={onDelete}
                 onOpenQR={onOpenQR}
                 onClone={onClone}
+                showActions={showActions}
               />
             ))
           )}

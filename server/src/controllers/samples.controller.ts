@@ -7,9 +7,11 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { SamplesService } from 'src/services/samples.service';
 import { CreateSampleDto, UpdateSampleDto } from 'src/utils/types';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('samples')
 export class SamplesController {
@@ -25,11 +27,13 @@ export class SamplesController {
     return await this.service.getSampleById(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('')
   async createSample(@Body() dto: CreateSampleDto) {
     return await this.service.createSample(dto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async updateSample(
     @Param('id', ParseIntPipe) id: number,
@@ -38,6 +42,7 @@ export class SamplesController {
     return await this.service.updateSample(id, dto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async deleteSample(@Param('id', ParseIntPipe) id: number) {
     return await this.service.deleteSample(id);

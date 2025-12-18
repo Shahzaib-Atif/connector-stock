@@ -38,6 +38,8 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   useClickOutside(ref, onClose);
   useEscKeyDown(ref, onClose);
 
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+
   return (
     <div
       id="transaction-modal"
@@ -63,9 +65,15 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             <DepartmentSelector value={dept} onChange={setDept} />
           )}
 
+          {!isAuthenticated && (
+            <p className="text-amber-400 text-sm text-center font-medium">
+              Please login to perform stock alterations
+            </p>
+          )}
+
           <button
             onClick={() => {
-              if (amount > 0) {
+              if (amount > 0 && isAuthenticated) {
                 onConfirm(
                   amount,
                   type === "OUT" ? dept : undefined,
@@ -77,8 +85,8 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               type === "IN"
                 ? "btn-primary"
                 : "bg-orange-600 hover:bg-orange-500"
-            } ${amount === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
-            disabled={amount === 0}
+            } ${(!isAuthenticated || amount === 0) ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={!isAuthenticated || amount === 0}
           >
             CONFIRM {type === "IN" ? "ENTRY" : "WITHDRAWAL"}
           </button>

@@ -11,11 +11,12 @@ import { useScan } from "./hooks/useScan";
 import { TransactionModal } from "./components/TransactionModal";
 import { initTransactionsData } from "./store/slices/transactionsSlice";
 import { QRData } from "./types";
+import { logout } from "./store/slices/authSlice";
 
 // Main App Component
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const { loading } = useAppSelector((state) => state.masterData);
   const [qrData, setQrData] = useState<QRData | null>(null);
   const { handleScan, error, clearError } = useScan();
@@ -31,16 +32,16 @@ const App: React.FC = () => {
     setQrData(qrData);
   };
 
-  if (!isAuthenticated) {
-    return <Login />;
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
       </div>
     );
+  }
+
+  if (user === "admin") {
+    dispatch(logout());
   }
 
   return (

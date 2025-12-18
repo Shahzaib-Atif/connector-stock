@@ -23,11 +23,17 @@ const print = {
   printLabel: `${API_BASE_URL}/print/label`,
 };
 
+const auth = {
+  login: `${API_BASE_URL}/auth/login`,
+  users: `${API_BASE_URL}/auth/users`,
+};
+
 export const API = {
   ...connectors,
   ...accessories,
   ...metadata,
   ...print,
+  ...auth,
   transactions: `${API_BASE_URL}/transactions`,
   samples: `${API_BASE_URL}/samples`,
 };
