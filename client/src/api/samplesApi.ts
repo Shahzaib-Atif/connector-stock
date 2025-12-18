@@ -4,6 +4,7 @@ import { API } from "@/utils/api";
 export const getSamples = async (): Promise<{
   samples: Sample[];
   projects: string[];
+  clients: string[];
 }> => {
   const response = await fetch(API.samples);
   if (!response.ok) throw new Error("Failed to fetch samples");

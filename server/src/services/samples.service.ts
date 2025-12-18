@@ -32,8 +32,13 @@ export class SamplesService {
     const samples = await this.samplesRepo.getAllSamples();
     // create a unique array of projects from samples
     const projects = new Set(samples.map((s) => s.Projeto).filter(Boolean));
+    const clients = new Set(samples.map((s) => s.Cliente).filter(Boolean));
 
-    return { samples, projects: Array.from(projects) };
+    return {
+      samples,
+      projects: Array.from(projects),
+      clients: Array.from(clients),
+    };
   }
 
   async getSampleById(id: number) {

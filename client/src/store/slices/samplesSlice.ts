@@ -10,6 +10,7 @@ import { Sample } from "@/types";
 interface SamplesState {
   samples: Sample[];
   projects: string[];
+  clients: string[];
   loading: boolean;
   error: string | null;
 }
@@ -17,6 +18,7 @@ interface SamplesState {
 const initialState: SamplesState = {
   samples: [],
   projects: [],
+  clients: [],
   loading: false,
   error: null,
 };
@@ -76,6 +78,7 @@ export const samplesSlice = createSlice({
       .addCase(fetchSamplesThunk.fulfilled, (state, action) => {
         state.samples = action.payload.samples;
         state.projects = action.payload.projects;
+        state.clients = action.payload.clients;
         state.loading = false;
       })
       .addCase(fetchSamplesThunk.rejected, (state, action) => {

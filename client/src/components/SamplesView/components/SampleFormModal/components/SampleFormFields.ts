@@ -21,6 +21,7 @@ export const FORM_FIELDS: FORM_FIELDS_Type[] = [
     name: "Cliente",
     label: "Cliente",
     placeholder: "Client name",
+    type: "autocomplete",
     required: true,
   },
   {

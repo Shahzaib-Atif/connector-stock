@@ -43,8 +43,9 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
     return Object.keys(masterData.connectors).sort();
   }, [masterData]);
 
-  // get projects options from samples state
+  // get projects and clients options from samples state
   const projectsOptions = useAppSelector((state) => state.samples.projects);
+  const clientsOptions = useAppSelector((state) => state.samples.clients);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,6 +95,7 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
   function getOptions(field: FORM_FIELDS_Type): string[] {
     if (field.name === "Projeto") return projectsOptions;
     else if (field.name === "Amostra") return connectorOptions;
+    else if (field.name === "Cliente") return clientsOptions;
     else return field.options;
   }
 
