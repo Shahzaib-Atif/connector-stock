@@ -40,7 +40,7 @@ export class ConnectorRepo {
 
   async update(codivmacId: string, amount: number) {
     try {
-      return await this.prisma.referencias_test.update({
+      return await this.prisma.connectors_Main.update({
         where: {
           CODIVMAC: codivmacId,
         },

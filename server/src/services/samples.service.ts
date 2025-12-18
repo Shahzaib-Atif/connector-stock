@@ -22,7 +22,7 @@ export class SamplesService {
   ) {
     if (!codivmac || !delta) return;
 
-    await tx.referencias_test.update({
+    await tx.connectors_Main.update({
       where: { CODIVMAC: codivmac },
       data: { Qty: { increment: delta } },
     });
