@@ -1,6 +1,6 @@
 import React from "react";
 import { ConnectorReferenceApiResponse } from "@/types";
-import { useNavigate } from "react-router-dom";
+import { ExternalLink } from "lucide-react";
 
 interface ConnectorListItem extends ConnectorReferenceApiResponse {
   id: string;
@@ -11,17 +11,47 @@ interface TableRowProps {
   index: number;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ connector, index }) => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/connector/${connector.id}`);
+const TableRow: React.FC<TableRowProps> = ({ connector }) => {
+  const handleOpenLink = (id: string, type: "box" | "connector") => {
+    const url = `/${type}/${id}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
     <tr className={"table-row table-row-bg"} key={connector.id}>
-      <td className="table-data font-mono">{connector.id}</td>
-      <td className="table-data">{connector.PosId || "-"}</td>
+      {/* ID */}
+      <td className="table-data">
+        {" "}
+        <div className="flex items-center gap-2">
+          <span>{connector.CODIVMAC}</span>
+          <button
+            onClick={() => handleOpenLink(connector.CODIVMAC, "connector")}
+            className="text-slate-400 hover:text-blue-400 transition-colors p-1"
+            title={`Open ${connector.CODIVMAC} in new tab`}
+          >
+            <ExternalLink className="w-4 h-4" />
+          </button>
+        </div>
+      </td>
+
+      {/* PosId */}
+      <td className="table-data">
+        {" "}
+        <div className="flex items-center gap-2">
+          <span>{connector.PosId}</span>
+          {connector.PosId && (
+            <button
+              onClick={() => handleOpenLink(connector.PosId, "box")}
+              className="text-slate-400 hover:text-blue-400 transition-colors p-1"
+              title={`Open ${connector.PosId} in new tab`}
+            >
+              <ExternalLink className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+      </td>
+
+      {/* Other Fields */}
       <td className="table-data">{connector.Cor || "-"}</td>
       <td className="table-data">{connector.Vias || "-"}</td>
       <td className="table-data">{connector.ConnType || "-"}</td>

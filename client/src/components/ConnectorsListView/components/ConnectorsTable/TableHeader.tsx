@@ -4,8 +4,8 @@ const TableHeader: React.FC = () => {
   return (
     <thead className="table-header">
       <tr>
-        <th className="table-header-cell w-20">ID</th>
-        <th className="table-header-cell w-20">Position</th>
+        <th className="table-header-cell w-24">ID</th>
+        <th className="table-header-cell w-24">Position</th>
         <th className="table-header-cell w-20">Color</th>
         <th className="table-header-cell w-20">Vias</th>
         <th className="table-header-cell w-24">Type</th>
