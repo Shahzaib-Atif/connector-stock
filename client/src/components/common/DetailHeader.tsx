@@ -72,7 +72,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
                 <span>Login</span>
               </Link>
             )}
-            {handleQRClick && (
+            {handleQRClick && user && (
               <button
                 id="qr-code-btn"
                 title="Show QR code"
