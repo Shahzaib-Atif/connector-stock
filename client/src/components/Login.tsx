@@ -19,16 +19,18 @@ export const Login: React.FC = () => {
     setError("");
     try {
       const data = await loginApi(username, password);
-      dispatch(login({ 
-        user: data.user.username, 
-        role: data.user.role, 
-        token: data.access_token 
-      }));
-      
+      dispatch(
+        login({
+          user: data.user.username,
+          role: data.user.role,
+          token: data.access_token,
+        })
+      );
+
       // Fetch users list after login
       const users = await fetchUsersApi(data.access_token);
       dispatch(setUsersList(users));
-      
+
       navigate("/");
     } catch (err: any) {
       setError(err.message || "Invalid credentials.");
@@ -83,6 +85,7 @@ export const Login: React.FC = () => {
               <input
                 type="password"
                 value={password}
+                autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-700 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all placeholder-slate-600"
                 placeholder="••••••••"
@@ -94,10 +97,23 @@ export const Login: React.FC = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full py-4 btn-primary font-bold rounded-xl transition-all active:scale-[0.98] shadow-xl shadow-blue-600/20 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+            className={`w-full py-4 btn-primary font-bold rounded-xl transition-all active:scale-[0.98] shadow-xl shadow-blue-600/20 ${
+              isLoading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
           >
             {isLoading ? "SIGNING IN..." : "SIGN IN"}
           </button>
+
+          <div className="text-center mt-6">
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="text-slate-400 hover:text-white transition-colors text-sm font-medium flex items-center justify-center gap-2 mx-auto"
+            >
+              <span>Continue to Homepage</span>
+              <span className="text-lg">→</span>
+            </button>
+          </div>
         </form>
       </div>
     </div>
