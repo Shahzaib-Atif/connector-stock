@@ -59,6 +59,7 @@ export class SamplesRepo {
     }
   }
 
+  /** Soft delete sample by setting IsActive to false   */
   async deleteSample(id: number, deletedBy?: string) {
     try {
       return await this.prisma.rEG_Amostras.update({
