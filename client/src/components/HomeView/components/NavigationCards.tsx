@@ -58,18 +58,18 @@ export const NavigationCards: React.FC = () => {
       color: "bg-orange-500",
     },
     {
-      to: "/transactions",
-      title: "Transactions",
-      icon: Receipt,
-      description: "Manage stock movements and history",
-      color: "bg-blue-500",
-    },
-    {
       to: "/samples",
       title: "Samples",
       icon: Beaker,
       description: "View and register project samples",
       color: "bg-emerald-500",
+    },
+    {
+      to: "/transactions",
+      title: "Transactions",
+      icon: Receipt,
+      description: "Manage stock movements and history",
+      color: "bg-blue-500",
     },
   ];
 
