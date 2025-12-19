@@ -10,6 +10,7 @@ import ErrorBox from "./components/ErrorBox";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useSuggestionNavigation } from "../../hooks/useSuggestionNavigation";
 import { useGlobalEnterKey } from "@/hooks/useGlobalEnterKey";
+import { NavigationCards } from "./components/NavigationCards";
 
 interface HomeViewProps {
   onScan: (code: string) => void;
@@ -72,51 +73,56 @@ export const HomeView: React.FC<HomeViewProps> = ({
       {/* Header */}
       <DetailHeader />
 
-      {/* Main content - centered */}
-      <div className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-md space-y-8">
-          {/* Title and description */}
-          <div className="text-center space-y-2">
-            <div className="w-20 h-20 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-6">
-              <Scan className="w-10 h-10 text-white" />
+      {/* Main content - centered vertically on small content, scrollable on larger */}
+      <div className="flex-1 flex flex-col items-center justify-start sm:justify-center p-6 py-12">
+        <div className="w-full max-w-4xl space-y-12 md:space-y-20">
+          <div className="max-w-md mx-auto space-y-8">
+            {/* Title and description */}
+            <div className="text-center space-y-2">
+              <div className="w-20 h-20 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-6">
+                <Scan className="w-10 h-10 text-white" />
+              </div>
+              <h1 className="text-3xl font-bold tracking-tight">
+                Connector Stock
+              </h1>
+              <p className="text-slate-400">
+                Search for Box, Connector or Client Reference
+              </p>
             </div>
-            <h1 className="text-3xl font-bold tracking-tight">
-              Connector Stock
-            </h1>
-            <p className="text-slate-400">
-              Search for Box, Connector or Client Reference
-            </p>
-          </div>
 
-          {/* Search */}
-          <div className="relative" ref={wrapperRef}>
-            <SearchInput
-              searchQuery={searchQuery}
-              scanError={scanError}
-              suggestions={suggestions}
-              onClearScanError={onClearScanError}
-              onScan={onScan}
-              setSearchQuery={setSearchQuery}
-              setShowSuggestions={setShowSuggestions}
-              onKeyDown={handleKeyDown}
-              onFocus={handleInputFocus}
-            />
-
-            {/* Autocomplete Dropdown */}
-            {showSuggestions && suggestions.length > 0 && (
-              <SuggestionsList
+            {/* Search */}
+            <div className="relative" ref={wrapperRef}>
+              <SearchInput
+                searchQuery={searchQuery}
+                scanError={scanError}
                 suggestions={suggestions}
-                handleSuggestionClick={handleSuggestionClick}
-                selectedIndex={selectedIndex}
+                onClearScanError={onClearScanError}
+                onScan={onScan}
+                setSearchQuery={setSearchQuery}
+                setShowSuggestions={setShowSuggestions}
+                onKeyDown={handleKeyDown}
+                onFocus={handleInputFocus}
               />
-            )}
+
+              {/* Autocomplete Dropdown */}
+              {showSuggestions && suggestions.length > 0 && (
+                <SuggestionsList
+                  suggestions={suggestions}
+                  handleSuggestionClick={handleSuggestionClick}
+                  selectedIndex={selectedIndex}
+                />
+              )}
+            </div>
+
+            {/* ERROR Alert */}
+            {scanError && <ErrorBox scanError={scanError} />}
+
+            {/* EXAMPLE */}
+            {/* <ExampleLookup onScan={onScan} /> */}
           </div>
 
-          {/* ERROR Alert */}
-          {scanError && <ErrorBox scanError={scanError} />}
-
-          {/* EXAMPLE */}
-          <ExampleLookup onScan={onScan} />
+          {/* QUICK LINKS GRID */}
+          <NavigationCards />
         </div>
       </div>
     </div>
