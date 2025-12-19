@@ -48,6 +48,7 @@ export const parseConnector = (
     }`,
     stock: masterData.connectors[id].Qty,
     accessories,
+    clientReferences: reference.ClientReferences || [],
   };
 };
 

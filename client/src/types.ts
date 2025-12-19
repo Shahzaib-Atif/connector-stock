@@ -26,6 +26,7 @@ export interface Connector {
   description: string;
   stock: number;
   accessories: Accessory[]; // Linked accessories
+  clientReferences?: string[]; // Legacy mappings (RefMARCA)
 }
 
 export interface Box {
@@ -122,6 +123,7 @@ export interface ConnectorReferenceApiResponse {
   Fabricante: string | null;
   Refabricante: string | null;
   Qty: number | null;
+  ClientReferences?: string[];
 }
 
 export interface AccessoryApiResponse {
