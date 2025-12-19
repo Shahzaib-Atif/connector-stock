@@ -13,14 +13,6 @@ model AccessoryTypes {
   TypeDescription String @db.VarChar(100)
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model CapotAngles {
-  ID         Int @default(autoincrement())
-  DegreesNum Int
-
-  @@ignore
-}
-
 model ConnectorFeatures {
   Id           Int       @default(autoincrement())
   CodivmacRef  String    @unique(map: "ConnectorFeatures_UNIQUE") @db.NVarChar(8)
@@ -41,33 +33,10 @@ model ContagemNumVias {
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model Cord_CON {
-  CON            String?   @db.NVarChar(255)
-  CV             String?   @db.NVarChar(255)
-  CH             String?   @db.NVarChar(255)
-  LastChangeBy   String?   @db.NVarChar(100)
-  LastChangeDate DateTime? @db.DateTime
-  ESTADO         Int       @default(1, map: "DF__Cord_CON___ESTAD__19DFD96B")
-  CV_Ma          String?   @db.NVarChar(100)
-  CH_Ma          String?   @db.NVarChar(100)
-  SampleSection  String?   @db.VarChar(100)
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Cores {
   Cor_Id   String  @unique(map: "Cores_UNIQUE") @map("Cor Id") @db.NVarChar(1)
   CORES    String? @db.NVarChar(50)
   Cores_UK String? @db.NVarChar(255)
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model Fabricantes {
-  ID_Fabricante Int     @default(autoincrement())
-  Fabricante    String? @db.NVarChar(50)
-
-  @@ignore
 }
 
 model Referencias {
