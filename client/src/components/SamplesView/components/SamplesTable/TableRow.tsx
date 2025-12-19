@@ -42,7 +42,7 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data break-all">{Projeto || "-"}</td>
       <td className="table-data">{EncDivmac || "-"}</td>
       <td className="table-data break-all">{Ref_Descricao || "-"}</td>
-      <td className="table-data">{Amostra || "-"}</td>
+      <td className="table-data break-all">{Amostra || "-"}</td>
       <td className="table-data">{Quantidade || "-"}</td>
       <td className="table-data">{N_Envio || "-"}</td>
       <td className="table-data break-all" title={Entregue_a}>
