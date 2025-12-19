@@ -39,48 +39,6 @@ model Cores {
   Cores_UK String? @db.NVarChar(255)
 }
 
-model Referencias {
-  Pos_ID           String?   @map("Pos ID") @db.NVarChar(4)
-  Cor              String    @db.NVarChar(1)
-  Vias             String?   @db.NVarChar(1)
-  CODIVMAC         String    @id(map: "Referências_PK") @db.NVarChar(8)
-  Designa__o       String?   @map("Designação") @db.NVarChar(30)
-  Fabricante       String?   @db.NVarChar(50)
-  Refabricante     String?   @db.NVarChar(100)
-  Clip             Boolean?
-  Spacer           Boolean?
-  Vedante          Boolean?
-  Tampa            Boolean?
-  Mola             Boolean?
-  Moldagem         Boolean?
-  Trav_o           Boolean?  @map("Travão")
-  Abracadeira      Boolean?
-  Linguetes        Boolean?
-  Outros           Boolean?
-  Registo          DateTime?
-  Amostra          Boolean?
-  OBS              String?   @db.NVarChar(Max)
-  Imagem           String?   @db.NVarChar(Max)
-  EstadoAmostra    String?   @db.NVarChar(50)
-  CoordVertical    String?   @db.NVarChar(2)
-  CoordHorizontal  Int?
-  LastChangeBy     String?   @db.NVarChar(50)
-  LastUpdateDate   DateTime?
-  ESTADO           Int       @default(1, map: "DF__Referênci__ESTAD__2DE6D218")
-  VersaoConnector  String?   @db.NVarChar(1)
-  SampleSection    String?   @db.VarChar(100)
-  SampleType       String?   @db.VarChar(100)
-  InternalDiameter Int?
-  ExternalDiameter Int?
-  Thickness        Int?
-  ConnType         String?   @db.VarChar(100)
-  ClipColor        String?   @db.VarChar(100)
-  CapotAngle       String?   @db.VarChar(100)
-  Olhal            Boolean?
-
-  @@map("Referências")
-}
-
 model Referencias_test {
   Pos_ID           String?   @map("Pos ID") @db.NVarChar(4)
   Cor              String    @db.NVarChar(1)
