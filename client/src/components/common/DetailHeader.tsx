@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { QrCode, Menu } from "lucide-react";
+import { QrCode, Menu, LogIn } from "lucide-react";
 import BrandLogo from "./BrandLogo";
 import Sidebar from "./Sidebar";
+import { useAppSelector } from "../../store/hooks";
+import { Link } from "react-router-dom";
 
 interface DetailHeaderProps {
   label?: string;
@@ -15,6 +17,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
   title,
   handleQRClick,
 }) => {
+  const user = useAppSelector((state) => state.auth.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const showCenterSection = label || title;
 
@@ -58,8 +61,17 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
             </div>
           )}
 
-          {/* Right side - QR button */}
-          <div className="flex items-center">
+          {/* Right side - QR button and Login button */}
+          <div className="flex items-center gap-2">
+            {!user && (
+              <Link
+                to="/login"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all"
+              >
+                <LogIn className="w-4 h-4" />
+                <span>Login</span>
+              </Link>
+            )}
             {handleQRClick && (
               <button
                 id="qr-code-btn"
