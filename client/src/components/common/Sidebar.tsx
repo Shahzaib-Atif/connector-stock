@@ -152,14 +152,15 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
         </div>
       ) : (
         <div className="absolute bottom-0 left-0 right-0 border-t border-slate-700 p-2">
-          <button
+          <Link
+            to="/login"
             id="login-nav-btn"
             onClick={closeMenu}
             className="sidebar-btn"
           >
             <Lock className="sidebar-btn-icon" />
-            <Link to="/login">Login</Link>
-          </button>{" "}
+            <span>Login</span>
+          </Link>{" "}
         </div>
       )}
     </div>
