@@ -65,17 +65,18 @@ function SearchInput({
       <button
         onClick={() => onScan(searchQuery)}
         className="btn-primary p-2.5 sm:p-3 rounded-xl transition-colors flex-shrink-0"
+        title="Search"
       >
-        <Search className="w-5 h-5 sm:w-6 h-6" />
+        <Search className="w-5 h-5" />
       </button>
 
       {onOpenScanner && (
         <button
           onClick={onOpenScanner}
-          className="p-2 sm:p-3 text-slate-400 hover:text-blue-400 transition-colors ml-0.5 sm:ml-1 flex-shrink-0"
+          className="ml-1 sm:ml-1.5 btn-primary p-2.5 sm:p-3 rounded-xl transition-colors flex-shrink-0"
           title="Scan with Camera"
         >
-          <ScanLine className="w-5 h-5 sm:w-6 h-6" />
+          <ScanLine className="w-5 h-5" />
         </button>
       )}
     </div>
