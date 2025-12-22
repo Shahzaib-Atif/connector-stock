@@ -1,4 +1,4 @@
-import { SESSION_KEY } from "./constants";
+import { AUTH_EXPIRED_EVENT, SESSION_KEY } from "./constants";
 
 const getAuthToken = () => {
   try {
@@ -29,6 +29,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
 
   if (response.status === 401) {
     localStorage.removeItem(SESSION_KEY);
+    window.dispatchEvent(new CustomEvent(AUTH_EXPIRED_EVENT));
     throw new Error("Session has expired. Please log in again.");
   }
 

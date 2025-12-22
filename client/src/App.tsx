@@ -12,6 +12,7 @@ import { TransactionModal } from "./components/TransactionModal";
 import { initTransactionsData } from "./store/slices/transactionsSlice";
 import { QRData } from "./types";
 import { initUsersList, logout } from "./store/slices/authSlice";
+import { AUTH_EXPIRED_EVENT } from "./utils/constants";
 
 // Main App Component
 const App: React.FC = () => {
@@ -27,6 +28,16 @@ const App: React.FC = () => {
     dispatch(initMasterData());
     dispatch(initTransactionsData());
     dispatch(initUsersList());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      dispatch(logout());
+    };
+
+    window.addEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
+    return () =>
+      window.removeEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
   }, [dispatch]);
 
   const handleOpenQR = (qrData: QRData) => {
