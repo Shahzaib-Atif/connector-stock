@@ -16,9 +16,40 @@ export const useScan = () => {
       return;
     }
 
-    const code = inputCode.trim();
-    const upperCode = code.toUpperCase();
+    let code = inputCode.trim();
 
+    // 1. Check if it's a full URL (handle old IP stickers)
+    if (code.startsWith("http")) {
+      try {
+        const url = new URL(code);
+        const pathParts = url.pathname.split("/").filter(Boolean);
+        // Expecting /box/ID or /connector/ID
+        if (pathParts.length >= 2) {
+          const type = pathParts[pathParts.length - 2].toLowerCase();
+          const id = pathParts[pathParts.length - 1].toUpperCase();
+
+          if (type === "box") return handleBoxNav(id);
+          if (type === "connector") return handleConnectorNav(id);
+          if (type === "accessory") return handleAccessoryNav(id);
+        }
+      } catch (e) {
+        console.warn("Failed to parse scanned URL", e);
+      }
+    }
+
+    // 2. Check for "Pure Data" prefixes (new stickers)
+    if (code.includes(":")) {
+      const [prefix, id] = code.split(":");
+      const cleanPrefix = prefix.toLowerCase();
+      const upperId = id.toUpperCase();
+
+      if (cleanPrefix === "box") return handleBoxNav(upperId);
+      if (cleanPrefix === "connector") return handleConnectorNav(upperId);
+      if (cleanPrefix === "accessory") return handleAccessoryNav(upperId);
+    }
+
+    // 3. Falling back to length-based detection for raw IDs
+    const upperCode = code.toUpperCase();
     if (code.length === 6) handleConnectorNav(upperCode);
     else if (code.length === 4) handleBoxNav(upperCode);
     else handleAccessoryNav(upperCode);

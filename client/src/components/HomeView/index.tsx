@@ -11,6 +11,7 @@ import { useClickOutside } from "@/hooks/useClickOutside";
 import { useSuggestionNavigation } from "../../hooks/useSuggestionNavigation";
 import { useGlobalEnterKey } from "@/hooks/useGlobalEnterKey";
 import { NavigationCards } from "./components/NavigationCards";
+import { CameraScanner } from "../common/Scanner/CameraScanner";
 
 interface HomeViewProps {
   onScan: (code: string) => void;
@@ -25,6 +26,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   // get suggestions
@@ -102,6 +104,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 setShowSuggestions={setShowSuggestions}
                 onKeyDown={handleKeyDown}
                 onFocus={handleInputFocus}
+                onOpenScanner={() => setShowScanner(true)}
               />
 
               {/* Autocomplete Dropdown */}
@@ -125,6 +128,16 @@ export const HomeView: React.FC<HomeViewProps> = ({
           <NavigationCards />
         </div>
       </div>
+
+      {showScanner && (
+        <CameraScanner
+          onScan={(code) => {
+            setSearchQuery(code);
+            onScan(code);
+          }}
+          onClose={() => setShowScanner(false)}
+        />
+      )}
     </div>
   );
 };
