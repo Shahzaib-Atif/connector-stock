@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
 import { SamplesRepo } from 'src/repository/samples.repo';
+import { ConnectorRepo } from 'src/repository/connectors.repo';
 import { CreateSampleDto, UpdateSampleDto } from 'src/utils/types';
 
 @Injectable()
@@ -9,64 +10,8 @@ export class SamplesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly samplesRepo: SamplesRepo,
+    private readonly connectorRepo: ConnectorRepo,
   ) {}
-
-  private parseQuantity(qty?: string | null): number {
-    const parsed = Number(qty);
-    return Number.isFinite(parsed) ? parsed : 0;
-  }
-
-  private async adjustConnectorQty(
-    tx: TransactionClient,
-    codivmac?: string | null,
-    delta?: number,
-  ) {
-    if (!codivmac || !delta) return;
-
-    await tx.connectors_Main.update({
-      where: { CODIVMAC: codivmac },
-      data: { Qty: { increment: delta } },
-    });
-  }
-
-  private async upsertReferenceMapping(
-    tx: TransactionClient,
-    amostra?: string | null,
-    refDescricao?: string | null,
-    user?: string | null,
-    dataRecepcao?: string | null,
-    entregueA?: string | null,
-    nEnvio?: string | null,
-  ) {
-    if (
-      !amostra ||
-      amostra.toUpperCase().includes('NEW') ||
-      !refDescricao ||
-      !dataRecepcao ||
-      !entregueA ||
-      !nEnvio
-    ) {
-      return;
-    }
-
-    const currentUser = user || 'system';
-
-    try {
-      // mapping: RefDIVMAC = Amostra, RefMARCA = Ref_Descricao
-      // Using multi-part name as ImageFeaturesDB.dbo.RefClientes_Marca
-      await tx.$executeRaw`
-        INSERT INTO ImageFeaturesDB.dbo.RefClientes_Marca (RefDIVMAC, RefMARCA, LastChangeBy, LastUpdateDate, createdByApp)
-        SELECT ${amostra}, ${refDescricao}, ${currentUser}, GETDATE(), 1
-        WHERE NOT EXISTS (
-          SELECT 1 FROM ImageFeaturesDB.dbo.RefClientes_Marca 
-          WHERE RefDIVMAC = ${amostra} AND RefMARCA = ${refDescricao} AND ESTADO = 1
-        )
-      `;
-    } catch (error) {
-      console.error('Error upserting reference mapping:', error.message);
-      // We log but don't necessarily want to fail the main sample update if mapping fails
-    }
-  }
 
   /** Get all samples with unique projects and clients */
   async getAllSamples() {
@@ -143,6 +88,7 @@ export class SamplesService {
       const previousQty = this.parseQuantity(existing?.Quantidade);
       await this.adjustConnectorQty(tx, existing?.Amostra, previousQty * -1);
 
+      // Apply new reservation
       const newQty = this.parseQuantity(dto.Quantidade ?? existing?.Quantidade);
       const targetAmostra = dto.Amostra ?? existing?.Amostra;
       await this.adjustConnectorQty(tx, targetAmostra, newQty);
@@ -166,4 +112,57 @@ export class SamplesService {
   async deleteSample(id: number, deletedBy?: string) {
     return this.samplesRepo.deleteSample(id, deletedBy);
   }
+
+  //#region -- Private Helpers
+  private parseQuantity(qty?: string | null): number {
+    const parsed = Number(qty);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  private async adjustConnectorQty(
+    tx: TransactionClient,
+    codivmac?: string | null,
+    delta?: number,
+  ) {
+    if (!codivmac || !delta) return;
+
+    await this.connectorRepo.adjustQuantity(tx, codivmac, delta);
+  }
+
+  private async upsertReferenceMapping(
+    tx: TransactionClient,
+    amostra?: string | null,
+    refDescricao?: string | null,
+    user?: string | null,
+    dataRecepcao?: string | null,
+    entregueA?: string | null,
+    nEnvio?: string | null,
+  ) {
+    if (
+      !amostra ||
+      amostra.toUpperCase().includes('NEW') ||
+      !refDescricao ||
+      !dataRecepcao ||
+      !entregueA ||
+      !nEnvio
+    ) {
+      return;
+    }
+
+    const currentUser = user || 'system';
+
+    try {
+      // Perform upsert operation for reference mapping
+      await this.connectorRepo.upsertReferenceMapping(
+        tx,
+        amostra,
+        refDescricao,
+        currentUser,
+      );
+    } catch (error) {
+      console.error('Error upserting reference mapping:', error.message);
+      // We log but don't necessarily want to fail the main sample update if mapping fails
+    }
+  }
+  //#endregion
 }

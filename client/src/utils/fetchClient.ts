@@ -1,36 +1,36 @@
-const SESSION_KEY = 'connector_stock_session_v1';
+import { SESSION_KEY } from "./constants";
 
 const getAuthToken = () => {
-    try {
-        const session = localStorage.getItem(SESSION_KEY);
-        if (session) {
-            const parsed = JSON.parse(session);
-            return parsed.token;
-        }
-    } catch (e) {
-        console.error("Error reading token from local storage", e);
+  try {
+    const session = localStorage.getItem(SESSION_KEY);
+    if (session) {
+      const parsed = JSON.parse(session);
+      return parsed.token;
     }
-    return null;
+  } catch (e) {
+    console.error("Error reading token from local storage", e);
+  }
+  return null;
 };
 
 export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
-    const token = getAuthToken();
-    const headers = {
-        ...options.headers,
-        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-        'Content-Type': 'application/json',
-    };
+  const token = getAuthToken();
 
-    const response = await fetch(url, {
-        ...options,
-        headers,
-    });
+  const headers = {
+    ...options.headers,
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    "Content-Type": "application/json",
+  };
 
-    if (response.status === 401) {
-        // Handle unauthorized (optional: logout user)
-        // localStorage.removeItem(SESSION_KEY);
-        // window.location.href = '/login';
-    }
+  const response = await fetch(url, {
+    ...options,
+    headers,
+  });
 
-    return response;
+  if (response.status === 401) {
+    localStorage.removeItem(SESSION_KEY);
+    throw new Error("Session has expired. Please log in again.");
+  }
+
+  return response;
 };

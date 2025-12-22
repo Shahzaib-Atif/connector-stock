@@ -1,4 +1,5 @@
 import { fetchUsersApi } from "@/api/authApi";
+import { SESSION_KEY } from "@/utils/constants";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface UserInfo {
@@ -16,8 +17,6 @@ interface AuthState {
   loading?: boolean;
   error?: string | null;
 }
-
-const SESSION_KEY = "connector_stock_session_v1";
 
 const loadSession = (): AuthState => {
   try {
