@@ -1,10 +1,18 @@
 import React from "react";
 import { ConnectorFilterColumn } from "@/hooks/useConnectorFilters";
+import { X } from "lucide-react";
+type filterColumns =
+  | "all"
+  | "id"
+  | "type"
+  | "fabricante"
+  | "refClient"
+  | "connName";
 
 interface Props {
-  filterColumn: ConnectorFilterColumn;
+  filterColumn: filterColumns;
   searchQuery: string;
-  onFilterColumnChange: (column: ConnectorFilterColumn) => void;
+  onFilterColumnChange: (column: filterColumns) => void;
   onSearchQueryChange: (query: string) => void;
 }
 
@@ -81,10 +89,10 @@ export const FilterBar: React.FC<Props> = ({
         {searchQuery && (
           <button
             type="button"
-            className="absolute right-2 top-[36px] text-slate-400 hover:text-slate-200"
+            className="absolute right-2 top-[34px] text-slate-400 hover:text-slate-200 p-1"
             onClick={() => onSearchQueryChange("")}
           >
-            ×
+            <X className="h-3 w-3" />
           </button>
         )}
       </div>
