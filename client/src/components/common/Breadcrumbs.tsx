@@ -12,16 +12,16 @@ export const Breadcrumbs: React.FC = () => {
   return (
     <nav
       id="Breadcrumbs"
-      className="flex items-center justify-end text-xs sm:text-sm sm:text-xs text-slate-200 font-medium uppercase tracking-wider 
-      overflow-x-auto whitespace-nowrap py-1.5 px-4 sm:px-6 no-scrollbar"
+      className="flex items-center justify-center text-[0.83rem] sm:text-sm text-slate-200 font-medium lowercase sm:uppercase  
+      overflow-x-auto whitespace-nowrap p-1 no-scrollbar max-w-full flex-wrap max-w-[70%] sm:max-w-[60%]"
     >
       {/* Home */}
       <Link
         to={ROUTES.HOME}
-        className="hover:text-blue-400 transition-colors flex items-center gap-1 flex-shrink-0"
+        className="hover:text-blue-400 transition-colors flex-shrink-0"
+        title="home"
       >
-        <Home className="w-3 h-3" />
-        <span className="hidden sm:inline">Home</span>
+        Home
       </Link>
 
       {/* Other breadcrumbs */}
@@ -29,27 +29,22 @@ export const Breadcrumbs: React.FC = () => {
         const last = index === pathnames.length - 1;
         const to = `/${pathnames.slice(0, index + 1).join("/")}`;
         const label = ROUTES[value.toLowerCase()] || value;
-        const isBox = pathnames.includes(label);
-
-        const isId =
-          index === 1 &&
-          (pathnames[0] === ROUTES.CONNECTORS ||
-            pathnames[0] === ROUTES.BOXES ||
-            pathnames[0] === ROUTES.ACCESSORIES);
+        const isBox = pathnames.includes("boxes");
 
         return (
           <React.Fragment key={to}>
-            <ChevronRight className="w-3 h-3 mx-1 text-slate-600 flex-shrink-0" />
+            <ChevronRight className="w-3 h-3 mx-0.5 sm:mx-1 text-slate-600 flex-shrink-0" />
             {last ? (
-              <span className="text-slate-300 truncate max-w-[120px] sm:max-w-none">
-                {isId ? value.toUpperCase() : label}
+              <span className="text-slate-300 truncate max-w-[120px] sm:max-w-none uppercase text-xs sm:text-base">
+                {label}
               </span>
             ) : isBox ? (
-              <span className="text-slate-600">{label}</span>
+              <span className="text-slate-400">{label}</span>
             ) : (
               <Link
                 to={to}
                 className="hover:text-blue-400 transition-colors flex-shrink-0"
+                title={label}
               >
                 {label}
               </Link>
