@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { X } from "lucide-react";
+import { startScanner } from "./startScanner";
 
 interface CameraScannerProps {
   onScan: (decodedText: string) => void;
@@ -33,47 +34,8 @@ export const CameraScanner: React.FC<CameraScannerProps> = ({
       aspectRatio: 1.0,
     };
 
-    const startScanner = async () => {
-      try {
-        await html5QrCode.start(
-          { facingMode: "environment" },
-          config,
-          (decodedText) => {
-            onScan(decodedText);
-            onClose();
-          },
-          () => {}
-        );
-        isRunningRef.current = true;
-      } catch (err: any) {
-        // If environment camera is not found (e.g. on desktop), try any camera
-        if (
-          err?.toString().includes("NotFoundError") ||
-          err?.toString().includes("NotAllowedError")
-        ) {
-          try {
-            await html5QrCode.start(
-              { facingMode: "user" }, // Fallback to front camera or any available
-              config,
-              (decodedText) => {
-                onScan(decodedText);
-                onClose();
-              },
-              () => {}
-            );
-            isRunningRef.current = true;
-          } catch (fallbackErr) {
-            console.error("Failed to start scanner with fallback", fallbackErr);
-            setError("Camera not found or permission denied");
-          }
-        } else {
-          console.error("Failed to start scanner", err);
-          setError("Could not access camera");
-        }
-      }
-    };
-
-    startScanner();
+    // Start the scanner
+    startScanner(html5QrCode, onScan, onClose, isRunningRef, setError);
 
     return () => {
       if (scannerRef.current && isRunningRef.current) {
