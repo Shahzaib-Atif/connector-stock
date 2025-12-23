@@ -5,9 +5,9 @@ import { usePagination } from "@/hooks/usePagination";
 import { useAccessoryFilters } from "@/hooks/useAccessoryFilters";
 import { DetailHeader } from "../common/DetailHeader";
 import { AccessoriesTable } from "./components/AccessoriesTable";
-import { FilterBar } from "./components/FilterBar";
 import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
+import { FilterBar } from "../common/FilterBar";
 
 export const AccessoriesListView: React.FC = () => {
   const navigate = useNavigate();
@@ -54,6 +54,7 @@ export const AccessoriesListView: React.FC = () => {
           <FilterBar
             filterColumn={filters.filterColumn}
             searchQuery={filters.searchQuery}
+            filterByOptions={["id", "type", "refClient", "connName"]}
             onFilterColumnChange={setFilterColumn}
             onSearchQueryChange={setSearchQuery}
           />

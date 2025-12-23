@@ -54,6 +54,7 @@ export const ConnectorsListView: React.FC = () => {
           <FilterBar
             filterColumn={filters.filterColumn}
             searchQuery={filters.searchQuery}
+            filterByOptions={["id", "type", "fabricante"]}
             onFilterColumnChange={setFilterColumn}
             onSearchQueryChange={setSearchQuery}
           />
