@@ -60,7 +60,10 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
         }
       />
 
-      <div className="max-w-3xl mx-auto p-4 space-y-4">
+      <div
+        id="connector-page"
+        className="max-w-3xl mx-auto p-4 space-y-4 text-sm sm:text-base"
+      >
         <ConnectorSummary connector={connector} />
 
         {/* Accessories List */}

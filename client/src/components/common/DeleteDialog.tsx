@@ -26,12 +26,6 @@ export default function DeleteDialog({
 }: Props) {
   return (
     <div>
-      <button
-        onClick={() => setOpen(true)}
-        className="rounded-md bg-white/10 px-2.5 py-1.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-white/20"
-      >
-        Open dialog
-      </button>
       <Dialog open={open} onClose={setOpen} className="relative z-10">
         <DialogBackdrop
           transition

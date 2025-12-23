@@ -19,7 +19,7 @@ export const InventoryListItem: React.FC<InventoryListItemProps> = ({
     <div
       onClick={onClick}
       className={clsx(
-        "bg-slate-800 p-4 rounded-xl border border-slate-700/50 shadow-sm",
+        "bg-slate-800 p-2 sm:p-4 rounded-xl border border-slate-700/50 shadow-sm",
         "flex items-center justify-between",
         interactive &&
           onClick && [

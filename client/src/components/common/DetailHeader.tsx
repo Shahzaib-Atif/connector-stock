@@ -25,11 +25,11 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
     <>
       <header
         id="detail-header"
-        className="bg-slate-900/80 backdrop-blur-md sticky top-0 z-10 border-b border-slate-800 px-4 py-3 shadow-sm"
+        className="bg-slate-900/80 backdrop-blur-md sticky top-0 z-10 border-b border-slate-800 p-2.5 sm:p-3.5 shadow-sm"
       >
         <div className="mx-auto w-full flex items-center justify-between min-h-[44px] relative">
           {/* Left side - Menu button */}
-          <div className="flex items-center gap-1 sm:gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <button
               id="menu-btn"
               onClick={() => setIsMenuOpen(!isMenuOpen)}

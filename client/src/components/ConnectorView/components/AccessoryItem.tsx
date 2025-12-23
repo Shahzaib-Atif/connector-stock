@@ -50,10 +50,13 @@ export const AccessoryItem: React.FC<Props> = ({
 
           {/* Info */}
           <div className="flex-1">
-            <div className="text-sm text-slate-400">
-              Type: <span className="text-slate-200">{accessory.type}</span>
+            <div className="text-slate-400">
+              Type:{" "}
+              <span className="text-slate-200">
+                {accessory.type?.toLowerCase()}
+              </span>
             </div>
-            <div className="text-sm text-slate-500 mt-1 space-y-1">
+            <div className="text-slate-400 mt-1 space-y-1">
               <p>Ref: {accessory.refClient || "N/A"}</p>
               {accessory.capotAngle && (
                 <p className="text-blue-400">Angle: {accessory.capotAngle}</p>
@@ -66,19 +69,19 @@ export const AccessoryItem: React.FC<Props> = ({
         </div>
       }
       right={
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <button
             onClick={() => onTransaction("OUT", accessory.id)}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors"
+            className={`${stockBtnClass} bg-slate-700 hover:bg-slate-600`}
           >
             <Minus className="w-4 h-4" />
           </button>
-          <span className="w-12 text-center font-mono text-lg font-bold text-slate-200">
+          <span className="w-8 sm:w-12 text-center font-mono text-lg sm:text-xl font-bold text-slate-200">
             {stock}
           </span>
           <button
             onClick={() => onTransaction("IN", accessory.id)}
-            className="w-8 h-8 flex items-center justify-center rounded-lg btn-primary transition-colors"
+            className={`${stockBtnClass} btn-primary`}
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -87,3 +90,6 @@ export const AccessoryItem: React.FC<Props> = ({
     />
   );
 };
+
+const stockBtnClass =
+  "w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg transition-colors";

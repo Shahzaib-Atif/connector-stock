@@ -23,6 +23,15 @@ export const AccessoryList: React.FC<Props> = ({
           onInspect={onInspect}
           onTransaction={onTransaction}
         />
+      ))}{" "}
+      {accessories.map((acc) => (
+        <AccessoryItem
+          key={acc.id}
+          accessory={acc}
+          stock={acc.stock}
+          onInspect={onInspect}
+          onTransaction={onTransaction}
+        />
       ))}
     </>
   );

@@ -10,11 +10,11 @@ import { usePagination } from "@/hooks/usePagination";
 import { useSampleFilters } from "@/hooks/useSampleFilters";
 import { DetailHeader } from "../common/DetailHeader";
 import { SamplesTable } from "./components/SamplesTable";
-import { FilterBar } from "./components/FilterBar";
 import { Pagination } from "../common/Pagination";
 import { SampleFormModal } from "./components/SampleFormModal";
 import Spinner from "../common/Spinner";
 import DeleteDialog from "../common/DeleteDialog";
+import { FilterBar } from "../common/FilterBar";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -120,6 +120,12 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
           <FilterBar
             filterColumn={filters.filterColumn}
             searchQuery={filters.searchQuery}
+            filterByOptions={[
+              "cliente",
+              "refDescricao",
+              "encDivmac",
+              "amostra",
+            ]}
             onFilterColumnChange={setFilterColumn}
             onSearchQueryChange={setSearchQuery}
           />

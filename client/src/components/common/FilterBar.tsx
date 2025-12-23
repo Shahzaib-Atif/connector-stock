@@ -6,7 +6,11 @@ type filterColumns =
   | "type"
   | "fabricante"
   | "refClient"
-  | "connName";
+  | "connName"
+  | "cliente"
+  | "refDescricao"
+  | "encDivmac"
+  | "amostra";
 
 interface Props {
   filterColumn: filterColumns;
