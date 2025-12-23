@@ -144,37 +144,6 @@ export const CameraScanner: React.FC<CameraScannerProps> = ({
           )}
         </div>
 
-        {/* CSS to fix library rendering issues */}
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-          #${regionId} video {
-            object-fit: cover !important;
-            width: 100% !important;
-            height: 100% !important;
-          }
-          #${regionId} canvas {
-            display: none !important;
-          }
-          #${regionId} > div {
-            border: none !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            height: 100% !important;
-          }
-          @keyframes scanner-line {
-            0% { top: 20%; }
-            50% { top: 80%; }
-            100% { top: 20%; }
-          }
-          .animate-scanner-line {
-            animation: scanner-line 3s ease-in-out infinite;
-          }
-        `,
-          }}
-        />
-
         {/* Instructions */}
         <div className="p-6 text-center space-y-2">
           <p className="text-blue-400 font-medium">
