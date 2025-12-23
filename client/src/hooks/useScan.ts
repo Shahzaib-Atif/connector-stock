@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
 import { getBoxDetails, parseConnector } from "../services/connectorService";
 
+/** Hook for handling QR code scanning logic */
 export const useScan = () => {
   const navigate = useNavigate();
   const masterData = useAppSelector((state) => state.masterData);

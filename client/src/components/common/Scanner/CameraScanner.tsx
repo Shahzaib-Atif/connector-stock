@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { X } from "lucide-react";
 import { startScanner } from "./startScanner";
+import { useQrScanner } from "./useQrScanner";
 
 interface CameraScannerProps {
   onScan: (decodedText: string) => void;
@@ -12,43 +13,8 @@ export const CameraScanner: React.FC<CameraScannerProps> = ({
   onScan,
   onClose,
 }) => {
-  const [error, setError] = React.useState<string | null>(null);
-  const [isSecure, setIsSecure] = React.useState(true);
-  const scannerRef = useRef<Html5Qrcode | null>(null);
-  const isRunningRef = useRef(false);
-  const regionId = "reader";
-
-  useEffect(() => {
-    // Check for Secure Context (required for Camera access)
-    if (!window.isSecureContext && window.location.hostname !== "localhost") {
-      setIsSecure(false);
-      setError("Insecure Context: Camera access requires HTTPS or localhost.");
-      return;
-    }
-    const html5QrCode = new Html5Qrcode(regionId);
-    scannerRef.current = html5QrCode;
-
-    const config = {
-      fps: 10,
-      qrbox: { width: 150, height: 150 },
-      aspectRatio: 1.0,
-    };
-
-    // Start the scanner
-    startScanner(html5QrCode, onScan, onClose, isRunningRef, setError);
-
-    return () => {
-      if (scannerRef.current && isRunningRef.current) {
-        isRunningRef.current = false;
-        scannerRef.current
-          .stop()
-          .then(() => {
-            scannerRef.current?.clear();
-          })
-          .catch((err) => console.warn("Failed to stop scanner", err));
-      }
-    };
-  }, [onScan, onClose]);
+  const regionId = "reader"; // ID of the HTML element to render the scanner
+  const { error, isSecure } = useQrScanner(regionId, onScan, onClose);
 
   return (
     <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center p-4">
