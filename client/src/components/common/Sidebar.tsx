@@ -75,10 +75,10 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
 
       {/* Menu items */}
       <nav className="py-2">
-        <button id="home-btn" onClick={closeMenu} className="sidebar-btn">
+        <Link to="/" id="home-btn" onClick={closeMenu} className="sidebar-btn">
           <Home className="sidebar-btn-icon" />
-          <Link to="/">Home</Link>
-        </button>
+          <span>Home</span>
+        </Link>
 
         {/* View Transactions */}
         <Link
