@@ -2,7 +2,7 @@ import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEscKeyDown } from "@/hooks/useEscKeyDown";
 import { QRData } from "@/types";
 import { API } from "@/utils/api";
-import { Printer, Loader2 } from "lucide-react";
+import { Printer, Loader2, AlertTriangle } from "lucide-react";
 import React, { useRef, useState } from "react";
 
 interface QRModalProps {
@@ -10,13 +10,12 @@ interface QRModalProps {
   onClose: () => void;
 }
 
-export const QRModal: React.FC<QRModalProps> = ({
-  qrData: { id: itemId, source, refCliente, encomenda },
-  onClose,
-}) => {
+export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
+  const { id: itemId, source, refCliente, encomenda, qty } = qrData;
   const itemIdLink = getItemIdLink(itemId);
   const ref = useRef(null);
   const [isPrinting, setIsPrinting] = useState(false);
+  const [printQty, setPrintQty] = useState(qty || 1);
   const [printStatus, setPrintStatus] = useState<{
     type: "success" | "error";
     message: string;
@@ -41,6 +40,7 @@ export const QRModal: React.FC<QRModalProps> = ({
           source,
           refCliente,
           encomenda,
+          qty: printQty,
         }),
       });
 
@@ -86,9 +86,49 @@ export const QRModal: React.FC<QRModalProps> = ({
           />
         </div>
 
-        <div className="font-mono text-xl font-bold text-white mb-6 tracking-wider break-all">
+        <div className="font-mono text-xl font-bold text-white mb-4 tracking-wider break-all">
           {itemId}
         </div>
+
+        {/* Quantity selector */}
+        <div className="flex flex-col items-center gap-2 mb-4">
+          <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
+            Print Quantity
+          </label>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setPrintQty(Math.max(1, printQty - 1))}
+              className="w-8 h-8 rounded-full bg-slate-700 hover:bg-slate-600 text-white flex items-center justify-center border border-slate-600 transition-colors"
+            >
+              -
+            </button>
+            <input
+              type="number"
+              value={printQty}
+              onChange={(e) =>
+                setPrintQty(Math.max(1, parseInt(e.target.value) || 1))
+              }
+              className="w-16 bg-slate-900 border border-slate-700 rounded-lg py-1 text-center text-white font-bold focus:outline-none focus:border-blue-500"
+              min="1"
+            />
+            <button
+              onClick={() => setPrintQty(printQty + 1)}
+              className="w-8 h-8 rounded-full bg-slate-700 hover:bg-slate-600 text-white flex items-center justify-center border border-slate-600 transition-colors"
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        {/* Warning for large quantity */}
+        {printQty > 10 && (
+          <div className="mb-6 flex items-center gap-2 px-3 py-2 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-400 text-xs text-left animate-in zoom-in-95">
+            <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+            <span>
+              Warning: You are about to print <strong>{printQty}</strong> labels. Please confirm before proceeding.
+            </span>
+          </div>
+        )}
 
         {printStatus && (
           <div

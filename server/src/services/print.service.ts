@@ -36,7 +36,6 @@ export class PrintService {
     try {
       // Generate TSPL commands
       const tsplCommands = this.generateTsplCommands(dto);
-
       // Write to temp file
       const tempFile = path.join(os.tmpdir(), `label_${Date.now()}.prn`);
       fs.writeFileSync(tempFile, tsplCommands, { encoding: 'ascii' });
@@ -56,7 +55,7 @@ export class PrintService {
   }
 
   private generateTsplCommands(dto: PrintLabelDto): string {
-    const { itemId, itemUrl, refCliente, encomenda, source } = dto;
+    const { itemId, itemUrl, refCliente, encomenda, source, qty } = dto;
     const { widthMm, heightMm, qrCodePos, center_X } = this.labelConfig;
     const { x: qr_x, y: qr_y } = qrCodePos;
 
@@ -120,8 +119,9 @@ export class PrintService {
       }
     }
 
-    // Finalize
-    lines.push('PRINT 1,1');
+    // Finalize - use qty if provided, otherwise 1
+    const printQty = isNaN(qty as number) ? 1 : (qty as number);
+    lines.push(`PRINT ${printQty},1`);
     return lines.join('\r\n') + '\r\n';
   }
 

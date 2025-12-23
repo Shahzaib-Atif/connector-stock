@@ -64,6 +64,7 @@ const TableRow: React.FC<TableRowProps> = ({
                     source: "sample",
                     refCliente: Ref_Descricao,
                     encomenda: EncDivmac,
+                    qty: Quantidade ? parseInt(Quantidade) : undefined,
                   })
                 }
                 title="Print Label"

@@ -167,4 +167,5 @@ export interface QRData {
   source?: "box" | "connector" | "sample";
   refCliente?: string;
   encomenda?: string;
+  qty?: number;
 }
