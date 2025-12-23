@@ -45,7 +45,10 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 pb-12 text-slate-200">
+    <div
+      id="box-page"
+      className="text-sm sm:text-base min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 pb-12 text-slate-200"
+    >
       {/* Header */}
       <DetailHeader
         label="Box Storage"

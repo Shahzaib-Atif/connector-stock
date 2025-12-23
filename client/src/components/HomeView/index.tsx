@@ -93,7 +93,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </div>
 
             {/* Search */}
-            <div className="relative" ref={wrapperRef}>
+            <div id="search-homeView" className="relative" ref={wrapperRef}>
               <SearchInput
                 searchQuery={searchQuery}
                 scanError={scanError}

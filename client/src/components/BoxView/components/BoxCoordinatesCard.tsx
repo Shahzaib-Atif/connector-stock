@@ -16,7 +16,7 @@ function BoxCoordinatesCard({ box }: Props) {
           <div className="text-xs text-slate-500 font-bold uppercase">
             Physical Coordinates
           </div>
-          <div className="font-mono font-bold text-white text-lg">
+          <div className="font-mono font-bold text-white text-base sm:text-lg">
             {box.cv} <span className="text-slate-600">/</span> {box.ch}
           </div>
         </div>

@@ -52,7 +52,8 @@ function SearchInput({
     <div className="bg-white/10 backdrop-blur-md p-1 rounded-2xl border border-white/10 flex items-center shadow-inner overflow-hidden">
       <input
         type="text"
-        className="bg-transparent border-none outline-none text-white placeholder-slate-400 px-2 sm:px-4 py-3 min-w-0 flex-1 font-mono text-base sm:text-lg uppercase"
+        className="bg-transparent border-none outline-none text-white placeholder-slate-400 px-2 sm:px-4 py-3 min-w-0 flex-1 
+        font-mono text-base sm:text-lg uppercase"
         placeholder="Search..."
         value={searchQuery}
         onChange={(e) => {
@@ -64,7 +65,7 @@ function SearchInput({
       />
       <button
         onClick={() => onScan(searchQuery)}
-        className="btn-primary p-2.5 sm:p-3 rounded-xl transition-colors flex-shrink-0"
+        className="btn-primary p-2 sm:p-3 rounded-xl transition-colors flex-shrink-0"
         title="Search"
       >
         <Search className="w-5 h-5" />
@@ -73,7 +74,7 @@ function SearchInput({
       {onOpenScanner && (
         <button
           onClick={onOpenScanner}
-          className="ml-1 sm:ml-1.5 btn-primary p-2.5 sm:p-3 rounded-xl transition-colors flex-shrink-0"
+          className="ml-1 sm:ml-1.5 btn-primary p-2 sm:p-3 rounded-xl transition-colors flex-shrink-0"
           title="Scan with Camera"
         >
           <ScanLine className="w-5 h-5" />
