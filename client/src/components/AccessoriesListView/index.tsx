@@ -4,7 +4,7 @@ import { useAppSelector } from "@/store/hooks";
 import { usePagination } from "@/hooks/usePagination";
 import { useAccessoryFilters } from "@/hooks/useAccessoryFilters";
 import { DetailHeader } from "../common/DetailHeader";
-import { AccessoriesTable } from "./components/AccessoriesTable";
+import { AccessoriesTable } from "./AccessoriesTable";
 import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { FilterBar } from "../common/FilterBar";
