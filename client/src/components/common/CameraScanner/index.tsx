@@ -47,6 +47,7 @@ export const CameraScanner: React.FC<CameraScannerProps> = ({
             <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-blue-400" />
           </div>
 
+          {/* Error Message */}
           {error && (
             <div className="absolute inset-0 flex items-center justify-center p-8 text-center bg-slate-900/90">
               <div>

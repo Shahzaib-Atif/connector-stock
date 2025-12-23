@@ -11,7 +11,7 @@ import { useClickOutside } from "@/hooks/useClickOutside";
 import { useSuggestionNavigation } from "../../hooks/useSuggestionNavigation";
 import { useGlobalEnterKey } from "@/hooks/useGlobalEnterKey";
 import { NavigationCards } from "./components/NavigationCards";
-import { CameraScanner } from "../common/Scanner/CameraScanner";
+import { CameraScanner } from "../common/CameraScanner";
 
 interface HomeViewProps {
   onScan: (code: string) => void;
