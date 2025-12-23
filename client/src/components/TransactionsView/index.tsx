@@ -9,6 +9,7 @@ import { usePagination } from "@/hooks/usePagination";
 import Spinner from "../common/Spinner";
 import { Pagination } from "../common/Pagination";
 import { Department } from "@/types";
+import { ROUTES } from "../AppRoutes";
 
 export const TransactionsView: React.FC = () => {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ export const TransactionsView: React.FC = () => {
       <DetailHeader
         label="Transactions"
         title="Transaction History"
-        onBack={() => navigate("/")}
+        onBack={() => navigate(ROUTES.HOME)}
       />
 
       <div id="transactions-content" className="table-view-content">

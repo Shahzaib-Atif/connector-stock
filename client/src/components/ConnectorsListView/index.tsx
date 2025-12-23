@@ -8,6 +8,7 @@ import { ConnectorsTable } from "./ConnectorsTable";
 import { FilterBar } from "../common/FilterBar";
 import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
+import { ROUTES } from "../AppRoutes";
 
 export const ConnectorsListView: React.FC = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export const ConnectorsListView: React.FC = () => {
       <DetailHeader
         label="Connectors"
         title="All Connectors"
-        onBack={() => navigate("/")}
+        onBack={() => navigate(ROUTES.HOME)}
       />
 
       <div id="connectors-content" className="table-view-content">

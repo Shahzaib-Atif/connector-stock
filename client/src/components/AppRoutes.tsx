@@ -30,10 +30,10 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({
 }) => {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/users" element={<UsersView />} />
+      <Route path={ROUTES.LOGIN} element={<Login />} />
+      <Route path={ROUTES.USERS} element={<UsersView />} />
       <Route
-        path="/"
+        path={ROUTES.HOME}
         element={
           <HomeView
             onScan={onScan}
@@ -43,22 +43,39 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({
         }
       />
       <Route
-        path="/connector/:id"
+        path={ROUTES.CONNECTOR_VIEW}
         element={
           <ConnectorView onOpenQR={onOpenQR} onTransaction={onTransaction} />
         }
       />
-      <Route path="/box/:id" element={<BoxView onOpenQR={onOpenQR} />} />
+      <Route path={ROUTES.BOX_VIEW} element={<BoxView onOpenQR={onOpenQR} />} />
       <Route
-        path="/accessory/:id"
+        path={ROUTES.ACCESSORY_VIEW}
         element={
           <AccessoryView onOpenQR={onOpenQR} onTransaction={onTransaction} />
         }
       />
-      <Route path="/transactions" element={<TransactionsView />} />
-      <Route path="/samples" element={<SamplesView onOpenQR={onOpenQR} />} />
-      <Route path="/connectors" element={<ConnectorsListView />} />
-      <Route path="/accessories" element={<AccessoriesListView />} />
+      <Route path={ROUTES.TRANSACTIONS} element={<TransactionsView />} />
+      <Route
+        path={ROUTES.SAMPLES}
+        element={<SamplesView onOpenQR={onOpenQR} />}
+      />
+      <Route path={ROUTES.CONNECTORS} element={<ConnectorsListView />} />
+      <Route path={ROUTES.ACCESSORIES} element={<AccessoriesListView />} />
     </Routes>
   );
+};
+
+export const ROUTES = {
+  HOME: "/",
+  LOGIN: "/login",
+  USERS: "/users",
+  BOXES: "/boxes",
+  CONNECTOR_VIEW: "/connectors/:id",
+  BOX_VIEW: "/boxes/:id",
+  ACCESSORY_VIEW: "/accessories/:id",
+  TRANSACTIONS: "/transactions",
+  SAMPLES: "/samples",
+  CONNECTORS: "/connectors",
+  ACCESSORIES: "/accessories",
 };

@@ -15,6 +15,7 @@ import { SampleFormModal } from "./components/SampleFormModal";
 import Spinner from "../common/Spinner";
 import DeleteDialog from "../common/DeleteDialog";
 import { FilterBar } from "../common/FilterBar";
+import { ROUTES } from "../AppRoutes";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -100,7 +101,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
       <DetailHeader
         label="Samples"
         title="REG Amostras"
-        onBack={() => navigate("/")}
+        onBack={() => navigate(ROUTES.HOME)}
       />
 
       <div id="samples-content" className="table-view-content">

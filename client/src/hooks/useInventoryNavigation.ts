@@ -1,3 +1,4 @@
+import { ROUTES } from "@/components/AppRoutes";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -7,15 +8,15 @@ export const useInventoryNavigation = () => {
 
   const goBack = useCallback(() => navigate(-1), [navigate]);
   const goToConnector = useCallback(
-    (connectorId: string) => navigate(`/connector/${connectorId}`),
+    (connectorId: string) => navigate(`${ROUTES.CONNECTORS}/${connectorId}`),
     [navigate]
   );
   const goToAccessory = useCallback(
-    (accessoryId: string) => navigate(`/accessory/${accessoryId}`),
+    (accessoryId: string) => navigate(`${ROUTES.ACCESSORIES}/${accessoryId}`),
     [navigate]
   );
   const goToBox = useCallback(
-    (boxId: string) => navigate(`/box/${boxId}`),
+    (boxId: string) => navigate(`${ROUTES.BOXES}/${boxId}`),
     [navigate]
   );
   const goToClientRef = useCallback(
@@ -25,4 +26,3 @@ export const useInventoryNavigation = () => {
 
   return { goBack, goToConnector, goToAccessory, goToBox, goToClientRef };
 };
-

@@ -4,7 +4,6 @@ import { initMasterData } from "./store/slices/masterDataSlice";
 import { useTransactionFlow } from "./hooks/useTransactionFlow";
 
 // Components
-import { Login } from "./components/Login";
 import { QRModal } from "./components/QRModal";
 import { AppRoutes } from "./components/AppRoutes";
 import { useScan } from "./hooks/useScan";

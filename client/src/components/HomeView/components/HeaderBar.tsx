@@ -3,6 +3,7 @@ import { logout } from "@/store/slices/authSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { LogOut, Receipt } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/components/AppRoutes";
 
 function HeaderBar() {
   const dispatch = useAppDispatch();
@@ -12,7 +13,7 @@ function HeaderBar() {
   return (
     <>
       <a
-        href="/"
+        href={ROUTES.HOME}
         className="absolute top-3 left-3 md:left-6 p-2 text-slate-400 hover:text-white flex items-center gap-2"
       >
         <LogoSvg />
@@ -21,7 +22,7 @@ function HeaderBar() {
 
       <div className="absolute top-3 right-3 md:right-6 flex items-center gap-2">
         <button
-          onClick={() => navigate("/transactions")}
+          onClick={() => navigate(ROUTES.TRANSACTIONS)}
           className="p-2 text-slate-400 hover:text-white flex items-center gap-2 transition-colors"
           title="View Transactions"
         >

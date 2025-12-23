@@ -8,6 +8,7 @@ import { AccessoriesTable } from "./AccessoriesTable";
 import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { FilterBar } from "../common/FilterBar";
+import { ROUTES } from "../AppRoutes";
 
 export const AccessoriesListView: React.FC = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export const AccessoriesListView: React.FC = () => {
       <DetailHeader
         label="Accessories"
         title="All Accessories"
-        onBack={() => navigate("/")}
+        onBack={() => navigate(ROUTES.HOME)}
       />
 
       <div id="accessories-content" className="table-view-content">

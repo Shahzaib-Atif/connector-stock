@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
+import { ROUTES } from "../AppRoutes";
 
 function BrandLogo() {
   return (
     <Link
-      to="/"
+      to={ROUTES.HOME}
       className="group transition-all duration-300 rounded-lg hover:scale-105"
       aria-label="Go home"
       title="home"

@@ -3,6 +3,7 @@ import { useAppSelector } from "@/store/hooks";
 import { DetailHeader } from "./common/DetailHeader";
 import { useNavigate } from "react-router-dom";
 import { UserInfo } from "@/store/slices/authSlice";
+import { ROUTES } from "./AppRoutes";
 
 export const UsersView: React.FC = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export const UsersView: React.FC = () => {
         <h1 className="text-2xl font-bold text-red-400">Access Denied</h1>
         <p className="mt-2">Only Master Admin can access this page.</p>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate(ROUTES.HOME)}
           className="mt-6 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
         >
           Go Back
@@ -28,7 +29,7 @@ export const UsersView: React.FC = () => {
       <DetailHeader
         label="Administration"
         title="User Management"
-        onBack={() => navigate("/")}
+        onBack={() => navigate(ROUTES.HOME)}
       />
 
       <div className="table-view-content">

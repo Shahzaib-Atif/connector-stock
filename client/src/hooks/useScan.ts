@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
 import { getBoxDetails, parseConnector } from "../services/connectorService";
+import { ROUTES } from "@/components/AppRoutes";
 
 /** Hook for handling QR code scanning logic */
 export const useScan = () => {
@@ -62,14 +63,14 @@ export const useScan = () => {
   const handleConnectorNav = (upperCode: string) => {
     const connector = parseConnector(upperCode, masterData.data);
 
-    if (connector) navigate(`/connector/${upperCode}`);
+    if (connector) navigate(`${ROUTES.CONNECTORS}/${upperCode}`);
     else setError("Connector not found!");
   };
 
   const handleBoxNav = (upperCode: string) => {
     const box = getBoxDetails(upperCode, masterData.data);
 
-    if (box) navigate(`/box/${upperCode}`);
+    if (box) navigate(`${ROUTES.BOXES}/${upperCode}`);
     else setError("Box not found!");
   };
 
@@ -82,7 +83,7 @@ export const useScan = () => {
 
     const accessory = masterData.data.accessories[id];
 
-    if (accessory) navigate(`/accessory/${id}`);
+    if (accessory) navigate(`${ROUTES.ACCESSORIES}/${id}`);
     else setError("Invalid code. Unable to find this item!");
   };
   //#endregion

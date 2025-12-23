@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Receipt, Beaker, Cable, Wrench, LucideIcon } from "lucide-react";
+import { ROUTES } from "@/components/AppRoutes";
 
 interface NavCardProps {
   to: string;
@@ -44,28 +45,28 @@ const NavCard: React.FC<NavCardProps> = ({
 export const NavigationCards: React.FC = () => {
   const navItems = [
     {
-      to: "/connectors",
+      to: ROUTES.CONNECTORS,
       title: "Connectors",
       icon: Cable,
       description: "Browse and manage connector stock",
       color: "bg-purple-500",
     },
     {
-      to: "/accessories",
+      to: ROUTES.ACCESSORIES,
       title: "Accessories",
       icon: Wrench,
       description: "Accessory inventory and controls",
       color: "bg-orange-500",
     },
     {
-      to: "/samples",
+      to: ROUTES.SAMPLES,
       title: "Samples",
       icon: Beaker,
       description: "View and register project samples",
       color: "bg-emerald-500",
     },
     {
-      to: "/transactions",
+      to: ROUTES.TRANSACTIONS,
       title: "Transactions",
       icon: Receipt,
       description: "Manage stock movements and history",

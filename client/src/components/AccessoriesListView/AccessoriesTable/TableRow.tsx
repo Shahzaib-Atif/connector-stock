@@ -1,6 +1,7 @@
 import React from "react";
 import { AccessoryApiResponse } from "@/types";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/components/AppRoutes";
 
 interface AccessoryListItem extends AccessoryApiResponse {
   id: string;
@@ -15,7 +16,7 @@ const TableRow: React.FC<TableRowProps> = ({ accessory, index }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/accessory/${accessory.id}`);
+    navigate(`${ROUTES.ACCESSORIES}/${accessory.id}`);
   };
 
   return (

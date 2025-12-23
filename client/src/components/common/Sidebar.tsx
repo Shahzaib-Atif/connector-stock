@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { ROUTES } from "../AppRoutes";
 
 interface Props {
   isMenuOpen: boolean;
@@ -43,7 +44,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
   const handleLogout = () => {
     dispatch(logout());
     closeMenu();
-    navigate("/login");
+    navigate(ROUTES.LOGIN);
   };
 
   return (
@@ -82,7 +83,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
       {/* Menu items */}
       <nav className="py-2">
         <Link
-          to="/"
+          to={ROUTES.HOME}
           id="home-btn"
           onClick={closeMenu}
           className={getButtonClass("/")}
@@ -93,7 +94,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
 
         {/* View Transactions */}
         <Link
-          to="/transactions"
+          to={ROUTES.TRANSACTIONS}
           id="view-transactions-btn"
           onClick={closeMenu}
           className={getButtonClass("/transactions")}
@@ -104,7 +105,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
 
         {/* View Samples */}
         <Link
-          to="/samples"
+          to={ROUTES.SAMPLES}
           id="view-samples-btn"
           onClick={closeMenu}
           className={getButtonClass("/samples")}
@@ -115,7 +116,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
 
         {/* View Connectors */}
         <Link
-          to="/connectors"
+          to={ROUTES.CONNECTORS}
           id="view-connectors-btn"
           onClick={closeMenu}
           className={getButtonClass("/connectors")}
@@ -126,7 +127,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
 
         {/* View Accessories */}
         <Link
-          to="/accessories"
+          to={ROUTES.ACCESSORIES}
           id="view-accessories-btn"
           onClick={closeMenu}
           className={getButtonClass("/accessories")}
@@ -138,7 +139,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
         {/* User Management (Master Admin only) */}
         {role === "Master Admin" && (
           <Link
-            to="/users"
+            to={ROUTES.USERS}
             id="user-mgmt-btn"
             onClick={closeMenu}
             className={getButtonClass("/users")}
@@ -164,7 +165,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
       ) : (
         <div className="absolute bottom-0 left-0 right-0 border-t border-slate-700 p-2">
           <Link
-            to="/login"
+            to={ROUTES.LOGIN}
             id="login-nav-btn"
             onClick={closeMenu}
             className="sidebar-btn"

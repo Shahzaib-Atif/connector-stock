@@ -4,6 +4,7 @@ import { useAppDispatch } from "../store/hooks";
 import { useNavigate } from "react-router-dom";
 import { login, setUsersList } from "../store/slices/authSlice";
 import { loginApi, fetchUsersApi } from "../api/authApi";
+import { ROUTES } from "./AppRoutes";
 
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -31,7 +32,7 @@ export const Login: React.FC = () => {
       const users = await fetchUsersApi(data.access_token);
       dispatch(setUsersList(users));
 
-      navigate("/");
+      navigate(ROUTES.HOME);
     } catch (err: any) {
       setError(err.message || "Invalid credentials.");
     } finally {
@@ -107,7 +108,7 @@ export const Login: React.FC = () => {
           <div className="text-center mt-6">
             <button
               type="button"
-              onClick={() => navigate("/")}
+              onClick={() => navigate(ROUTES.HOME)}
               className="text-slate-400 hover:text-white transition-colors text-sm font-medium flex items-center justify-center gap-2 mx-auto"
             >
               <span>Continue to Homepage</span>
