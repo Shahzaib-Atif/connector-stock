@@ -9,19 +9,24 @@ interface ConnectorListItem extends ConnectorReferenceApiResponse {
 
 interface ConnectorsTableProps {
   connectors: ConnectorListItem[];
+  showImages?: boolean;
 }
 
 export const ConnectorsTable: React.FC<ConnectorsTableProps> = ({
   connectors,
+  showImages = false,
 }) => {
   return (
     <div id="connectors-table" className="table-container-inner">
       <table className="w-full table-fixed">
-        <TableHeader />
+        <TableHeader showImages={showImages} />
         <tbody>
           {connectors.length === 0 ? (
             <tr>
-              <td colSpan={8} className="table-row-not-found">
+              <td
+                colSpan={showImages ? 9 : 8}
+                className="table-row-not-found"
+              >
                 No connectors found
               </td>
             </tr>
@@ -31,6 +36,7 @@ export const ConnectorsTable: React.FC<ConnectorsTableProps> = ({
                 key={connector.id}
                 connector={connector}
                 index={index}
+                showImages={showImages}
               />
             ))
           )}

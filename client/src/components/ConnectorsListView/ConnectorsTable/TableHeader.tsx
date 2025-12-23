@@ -1,9 +1,14 @@
 import React from "react";
 
-const TableHeader: React.FC = () => {
+interface TableHeaderProps {
+  showImages?: boolean;
+}
+
+const TableHeader: React.FC<TableHeaderProps> = ({ showImages = false }) => {
   return (
     <thead className="table-header">
       <tr>
+        {showImages && <th className="table-header-cell w-24">Photo</th>}
         <th className="table-header-cell w-28">ID</th>
         <th className="table-header-cell w-24">Position</th>
         <th className="table-header-cell w-16">Color</th>

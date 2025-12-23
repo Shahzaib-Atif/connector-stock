@@ -18,6 +18,7 @@ interface Props {
   filterByOptions: filterColumns[];
   onFilterColumnChange: (column: filterColumns) => void;
   onSearchQueryChange: (query: string) => void;
+  children?: React.ReactNode;
 }
 
 export const FilterBar: React.FC<Props> = ({
@@ -26,9 +27,10 @@ export const FilterBar: React.FC<Props> = ({
   filterByOptions,
   onFilterColumnChange,
   onSearchQueryChange,
+  children,
 }) => {
   const inputBase =
-    "w-full p-1 sm:p-2 bg-slate-700 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400";
+    "w-full p-2 bg-slate-700 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400";
   const inputFocus =
     "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
 
@@ -99,6 +101,13 @@ export const FilterBar: React.FC<Props> = ({
           </button>
         )}
       </div>
+
+      {/* Custom Actions Slot */}
+      {children && (
+        <div className="flex items-end flex-1 sm:flex-none sm:ml-auto">
+          {children}
+        </div>
+      )}
     </div>
   );
 };

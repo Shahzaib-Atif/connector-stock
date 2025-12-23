@@ -1,3 +1,4 @@
+import { ROUTES } from "@/components/AppRoutes";
 import { Transaction } from "@/types";
 import { formatDate } from "@/utils/formatDate";
 import { ExternalLink } from "lucide-react";
@@ -8,7 +9,9 @@ interface Props {
 }
 function TableRow({ tx, index }: Props) {
   const handleOpenLink = () => {
-    const url = `/${tx.itemType}/${tx.itemId}`;
+    const route =
+      tx.itemType === "connector" ? ROUTES.CONNECTORS : ROUTES.ACCESSORIES;
+    const url = `${route}/${tx.itemId}`;
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
