@@ -35,13 +35,13 @@ export const FilterBar: React.FC<Props> = ({
   return (
     <div
       id="connectors-filter-bar"
-      className="flex flex-col sm:flex-row gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700"
+      className="text-sm sm:text-base flex flex-col sm:flex-row gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700"
     >
       {/* Filter Column Selector */}
       <div className="w-full sm:w-48">
         <label
           htmlFor="connectors-table-filterBy"
-          className="block text-sm font-semibold text-slate-300 mb-2"
+          className="block font-semibold mb-1 sm:mb-2"
         >
           Filter By
         </label>
@@ -64,7 +64,7 @@ export const FilterBar: React.FC<Props> = ({
       <div className="w-full sm:w-64 relative">
         <label
           htmlFor="connectors-table-search"
-          className="block text-sm font-semibold text-slate-300 mb-2"
+          className="block font-semibold mb-1 sm:mb-2"
         >
           Search
         </label>

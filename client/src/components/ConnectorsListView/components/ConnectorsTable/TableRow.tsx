@@ -22,7 +22,7 @@ const TableRow: React.FC<TableRowProps> = ({ connector }) => {
       {/* ID */}
       <td className="table-data">
         {" "}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <span>{connector.CODIVMAC}</span>
           <button
             onClick={() => handleOpenLink(connector.CODIVMAC, "connector")}
@@ -37,7 +37,7 @@ const TableRow: React.FC<TableRowProps> = ({ connector }) => {
       {/* PosId */}
       <td className="table-data">
         {" "}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <span>{connector.PosId}</span>
           {connector.PosId && (
             <button

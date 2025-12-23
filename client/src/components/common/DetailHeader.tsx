@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { QrCode, Menu, LogIn } from "lucide-react";
+import { QrCode, Menu, LogIn, HomeIcon, Home } from "lucide-react";
 import BrandLogo from "./BrandLogo";
 import Sidebar from "./Sidebar";
 import { useAppSelector } from "../../store/hooks";
@@ -29,20 +29,30 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
       >
         <div className="mx-auto w-full flex items-center justify-between min-h-[44px] relative">
           {/* Left side - Menu button */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <button
               id="menu-btn"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 text-slate-400 hover:text-white transition-colors rounded-lg flex-shrink-0"
+              className={IconClass1}
               aria-label="Toggle menu"
+              title="menu"
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
 
             {/* LOGO section - hidden on mobile */}
             <div className="hidden sm:flex items-center">
               <BrandLogo />
             </div>
+
+            {/* Home Icon - visible on mobile only */}
+            <Link
+              to="/"
+              className={`${IconClass1} flex sm:hidden`}
+              title="home"
+            >
+              <Home className="w-5 h-5" />
+            </Link>
           </div>
 
           {/* Label and Title - absolutely centered */}
@@ -66,7 +76,8 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
             {!user && (
               <Link
                 to="/login"
-                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all"
+                className="flex items-center gap-1 sm:gap-2 px-1 sm:px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all"
+                title="login"
               >
                 <LogIn className="w-4 h-4" />
                 <span>Login</span>
@@ -100,3 +111,6 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
     </>
   );
 };
+
+const IconClass1 =
+  "p-0.5 sm:p-2 text-slate-300 hover:text-white transition-colors rounded-lg flex-shrink-0";

@@ -16,7 +16,7 @@ export const AccessoriesTable: React.FC<AccessoriesTableProps> = ({
 }) => {
   return (
     <div id="accessories-table" className="table-container-inner">
-      <table className="w-full text-sm table-fixed">
+      <table className="w-full table-fixed">
         <TableHeader />
         <tbody>
           {accessories.length === 0 ? (

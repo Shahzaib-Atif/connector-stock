@@ -16,7 +16,7 @@ export const ConnectorsTable: React.FC<ConnectorsTableProps> = ({
 }) => {
   return (
     <div id="connectors-table" className="table-container-inner">
-      <table className="w-full text-sm table-fixed">
+      <table className="w-full table-fixed">
         <TableHeader />
         <tbody>
           {connectors.length === 0 ? (

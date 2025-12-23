@@ -6,6 +6,7 @@ function BrandLogo() {
       to="/"
       className="group transition-all duration-300 rounded-lg hover:scale-105"
       aria-label="Go home"
+      title="home"
     >
       <svg
         viewBox="0 0 90 32"

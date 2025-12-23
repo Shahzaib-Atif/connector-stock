@@ -30,7 +30,7 @@ export default {
           "@apply max-w-full mx-auto h-full p-4 flex flex-col gap-4": {},
         },
         ".table-container-inner": {
-          "@apply h-full overflow-auto rounded-xl border border-slate-700 bg-slate-800/50":
+          "@apply h-full overflow-auto rounded-xl border border-slate-700 bg-slate-800/50 text-sm sm:text-[0.9rem]":
             {},
         },
         ".table-container-outer": {
@@ -40,7 +40,7 @@ export default {
           "@apply px-4 py-8 text-center text-slate-400": {},
         },
         ".table-row": {
-          "@apply transition-colors break-normal text-slate-300 text-sm overflow-hidden text-ellipsis": {},
+          "@apply transition-colors break-normal text-slate-300 overflow-hidden text-ellipsis": {},
         },
           ".table-row-bg": {
           "@apply even:bg-slate-800/90 odd:bg-slate-800/10 hover:bg-slate-700/50": {},
