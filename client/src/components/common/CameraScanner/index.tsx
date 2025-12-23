@@ -17,7 +17,10 @@ export const CameraScanner: React.FC<CameraScannerProps> = ({
   const { error, isSecure } = useQrScanner(regionId, onScan, onClose);
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center p-4">
+    <div
+      id="camera-scanner"
+      className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center p-4"
+    >
       <div className="w-full max-w-md relative bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-slate-800 absolute top-0 left-0 right-0 z-10 bg-slate-900/80 backdrop-blur-md">

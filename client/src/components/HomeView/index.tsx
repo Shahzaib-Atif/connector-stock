@@ -77,17 +77,24 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* Main content - centered vertically on small content, scrollable on larger */}
       <div className="flex-1 flex flex-col items-center justify-start sm:justify-center p-6 py-12">
-        <div className="w-full max-w-4xl space-y-12 md:space-y-20">
-          <div className="max-w-md mx-auto space-y-8">
+        <div className="w-full max-w-4xl space-y-10 md:space-y-18">
+          <div className="max-w-md mx-auto space-y-6 sm:space-y-8">
             {/* Title and description */}
             <div className="text-center space-y-2">
-              <div className="w-20 h-20 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-6">
+              {/* Scan Icon */}
+              <div
+                className="w-16 h-16 sm:w-20 sm:h-20 bg-blue-500 rounded-2xl flex items-center justify-center 
+              mx-auto shadow-lg shadow-blue-500/30 mb-4 sm:mb-6"
+              >
                 <Scan className="w-10 h-10 text-white" />
               </div>
-              <h1 className="text-3xl font-bold tracking-tight">
+
+              {/* Title */}
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
                 Connector Stock
               </h1>
-              <p className="text-slate-400">
+              {/* Description */}
+              <p className="text-slate-400 text-[0.9rem] sm:text-base">
                 Search for Box, Connector or Client Reference
               </p>
             </div>

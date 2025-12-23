@@ -51,8 +51,9 @@ function SearchInput({
   return (
     <div className="bg-white/10 backdrop-blur-md p-1 rounded-2xl border border-white/10 flex items-center shadow-inner overflow-hidden">
       <input
+        id="home-search-input"
         type="text"
-        className="bg-transparent border-none outline-none text-white placeholder-slate-400 px-2 sm:px-4 py-3 min-w-0 flex-1 
+        className="bg-transparent border-none outline-none text-white placeholder-slate-400 p-2 sm:px-4 sm:py-3 min-w-0 flex-1 
         font-mono text-base sm:text-lg uppercase"
         placeholder="Search..."
         value={searchQuery}

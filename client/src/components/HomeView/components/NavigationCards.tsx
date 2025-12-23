@@ -21,16 +21,18 @@ const NavCard: React.FC<NavCardProps> = ({
   return (
     <Link
       to={to}
-      className="group block p-6 bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-2xl hover:bg-slate-700/60 hover:border-blue-500/50 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/10"
+      className="group block p-4 sm:p-6 bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-2xl hover:bg-slate-700/60 hover:border-blue-500/50 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/10"
     >
       <div className="flex items-start gap-4">
         <div
-          className={`p-3 rounded-xl ${color} bg-opacity-10 group-hover:bg-opacity-20 transition-colors`}
+          className={`p-2 sm:p-3 rounded-xl ${color} bg-opacity-10 group-hover:bg-opacity-20 transition-colors`}
         >
-          <Icon className={`w-6 h-6 ${color.replace("bg-", "text-")}`} />
+          <Icon
+            className={`w-5 h-5 sm:w-6 sm:h-6 ${color.replace("bg-", "text-")}`}
+          />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">
+          <h3 className="text-[1.1rem] font-semibold sm:font-bold text-white group-hover:text-blue-400 transition-colors">
             {title}
           </h3>
           <p className="text-slate-400 text-sm mt-1 leading-relaxed">
