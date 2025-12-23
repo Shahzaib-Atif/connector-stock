@@ -27,10 +27,10 @@ export default {
           "@apply flex-1 overflow-auto sm:overflow-hidden": {},
         },
         ".table-view-inner-content": {
-          "@apply max-w-full mx-auto h-full p-4 flex flex-col gap-4": {},
+          "@apply max-w-full mx-auto h-full p-4 flex flex-col gap-4 text-sm sm:text-[0.9rem]": {},
         },
         ".table-container-inner": {
-          "@apply h-full overflow-auto rounded-xl border border-slate-700 bg-slate-800/50 text-sm sm:text-[0.9rem]":
+          "@apply h-full overflow-auto rounded-xl border border-slate-700 bg-slate-800/50":
             {},
         },
         ".table-container-outer": {

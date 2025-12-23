@@ -5,7 +5,7 @@ import { usePagination } from "@/hooks/usePagination";
 import { useConnectorFilters } from "@/hooks/useConnectorFilters";
 import { DetailHeader } from "../common/DetailHeader";
 import { ConnectorsTable } from "./components/ConnectorsTable";
-import { FilterBar } from "./components/FilterBar";
+import { FilterBar } from "../common/FilterBar";
 import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 
