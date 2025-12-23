@@ -12,7 +12,7 @@ export const Breadcrumbs: React.FC = () => {
   return (
     <nav
       id="Breadcrumbs"
-      className="flex items-center justify-center text-[0.83rem] sm:text-sm text-slate-200 font-medium lowercase sm:uppercase  
+      className="flex items-center justify-center text-[0.8rem] sm:text-base text-slate-200 font-medium uppercase   
       overflow-x-auto whitespace-nowrap p-1 no-scrollbar max-w-full flex-wrap max-w-[70%] sm:max-w-[60%]"
     >
       {/* Home */}
@@ -33,9 +33,9 @@ export const Breadcrumbs: React.FC = () => {
 
         return (
           <React.Fragment key={to}>
-            <ChevronRight className="w-3 h-3 mx-0.5 sm:mx-1 text-slate-600 flex-shrink-0" />
+            <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 mx-0.5 sm:mx-1 text-slate-400 flex-shrink-0" />
             {last ? (
-              <span className="text-slate-300 truncate max-w-[120px] sm:max-w-none uppercase text-xs sm:text-base">
+              <span className="text-slate-300 truncate max-w-[120px] sm:max-w-none uppercase">
                 {label}
               </span>
             ) : isBox ? (
