@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 interface Props {
   isMenuOpen: boolean;
@@ -25,6 +25,12 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
   const role = useAppSelector((state) => state.auth.role);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const location = useLocation();
+
+  const getButtonClass = (path: string) => {
+    const isActive = location.pathname === path;
+    return `sidebar-btn ${isActive ? "text-blue-400 hover:text-blue-300" : ""}`;
+  };
 
   // Close menu when clicking outside
   const menuRef = useRef<HTMLDivElement>(null);
@@ -75,7 +81,12 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
 
       {/* Menu items */}
       <nav className="py-2">
-        <Link to="/" id="home-btn" onClick={closeMenu} className="sidebar-btn">
+        <Link
+          to="/"
+          id="home-btn"
+          onClick={closeMenu}
+          className={getButtonClass("/")}
+        >
           <Home className="sidebar-btn-icon" />
           <span>Home</span>
         </Link>
@@ -85,7 +96,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
           to="/transactions"
           id="view-transactions-btn"
           onClick={closeMenu}
-          className="sidebar-btn"
+          className={getButtonClass("/transactions")}
         >
           <Receipt className="sidebar-btn-icon" />
           <span>View Transactions</span>
@@ -96,7 +107,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
           to="/samples"
           id="view-samples-btn"
           onClick={closeMenu}
-          className="sidebar-btn"
+          className={getButtonClass("/samples")}
         >
           <Beaker className="sidebar-btn-icon" />
           <span>View Samples</span>
@@ -107,7 +118,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
           to="/connectors"
           id="view-connectors-btn"
           onClick={closeMenu}
-          className="sidebar-btn"
+          className={getButtonClass("/connectors")}
         >
           <Cable className="sidebar-btn-icon" />
           <span>View Connectors</span>
@@ -118,7 +129,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
           to="/accessories"
           id="view-accessories-btn"
           onClick={closeMenu}
-          className="sidebar-btn"
+          className={getButtonClass("/accessories")}
         >
           <Wrench className="sidebar-btn-icon" />
           <span>View Accessories</span>
@@ -130,7 +141,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
             to="/users"
             id="user-mgmt-btn"
             onClick={closeMenu}
-            className="sidebar-btn text-blue-400 hover:text-blue-300"
+            className={getButtonClass("/users")}
           >
             <Users className="sidebar-btn-icon" />
             <span>Manage Users</span>
