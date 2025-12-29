@@ -3,15 +3,15 @@ import { SESSION_KEY } from "@/utils/constants";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface UserInfo {
-  id: string;
+  id: number;
   username: string;
-  role: "Master Admin" | "Normal User";
+  role: "Master" | "Admin" | "User";
 }
 
 interface AuthState {
   isAuthenticated: boolean;
   user: string | null;
-  role: "Master Admin" | "Normal User" | null;
+  role: "Master" | "Admin" | "User" | null;
   token?: string;
   users: UserInfo[];
   loading?: boolean;
@@ -52,7 +52,7 @@ export const authSlice = createSlice({
       state,
       action: PayloadAction<{
         user: string;
-        role: "Master Admin" | "Normal User";
+        role: "Master" | "Admin" | "User";
         token: string;
       }>
     ) => {

@@ -9,7 +9,7 @@ export const UsersView: React.FC = () => {
   const navigate = useNavigate();
   const { users, role } = useAppSelector((state) => state.auth);
 
-  if (role !== "Master Admin") {
+  if (role !== "Master") {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 text-white p-4">
         <h1 className="text-2xl font-bold text-red-400">Access Denied</h1>
@@ -77,7 +77,7 @@ export const UsersView: React.FC = () => {
                     <td className="px-6 py-4">
                       <span
                         className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                          u.role === "Master Admin"
+                          u.role === "Master"
                             ? "bg-purple-500/10 text-purple-400 border border-purple-500/20"
                             : "bg-blue-500/10 text-blue-400 border border-blue-500/20"
                         }`}

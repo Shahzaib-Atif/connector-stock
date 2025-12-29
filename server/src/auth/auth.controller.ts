@@ -3,7 +3,6 @@ import {
   Post,
   Body,
   Get,
-  UnauthorizedException,
   UseGuards,
   Request,
 } from '@nestjs/common';
@@ -22,12 +21,9 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('login')
-  login(@Body() body: LoginDto) {
+  async login(@Body() body: LoginDto) {
     const { username, password } = body;
-    const user = this.authService.validateUser(username, password);
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+    const user = await this.authService.validateUser(username, password);
     return this.authService.login(user);
   }
 

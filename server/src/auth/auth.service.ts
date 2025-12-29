@@ -1,52 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { UsersRepo } from '../repository/users.repo';
 
 export interface User {
-  id: string;
+  userId: number;
   username: string;
-  role: 'Master Admin' | 'Normal User';
+  role: 'Master' | 'Admin' | 'User';
+  password?: string;
 }
 
 @Injectable()
 export class AuthService {
-  // Hardcoded list of users
-  private users: User[] = [
-    {
-      id: '1',
-      username: 'admin1',
-      role: 'Master Admin',
-    },
-    {
-      id: '2',
-      username: 'user1',
-      role: 'Normal User',
-    },
-  ];
+  constructor(
+    private jwtService: JwtService,
+    private usersRepo: UsersRepo,
+  ) {}
 
-  constructor(private jwtService: JwtService) {}
-
-  validateUser(username: string, pass: string): User | null {
-    const user = this.users.find((u) => u.username === username);
+  // Validate user credentials
+  async validateUser(username: string, pass: string): Promise<User> {
+    const user = (await this.usersRepo.findByUsername(username)) as User;
     if (user) {
-      if (pass === user.username) {
-        // Simple rule: password is the same as username for now
-        const { ...result } = user;
-        return result;
+      const isMatch = await bcrypt.compare(pass, user?.password);
+      if (isMatch) {
+        const { userId, username, role } = user;
+        return {
+          userId,
+          username,
+          role,
+        };
       }
+      throw new UnauthorizedException('Invalid credentials!');
     }
-    return null;
+    throw new UnauthorizedException('User not found!');
   }
 
+  // Generate JWT token for authenticated user
   login(user: User) {
     const payload = {
       username: user?.username || '',
-      sub: user.id,
+      sub: user.userId,
+      userId: user.userId,
       role: user.role,
     };
     return {
       access_token: this.jwtService.sign(payload),
       user: {
-        id: user.id,
+        id: user.userId,
         username: user.username,
         role: user.role,
       },
@@ -54,6 +54,6 @@ export class AuthService {
   }
 
   getUsers() {
-    return this.users;
+    return this.usersRepo.findAll();
   }
 }

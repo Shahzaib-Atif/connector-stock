@@ -18,6 +18,7 @@ import { SamplesService } from './services/samples.service';
 import { ConnectorsService } from './services/connectors.service';
 import { PrintController } from './controllers/print.controller';
 import { PrintService } from './services/print.service';
+import { UsersRepo } from './repository/users.repo';
 
 import { AuthModule } from './auth/auth.module';
 
@@ -44,6 +45,7 @@ import { AuthModule } from './auth/auth.module';
     SamplesRepo,
     SamplesService,
     PrintService,
+    UsersRepo,
   ],
 })
 export class AppModule {}
