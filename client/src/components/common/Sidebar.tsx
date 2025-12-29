@@ -137,7 +137,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
         </Link>
 
         {/* User Management (Master Admin only) */}
-        {role === "Master Admin" && (
+        {role === "Master" && (
           <Link
             to={ROUTES.USERS}
             id="user-mgmt-btn"

@@ -3,7 +3,7 @@ import { SESSION_KEY } from "@/utils/constants";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface UserInfo {
-  id: number;
+  userId: number;
   username: string;
   role: "Master" | "Admin" | "User";
 }

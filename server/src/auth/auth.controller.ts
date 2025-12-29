@@ -34,7 +34,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Master Admin')
+  @Roles('Master')
   @Post('users')
   createUser() {
     // This is a placeholder for user creation (only Master Admin)

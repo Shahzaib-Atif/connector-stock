@@ -65,11 +65,11 @@ export const UsersView: React.FC = () => {
               <tbody className="divide-y divide-slate-700">
                 {users.map((u: UserInfo) => (
                   <tr
-                    key={u.id}
+                    key={u.userId}
                     className="hover:bg-slate-700/50 transition-colors"
                   >
                     <td className="px-6 py-4 text-slate-300 font-mono">
-                      {u.id}
+                      {u.userId}
                     </td>
                     <td className="px-6 py-4 text-white font-medium">
                       {u.username}
