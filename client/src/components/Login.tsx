@@ -40,6 +40,11 @@ export const Login: React.FC = () => {
     }
   };
 
+  const inputClass =
+    "w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-700 text-white rounded-xl transition-all placeholder-slate-600";
+  const inputClassFocus =
+    "focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500";
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-900 px-4">
       <div className="bg-slate-800 w-full max-w-md p-8 rounded-2xl shadow-2xl border border-slate-700">
@@ -69,8 +74,9 @@ export const Login: React.FC = () => {
               <input
                 type="text"
                 value={username}
+                autoComplete="username"
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-700 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all placeholder-slate-600"
+                className={`${inputClass} ${inputClassFocus}`}
                 placeholder="Enter username"
               />
             </div>
@@ -88,7 +94,7 @@ export const Login: React.FC = () => {
                 value={password}
                 autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-700 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all placeholder-slate-600"
+                className={`${inputClass} ${inputClassFocus}`}
                 placeholder="••••••••"
               />
             </div>

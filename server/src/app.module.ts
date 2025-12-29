@@ -22,7 +22,7 @@ import { PrintService } from './services/print.service';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), AuthModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule],
   controllers: [
     ImageController,
     MetadataController,
