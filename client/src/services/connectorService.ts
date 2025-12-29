@@ -47,6 +47,7 @@ export const parseConnector = (
       masterData.vias[viasCode] || "Std"
     }`,
     stock: masterData.connectors[id].Qty,
+    family: reference.Family,
     accessories,
     clientReferences: reference.ClientReferences || [],
   };

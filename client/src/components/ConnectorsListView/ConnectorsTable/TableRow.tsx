@@ -81,6 +81,7 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data">{connector.Cor || "-"}</td>
       <td className="table-data">{connector.Vias || "-"}</td>
       <td className="table-data">{connector.ConnType || "-"}</td>
+      <td className="table-data text-center">{connector.Family || "-"}</td>
       <td className="table-data">{connector.Fabricante || "-"}</td>
       <td className="table-data break-all">{connector.Refabricante || "-"}</td>
       <td className="table-data text-center text-emerald-200">

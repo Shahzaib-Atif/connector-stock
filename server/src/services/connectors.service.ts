@@ -42,6 +42,7 @@ export class ConnectorsService {
       ...conn,
       Fabricante: conn.Connectors_Details?.Fabricante,
       Refabricante: conn.Connectors_Details?.Refabricante,
+      Family: conn.Connectors_Details?.Family,
       ClientReferences: mappingStore[conn.CODIVMAC] || [],
     }));
   }

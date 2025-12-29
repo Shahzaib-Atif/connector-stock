@@ -47,6 +47,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
         <CardInfoDiv label="Color" value={connector.colorName} />
         <CardInfoDiv label="Vias" value={connector.viasName} />
         <CardInfoDiv label="Type" value={connector.type} />
+        <CardInfoDiv label="Family" value={connector.family?.toString() || "-"} />
         <CardInfoDiv label="Fabricante" value={connector.fabricante} />
       </div>
 

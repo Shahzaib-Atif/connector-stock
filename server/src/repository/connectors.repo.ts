@@ -29,6 +29,7 @@ export class ConnectorRepo {
             select: {
               Fabricante: true,
               Refabricante: true,
+              Family: true,
             },
           },
         },
