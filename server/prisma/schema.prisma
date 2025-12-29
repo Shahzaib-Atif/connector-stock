@@ -155,6 +155,7 @@ model Connectors_Details {
   OBS             String?         @db.NVarChar(Max)
   ClipColor       String?         @db.VarChar(100)
   CapotAngle      String?         @db.VarChar(100)
+  Family          Int             @default(1, map: "DF__Connector__Famil__6BE40491")
   Connectors_Main Connectors_Main @relation(fields: [ConnId], references: [CODIVMAC], onDelete: Cascade, onUpdate: NoAction, map: "FK_Connector_Details")
 }
 
