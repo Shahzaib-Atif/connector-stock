@@ -5,16 +5,14 @@ import {
   Get,
   UseGuards,
   Request,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
-
-export class LoginDto {
-  username: string;
-  password: string;
-}
+import { UserRoles } from 'src/utils/types';
+import { LoginDto, CreateUserDto, ChangePasswordDto } from 'src/dtos/auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -34,14 +32,36 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Master')
+  @Roles('Master', 'Admin')
   @Post('users')
-  createUser() {
-    // This is a placeholder for user creation (only Master Admin)
-    return {
-      message:
-        'User creation is not fully implemented in this mock version, but you have permission!',
-    };
+  async createUser(@Body() body: CreateUserDto, @Request() req) {
+    const { username, password, role } = body;
+    const currentUserRole = req.user.role as UserRoles;
+
+    // Admin can only create 'User' role
+    if (currentUserRole === UserRoles.Admin && role !== UserRoles.User) {
+      throw new UnauthorizedException(
+        'Admins can only create users with "User" role.',
+      );
+    }
+
+    return this.authService.createUser(username, password, role);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Master')
+  @Post('users/delete/:id')
+  async deleteUser(@Request() req: any) {
+    const userId = parseInt(req.params.id as string);
+    return this.authService.deleteUser(userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('change-password')
+  async changePassword(@Body() body: ChangePasswordDto, @Request() req) {
+    const { newPassword } = body;
+    const userId = req.user.userId as number;
+    return this.authService.updatePassword(userId, newPassword);
   }
 
   @UseGuards(JwtAuthGuard)

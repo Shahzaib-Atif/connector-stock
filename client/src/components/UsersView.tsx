@@ -4,16 +4,22 @@ import { DetailHeader } from "./common/DetailHeader";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "./AppRoutes";
 import { User, UserRoles } from "@/types";
+import { Trash2, UserPlus } from "lucide-react";
+import { CreateUserModal } from "./CreateUserModal";
+import { useAppDispatch } from "@/store/hooks";
+import { deleteUserThunk } from "@/store/slices/authSlice";
 
 export const UsersView: React.FC = () => {
   const navigate = useNavigate();
-  const { users, role } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const { users, role, user: currentUsername } = useAppSelector((state) => state.auth);
+  const [showCreateModal, setShowCreateModal] = React.useState(false);
 
-  if (role !== UserRoles.Master) {
+  if (role !== UserRoles.Master && role !== UserRoles.Admin) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 text-white p-4">
         <h1 className="text-2xl font-bold text-red-400">Access Denied</h1>
-        <p className="mt-2">Only Master Admin can access this page.</p>
+        <p className="mt-2">You do not have permission to access this page.</p>
         <button
           onClick={() => navigate(ROUTES.HOME)}
           className="mt-6 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
@@ -23,6 +29,16 @@ export const UsersView: React.FC = () => {
       </div>
     );
   }
+
+  const handleDelete = (userId: number, username: string) => {
+    if (username === currentUsername) {
+      alert("You cannot delete yourself!");
+      return;
+    }
+    if (window.confirm(`Are you sure you want to delete user "${username}"?`)) {
+      dispatch(deleteUserThunk(userId));
+    }
+  };
 
   return (
     <div className="table-view-wrapper">
@@ -36,12 +52,13 @@ export const UsersView: React.FC = () => {
         <div className="table-view-inner-content">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-white">System Users</h2>
-            {/* Create New User button (TODO) */}
-            {false && (
-              <button className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-blue-600/30">
-                Create New User
-              </button>
-            )}
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-blue-600/30"
+            >
+              <UserPlus className="w-4 h-4" />
+              Create New User
+            </button>
           </div>
 
           <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
@@ -59,6 +76,9 @@ export const UsersView: React.FC = () => {
                   </th>
                   <th className="px-6 py-4 text-slate-400 font-semibold uppercase text-xs tracking-wider">
                     Status
+                  </th>
+                  <th className="px-6 py-4 text-slate-400 font-semibold uppercase text-xs tracking-wider text-right">
+                    Actions
                   </th>
                 </tr>
               </thead>
@@ -91,6 +111,17 @@ export const UsersView: React.FC = () => {
                         Active
                       </span>
                     </td>
+                    <td className="px-6 py-4 text-right">
+                      {role === UserRoles.Master && u.role !== UserRoles.Master && (
+                        <button
+                          onClick={() => handleDelete(u.userId, u.username)}
+                          className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                          title="Delete User"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -98,6 +129,7 @@ export const UsersView: React.FC = () => {
           </div>
         </div>
       </div>
+      {showCreateModal && <CreateUserModal onClose={() => setShowCreateModal(false)} />}
     </div>
   );
 };

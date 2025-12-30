@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Logger } from '@nestjs/common';
 import { PrintService } from '../services/print.service';
-import { PrintLabelDto } from 'src/dtos/PrintLabelDto';
+import { PrintLabelDto } from 'src/dtos/print.dto';
 
 @Controller('print')
 export class PrintController {

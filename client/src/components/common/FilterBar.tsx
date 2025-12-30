@@ -87,6 +87,7 @@ export const FilterBar: React.FC<Props> = ({
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchQueryChange(e.target.value)}
+          autoComplete="off"
           placeholder={getPlaceholder()}
           className={`${inputBase} ${inputFocus} pr-8`}
         />

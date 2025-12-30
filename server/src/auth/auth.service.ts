@@ -2,13 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersRepo } from '../repository/users.repo';
-
-export interface User {
-  userId: number;
-  username: string;
-  role: 'Master' | 'Admin' | 'User';
-  password?: string;
-}
+import { User, UserRoles } from 'src/utils/types';
 
 @Injectable()
 export class AuthService {
@@ -55,5 +49,27 @@ export class AuthService {
 
   getUsers() {
     return this.usersRepo.findAll();
+  }
+
+  async createUser(username: string, pass: string, role: UserRoles) {
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(pass, salt);
+
+    return this.usersRepo.create({
+      username,
+      password: passwordHash,
+      role,
+      userId: 0,
+    });
+  }
+
+  async deleteUser(userId: number) {
+    return this.usersRepo.delete(userId);
+  }
+
+  async updatePassword(userId: number, newPassword: string) {
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(newPassword, salt);
+    return this.usersRepo.updatePassword(userId, passwordHash);
   }
 }

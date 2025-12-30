@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
+import { User } from 'src/utils/types';
 
 @Injectable()
 export class UsersRepo {
@@ -31,6 +32,44 @@ export class UsersRepo {
     } catch (ex: any) {
       console.error('Error fetching users:', ex.message);
       return [];
+    }
+  }
+
+  async create({ username, password, role }: User) {
+    try {
+      return await this.prisma.users.create({
+        data: {
+          username,
+          password,
+          role,
+        },
+      });
+    } catch (ex: any) {
+      console.error('Error creating user:', ex.message);
+      throw ex;
+    }
+  }
+
+  async delete(userId: number) {
+    try {
+      return await this.prisma.users.delete({
+        where: { userId },
+      });
+    } catch (ex: any) {
+      console.error('Error deleting user:', ex.message);
+      throw ex;
+    }
+  }
+
+  async updatePassword(userId: number, passwordHash: string) {
+    try {
+      return await this.prisma.users.update({
+        where: { userId },
+        data: { password: passwordHash },
+      });
+    } catch (ex: any) {
+      console.error('Error updating password:', ex.message);
+      throw ex;
     }
   }
 }

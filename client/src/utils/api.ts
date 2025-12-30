@@ -27,6 +27,7 @@ const print = {
 const auth = {
   login: `${API_BASE_URL}/auth/login`,
   users: `${API_BASE_URL}/auth/users`,
+  changePwd: `${API_BASE_URL}/auth/change-password`,
 };
 
 export const API = {

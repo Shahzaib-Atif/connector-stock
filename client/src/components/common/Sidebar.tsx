@@ -11,7 +11,9 @@ import {
   Users,
   Wrench,
   X,
+  Key,
 } from "lucide-react";
+import { ChangePasswordModal } from "./ChangePasswordModal";
 import { useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "../AppRoutes";
@@ -28,6 +30,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const getButtonClass = (path: string) => {
     const isActive = location.pathname === path;
@@ -75,6 +78,13 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
               Logged in as
             </p>
             <p className="text-white font-mono font-semibold mt-1">{user}</p>
+            <button
+              onClick={() => setShowPasswordModal(true)}
+              className="mt-2 text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors"
+            >
+              <Key className="w-3 h-3" />
+              Change Password
+            </button>
           </>
         ) : (
           <p className="text-white font-semibold">Not logged in</p>
@@ -137,8 +147,8 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
           <span>View Accessories</span>
         </Link>
 
-        {/* User Management (Master Admin only) */}
-        {role === UserRoles.Master && (
+        {/* User Management (Master or Admin) */}
+        {(role === UserRoles.Master || role === UserRoles.Admin) && (
           <Link
             to={ROUTES.USERS}
             id="user-mgmt-btn"
@@ -176,6 +186,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
           </Link>{" "}
         </div>
       )}
+      {showPasswordModal && <ChangePasswordModal onClose={() => setShowPasswordModal(false)} />}
     </div>
   );
 }

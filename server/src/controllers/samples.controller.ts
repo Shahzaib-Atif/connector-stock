@@ -10,8 +10,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { SamplesService } from 'src/services/samples.service';
-import { CreateSampleDto, UpdateSampleDto } from 'src/utils/types';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CreateSampleDto, UpdateSampleDto } from 'src/dtos/samples.dto';
 
 @Controller('samples')
 export class SamplesController {

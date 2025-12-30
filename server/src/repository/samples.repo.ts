@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { CreateSampleDto, UpdateSampleDto } from 'src/utils/types';
+import { CreateSampleDto, UpdateSampleDto } from 'src/dtos/samples.dto';
 
 @Injectable()
 export class SamplesRepo {

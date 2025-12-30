@@ -3,7 +3,7 @@ import { PrismaService } from 'prisma/prisma.service';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
 import { SamplesRepo } from 'src/repository/samples.repo';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
-import { CreateSampleDto, UpdateSampleDto } from 'src/utils/types';
+import { CreateSampleDto, UpdateSampleDto } from 'src/dtos/samples.dto';
 
 @Injectable()
 export class SamplesService {

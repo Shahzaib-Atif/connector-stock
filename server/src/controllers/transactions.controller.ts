@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { TransactionsRepo } from 'src/repository/transactions.repo';
 import { TransactionsService } from 'src/services/transactions.service';
-import { CreateTransactionsDto } from 'src/utils/types';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CreateTransactionsDto } from 'src/dtos/transaction.dto';
 
 @Controller('transactions')
 export class TransactionsController {

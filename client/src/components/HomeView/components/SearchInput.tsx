@@ -63,6 +63,7 @@ function SearchInput({
         }}
         onKeyDown={handleKeyDown}
         onFocus={handleFocus}
+        autoComplete="off"
       />
       <button
         onClick={() => onScan(searchQuery)}

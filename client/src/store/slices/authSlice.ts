@@ -1,4 +1,9 @@
-import { fetchUsersApi } from "@/api/authApi";
+import {
+  changePasswordApi,
+  createUserApi,
+  deleteUserApi,
+  fetchUsersApi,
+} from "@/api/authApi";
 import { User, UserRoles } from "@/types";
 import { SESSION_KEY } from "@/utils/constants";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -38,6 +43,34 @@ export const initUsersList = createAsyncThunk("usersList/init", async () => {
 
   return [];
 });
+
+export const createUserThunk = createAsyncThunk(
+  "usersList/create",
+  async (userData: User, { getState, dispatch }) => {
+    const state = (getState() as any).auth;
+    const result = await createUserApi(state.token, userData);
+    dispatch(initUsersList());
+    return result;
+  }
+);
+
+export const deleteUserThunk = createAsyncThunk(
+  "usersList/delete",
+  async (userId: number, { getState, dispatch }) => {
+    const state = (getState() as any).auth;
+    const result = await deleteUserApi(state.token, userId);
+    dispatch(initUsersList());
+    return result;
+  }
+);
+
+export const changePasswordThunk = createAsyncThunk(
+  "auth/changePassword",
+  async (newPassword: string, { getState }) => {
+    const state = (getState() as any).auth;
+    return await changePasswordApi(state.token, newPassword);
+  }
+);
 
 export const authSlice = createSlice({
   name: "auth",

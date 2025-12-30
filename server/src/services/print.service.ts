@@ -4,7 +4,7 @@ import { promisify } from 'util';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-import { PrintLabelDto } from 'src/dtos/PrintLabelDto';
+import { PrintLabelDto } from 'src/dtos/print.dto';
 
 const execAsync = promisify(exec);
 
@@ -120,7 +120,7 @@ export class PrintService {
     }
 
     // Finalize - use qty if provided, otherwise 1
-    const printQty = isNaN(qty as number) ? 1 : (qty as number);
+    const printQty = isNaN(qty) ? 1 : qty;
     lines.push(`PRINT ${printQty},1`);
     return lines.join('\r\n') + '\r\n';
   }
