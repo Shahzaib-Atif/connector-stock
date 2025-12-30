@@ -35,7 +35,7 @@ export class AuthController {
   @Roles('Master', 'Admin')
   @Post('users')
   async createUser(@Body() body: CreateUserDto, @Request() req) {
-    const { username, password, role } = body;
+    const { username, password, role, dept } = body;
     const currentUserRole = req.user.role as UserRoles;
 
     // Admin can only create 'User' role
@@ -45,7 +45,7 @@ export class AuthController {
       );
     }
 
-    return this.authService.createUser(username, password, role);
+    return this.authService.createUser(username, password, role, dept);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

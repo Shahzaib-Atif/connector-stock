@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { X, UserPlus, Loader2, CheckCircle2 } from "lucide-react";
+import { X, UserPlus, Loader2, CheckCircle2, Building2 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { createUserThunk } from "@/store/slices/authSlice";
-import { UserRoles } from "@/types";
+import { UserRoles, Department } from "@/types";
 
 interface Props {
   onClose: () => void;
@@ -15,6 +15,7 @@ export const CreateUserModal: React.FC<Props> = ({ onClose }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<UserRoles>(UserRoles.User);
+  const [dept, setDept] = useState("");
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
@@ -39,6 +40,7 @@ export const CreateUserModal: React.FC<Props> = ({ onClose }) => {
           username,
           password,
           role,
+          dept: dept || undefined,
         })
       ).unwrap();
       setStatus("success");
@@ -84,10 +86,14 @@ export const CreateUserModal: React.FC<Props> = ({ onClose }) => {
           ) : (
             <>
               <div>
-                <label className="block text-sm font-medium text-slate-400 mb-1.5">
+                <label
+                  htmlFor="username"
+                  className="block text-sm font-medium text-slate-400 mb-1.5"
+                >
                   Username
                 </label>
                 <input
+                  id="username"
                   type="text"
                   value={username}
                   autoComplete="username"
@@ -98,11 +104,16 @@ export const CreateUserModal: React.FC<Props> = ({ onClose }) => {
                 />
               </div>
 
+              {/* Password field */}
               <div>
-                <label className="block text-sm font-medium text-slate-400 mb-1.5">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-slate-400 mb-1.5"
+                >
                   Password
                 </label>
                 <input
+                  id="password"
                   type="password"
                   value={password}
                   autoComplete="current-password"
@@ -113,14 +124,19 @@ export const CreateUserModal: React.FC<Props> = ({ onClose }) => {
                 />
               </div>
 
+              {/* Role field */}
               <div>
-                <label className="block text-sm font-medium text-slate-400 mb-1.5">
+                <label
+                  htmlFor="role"
+                  className="block text-sm font-medium text-slate-400 mb-1.5"
+                >
                   Role
                 </label>
                 <select
+                  id="role"
                   value={role}
                   onChange={(e) => setRole(e.target.value as UserRoles)}
-                  className={inputClass + " appearance-none"}
+                  className={inputClass + " appearance-none cursor-pointer"}
                   required
                 >
                   {availableRoles.map((r) => (
@@ -129,6 +145,47 @@ export const CreateUserModal: React.FC<Props> = ({ onClose }) => {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* Department field */}
+              <div className="space-y-2">
+                <label
+                  htmlFor="dept"
+                  className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 flex items-center gap-2"
+                >
+                  <Building2 className="w-3 h-3" />
+                  Department
+                </label>
+                <div className="relative">
+                  <select
+                    id="dept"
+                    value={dept}
+                    onChange={(e) => setDept(e.target.value)}
+                    className={inputClass + " appearance-none cursor-pointer"}
+                  >
+                    <option value="">No Department</option>
+                    {Object.values(Department).map((d) => (
+                      <option key={d} value={d}>
+                        {d}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
               </div>
 
               {status === "error" && (

@@ -9,4 +9,5 @@ export interface User {
   username: string;
   role: 'Master' | 'Admin' | 'User';
   password?: string;
+  dept?: string;
 }

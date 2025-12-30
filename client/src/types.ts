@@ -177,6 +177,7 @@ export interface User {
   username: string;
   role: UserRoles;
   password?: string;
+  dept?: string;
 }
 
 export enum UserRoles {

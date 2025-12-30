@@ -51,7 +51,7 @@ export class AuthService {
     return this.usersRepo.findAll();
   }
 
-  async createUser(username: string, pass: string, role: UserRoles) {
+  async createUser(username: string, pass: string, role: UserRoles, dept?: string) {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(pass, salt);
 
@@ -60,6 +60,7 @@ export class AuthService {
       password: passwordHash,
       role,
       userId: 0,
+      dept,
     });
   }
 

@@ -35,13 +35,14 @@ export class UsersRepo {
     }
   }
 
-  async create({ username, password, role }: User) {
+  async create({ username, password, role, dept }: User) {
     try {
       return await this.prisma.users.create({
         data: {
           username,
           password,
           role,
+          dept,
         },
       });
     } catch (ex: any) {
