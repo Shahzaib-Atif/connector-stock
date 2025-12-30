@@ -26,6 +26,7 @@ export class UsersRepo {
           userId: true,
           username: true,
           role: true,
+          dept: true,
           // Exclude password from general list matches
         },
       });

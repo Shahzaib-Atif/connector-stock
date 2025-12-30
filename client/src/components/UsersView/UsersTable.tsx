@@ -31,7 +31,7 @@ function UsersTable({ setSelectedUser, setOpenDltDlg }: Props) {
               Role
             </th>
             <th className="px-6 py-4 text-slate-400 font-semibold uppercase text-xs tracking-wider">
-              Status
+              Dept
             </th>
             <th className="px-6 py-4 text-slate-400 font-semibold uppercase text-xs tracking-wider text-right">
               Actions
@@ -59,11 +59,8 @@ function UsersTable({ setSelectedUser, setOpenDltDlg }: Props) {
                   {u.role}
                 </span>
               </td>
-              <td className="px-6 py-4">
-                <span className="flex items-center gap-2 text-green-400 text-sm">
-                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                  Active
-                </span>
+              <td className="px-6 py-4 text-slate-300">
+                {u.dept || "--"}
               </td>
               <td className="px-6 py-4 text-right">
                 {role === UserRoles.Master && u.role !== UserRoles.Master && (
