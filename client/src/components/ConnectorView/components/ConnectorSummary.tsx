@@ -20,6 +20,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
 
   return (
     <div id="connector-summary" className={VIEW_SUMMARY_CLASS}>
+
       {/* Connector Image (if available) */}
       <ImageBox
         error={error}
@@ -47,7 +48,10 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
         <CardInfoDiv label="Color" value={connector.colorName} />
         <CardInfoDiv label="Vias" value={connector.viasName} />
         <CardInfoDiv label="Type" value={connector.type} />
-        <CardInfoDiv label="Family" value={connector.family?.toString() || "-"} />
+        <CardInfoDiv
+          label="Family"
+          value={connector.family?.toString() || "-"}
+        />
         <CardInfoDiv label="Fabricante" value={connector.fabricante} />
       </div>
 

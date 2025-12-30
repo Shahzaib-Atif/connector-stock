@@ -1,5 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ConnectorsService } from 'src/services/connectors.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { UpdateConnectorDto } from 'src/dtos/update-connector.dto';
 
 @Controller('connectors')
 export class ConnectorController {
@@ -13,5 +17,15 @@ export class ConnectorController {
   @Get('')
   async getReferencias() {
     return await this.service.getConnectors();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Master')
+  @Post('/:id/update')
+  async updateConnector(
+    @Param('id') id: string,
+    @Body() body: UpdateConnectorDto,
+  ) {
+    return await this.service.updateConnector(id, body);
   }
 }

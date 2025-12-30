@@ -46,4 +46,8 @@ export class ConnectorsService {
       ClientReferences: mappingStore[conn.CODIVMAC] || [],
     }));
   }
+
+  async updateConnector(codivmac: string, data: any) {
+    return this.repo.updateConnectorProperties(codivmac, data);
+  }
 }

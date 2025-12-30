@@ -1,6 +1,8 @@
 import { Connector, Box, Accessory, MasterData } from "../types";
 import { getCoordinates } from "../utils/inventoryUtils";
 import { parseAccessory } from "./accessoryService";
+import { API } from "../utils/api";
+import { SESSION_KEY } from "../utils/constants";
 
 export const parseConnector = (
   id: string,
@@ -119,5 +121,28 @@ export const searchConnectors = (
     }
   }
 
+
   return results;
+};
+
+export const updateConnectorApi = async (connectorId: string, data: any) => {
+  const session = localStorage.getItem(SESSION_KEY);
+  if (!session) throw new Error("No session found");
+  const { token } = JSON.parse(session);
+
+  const response = await fetch(`${API.connectors}/${connectorId}/update`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to update connector");
+  }
+
+  return response.json();
 };

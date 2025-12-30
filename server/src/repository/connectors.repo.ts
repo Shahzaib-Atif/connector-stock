@@ -81,4 +81,39 @@ export class ConnectorRepo {
       )
     `;
   }
+
+  async updateConnectorProperties(codivmac: string, data: any) {
+    try {
+      return await this.prisma.$transaction(async (tx) => {
+        // Update Main table
+        await tx.connectors_Main.update({
+          where: { CODIVMAC: codivmac },
+          data: {
+            Cor: data.Cor,
+            Vias: data.Vias,
+            ConnType: data.ConnType,
+          },
+        });
+
+        // Update Details table (upsert just in case it's missing)
+        await tx.connectors_Details.upsert({
+          where: { ConnId: codivmac },
+          create: {
+            ConnId: codivmac,
+            Fabricante: data.Fabricante,
+            Family: data.Family,
+          },
+          update: {
+            Fabricante: data.Fabricante,
+            Family: data.Family,
+          },
+        });
+
+        return true;
+      });
+    } catch (ex: any) {
+      console.error('Error updating connector properties:', ex.message);
+      throw ex;
+    }
+  }
 }

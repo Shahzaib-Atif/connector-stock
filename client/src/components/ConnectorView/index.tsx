@@ -12,6 +12,10 @@ import { ConnectorSummary } from "./components/ConnectorSummary";
 import { AccessoryList } from "./components/AccessoryList";
 import { BoxShortcut } from "../common/BoxShortcut";
 import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
+import { useAppSelector } from "../../store/hooks";
+import { UserRoles } from "../../types";
+import { Edit2 } from "lucide-react";
+import { ConnectorEditForm } from "./components/ConnectorEditForm";
 
 interface ConnectorViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -30,9 +34,13 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
   onTransaction,
   onOpenQR,
 }) => {
+  const { role } = useAppSelector((state) => state.auth);
+  const masterData = useAppSelector((state) => state.masterData.data);
+
   // Shared hook lifts params and cache plumbing.
   const { entity: connector } = useEntityDetails<Connector>(connectorResolver);
   const { goBack, goToAccessory, goToBox } = useInventoryNavigation();
+  const [isEditing, setIsEditing] = React.useState(false);
 
   // Enable Back key to go back
   useGlobalBackNavigation(goBack);
@@ -64,7 +72,29 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
         id="connector-page"
         className="max-w-3xl mx-auto p-4 space-y-4 text-sm sm:text-base"
       >
-        <ConnectorSummary connector={connector} />
+        {isEditing && masterData ? (
+          <ConnectorEditForm
+            connector={connector}
+            masterData={masterData}
+            onCancel={() => setIsEditing(false)}
+            onSave={() => setIsEditing(false)}
+          />
+        ) : (
+          <div className="relative">
+            <ConnectorSummary connector={connector} />
+            {role === UserRoles.Master && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 bg-slate-800/80 backdrop-blur-md border border-slate-700 hover:border-blue-500/50 hover:bg-slate-700 text-slate-300 hover:text-blue-400 rounded-xl transition-all shadow-lg group"
+              >
+                <Edit2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <span className="text-xs font-bold uppercase tracking-wider">
+                  Edit
+                </span>
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Accessories List */}
         {connector.accessories.length > 0 && (
