@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { DetailHeader } from "./common/DetailHeader";
 import { useNavigate } from "react-router-dom";
@@ -8,12 +8,19 @@ import { Trash2, UserPlus } from "lucide-react";
 import { CreateUserModal } from "./CreateUserModal";
 import { useAppDispatch } from "@/store/hooks";
 import { deleteUserThunk } from "@/store/slices/authSlice";
+import DeleteDialog from "./common/DeleteDialog";
 
 export const UsersView: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { users, role, user: currentUsername } = useAppSelector((state) => state.auth);
-  const [showCreateModal, setShowCreateModal] = React.useState(false);
+  const {
+    users,
+    role,
+    user: currentUsername,
+  } = useAppSelector((state) => state.auth);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [openDltDlg, setOpenDltDlg] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   if (role !== UserRoles.Master && role !== UserRoles.Admin) {
     return (
@@ -30,14 +37,9 @@ export const UsersView: React.FC = () => {
     );
   }
 
-  const handleDelete = (userId: number, username: string) => {
-    if (username === currentUsername) {
-      alert("You cannot delete yourself!");
-      return;
-    }
-    if (window.confirm(`Are you sure you want to delete user "${username}"?`)) {
-      dispatch(deleteUserThunk(userId));
-    }
+  const handleDelete = () => {
+    if (selectedUser.username !== currentUsername)
+      dispatch(deleteUserThunk(selectedUser?.userId));
   };
 
   return (
@@ -61,6 +63,7 @@ export const UsersView: React.FC = () => {
             </button>
           </div>
 
+          {/* User table */}
           <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
             <table className="w-full text-left">
               <thead>
@@ -112,15 +115,19 @@ export const UsersView: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      {role === UserRoles.Master && u.role !== UserRoles.Master && (
-                        <button
-                          onClick={() => handleDelete(u.userId, u.username)}
-                          className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
-                          title="Delete User"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      )}
+                      {role === UserRoles.Master &&
+                        u.role !== UserRoles.Master && (
+                          <button
+                            onClick={() => {
+                              setSelectedUser(u);
+                              setOpenDltDlg(true);
+                            }}
+                            className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                            title="Delete User"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
                     </td>
                   </tr>
                 ))}
@@ -129,7 +136,17 @@ export const UsersView: React.FC = () => {
           </div>
         </div>
       </div>
-      {showCreateModal && <CreateUserModal onClose={() => setShowCreateModal(false)} />}
+      {showCreateModal && (
+        <CreateUserModal onClose={() => setShowCreateModal(false)} />
+      )}
+
+      <DeleteDialog
+        open={openDltDlg}
+        setOpen={setOpenDltDlg}
+        msg={`Are you sure you want to delete '${selectedUser?.username}'?`}
+        title="Delete User"
+        onDelete={handleDelete}
+      />
     </div>
   );
 };

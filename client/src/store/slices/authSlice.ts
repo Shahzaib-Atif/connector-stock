@@ -57,6 +57,8 @@ export const createUserThunk = createAsyncThunk(
 export const deleteUserThunk = createAsyncThunk(
   "usersList/delete",
   async (userId: number, { getState, dispatch }) => {
+    if (!userId) throw new Error("UserId cannot be empty!");
+
     const state = (getState() as any).auth;
     const result = await deleteUserApi(state.token, userId);
     dispatch(initUsersList());
