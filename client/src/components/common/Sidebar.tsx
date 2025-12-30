@@ -15,6 +15,7 @@ import {
 import { useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "../AppRoutes";
+import { UserRoles } from "@/types";
 
 interface Props {
   isMenuOpen: boolean;
@@ -137,7 +138,7 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
         </Link>
 
         {/* User Management (Master Admin only) */}
-        {role === "Master" && (
+        {role === UserRoles.Master && (
           <Link
             to={ROUTES.USERS}
             id="user-mgmt-btn"

@@ -2,14 +2,14 @@ import React from "react";
 import { useAppSelector } from "@/store/hooks";
 import { DetailHeader } from "./common/DetailHeader";
 import { useNavigate } from "react-router-dom";
-import { UserInfo } from "@/store/slices/authSlice";
 import { ROUTES } from "./AppRoutes";
+import { User, UserRoles } from "@/types";
 
 export const UsersView: React.FC = () => {
   const navigate = useNavigate();
   const { users, role } = useAppSelector((state) => state.auth);
 
-  if (role !== "Master") {
+  if (role !== UserRoles.Master) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 text-white p-4">
         <h1 className="text-2xl font-bold text-red-400">Access Denied</h1>
@@ -63,7 +63,7 @@ export const UsersView: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-700">
-                {users.map((u: UserInfo) => (
+                {users.map((u: User) => (
                   <tr
                     key={u.userId}
                     className="hover:bg-slate-700/50 transition-colors"
@@ -77,7 +77,7 @@ export const UsersView: React.FC = () => {
                     <td className="px-6 py-4">
                       <span
                         className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                          u.role === "Master"
+                          u.role === UserRoles.Master
                             ? "bg-purple-500/10 text-purple-400 border border-purple-500/20"
                             : "bg-blue-500/10 text-blue-400 border border-blue-500/20"
                         }`}

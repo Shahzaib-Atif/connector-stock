@@ -1,5 +1,5 @@
+import { User } from "@/types";
 import { API } from "../utils/api";
-import { UserInfo } from "../store/slices/authSlice";
 
 export const loginApi = async (username: string, password: string) => {
   const response = await fetch(API.login, {
@@ -16,7 +16,7 @@ export const loginApi = async (username: string, password: string) => {
   return response.json();
 };
 
-export const fetchUsersApi = async (token: string): Promise<UserInfo[]> => {
+export const fetchUsersApi = async (token: string): Promise<User[]> => {
   const response = await fetch(API.users, {
     headers: {
       Authorization: `Bearer ${token}`,

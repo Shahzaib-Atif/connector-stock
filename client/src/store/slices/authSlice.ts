@@ -1,19 +1,14 @@
 import { fetchUsersApi } from "@/api/authApi";
+import { User, UserRoles } from "@/types";
 import { SESSION_KEY } from "@/utils/constants";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export interface UserInfo {
-  userId: number;
-  username: string;
-  role: "Master" | "Admin" | "User";
-}
 
 interface AuthState {
   isAuthenticated: boolean;
   user: string | null;
-  role: "Master" | "Admin" | "User" | null;
+  role: UserRoles | null;
   token?: string;
-  users: UserInfo[];
+  users: User[];
   loading?: boolean;
   error?: string | null;
 }
@@ -52,7 +47,7 @@ export const authSlice = createSlice({
       state,
       action: PayloadAction<{
         user: string;
-        role: "Master" | "Admin" | "User";
+        role: UserRoles;
         token: string;
       }>
     ) => {
@@ -79,7 +74,7 @@ export const authSlice = createSlice({
       state.users = [];
       localStorage.removeItem(SESSION_KEY);
     },
-    setUsersList: (state, action: PayloadAction<UserInfo[]>) => {
+    setUsersList: (state, action: PayloadAction<User[]>) => {
       state.users = action.payload;
     },
   },

@@ -171,3 +171,16 @@ export interface QRData {
   encomenda?: string;
   qty?: number;
 }
+
+export interface User {
+  userId: number;
+  username: string;
+  role: UserRoles;
+  password?: string;
+}
+
+export enum UserRoles {
+  Master = "Master",
+  Admin = "Admin",
+  User = "User",
+}

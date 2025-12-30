@@ -51,10 +51,6 @@ const App: React.FC = () => {
     );
   }
 
-  if (user === "admin") {
-    dispatch(logout());
-  }
-
   return (
     <>
       <AppRoutes
