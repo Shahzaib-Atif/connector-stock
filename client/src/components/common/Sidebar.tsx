@@ -22,15 +22,19 @@ import { UserRoles } from "@/types";
 interface Props {
   isMenuOpen: boolean;
   setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowPasswordModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
+export function Sidebar({
+  isMenuOpen,
+  setIsMenuOpen,
+  setShowPasswordModal,
+}: Props) {
   const user = useAppSelector((state) => state.auth.user);
   const role = useAppSelector((state) => state.auth.role);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const getButtonClass = (path: string) => {
     const isActive = location.pathname === path;
@@ -186,7 +190,6 @@ export function Sidebar({ isMenuOpen, setIsMenuOpen }: Props) {
           </Link>{" "}
         </div>
       )}
-      {showPasswordModal && <ChangePasswordModal onClose={() => setShowPasswordModal(false)} />}
     </div>
   );
 }

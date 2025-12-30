@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 
 import { Breadcrumbs } from "./Breadcrumbs";
 import { ROUTES } from "../AppRoutes";
+import { ChangePasswordModal } from "./ChangePasswordModal";
 
 interface DetailHeaderProps {
   label?: string;
@@ -23,6 +24,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
   const user = useAppSelector((state) => state.auth.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const showCenterSection = label || title;
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   return (
     <>
@@ -89,8 +91,17 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
         />
       )}
 
+      {/* Password change modal */}
+      {showPasswordModal && (
+        <ChangePasswordModal onClose={() => setShowPasswordModal(false)} />
+      )}
+
       {/* Sidebar */}
-      <Sidebar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+      <Sidebar
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+        setShowPasswordModal={setShowPasswordModal}
+      />
     </>
   );
 };

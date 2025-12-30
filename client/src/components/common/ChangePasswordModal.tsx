@@ -12,7 +12,9 @@ export const ChangePasswordModal: React.FC<Props> = ({ onClose }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -45,12 +47,17 @@ export const ChangePasswordModal: React.FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+    <div
+      id="change-password-modal"
+      className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4"
+    >
       <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
           <div className="flex items-center gap-2">
             <Lock className="w-5 h-5 text-blue-400" />
-            <h3 className="text-lg font-semibold text-white">Update Password</h3>
+            <h3 className="text-lg font-semibold text-white">
+              Update Password
+            </h3>
           </div>
           <button
             onClick={onClose}
@@ -81,13 +88,18 @@ export const ChangePasswordModal: React.FC<Props> = ({ onClose }) => {
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all pr-12"
                     placeholder="Enter new password"
                     required
+                    autoComplete="new-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-500 hover:text-slate-300 transition-colors"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -103,12 +115,15 @@ export const ChangePasswordModal: React.FC<Props> = ({ onClose }) => {
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all"
                   placeholder="Confirm new password"
                   required
+                  autoComplete="new-password"
                 />
               </div>
 
               {status === "error" && (
                 <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
-                  <p className="text-sm text-red-400 text-center">{errorMessage}</p>
+                  <p className="text-sm text-red-400 text-center">
+                    {errorMessage}
+                  </p>
                 </div>
               )}
 
