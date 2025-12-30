@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { User } from 'src/utils/types';
 
@@ -45,6 +45,9 @@ export class UsersRepo {
         },
       });
     } catch (ex: any) {
+      if (ex?.code === 'P2002')
+        throw new ConflictException('User already exists!');
+
       console.error('Error creating user:', ex.message);
       throw ex;
     }
