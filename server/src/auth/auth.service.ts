@@ -51,7 +51,12 @@ export class AuthService {
     return this.usersRepo.findAll();
   }
 
-  async createUser(username: string, pass: string, role: UserRoles, dept?: string) {
+  async createUser(
+    username: string,
+    pass: string,
+    role: UserRoles,
+    dept?: string,
+  ) {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(pass, salt);
 

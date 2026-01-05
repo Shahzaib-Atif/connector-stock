@@ -4,4 +4,5 @@ export class UpdateConnectorDto {
   ConnType: string;
   Fabricante: string;
   Family: number;
+  Qty: number;
 }

@@ -28,6 +28,7 @@ export const ConnectorEditForm: React.FC<Props> = ({
     ConnType: connector.type,
     Fabricante: connector.fabricante === "--" ? "" : connector.fabricante,
     Family: connector.family || 1,
+    Qty: connector.stock || 0,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -106,24 +107,34 @@ export const ConnectorEditForm: React.FC<Props> = ({
           </select>
         </div>
 
-        {/* Family Dropdown */}
+        {/* Family Input */}
         <div className="space-y-1.5">
           <label className="text-xs font-semibold text-slate-400 uppercase ml-1">
             Family
           </label>
-          <select
+          <input
+            type="number"
             value={formData.Family}
             onChange={(e) =>
-              setFormData({ ...formData, Family: parseInt(e.target.value) })
+              setFormData({ ...formData, Family: parseInt(e.target.value) || 0 })
             }
-            className={selectClass}
-          >
-            {[1, 2, 3, 4, 5].map((f) => (
-              <option key={f} value={f}>
-                Family {f}
-              </option>
-            ))}
-          </select>
+            className={inputClass}
+          />
+        </div>
+
+        {/* Quantity Input */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-slate-400 uppercase ml-1">
+            Quantity
+          </label>
+          <input
+            type="number"
+            value={formData.Qty}
+            onChange={(e) =>
+              setFormData({ ...formData, Qty: parseInt(e.target.value) || 0 })
+            }
+            className={inputClass}
+          />
         </div>
 
         {/* Fabricante dropdown */}
@@ -187,3 +198,6 @@ export const ConnectorEditForm: React.FC<Props> = ({
 
 const selectClass =
   "w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-blue-500/50 outline-none transition-all appearance-none cursor-pointer";
+
+const inputClass =
+  "w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-blue-500/50 outline-none transition-all";

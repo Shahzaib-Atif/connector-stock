@@ -92,6 +92,7 @@ export class ConnectorRepo {
             Cor: data.Cor,
             Vias: data.Vias,
             ConnType: data.ConnType,
+            Qty: data.Qty,
           },
         });
 
