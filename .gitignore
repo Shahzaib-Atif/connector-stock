@@ -1,3 +1,4 @@
 server/package-lock.json
 client/package-lock.json
 server/.env.prod
+server/.env.dev

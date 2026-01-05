@@ -23,7 +23,13 @@ import { UsersRepo } from './repository/users.repo';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV || 'dev'}`,
+    }),
+    AuthModule,
+  ],
   controllers: [
     ImageController,
     MetadataController,
