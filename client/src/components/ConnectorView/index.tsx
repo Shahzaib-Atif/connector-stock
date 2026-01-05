@@ -1,8 +1,7 @@
 import React from "react";
-import { Wrench, QrCode } from "lucide-react";
+import { Wrench } from "lucide-react";
 import { Connector, QRData } from "../../types";
 import { parseConnector } from "../../services/connectorService";
-import { CollapsibleSection } from "../common/CollapsibleSection";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
 import { NotFoundPage } from "../common/NotFoundPage";
@@ -16,6 +15,7 @@ import { useAppSelector } from "../../store/hooks";
 import { UserRoles } from "../../types";
 import { Edit2 } from "lucide-react";
 import { ConnectorEditForm } from "./components/ConnectorEditForm";
+import { RelatedImages } from "./components/RelatedImages";
 
 interface ConnectorViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -98,18 +98,15 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
 
         {/* Accessories List */}
         {connector.accessories.length > 0 && (
-          <CollapsibleSection
-            title="Associated Accessories"
-            icon={<Wrench className="w-4 h-4" />}
-            count={connector.accessories.length}
-          >
-            <AccessoryList
-              accessories={connector.accessories}
-              onTransaction={onTransaction}
-              onInspect={handleAccessoryInspect}
-            />
-          </CollapsibleSection>
+          <AccessoryList
+            accessories={connector.accessories}
+            onTransaction={onTransaction}
+            onInspect={handleAccessoryInspect}
+          />
         )}
+
+        {/* Related Images */}
+        <RelatedImages connectorId={connector.id} />
 
         <BoxShortcut
           posId={connector.posId}

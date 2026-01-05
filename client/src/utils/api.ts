@@ -5,6 +5,8 @@ const connectors = {
   connectorTypes: `${API_BASE_URL}/connectors/types`,
   connectors: `${API_BASE_URL}/connectors`,
   connectorImages: (id: string) => `${API_BASE_URL}/images/connector/${id}`,
+  connectorRelatedImages: (id: string) => `${API_BASE_URL}/images/extras/${id}`,
+  extrasImage: (filename: string) => `${API_BASE_URL}/images/extras/file/${filename}`,
 };
 
 const accessories = {

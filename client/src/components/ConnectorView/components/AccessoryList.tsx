@@ -1,6 +1,8 @@
 import React from "react";
 import { Accessory } from "../../../types";
 import { AccessoryItem } from "./AccessoryItem";
+import { CollapsibleSection } from "@/components/common/CollapsibleSection";
+import { Wrench } from "lucide-react";
 
 interface Props {
   accessories: Accessory[];
@@ -14,7 +16,11 @@ export const AccessoryList: React.FC<Props> = ({
   onInspect,
 }) => {
   return (
-    <>
+    <CollapsibleSection
+      title="Associated Accessories"
+      icon={<Wrench className="w-4 h-4" />}
+      count={accessories.length}
+    >
       {accessories.map((acc) => (
         <AccessoryItem
           key={acc.id}
@@ -33,6 +39,6 @@ export const AccessoryList: React.FC<Props> = ({
           onTransaction={onTransaction}
         />
       ))}
-    </>
+    </CollapsibleSection>
   );
 };

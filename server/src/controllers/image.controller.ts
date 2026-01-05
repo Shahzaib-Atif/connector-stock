@@ -43,4 +43,25 @@ export class ImageController {
       res.sendStatus(404);
     }
   }
+
+  @ApiOperation({ summary: 'Get related images filenames' })
+  @Get('extras/:connectorId')
+  getRelatedImages(@Param('connectorId') connectorId: string) {
+    return this.imageService.getRelatedImages(connectorId);
+  }
+
+  @ApiOperation({ summary: 'Get individual extras image' })
+  @Get('extras/file/:filename')
+  getExtrasImage(@Param('filename') filename: string, @Res() res: Response) {
+    try {
+      const { contentType, stream } =
+        this.imageService.getExtrasImageStream(filename);
+
+      res.setHeader('Content-Type', contentType);
+      stream.pipe(res);
+    } catch (e) {
+      console.error(e.message);
+      res.sendStatus(404);
+    }
+  }
 }
