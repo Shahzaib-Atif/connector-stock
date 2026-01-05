@@ -1,6 +1,3 @@
-client/package.json
 server/package-lock.json
-server/package.json
-server/tsconfig.build.json
-server/src/controllers/app.controller.ts
 client/package-lock.json
+server/.env.prod
