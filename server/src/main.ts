@@ -4,34 +4,32 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication, Logger } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import * as fs from 'fs';
+
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
-
-  // add frontend static files serving
-  app.useStaticAssets(join(__dirname, '..', '..', '..', 'client', 'dist'));
-
-  // spa fallback
-  const server = app.getHttpAdapter().getInstance();
-  server.get(/^(?!\/api).*/, (req, res) => {
-    res.sendFile(
-      join(__dirname, '..', '..', '..', 'client', 'dist', 'index.html'),
-    );
+  const httpsOptions = getHttpsOptions();
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    httpsOptions,
   });
+
+  // add static files serving
+  serveStaticFiles(app);
 
   // add logger and api documentation
   addLogger(app);
   addApiDocumentation(app);
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
   console.log('-- Server listening on port', process.env.PORT);
 }
 
 bootstrap()
   .then(() => {})
   .catch((e: any) => {
-    console.error('Something went wrong!', e.message);
+    Logger.error('Error: ', e.message);
   });
 
+// Setup Swagger API documentation
 function addApiDocumentation(app: INestApplication) {
   const config = new DocumentBuilder()
     .setTitle('API')
@@ -44,9 +42,43 @@ function addApiDocumentation(app: INestApplication) {
   SwaggerModule.setup('api', app, documentFactory);
 }
 
+// Simple request logger middleware
 function addLogger(app: INestApplication) {
   app.use((req, res, next) => {
     Logger.log(`${req.method} ${req.url}`);
     next();
   });
+}
+
+// Serve static files from the client/dist folder
+function serveStaticFiles(app: NestExpressApplication) {
+  app.useStaticAssets(join(__dirname, '..', '..', '..', 'client', 'dist'));
+
+  // spa fallback
+  const server = app.getHttpAdapter().getInstance();
+  server.get(/^(?!\/api).*/, (req, res) => {
+    res.sendFile(
+      join(__dirname, '..', '..', '..', 'client', 'dist', 'index.html'),
+    );
+  });
+}
+
+// Load HTTPS options from certs folder
+function getHttpsOptions() {
+  const certsPath = join(process.cwd(), 'certs');
+  const keyPath = join(certsPath, 'key.pem');
+  const certPath = join(certsPath, 'cert.pem');
+
+  if (fs.existsSync(keyPath) === false || fs.existsSync(certPath) === false) {
+    Logger.warn('HTTPS certificates not found, running on HTTP');
+    return undefined;
+  } else {
+    Logger.log('HTTPS certificates found, running on HTTPS');
+  }
+
+  const httpsOptions = {
+    key: fs.readFileSync(keyPath),
+    cert: fs.readFileSync(certPath),
+  };
+  return httpsOptions;
 }
