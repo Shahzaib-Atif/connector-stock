@@ -3,7 +3,7 @@ import { ApiOperation } from '@nestjs/swagger';
 import { Response } from 'express';
 import { ImageService } from 'src/services/image.service';
 
-@Controller('images')
+@Controller('api/images')
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 

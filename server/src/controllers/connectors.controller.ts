@@ -5,7 +5,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { UpdateConnectorDto } from 'src/dtos/update-connector.dto';
 
-@Controller('connectors')
+@Controller('api/connectors')
 export class ConnectorController {
   constructor(private readonly service: ConnectorsService) {}
 

@@ -2,11 +2,25 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication, Logger } from '@nestjs/common';
-
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  addApiDocumentation(app);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // add frontend static files serving
+  app.useStaticAssets(join(__dirname, '..', '..', '..', 'client', 'dist'));
+
+  // spa fallback
+  const server = app.getHttpAdapter().getInstance();
+  server.get(/^(?!\/api).*/, (req, res) => {
+    res.sendFile(
+      join(__dirname, '..', '..', '..', 'client', 'dist', 'index.html'),
+    );
+  });
+
+  // add logger and api documentation
   addLogger(app);
+  addApiDocumentation(app);
 
   await app.listen(process.env.PORT ?? 3000);
   console.log('-- Server listening on port', process.env.PORT);
@@ -14,8 +28,8 @@ async function bootstrap() {
 
 bootstrap()
   .then(() => {})
-  .catch(() => {
-    console.error('Something went wrong!');
+  .catch((e: any) => {
+    console.error('Something went wrong!', e.message);
   });
 
 function addApiDocumentation(app: INestApplication) {

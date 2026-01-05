@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { AccessoryRepo } from 'src/repository/accessories.repo';
 
-@Controller('accessories')
+@Controller('api/accessories')
 export class AccessoryController {
   constructor(private readonly repo: AccessoryRepo) {}
 

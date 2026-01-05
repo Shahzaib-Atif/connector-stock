@@ -13,7 +13,7 @@ import { SamplesService } from 'src/services/samples.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreateSampleDto, UpdateSampleDto } from 'src/dtos/samples.dto';
 
-@Controller('samples')
+@Controller('api/samples')
 export class SamplesController {
   constructor(private readonly service: SamplesService) {}
 

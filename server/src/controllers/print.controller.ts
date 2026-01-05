@@ -2,7 +2,7 @@ import { Controller, Post, Body, Logger } from '@nestjs/common';
 import { PrintService } from '../services/print.service';
 import { PrintLabelDto } from 'src/dtos/print.dto';
 
-@Controller('print')
+@Controller('api/print')
 export class PrintController {
   private readonly logger = new Logger(PrintController.name);
 

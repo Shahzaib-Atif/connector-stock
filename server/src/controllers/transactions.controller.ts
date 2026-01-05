@@ -4,7 +4,7 @@ import { TransactionsService } from 'src/services/transactions.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreateTransactionsDto } from 'src/dtos/transaction.dto';
 
-@Controller('transactions')
+@Controller('api/transactions')
 export class TransactionsController {
   constructor(
     private readonly repo: TransactionsRepo,

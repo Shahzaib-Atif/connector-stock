@@ -14,7 +14,7 @@ import { Roles } from './decorators/roles.decorator';
 import { UserRoles } from 'src/utils/types';
 import { LoginDto, CreateUserDto, ChangePasswordDto } from 'src/dtos/auth.dto';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 

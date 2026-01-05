@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { MetadataRepo } from 'src/repository/metadata.repo';
 
-@Controller()
+@Controller('api')
 export class MetadataController {
   constructor(private readonly repo: MetadataRepo) {}
 
