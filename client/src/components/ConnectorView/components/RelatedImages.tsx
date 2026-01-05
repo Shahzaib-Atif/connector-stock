@@ -13,7 +13,6 @@ export const RelatedImages: React.FC<RelatedImagesProps> = ({
 }) => {
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -24,7 +23,6 @@ export const RelatedImages: React.FC<RelatedImagesProps> = ({
         setImages(data);
       } catch (err: any) {
         console.error("Failed to fetch related images:", err);
-        setError("Could not load related images");
       } finally {
         setLoading(false);
       }
