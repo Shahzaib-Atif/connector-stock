@@ -7,13 +7,13 @@ export const getSamples = async (): Promise<{
   projects: string[];
   clients: string[];
 }> => {
-  const response = await fetch(API.samples);
+  const response = await fetchWithAuth(API.samples);
   if (!response.ok) throw new Error("Failed to fetch samples");
   return response.json();
 };
 
 export const getSample = async (id: number): Promise<Sample> => {
-  const response = await fetch(`${API.samples}/${id}`);
+  const response = await fetchWithAuth(`${API.samples}/${id}`);
   if (!response.ok) throw new Error("Failed to fetch sample");
   return response.json();
 };

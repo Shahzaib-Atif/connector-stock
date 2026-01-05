@@ -5,11 +5,12 @@ import {
   MasterData,
 } from "@/types";
 import { API } from "@/utils/api";
+import { fetchWithAuth } from "@/utils/fetchClient";
 
 export const fetchAccessories = async (): Promise<
   MasterData["accessories"]
 > => {
-  const response = await fetch(API.accessories);
+  const response = await fetchWithAuth(API.accessories);
   if (!response.ok) {
     throw new Error("Failed to fetch accessories");
   }
@@ -28,7 +29,7 @@ export const fetchAccessories = async (): Promise<
 };
 
 export const fetchAccessoryTypes = async (): Promise<string[]> => {
-  const response = await fetch(API.accessoryTypes);
+  const response = await fetchWithAuth(API.accessoryTypes);
   if (!response.ok) {
     throw new Error("Failed to fetch accessory types");
   }

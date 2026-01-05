@@ -1,5 +1,6 @@
 import { User } from "@/types";
 import { API } from "../utils/api";
+import { fetchWithAuth } from "../utils/fetchClient";
 
 export const loginApi = async (username: string, password: string) => {
   const response = await fetch(API.login, {
@@ -16,12 +17,8 @@ export const loginApi = async (username: string, password: string) => {
   return response.json();
 };
 
-export const fetchUsersApi = async (token: string): Promise<User[]> => {
-  const response = await fetch(API.users, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const fetchUsersApi = async (): Promise<User[]> => {
+  const response = await fetchWithAuth(API.users);
 
   if (!response.ok) {
     throw new Error("Failed to fetch users");
@@ -30,13 +27,9 @@ export const fetchUsersApi = async (token: string): Promise<User[]> => {
   return response.json();
 };
 
-export const createUserApi = async (token: string, userData: User) => {
-  const response = await fetch(API.users, {
+export const createUserApi = async (userData: User) => {
+  const response = await fetchWithAuth(API.users, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
     body: JSON.stringify(userData),
   });
 
@@ -48,12 +41,9 @@ export const createUserApi = async (token: string, userData: User) => {
   return response.json();
 };
 
-export const deleteUserApi = async (token: string, userId: number) => {
-  const response = await fetch(`${API.users}/delete/${userId}`, {
+export const deleteUserApi = async (userId: number) => {
+  const response = await fetchWithAuth(`${API.users}/delete/${userId}`, {
     method: "POST", // Backend uses POST for delete right now
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   });
 
   if (!response.ok) {
@@ -63,13 +53,9 @@ export const deleteUserApi = async (token: string, userId: number) => {
   return response.json();
 };
 
-export const changePasswordApi = async (token: string, newPassword: string) => {
-  const response = await fetch(API.changePwd, {
+export const changePasswordApi = async (newPassword: string) => {
+  const response = await fetchWithAuth(API.changePwd, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
     body: JSON.stringify({ newPassword }),
   });
 

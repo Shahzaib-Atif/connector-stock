@@ -4,13 +4,14 @@ import {
   PositionApiResponse,
 } from "@/types";
 import { API } from "@/utils/api";
+import { fetchWithAuth } from "@/utils/fetchClient";
 
 export const fetchColors = async (): Promise<{
   colorsUK: Record<string, string>;
   colorsPT: Record<string, string>;
 }> => {
   try {
-    const response = await fetch(API.cors);
+    const response = await fetchWithAuth(API.cors);
     if (!response.ok) {
       throw new Error("Failed to fetch colors");
     }
@@ -33,7 +34,7 @@ export const fetchColors = async (): Promise<{
 
 export const fetchVias = async (): Promise<Record<string, string>> => {
   try {
-    const response = await fetch(API.vias);
+    const response = await fetchWithAuth(API.vias);
     if (!response.ok) {
       throw new Error("Failed to fetch vias");
     }
@@ -54,7 +55,7 @@ export const fetchVias = async (): Promise<Record<string, string>> => {
 export const fetchPositions = async (): Promise<
   Record<string, { cv: string; ch: string }>
 > => {
-  const response = await fetch(API.positions);
+  const response = await fetchWithAuth(API.positions);
   if (!response.ok) {
     throw new Error("Failed to fetch positions");
   }
@@ -75,7 +76,7 @@ export const fetchPositions = async (): Promise<
 };
 
 export const fetchFabricantes = async (): Promise<string[]> => {
-  const response = await fetch(API.fabricantes);
+  const response = await fetchWithAuth(API.fabricantes);
   if (!response.ok) {
     throw new Error("Failed to fetch fabricantes");
   }

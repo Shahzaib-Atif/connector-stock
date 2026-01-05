@@ -16,7 +16,7 @@ export const createTransaction = async (
 };
 
 export const getTransactions = async (): Promise<Transaction[]> => {
-  const response = await fetch(API.transactions);
+  const response = await fetchWithAuth(API.transactions);
   if (!response.ok) throw new Error("Failed to fetch transactions");
 
   return response.json();

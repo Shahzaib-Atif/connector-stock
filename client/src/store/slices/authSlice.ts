@@ -35,20 +35,13 @@ const loadSession = (): AuthState => {
 const initialState: AuthState = loadSession();
 
 export const initUsersList = createAsyncThunk("usersList/init", async () => {
-  const serializedState = localStorage.getItem(SESSION_KEY);
-  if (serializedState != null) {
-    const state = JSON.parse(serializedState);
-    return await fetchUsersApi(state.token);
-  }
-
-  return [];
+  return await fetchUsersApi();
 });
 
 export const createUserThunk = createAsyncThunk(
   "usersList/create",
-  async (userData: User, { getState, dispatch }) => {
-    const state = (getState() as any).auth;
-    const result = await createUserApi(state.token, userData);
+  async (userData: User, { dispatch }) => {
+    const result = await createUserApi(userData);
     dispatch(initUsersList());
     return result;
   }
@@ -56,11 +49,10 @@ export const createUserThunk = createAsyncThunk(
 
 export const deleteUserThunk = createAsyncThunk(
   "usersList/delete",
-  async (userId: number, { getState, dispatch }) => {
+  async (userId: number, { dispatch }) => {
     if (!userId) throw new Error("UserId cannot be empty!");
 
-    const state = (getState() as any).auth;
-    const result = await deleteUserApi(state.token, userId);
+    const result = await deleteUserApi(userId);
     dispatch(initUsersList());
     return result;
   }
@@ -68,9 +60,8 @@ export const deleteUserThunk = createAsyncThunk(
 
 export const changePasswordThunk = createAsyncThunk(
   "auth/changePassword",
-  async (newPassword: string, { getState }) => {
-    const state = (getState() as any).auth;
-    return await changePasswordApi(state.token, newPassword);
+  async (newPassword: string) => {
+    return await changePasswordApi(newPassword);
   }
 );
 

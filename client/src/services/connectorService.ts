@@ -125,17 +125,11 @@ export const searchConnectors = (
   return results;
 };
 
-export const updateConnectorApi = async (connectorId: string, data: any) => {
-  const session = localStorage.getItem(SESSION_KEY);
-  if (!session) throw new Error("No session found");
-  const { token } = JSON.parse(session);
+import { fetchWithAuth } from "../utils/fetchClient";
 
-  const response = await fetch(`${API.connectors}/${connectorId}/update`, {
+export const updateConnectorApi = async (connectorId: string, data: any) => {
+  const response = await fetchWithAuth(`${API.connectors}/${connectorId}/update`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
     body: JSON.stringify(data),
   });
 

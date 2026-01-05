@@ -4,9 +4,10 @@ import {
   MasterData,
 } from "@/types";
 import { API } from "@/utils/api";
+import { fetchWithAuth } from "@/utils/fetchClient";
 
 export const fetchConnectors = async (): Promise<MasterData["connectors"]> => {
-  const response = await fetch(API.connectors);
+  const response = await fetchWithAuth(API.connectors);
   if (!response.ok) {
     throw new Error("Failed to fetch references");
   }
@@ -23,7 +24,7 @@ export const fetchConnectors = async (): Promise<MasterData["connectors"]> => {
 };
 
 export const fetchConnectorTypes = async (): Promise<string[]> => {
-  const response = await fetch(API.connectorTypes);
+  const response = await fetchWithAuth(API.connectorTypes);
   if (!response.ok) {
     throw new Error("Failed to fetch connector types");
   }
