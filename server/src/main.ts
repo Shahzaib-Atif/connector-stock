@@ -9,7 +9,7 @@ import * as fs from 'fs';
 async function bootstrap() {
   const httpsOptions = getHttpsOptions();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    httpsOptions,
+    // httpsOptions,
   });
 
   // add static files serving
