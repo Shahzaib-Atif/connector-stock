@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
+import { AppNotification } from 'src/dtos/notifications.dto';
+import { UpdateSampleDto } from 'src/dtos/samples.dto';
 
 export interface ParsedMessage {
   conector?: string;
@@ -11,7 +13,7 @@ export class NotificationsRepo {
   constructor(private prisma: PrismaService) {}
 
   /** Get all unfinished notifications ordered by creation date */
-  async getUnfinishedNotifications() {
+  async getUnfinishedNotifications(): Promise<AppNotification[]> {
     try {
       return await this.prisma.notification_Users.findMany({
         where: { Finished: false },
@@ -24,7 +26,7 @@ export class NotificationsRepo {
   }
 
   /** Get notification by ID */
-  async getNotificationById(id: number) {
+  async getNotificationById(id: number): Promise<AppNotification | null> {
     try {
       return await this.prisma.notification_Users.findUnique({
         where: { id },
@@ -35,9 +37,8 @@ export class NotificationsRepo {
     }
   }
 
-
   /** Mark notification as read */
-  async markAsRead(id: number) {
+  async markAsRead(id: number): Promise<AppNotification | null> {
     try {
       return await this.prisma.notification_Users.update({
         where: { id },
@@ -53,25 +54,30 @@ export class NotificationsRepo {
   }
 
   /** Find matching sample by Amostra and EncDivmac */
-  async findMatchingSample(conector: string, encomenda: string) {
+  async findMatchingSample(
+    conector: string,
+    encomenda: string,
+  ): Promise<UpdateSampleDto | null> {
     try {
-      const samples = await this.prisma.rEG_Amostras.findMany({
-        where: {
-          Amostra: conector,
-          EncDivmac: encomenda,
-          IsActive: true,
-        },
-        select: {
-          ID: true,
-          Amostra: true,
-          EncDivmac: true,
-          Cliente: true,
-          Projeto: true,
-          Quantidade: true,
-        },
-        take: 1,
-        orderBy: { ID: 'desc' },
-      });
+      const samples: UpdateSampleDto[] =
+        await this.prisma.rEG_Amostras.findMany({
+          where: {
+            Amostra: conector,
+            EncDivmac: encomenda,
+            IsActive: true,
+          },
+          select: {
+            ID: true,
+            Amostra: true,
+            EncDivmac: true,
+            Cliente: true,
+            Projeto: true,
+            Quantidade: true,
+            Ref_Descricao: true,
+          },
+          take: 1,
+          orderBy: { ID: 'desc' },
+        });
 
       return samples.length > 0 ? samples[0] : null;
     } catch (ex: any) {
@@ -90,7 +96,7 @@ export class NotificationsRepo {
       newQty: string;
       updatedBy: string;
     },
-  ) {
+  ): Promise<AppNotification> {
     return await this.prisma.$transaction(async (tx) => {
       // 1. Mark notification as finished
       const updatedNotification = await tx.notification_Users.update({

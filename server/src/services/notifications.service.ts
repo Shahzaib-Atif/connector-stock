@@ -7,7 +7,9 @@ import { SamplesRepo } from 'src/repository/samples.repo';
 import {
   NotificationWithParsedData,
   NotificationWithSample,
+  AppNotification,
 } from 'src/dtos/notifications.dto';
+import { UpdateSampleDto } from 'src/dtos/samples.dto';
 
 @Injectable()
 export class NotificationsService {
@@ -44,7 +46,7 @@ export class NotificationsService {
     const parsed = this.parseNotificationMessage(notification.Message);
 
     // Try to find matching sample
-    let linkedSample = null;
+    let linkedSample: UpdateSampleDto = null;
     if (parsed.conector && parsed.encomenda) {
       linkedSample = await this.notificationsRepo.findMatchingSample(
         parsed.conector,
@@ -65,14 +67,18 @@ export class NotificationsService {
     id: number,
     quantityTakenOut: number,
     finishedBy?: string,
-  ) {
+  ): Promise<AppNotification> {
     // Get notification with sample
     const notificationData = await this.getNotificationWithSample(id);
     if (!notificationData) {
       throw new Error(`Notification with ID ${id} not found`);
     }
 
-    let sampleUpdate = undefined;
+    let sampleUpdate: {
+      sampleId: number;
+      newQty: string;
+      updatedBy: string;
+    };
 
     // Calculate new quantity if linked sample exists
     if (notificationData.linkedSample && quantityTakenOut > 0) {

@@ -1,9 +1,6 @@
-export interface FinishNotificationDto {
-  quantityTakenOut: number;
-  finishedBy?: string;
-}
+import { UpdateSampleDto } from './samples.dto';
 
-export interface NotificationWithParsedData {
+export interface AppNotification {
   id: number;
   SenderSector: string;
   SenderUser: string;
@@ -16,18 +13,19 @@ export interface NotificationWithParsedData {
   CreationDate: Date;
   ReadDate: Date | null;
   FinishedDate: Date | null;
+}
+
+export interface FinishNotificationDto {
+  quantityTakenOut: number;
+  finishedBy?: string;
+}
+
+export interface NotificationWithParsedData extends AppNotification {
   // Parsed fields
   parsedConector?: string;
   parsedEncomenda?: string;
 }
 
 export interface NotificationWithSample extends NotificationWithParsedData {
-  linkedSample?: {
-    ID: number;
-    Amostra: string | null;
-    EncDivmac: string | null;
-    Cliente: string | null;
-    Projeto: string | null;
-    Quantidade: string | null;
-  } | null;
+  linkedSample?: UpdateSampleDto | null;
 }

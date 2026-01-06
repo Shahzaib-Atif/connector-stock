@@ -1,4 +1,5 @@
 export type CreateSampleDto = {
+  ID?: number;
   Cliente: string;
   EncDivmac: string;
   Ref_Descricao: string;
