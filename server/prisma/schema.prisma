@@ -190,3 +190,60 @@ model Users {
   password String  @db.NVarChar(100)
   dept     String? @db.VarChar(20)
 }
+
+model Refer_ncias_bk {
+  Pos_ID           String?   @map("Pos ID") @db.NVarChar(4)
+  Cor              String    @db.NVarChar(1)
+  Vias             String?   @db.NVarChar(1)
+  CODIVMAC         String    @unique(map: "Referências_UNIQUE") @db.NVarChar(8)
+  Designa__o       String?   @map("Designação") @db.NVarChar(30)
+  Fabricante       String?   @db.NVarChar(50)
+  Refabricante     String?   @db.NVarChar(100)
+  Clip             Boolean?
+  Spacer           Boolean?
+  Vedante          Boolean?
+  Tampa            Boolean?
+  Mola             Boolean?
+  Moldagem         Boolean?
+  Trav_o           Boolean?  @map("Travão")
+  Abracadeira      Boolean?
+  Linguetes        Boolean?
+  Outros           Boolean?
+  Registo          DateTime?
+  Amostra          Boolean?
+  OBS              String?   @db.NVarChar(Max)
+  Imagem           String?   @db.NVarChar(Max)
+  EstadoAmostra    String?   @db.NVarChar(50)
+  CoordVertical    String?   @db.NVarChar(2)
+  CoordHorizontal  Int?
+  LastChangeBy     String?   @db.NVarChar(50)
+  LastUpdateDate   DateTime?
+  ESTADO           Int       @default(1, map: "DF__Referênci__ESTAD__2B0A656D")
+  VersaoConnector  String?   @db.NVarChar(1)
+  SampleSection    String?   @db.VarChar(100)
+  SampleType       String?   @db.VarChar(100)
+  InternalDiameter Int?
+  ExternalDiameter Int?
+  Thickness        Int?
+  ConnType         String?   @db.VarChar(100)
+  ClipColor        String?   @db.VarChar(100)
+  CapotAngle       String?   @db.VarChar(100)
+  Olhal            Boolean   @default(false, map: "DF__Referênci__Olhal__2645B050")
+
+  @@map("Referências_bk")
+}
+
+model Notification_Users {
+  id             Int       @unique(map: "Notification_Users_UNIQUE") @default(autoincrement())
+  SenderSector   String    @db.NVarChar(100)
+  SenderUser     String    @db.NVarChar(100)
+  ReceiverUser   String    @db.NVarChar(100)
+  ReceiverSector String    @db.NVarChar(100)
+  Message        String    @db.NVarChar(200)
+  Read           Boolean
+  Title          String?   @db.NVarChar(20)
+  Finished       Boolean
+  CreationDate   DateTime
+  ReadDate       DateTime?
+  FinishedDate   DateTime?
+}
