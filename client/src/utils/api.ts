@@ -40,4 +40,5 @@ export const API = {
   ...auth,
   transactions: `${API_BASE_URL}/transactions`,
   samples: `${API_BASE_URL}/samples`,
+  notifications: `${API_BASE_URL}/notifications`,
 };

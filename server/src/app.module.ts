@@ -19,6 +19,9 @@ import { ConnectorsService } from './services/connectors.service';
 import { PrintController } from './controllers/print.controller';
 import { PrintService } from './services/print.service';
 import { UsersRepo } from './repository/users.repo';
+import { NotificationsController } from './controllers/notifications.controller';
+import { NotificationsService } from './services/notifications.service';
+import { NotificationsRepo } from './repository/notifications.repo';
 
 import { AuthModule } from './auth/auth.module';
 
@@ -40,6 +43,7 @@ import { AuthModule } from './auth/auth.module';
     TransactionsController,
     SamplesController,
     PrintController,
+    NotificationsController,
   ],
   providers: [
     PrismaService,
@@ -54,6 +58,8 @@ import { AuthModule } from './auth/auth.module';
     SamplesService,
     PrintService,
     UsersRepo,
+    NotificationsService,
+    NotificationsRepo,
   ],
 })
 export class AppModule {}

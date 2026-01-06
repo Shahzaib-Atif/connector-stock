@@ -1,0 +1,167 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'prisma/prisma.service';
+import {
+  NotificationsRepo,
+  ParsedMessage,
+} from 'src/repository/notifications.repo';
+import { SamplesRepo } from 'src/repository/samples.repo';
+import {
+  NotificationWithParsedData,
+  NotificationWithSample,
+} from 'src/dtos/notifications.dto';
+
+@Injectable()
+export class NotificationsService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationsRepo: NotificationsRepo,
+    private readonly samplesRepo: SamplesRepo,
+  ) {}
+
+  /** Get all unfinished notifications with parsed data */
+  async getUnfinishedNotifications(): Promise<NotificationWithParsedData[]> {
+    const notifications =
+      await this.notificationsRepo.getUnfinishedNotifications();
+
+    return notifications.map((notification) => {
+      const parsed = this.parseNotificationMessage(notification.Message);
+      return {
+        ...notification,
+        parsedConector: parsed.conector,
+        parsedEncomenda: parsed.encomenda,
+      };
+    });
+  }
+
+  /** Get notification with linked sample if exists */
+  async getNotificationWithSample(
+    id: number,
+  ): Promise<NotificationWithSample | null> {
+    const notification = await this.notificationsRepo.getNotificationById(id);
+    if (!notification) {
+      return null;
+    }
+
+    // Parse message to extract connector and encomenda
+    const parsed = this.parseNotificationMessage(notification.Message);
+
+    // Try to find matching sample
+    let linkedSample = null;
+    if (parsed.conector && parsed.encomenda) {
+      linkedSample = await this.findMatchingSample(
+        parsed.conector,
+        parsed.encomenda,
+      );
+    }
+
+    return {
+      ...notification,
+      parsedConector: parsed.conector,
+      parsedEncomenda: parsed.encomenda,
+      linkedSample,
+    };
+  }
+
+  /** Mark notification as finished and optionally update sample quantity */
+  async finishNotification(
+    id: number,
+    quantityTakenOut: number,
+    finishedBy?: string,
+  ) {
+    return await this.prisma.$transaction(async (tx) => {
+      // Get notification with sample
+      const notificationData = await this.getNotificationWithSample(id);
+      if (!notificationData) {
+        throw new Error(`Notification with ID ${id} not found`);
+      }
+
+      // Mark notification as finished
+      const updated = await tx.notification_Users.update({
+        where: { id },
+        data: {
+          Finished: true,
+          FinishedDate: new Date(),
+        },
+      });
+
+      // Update sample quantity if linked sample exists
+      if (notificationData.linkedSample && quantityTakenOut > 0) {
+        const sampleId = notificationData.linkedSample.ID;
+        const currentQty = parseInt(
+          notificationData.linkedSample.Quantidade || '0',
+        );
+        const newQty = Math.max(0, currentQty - quantityTakenOut);
+
+        await tx.rEG_Amostras.update({
+          where: { ID: sampleId },
+          data: {
+            Quantidade: newQty.toString(),
+            LasUpdateBy: finishedBy || 'system',
+            DateOfLastUpdate: new Date().toISOString(),
+          },
+        });
+      }
+
+      return updated;
+    });
+  }
+
+  /** Mark notification as read */
+  async markAsRead(id: number) {
+    return this.notificationsRepo.markAsRead(id);
+  }
+
+  /** Find matching sample by Amostra and EncDivmac */
+  private async findMatchingSample(conector: string, encomenda: string) {
+    try {
+      const samples = await this.prisma.rEG_Amostras.findMany({
+        where: {
+          Amostra: conector,
+          EncDivmac: encomenda,
+          IsActive: true,
+        },
+        select: {
+          ID: true,
+          Amostra: true,
+          EncDivmac: true,
+          Cliente: true,
+          Projeto: true,
+          Quantidade: true,
+        },
+        take: 1,
+        orderBy: { ID: 'desc' },
+      });
+
+      return samples.length > 0 ? samples[0] : null;
+    } catch (ex: any) {
+      console.error('Failed to find matching sample:', ex.message);
+      return null;
+    }
+  }
+
+  /**
+   * Parse notification message to extract connector and encomenda
+   * Expected format:
+   * Pedido de amostra para montagem
+   * Conector: I357C2
+   * Encomenda: 251120ProdId= 274886
+   */
+  parseNotificationMessage(message: string): ParsedMessage {
+    const parsed: ParsedMessage = {};
+
+    // Extract Conector - match "Conector: <value>"
+    const conectorMatch = message.match(/Conector:\s*([^\s\n]+)/i);
+    if (conectorMatch && conectorMatch[1]) {
+      parsed.conector = conectorMatch[1].trim();
+    }
+
+    // Extract Encomenda - match "Encomenda: <value>" (before "ProdId=" if present)
+    const encomendaMatch = message.match(/Encomenda:\s*([^\s\n]+)/i);
+    if (encomendaMatch && encomendaMatch[1]) {
+      // Remove "ProdId=" part if present
+      parsed.encomenda = encomendaMatch[1].replace(/ProdId=.*$/i, '').trim();
+    }
+
+    return parsed;
+  }
+}

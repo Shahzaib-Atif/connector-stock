@@ -8,6 +8,7 @@ import { TransactionsView } from "./TransactionsView";
 import { SamplesView } from "./SamplesView";
 import { ConnectorsListView } from "./ConnectorsListView";
 import { AccessoriesListView } from "./AccessoriesListView";
+import { NotificationsView } from "./NotificationsView";
 import { QRData } from "@/types";
 
 interface AppRoutesProps {
@@ -62,6 +63,7 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({
       />
       <Route path={ROUTES.CONNECTORS} element={<ConnectorsListView />} />
       <Route path={ROUTES.ACCESSORIES} element={<AccessoriesListView />} />
+      <Route path={ROUTES.NOTIFICATIONS} element={<NotificationsView />} />
     </Routes>
   );
 };
@@ -78,4 +80,5 @@ export const ROUTES = {
   SAMPLES: "/samples",
   CONNECTORS: "/connectors",
   ACCESSORIES: "/accessories",
+  NOTIFICATIONS: "/notifications",
 };

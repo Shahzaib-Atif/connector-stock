@@ -29,7 +29,7 @@ export const Login: React.FC = () => {
       );
 
       // Fetch users list after login
-      const users = await fetchUsersApi(data.access_token);
+      const users = await fetchUsersApi();
       dispatch(setUsersList(users));
 
       navigate(ROUTES.HOME);

@@ -185,3 +185,35 @@ export enum UserRoles {
   Admin = "Admin",
   User = "User",
 }
+
+export interface Notification {
+  id: number;
+  SenderSector: string;
+  SenderUser: string;
+  ReceiverUser: string;
+  ReceiverSector: string;
+  Message: string;
+  Read: boolean;
+  Title: string | null;
+  Finished: boolean;
+  CreationDate: string;
+  ReadDate: string | null;
+  FinishedDate: string | null;
+  parsedConector?: string;
+  parsedEncomenda?: string;
+}
+
+// export interface NotificationWithSample extends Notification {
+//   linkedSample?: {
+//     ID: number;
+//     Amostra: string | null;
+//     EncDivmac: string | null;
+//     Cliente: string | null;
+//     Projeto: string | null;
+//     Quantidade: string | null;
+//   } | null;
+// }
+
+export interface NotificationWithSample extends Notification {
+  linkedSample?: Sample;
+}

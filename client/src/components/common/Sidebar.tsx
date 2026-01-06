@@ -12,12 +12,15 @@ import {
   Wrench,
   X,
   Key,
+  Bell,
 } from "lucide-react";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 import { useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "../AppRoutes";
 import { UserRoles } from "@/types";
+import { fetchUnfinishedNotifications } from "@/store/slices/notificationsSlice";
+import { useEffect } from "react";
 
 interface Props {
   isMenuOpen: boolean;
@@ -35,6 +38,16 @@ export function Sidebar({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
+
+  const unfinishedCount = useAppSelector(
+    (state) => state.notifications.unfinishedCount
+  );
+
+  useEffect(() => {
+    if (user && (role === UserRoles.Master || role === UserRoles.Admin)) {
+      dispatch(fetchUnfinishedNotifications());
+    }
+  }, [dispatch, user, role]);
 
   const getButtonClass = (path: string) => {
     const isActive = location.pathname === path;
@@ -153,15 +166,34 @@ export function Sidebar({
 
         {/* User Management (Master or Admin) */}
         {(role === UserRoles.Master || role === UserRoles.Admin) && (
-          <Link
-            to={ROUTES.USERS}
-            id="user-mgmt-btn"
-            onClick={closeMenu}
-            className={getButtonClass("/users")}
-          >
-            <Users className="sidebar-btn-icon" />
-            <span>Manage Users</span>
-          </Link>
+          <>
+            <Link
+              to={ROUTES.NOTIFICATIONS}
+              id="notifications-btn"
+              onClick={closeMenu}
+              className={getButtonClass(ROUTES.NOTIFICATIONS)}
+            >
+              <div className="relative">
+                <Bell className="sidebar-btn-icon" />
+                {unfinishedCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white animate-pulse">
+                    {unfinishedCount}
+                  </span>
+                )}
+              </div>
+              <span>Notifications</span>
+            </Link>
+
+            <Link
+              to={ROUTES.USERS}
+              id="user-mgmt-btn"
+              onClick={closeMenu}
+              className={getButtonClass(ROUTES.USERS)}
+            >
+              <Users className="sidebar-btn-icon" />
+              <span>Manage Users</span>
+            </Link>
+          </>
         )}
       </nav>
 
