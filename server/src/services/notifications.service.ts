@@ -86,22 +86,20 @@ export class NotificationsService {
       throw new Error(`Notification with ID ${id} not found`);
     }
 
-    let sampleUpdate: {
-      sampleId: number;
-      newQty: string;
+    let connectorUpdate: {
+      codivmac: string;
+      newQty: number;
       updatedBy: string;
     };
 
-    // Calculate new quantity if linked sample exists
-    if (notificationData.linkedSample && quantityTakenOut > 0) {
-      const currentQty = parseInt(
-        notificationData.linkedSample.Quantidade || '0',
-      );
+    // Calculate new quantity if linked connector exists
+    if (notificationData.linkedConnector && quantityTakenOut > 0) {
+      const currentQty = notificationData.linkedConnector.Qty || 0;
       const newQty = Math.max(0, currentQty - quantityTakenOut);
 
-      sampleUpdate = {
-        sampleId: notificationData.linkedSample.ID,
-        newQty: newQty.toString(),
+      connectorUpdate = {
+        codivmac: notificationData.linkedConnector?.CODIVMAC,
+        newQty: newQty,
         updatedBy: finishedBy || 'system',
       };
     }
@@ -109,7 +107,7 @@ export class NotificationsService {
     // Delegate transaction to repository
     return await this.notificationsRepo.finishNotificationTransaction(
       id,
-      sampleUpdate,
+      connectorUpdate,
     );
   }
 

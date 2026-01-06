@@ -8,6 +8,7 @@ export class UpdateConnectorDto {
 }
 
 export class ConnectorDto {
+  CODIVMAC: string;
   Cor: string;
   Vias: string;
   ConnType: string;

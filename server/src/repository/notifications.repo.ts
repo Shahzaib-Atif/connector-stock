@@ -91,9 +91,9 @@ export class NotificationsRepo {
    */
   async finishNotificationTransaction(
     notificationId: number,
-    sampleUpdate?: {
-      sampleId: number;
-      newQty: string;
+    connectorUpdate?: {
+      codivmac: string;
+      newQty: number;
       updatedBy: string;
     },
   ): Promise<AppNotification> {
@@ -107,14 +107,14 @@ export class NotificationsRepo {
         },
       });
 
-      // 2. Update sample quantity if provided
-      if (sampleUpdate) {
-        await tx.rEG_Amostras.update({
-          where: { ID: sampleUpdate.sampleId },
+      // 2. Update connector quantity if provided
+      if (connectorUpdate) {
+        await tx.connectors_Main.update({
+          where: { CODIVMAC: connectorUpdate.codivmac },
           data: {
-            Quantidade: sampleUpdate.newQty,
-            LasUpdateBy: sampleUpdate.updatedBy,
-            DateOfLastUpdate: new Date().toISOString(),
+            Qty: connectorUpdate.newQty,
+            LastChangeBy: connectorUpdate.updatedBy,
+            LastUpdateDate: new Date(),
           },
         });
       }
