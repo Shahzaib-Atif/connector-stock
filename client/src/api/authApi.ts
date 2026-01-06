@@ -10,6 +10,7 @@ export const loginApi = async (username: string, password: string) => {
   });
 
   if (!response.ok) {
+    if (response.status == 500) throw new Error("Server is not responding!");
     const errorData = await response.json();
     throw new Error(errorData.message || "Login failed");
   }
