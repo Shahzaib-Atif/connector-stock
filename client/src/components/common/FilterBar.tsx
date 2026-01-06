@@ -95,7 +95,7 @@ export const FilterBar: React.FC<Props> = ({
         {searchQuery && (
           <button
             type="button"
-            className="absolute right-2 top-[34px] text-slate-400 hover:text-slate-200 p-1"
+            className="absolute right-1 top-8 sm:top-11 text-slate-400 hover:text-slate-200 p-1"
             onClick={() => onSearchQueryChange("")}
           >
             <X className="h-3 w-3" />
