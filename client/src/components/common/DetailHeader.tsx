@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { QrCode, Menu, LogIn, HomeIcon, Home } from "lucide-react";
+import { QrCode, Menu, LogIn, Bell } from "lucide-react";
 import BrandLogo from "./BrandLogo";
 import Sidebar from "./Sidebar";
 import { useAppSelector } from "../../store/hooks";
@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { ROUTES } from "../AppRoutes";
 import { ChangePasswordModal } from "./ChangePasswordModal";
+import { UserRoles } from "../../types";
 
 interface DetailHeaderProps {
   label?: string;
@@ -22,7 +23,12 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
   handleQRClick,
 }) => {
   const user = useAppSelector((state) => state.auth.user);
+  const role = useAppSelector((state) => state.auth.role);
+  const unfinishedCount = useAppSelector(
+    (state) => state.notifications.unfinishedCount
+  );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
   const showCenterSection = label || title;
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
@@ -78,6 +84,23 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
               >
                 <QrCode className="w-6 h-6" />
               </button>
+            )}
+
+            {/* Notification Bell */}
+            {user && isAdmin && (
+              <Link
+                to={ROUTES.NOTIFICATIONS}
+                className="p-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg flex-shrink-0 relative"
+                title="Notifications"
+                aria-label="View notifications"
+              >
+                <Bell className="w-6 h-6" />
+                {unfinishedCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white border-2 border-slate-900 animate-pulse">
+                    {unfinishedCount}
+                  </span>
+                )}
+              </Link>
             )}
           </div>
         </div>
