@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
+import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
 
 @Injectable()
@@ -19,6 +20,7 @@ export class ConnectorsService {
     // Fetch client references from legacy table
     let clientMappings: any[] = [];
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       clientMappings = await (this.prisma as any).$queryRawUnsafe(`
         SELECT RefDIVMAC, RefMARCA 
         FROM ImageFeaturesDB.dbo.RefClientes_Marca 
@@ -47,7 +49,7 @@ export class ConnectorsService {
     }));
   }
 
-  async updateConnector(codivmac: string, data: any) {
+  async updateConnector(codivmac: string, data: UpdateConnectorDto) {
     return this.repo.updateConnectorProperties(codivmac, data);
   }
 }

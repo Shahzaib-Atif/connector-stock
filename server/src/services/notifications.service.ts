@@ -4,18 +4,21 @@ import {
   ParsedMessage,
 } from 'src/repository/notifications.repo';
 import { SamplesRepo } from 'src/repository/samples.repo';
+import { ConnectorRepo } from 'src/repository/connectors.repo';
 import {
   NotificationWithParsedData,
   NotificationWithSample,
   AppNotification,
 } from 'src/dtos/notifications.dto';
 import { UpdateSampleDto } from 'src/dtos/samples.dto';
+import { ConnectorDto } from 'src/dtos/connector.dto';
 
 @Injectable()
 export class NotificationsService {
   constructor(
     private readonly notificationsRepo: NotificationsRepo,
     private readonly samplesRepo: SamplesRepo,
+    private readonly connectorRepo: ConnectorRepo,
   ) {}
 
   /** Get all unfinished notifications with parsed data */
@@ -45,13 +48,21 @@ export class NotificationsService {
     // Parse message to extract connector and encomenda
     const parsed = this.parseNotificationMessage(notification.Message);
 
-    // Try to find matching sample
+    // Try to find matching sample and connector
     let linkedSample: UpdateSampleDto = null;
-    if (parsed.conector && parsed.encomenda) {
-      linkedSample = await this.notificationsRepo.findMatchingSample(
+    let linkedConnector: ConnectorDto = null;
+
+    if (parsed.conector) {
+      linkedConnector = await this.connectorRepo.getConnectorByCodivmac(
         parsed.conector,
-        parsed.encomenda,
       );
+
+      if (parsed.encomenda) {
+        linkedSample = await this.notificationsRepo.findMatchingSample(
+          parsed.conector,
+          parsed.encomenda,
+        );
+      }
     }
 
     return {
@@ -59,6 +70,7 @@ export class NotificationsService {
       parsedConector: parsed.conector,
       parsedEncomenda: parsed.encomenda,
       linkedSample,
+      linkedConnector,
     };
   }
 

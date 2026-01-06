@@ -3,7 +3,7 @@ import { ConnectorsService } from 'src/services/connectors.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { UpdateConnectorDto } from 'src/dtos/update-connector.dto';
+import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 
 @Controller('api/connectors')
 export class ConnectorController {

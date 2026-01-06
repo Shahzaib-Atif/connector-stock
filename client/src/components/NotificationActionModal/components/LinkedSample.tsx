@@ -1,8 +1,9 @@
 import React from "react";
 import { CheckCircle2, ExternalLink, AlertCircle } from "lucide-react";
+import { Sample } from "@/types";
 
 interface LinkedSampleProps {
-  sample: any;
+  sample: Sample;
   onNavigate: () => void;
 }
 
@@ -34,20 +35,22 @@ export const LinkedSample: React.FC<LinkedSampleProps> = ({
           </p>
           <div className="grid grid-cols-2 gap-2 text-sm">
             <div>
-              <span className="text-slate-500">Sample ID:</span>
-              <span className="text-white ml-2">{sample.ID}</span>
-            </div>
-            <div>
-              <span className="text-slate-500">Client:</span>
-              <span className="text-white ml-2">{sample.Cliente || "N/A"}</span>
+              <span className="text-slate-500">Ref_Descricao:</span>
+              <span className="text-white ml-2">{sample.Ref_Descricao}</span>
             </div>
             <div>
               <span className="text-slate-500">Project:</span>
               <span className="text-white ml-2">{sample.Projeto || "N/A"}</span>
             </div>
             <div>
+              <span className="text-slate-500">Client:</span>
+              <span className="text-white ml-2">{sample.Cliente || "N/A"}</span>
+            </div>
+            <div>
               <span className="text-slate-500">Quantity:</span>
-              <span className="text-white ml-2">{sample.Quantidade || "0"}</span>
+              <span className="text-white ml-2">
+                {sample.Quantidade || "0"}
+              </span>
             </div>
           </div>
         </div>

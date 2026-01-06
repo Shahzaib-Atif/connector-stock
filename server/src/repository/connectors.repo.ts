@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
+import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
 
 @Injectable()
@@ -37,6 +38,35 @@ export class ConnectorRepo {
     } catch (ex: any) {
       console.error(ex.message);
       return [];
+    }
+  }
+
+  async getConnectorByCodivmac(codivmac: string) {
+    try {
+      return await this.prisma.connectors_Main.findUnique({
+        where: { CODIVMAC: codivmac },
+        select: {
+          PosId: true,
+          Cor: true,
+          Vias: true,
+          CODIVMAC: true,
+          ConnType: true,
+          Qty: true,
+          Imagem: true,
+          Connectors_Details: {
+            select: {
+              Designa__o: true,
+              Fabricante: true,
+              Refabricante: true,
+              Family: true,
+              OBS: true,
+            },
+          },
+        },
+      });
+    } catch (ex: any) {
+      console.error('Error fetching connector by codivmac:', ex.message);
+      return null;
     }
   }
 
@@ -82,7 +112,7 @@ export class ConnectorRepo {
     `;
   }
 
-  async updateConnectorProperties(codivmac: string, data: any) {
+  async updateConnectorProperties(codivmac: string, data: UpdateConnectorDto) {
     try {
       return await this.prisma.$transaction(async (tx) => {
         // Update Main table

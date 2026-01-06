@@ -5,6 +5,7 @@ import { X, Loader2, CheckCircle2, Package } from "lucide-react";
 import { NotificationInfo } from "./components/NotificationInfo";
 import { ParsedInfo } from "./components/ParsedInfo";
 import { LinkedSample } from "./components/LinkedSample";
+import { LinkedConnector } from "./components/LinkedConnector";
 import { FinishForm } from "./components/FinishForm";
 
 // Hook
@@ -71,6 +72,11 @@ export const NotificationActionModal: React.FC<Props> = ({
               <ParsedInfo
                 conector={notification?.parsedConector}
                 encomenda={notification?.parsedEncomenda}
+              />
+
+              <LinkedConnector
+                connector={notification?.linkedConnector}
+                onClose={onClose}
               />
 
               <LinkedSample

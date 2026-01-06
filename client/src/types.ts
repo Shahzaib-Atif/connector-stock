@@ -215,5 +215,6 @@ export interface Notification {
 // }
 
 export interface NotificationWithSample extends Notification {
-  linkedSample?: Sample;
+  linkedSample?: Sample | null;
+  linkedConnector?: any | null;
 }
