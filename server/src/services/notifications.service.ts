@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'prisma/prisma.service';
 import {
   NotificationsRepo,
   ParsedMessage,
@@ -13,7 +12,6 @@ import {
 @Injectable()
 export class NotificationsService {
   constructor(
-    private readonly prisma: PrismaService,
     private readonly notificationsRepo: NotificationsRepo,
     private readonly samplesRepo: SamplesRepo,
   ) {}
@@ -48,7 +46,7 @@ export class NotificationsService {
     // Try to find matching sample
     let linkedSample = null;
     if (parsed.conector && parsed.encomenda) {
-      linkedSample = await this.findMatchingSample(
+      linkedSample = await this.notificationsRepo.findMatchingSample(
         parsed.conector,
         parsed.encomenda,
       );
@@ -68,75 +66,38 @@ export class NotificationsService {
     quantityTakenOut: number,
     finishedBy?: string,
   ) {
-    return await this.prisma.$transaction(async (tx) => {
-      // Get notification with sample
-      const notificationData = await this.getNotificationWithSample(id);
-      if (!notificationData) {
-        throw new Error(`Notification with ID ${id} not found`);
-      }
+    // Get notification with sample
+    const notificationData = await this.getNotificationWithSample(id);
+    if (!notificationData) {
+      throw new Error(`Notification with ID ${id} not found`);
+    }
 
-      // Mark notification as finished
-      const updated = await tx.notification_Users.update({
-        where: { id },
-        data: {
-          Finished: true,
-          FinishedDate: new Date(),
-        },
-      });
+    let sampleUpdate = undefined;
 
-      // Update sample quantity if linked sample exists
-      if (notificationData.linkedSample && quantityTakenOut > 0) {
-        const sampleId = notificationData.linkedSample.ID;
-        const currentQty = parseInt(
-          notificationData.linkedSample.Quantidade || '0',
-        );
-        const newQty = Math.max(0, currentQty - quantityTakenOut);
+    // Calculate new quantity if linked sample exists
+    if (notificationData.linkedSample && quantityTakenOut > 0) {
+      const currentQty = parseInt(
+        notificationData.linkedSample.Quantidade || '0',
+      );
+      const newQty = Math.max(0, currentQty - quantityTakenOut);
 
-        await tx.rEG_Amostras.update({
-          where: { ID: sampleId },
-          data: {
-            Quantidade: newQty.toString(),
-            LasUpdateBy: finishedBy || 'system',
-            DateOfLastUpdate: new Date().toISOString(),
-          },
-        });
-      }
+      sampleUpdate = {
+        sampleId: notificationData.linkedSample.ID,
+        newQty: newQty.toString(),
+        updatedBy: finishedBy || 'system',
+      };
+    }
 
-      return updated;
-    });
+    // Delegate transaction to repository
+    return await this.notificationsRepo.finishNotificationTransaction(
+      id,
+      sampleUpdate,
+    );
   }
 
   /** Mark notification as read */
   async markAsRead(id: number) {
     return this.notificationsRepo.markAsRead(id);
-  }
-
-  /** Find matching sample by Amostra and EncDivmac */
-  private async findMatchingSample(conector: string, encomenda: string) {
-    try {
-      const samples = await this.prisma.rEG_Amostras.findMany({
-        where: {
-          Amostra: conector,
-          EncDivmac: encomenda,
-          IsActive: true,
-        },
-        select: {
-          ID: true,
-          Amostra: true,
-          EncDivmac: true,
-          Cliente: true,
-          Projeto: true,
-          Quantidade: true,
-        },
-        take: 1,
-        orderBy: { ID: 'desc' },
-      });
-
-      return samples.length > 0 ? samples[0] : null;
-    } catch (ex: any) {
-      console.error('Failed to find matching sample:', ex.message);
-      return null;
-    }
   }
 
   /**
