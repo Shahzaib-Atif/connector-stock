@@ -48,8 +48,16 @@ export function useNotificationAction(notificationId: number, onClose: () => voi
     e.preventDefault();
 
     const qty = parseInt(quantityInput);
-    if (isNaN(qty) || qty <= 0) {
+    const availableStock = notification?.linkedConnector?.Qty ?? Infinity;
+
+    if (isNaN(qty) || qty < 0) {
       setErrorMessage("Please enter a valid quantity");
+      setStatus("error");
+      return;
+    }
+
+    if (qty > availableStock) {
+      setErrorMessage(`Cannot take out more than available stock (${availableStock})`);
       setStatus("error");
       return;
     }

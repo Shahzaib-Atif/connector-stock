@@ -94,6 +94,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
       <TransactionBar
         onRemove={() => onTransaction("OUT", accessory.id)}
         onAdd={() => onTransaction("IN", accessory.id)}
+        isRemoveDisabled={accessory.stock <= 0}
       />
     </div>
   );

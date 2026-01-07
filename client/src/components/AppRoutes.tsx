@@ -6,7 +6,7 @@ import { BoxView } from "./BoxView";
 import { AccessoryView } from "./AccessoryView";
 import { TransactionsView } from "./TransactionsView";
 import { SamplesView } from "./SamplesView";
-import { ConnectorsListView } from "./ConnectorsListView";
+import { ConnectorsListView } from "./ConnectorsTable";
 import { AccessoriesListView } from "./AccessoriesListView";
 import { NotificationsView } from "./NotificationsView";
 import { QRData } from "@/types";

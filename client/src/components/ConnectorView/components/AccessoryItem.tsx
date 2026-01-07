@@ -72,7 +72,12 @@ export const AccessoryItem: React.FC<Props> = ({
         <div className="flex items-center gap-1 sm:gap-2">
           <button
             onClick={() => onTransaction("OUT", accessory.id)}
-            className={`${stockBtnClass} bg-slate-700 hover:bg-slate-600`}
+            disabled={stock <= 0}
+            className={`${stockBtnClass} ${
+              stock <= 0
+                ? "bg-slate-800 text-slate-600 cursor-not-allowed"
+                : "bg-slate-700 hover:bg-slate-600 text-slate-200"
+            }`}
           >
             <Minus className="w-4 h-4" />
           </button>

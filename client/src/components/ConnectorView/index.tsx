@@ -35,7 +35,6 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
   onOpenQR,
 }) => {
   const { role } = useAppSelector((state) => state.auth);
-  const masterData = useAppSelector((state) => state.masterData.data);
 
   // Shared hook lifts params and cache plumbing.
   const { entity: connector } = useEntityDetails<Connector>(connectorResolver);
@@ -72,10 +71,9 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
         id="connector-page"
         className="max-w-3xl mx-auto p-4 space-y-4 text-sm sm:text-base"
       >
-        {isEditing && masterData ? (
+        {isEditing ? (
           <ConnectorEditForm
             connector={connector}
-            masterData={masterData}
             onCancel={() => setIsEditing(false)}
             onSave={() => setIsEditing(false)}
           />
@@ -117,6 +115,7 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
       <TransactionBar
         onRemove={() => onTransaction("OUT", connector.id)}
         onAdd={() => onTransaction("IN", connector.id)}
+        isRemoveDisabled={connector.stock <= 0}
       />
     </div>
   );

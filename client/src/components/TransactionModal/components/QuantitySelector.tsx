@@ -3,6 +3,7 @@ import React from "react";
 interface QuantitySelectorProps {
   amount: number;
   onChange: (amount: number) => void;
+  max?: number;
 }
 
 const iconBtnClass =
@@ -11,6 +12,7 @@ const iconBtnClass =
 export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   amount,
   onChange,
+  max,
 }) => {
   return (
     <div className="flex items-center justify-center gap-6">
@@ -28,20 +30,27 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
           if (val === "") {
             onChange(0);
           } else {
-            const num = parseInt(val);
+            let num = parseInt(val);
             if (!isNaN(num) && num >= 0) {
+              if (max !== undefined && num > max) {
+                num = max;
+              }
               onChange(num);
             }
           }
         }}
         onBlur={() => {
-          if (amount === 0) {
+          if (amount === 0 && (max === undefined || max > 0)) {
             onChange(1);
           }
         }}
         className="text-2xl sm:text-3xl font-bold text-white w-16 sm:w-24 text-center bg-transparent border-none outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       />
-      <button onClick={() => onChange(amount + 1)} className={iconBtnClass}>
+      <button
+        onClick={() => onChange(amount + 1)}
+        disabled={max !== undefined && amount >= max}
+        className={`${iconBtnClass} disabled:opacity-30 disabled:cursor-not-allowed`}
+      >
         +
       </button>
     </div>

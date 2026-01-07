@@ -9,6 +9,7 @@ interface TransactionBarProps {
   addIcon?: ReactNode;
   removeIcon?: ReactNode;
   className?: string;
+  isRemoveDisabled?: boolean;
 }
 
 const defaultButtonClass =
@@ -23,6 +24,7 @@ export const TransactionBar: React.FC<TransactionBarProps> = ({
   addIcon,
   removeIcon,
   className = "",
+  isRemoveDisabled = false,
 }) => {
   return (
     <div
@@ -32,7 +34,12 @@ export const TransactionBar: React.FC<TransactionBarProps> = ({
       <div className="justify-center max-w-3xl mx-auto flex gap-3 sm:gap-6 text-sm sm:text-lg">
         <button
           onClick={onRemove}
-          className={`${defaultButtonClass} bg-slate-800 hover:bg-slate-700 text-white border border-slate-600`}
+          disabled={isRemoveDisabled}
+          className={`${defaultButtonClass} ${
+            isRemoveDisabled
+              ? "bg-slate-800/50 text-slate-600 border-slate-700 cursor-not-allowed"
+              : "bg-slate-800 hover:bg-slate-700 text-white border-slate-600"
+          }`}
         >
           {removeIcon ?? <Minus className={iconClass} />}
           {removeLabel}

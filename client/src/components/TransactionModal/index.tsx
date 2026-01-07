@@ -39,6 +39,27 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   useEscKeyDown(ref, onClose);
 
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const masterData = useAppSelector((state) => state.masterData.data);
+
+  const currentStock = useMemo(() => {
+    if (!masterData) return 0;
+    // Check if targetId is an accessory (has underscore)
+    if (targetId.includes("_")) {
+      return masterData.accessories?.[targetId]?.Qty || 0;
+    }
+    // Otherwise it's a connector
+    return masterData.connectors?.[targetId]?.Qty || 0;
+  }, [masterData, targetId]);
+
+  // If type is OUT, ensure amount doesn't exceed stock
+  useEffect(() => {
+    if (type === "OUT" && amount > currentStock) {
+      setAmount(Math.max(1, currentStock));
+    }
+    if (type === "OUT" && currentStock === 0) {
+      setAmount(0);
+    }
+  }, [currentStock, type]);
 
   return (
     <div
@@ -52,13 +73,18 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         <TransactionHeader type={type} onClose={onClose} targetId={targetId} />
 
         <div className="space-y-6 sm:space-y-10">
-          <QuantitySelector amount={amount} onChange={setAmount} />
+          <QuantitySelector
+            amount={amount}
+            onChange={setAmount}
+            max={type === "OUT" ? currentStock : undefined}
+          />
 
           {/* Associated Accessories Checklist */}
           <AccessoryChecklist
             associatedAccessories={associatedAccessories}
             selectedAccessoryIds={selectedAccessoryIds}
             setSelectedAccessoryIds={setSelectedAccessoryIds}
+            transactionType={type}
           />
 
           {type === "OUT" && (

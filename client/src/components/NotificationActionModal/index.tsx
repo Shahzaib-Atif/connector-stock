@@ -91,6 +91,7 @@ export const NotificationActionModal: React.FC<Props> = ({
                 status={status}
                 errorMessage={errorMessage}
                 onCancel={onClose}
+                maxQuantity={notification?.linkedConnector?.Qty}
               />
             </>
           )}
