@@ -8,7 +8,11 @@ export class TransactionsRepo {
 
   async getAllTransactions() {
     try {
-      return await this.prisma.transactions.findMany();
+      return await this.prisma.transactions.findMany({
+        orderBy: {
+          updatedAt: 'desc',
+        },
+      });
     } catch (ex: any) {
       console.error(ex.message);
       return [];

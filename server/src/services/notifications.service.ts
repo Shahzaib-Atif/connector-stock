@@ -12,6 +12,7 @@ import {
 } from 'src/dtos/notifications.dto';
 import { UpdateSampleDto } from 'src/dtos/samples.dto';
 import { ConnectorDto } from 'src/dtos/connector.dto';
+import { CreateTransactionsDto } from 'src/dtos/transaction.dto';
 
 @Injectable()
 export class NotificationsService {
@@ -104,10 +105,28 @@ export class NotificationsService {
       };
     }
 
+    // Prepare transaction if applicable
+    let transactionDto: CreateTransactionsDto | undefined;
+
+    if (
+      notificationData.linkedConnector &&
+      quantityTakenOut > 0 &&
+      connectorUpdate
+    ) {
+      transactionDto = {
+        itemId: notificationData.linkedConnector.CODIVMAC,
+        transactionType: 'OUT',
+        amount: quantityTakenOut,
+        itemType: 'connector',
+        department: notificationData.SenderSector, // Taking department from sender sector
+      };
+    }
+
     // Delegate transaction to repository
     return await this.notificationsRepo.finishNotificationTransaction(
       id,
       connectorUpdate,
+      transactionDto,
     );
   }
 

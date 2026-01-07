@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { AppNotification } from 'src/dtos/notifications.dto';
 import { UpdateSampleDto } from 'src/dtos/samples.dto';
+import { CreateTransactionsDto } from 'src/dtos/transaction.dto';
 
 export interface ParsedMessage {
   conector?: string;
@@ -96,6 +97,7 @@ export class NotificationsRepo {
       newQty: number;
       updatedBy: string;
     },
+    transactionDto?: CreateTransactionsDto,
   ): Promise<AppNotification> {
     return await this.prisma.$transaction(async (tx) => {
       // 1. Mark notification as finished
@@ -107,15 +109,26 @@ export class NotificationsRepo {
         },
       });
 
-      // 2. Update connector quantity if provided
-      if (connectorUpdate) {
-        await tx.connectors_Main.update({
-          where: { CODIVMAC: connectorUpdate.codivmac },
-          data: {
-            Qty: connectorUpdate.newQty,
-            LastChangeBy: connectorUpdate.updatedBy,
-            LastUpdateDate: new Date(),
-          },
+      try {
+        // 2. Update connector quantity if provided
+        if (connectorUpdate) {
+          await tx.connectors_Main.update({
+            where: { CODIVMAC: connectorUpdate.codivmac },
+            data: {
+              Qty: connectorUpdate.newQty,
+              LastChangeBy: connectorUpdate.updatedBy,
+              LastUpdateDate: new Date(),
+            },
+          });
+        }
+      } catch (e: any) {
+        console.log(e.message);
+      }
+
+      // 3. Create transaction record if provided
+      if (transactionDto) {
+        await tx.transactions.create({
+          data: transactionDto,
         });
       }
 
