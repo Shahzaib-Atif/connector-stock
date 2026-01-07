@@ -1,7 +1,7 @@
 import React from "react";
 import { Package, ExternalLink, AlertCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../AppRoutes";
+import MetaItem from "./MetaItem";
 
 interface LinkedConnectorProps {
   connector: any;
@@ -12,8 +12,6 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
   connector,
   onClose,
 }) => {
-  const navigate = useNavigate();
-
   if (!connector) {
     return (
       <div className="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 flex items-center gap-3">
@@ -26,11 +24,17 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
   }
 
   const handleNavigate = () => {
-    navigate(`${ROUTES.CONNECTORS}/${connector.CODIVMAC}`);
+    window.open(
+      `${ROUTES.CONNECTORS}/${connector.CODIVMAC}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
     onClose();
   };
 
   const details = connector.Connectors_Details || {};
+  const { CODIVMAC, Vias } = connector;
+  const { Designa__o, Fabricante } = details;
 
   return (
     <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
@@ -41,45 +45,15 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
             <span>Related Connector</span>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <p className="text-slate-500 text-xs uppercase tracking-wider mb-0.5">
-                Reference
-              </p>
-              <p className="text-white font-mono font-medium">
-                {connector.CODIVMAC}
-              </p>
-            </div>
-            <div>
-              <p className="text-slate-500 text-xs uppercase tracking-wider mb-0.5">
-                Current Stock
-              </p>
-              <p
-                className={`font-bold ${
-                  connector.Qty > 0 ? "text-green-400" : "text-red-400"
-                }`}
-              >
-                {connector.Qty} units
-              </p>
-            </div>
-            <div className="col-span-2">
-              <p className="text-slate-500 text-xs uppercase tracking-wider mb-0.5">
-                Description
-              </p>
-              <p className="text-slate-300">{details.Designa__o || "N/A"}</p>
-            </div>
-            <div>
-              <p className="text-slate-500 text-xs uppercase tracking-wider mb-0.5">
-                Manufacturer
-              </p>
-              <p className="text-slate-300">{details.Fabricante || "N/A"}</p>
-            </div>
-            <div>
-              <p className="text-slate-500 text-xs uppercase tracking-wider mb-0.5">
-                Vias
-              </p>
-              <p className="text-slate-300">{connector.Vias}</p>
-            </div>
+          <div className="grid sm:grid-cols-2 gap-2 text-sm break-all">
+            <MetaItem label="CODIVMAC" value={CODIVMAC}></MetaItem>
+            <MetaItem
+              label="Current Stock"
+              value={connector.Qty + " units"}
+            ></MetaItem>
+            <MetaItem label="Description" value={Designa__o}></MetaItem>
+            <MetaItem label="Manufacturer" value={Fabricante}></MetaItem>
+            <MetaItem label="Vias" value={Vias}></MetaItem>
           </div>
         </div>
 

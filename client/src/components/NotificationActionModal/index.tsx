@@ -50,7 +50,7 @@ export const NotificationActionModal: React.FC<Props> = ({
           </button>
         </div>
 
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-4 max-h-[80vh] overflow-auto">
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
