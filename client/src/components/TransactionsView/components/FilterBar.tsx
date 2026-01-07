@@ -1,4 +1,4 @@
-import { Department } from "@/types";
+import { Department } from "@/utils/types/types";
 import React from "react";
 
 interface Props {

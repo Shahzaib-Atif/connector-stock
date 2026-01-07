@@ -9,7 +9,7 @@ import { AppRoutes } from "./components/AppRoutes";
 import { useScan } from "./hooks/useScan";
 import { TransactionModal } from "./components/TransactionModal";
 import { initTransactionsData } from "./store/slices/transactionsSlice";
-import { QRData } from "./types";
+import { QRData } from "./utils/types/types";
 import { initUsersList, logout } from "./store/slices/authSlice";
 import { AUTH_EXPIRED_EVENT } from "./utils/constants";
 

@@ -9,7 +9,7 @@ import { SamplesView } from "./SamplesView";
 import { ConnectorsListView } from "./ConnectorsTable";
 import { AccessoriesListView } from "./AccessoriesListView";
 import { NotificationsView } from "./NotificationsView";
-import { QRData } from "@/types";
+import { QRData } from "@/utils/types/types";
 
 interface AppRoutesProps {
   onScan: (code: string) => void;

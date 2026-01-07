@@ -4,7 +4,7 @@ import {
   deleteUserApi,
   fetchUsersApi,
 } from "@/api/authApi";
-import { User, UserRoles } from "@/types";
+import { User, UserRoles } from "@/utils/types/types";
 import { SESSION_KEY } from "@/utils/constants";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 

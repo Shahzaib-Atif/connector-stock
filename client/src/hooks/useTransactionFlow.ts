@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Department } from "../types";
+import { Department } from "../utils/types/types";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { performTransactionThunk } from "@/store/slices/transactionsSlice";
 

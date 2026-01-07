@@ -246,4 +246,5 @@ model Notification_Users {
   CreationDate   DateTime
   ReadDate       DateTime?
   FinishedDate   DateTime?
+  CompletionNote String?   @db.VarChar(100)
 }

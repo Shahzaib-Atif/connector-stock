@@ -98,6 +98,7 @@ export class NotificationsRepo {
       updatedBy: string;
     },
     transactionDto?: CreateTransactionsDto,
+    completionNote?: string,
   ): Promise<AppNotification> {
     return await this.prisma.$transaction(async (tx) => {
       // 1. Mark notification as finished
@@ -106,6 +107,7 @@ export class NotificationsRepo {
         data: {
           Finished: true,
           FinishedDate: new Date(),
+          CompletionNote: completionNote,
         },
       });
 

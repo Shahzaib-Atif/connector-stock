@@ -1,5 +1,5 @@
 import React from "react";
-import { ConnectorReferenceApiResponse } from "@/types";
+import { ConnectorReferenceApiResponse } from "@/utils/types/types";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 
@@ -23,10 +23,7 @@ export const ConnectorsTable: React.FC<ConnectorsTableProps> = ({
         <tbody>
           {connectors.length === 0 ? (
             <tr>
-              <td
-                colSpan={showImages ? 9 : 8}
-                className="table-row-not-found"
-              >
+              <td colSpan={showImages ? 9 : 8} className="table-row-not-found">
                 No connectors found
               </td>
             </tr>

@@ -1,15 +1,18 @@
 import React from "react";
-import { X, Loader2, CheckCircle2, Package } from "lucide-react";
+import { X, Loader2, Package } from "lucide-react";
 
 // Sub-components
 import { NotificationInfo } from "./components/NotificationInfo";
 import { ParsedInfo } from "./components/ParsedInfo";
 import { LinkedSample } from "./components/LinkedSample";
 import { LinkedConnector } from "./components/LinkedConnector";
-import { FinishForm } from "./components/FinishForm";
-
-// Hook
 import { useNotificationAction } from "./useNotificationAction";
+import ShowSucess from "../common/ShowSucess";
+import ActionButtons from "./components/ActionButtons";
+import NotificationStatus from "./components/NotificationStatus";
+import QuantityInput from "./components/QuantityInput";
+import CustomNote from "./components/CustomNote";
+import NotificationHeader from "./components/NotificationHeader";
 
 interface Props {
   notificationId: number;
@@ -25,6 +28,10 @@ export const NotificationActionModal: React.FC<Props> = ({
     loading,
     quantityInput,
     setQuantityInput,
+    completionType,
+    setCompletionType,
+    customNote,
+    setCustomNote,
     status,
     errorMessage,
     handleFinish,
@@ -35,20 +42,7 @@ export const NotificationActionModal: React.FC<Props> = ({
     <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
       <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
-          <div className="flex items-center gap-2">
-            <Package className="w-5 h-5 text-blue-400" />
-            <h3 className="text-lg font-semibold text-white">
-              Sample Request Details
-            </h3>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-1 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+        <NotificationHeader onClose={onClose} />
 
         <div className="p-6 space-y-4 max-h-[80vh] overflow-auto">
           {loading ? (
@@ -56,22 +50,14 @@ export const NotificationActionModal: React.FC<Props> = ({
               <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
             </div>
           ) : status === "success" ? (
-            <div className="flex flex-col items-center justify-center py-6 space-y-3">
-              <CheckCircle2 className="w-16 h-16 text-green-500 animate-bounce" />
-              <p className="text-xl font-bold text-white">Request Completed!</p>
-              <p className="text-slate-400">Closing...</p>
-            </div>
+            <ShowSucess title="Request Completed!" message="Closing..." />
           ) : (
-            <>
-              <NotificationInfo
-                senderUser={notification?.SenderUser}
-                senderSector={notification?.SenderSector}
-                message={notification?.Message}
-              />
-
+            <form onSubmit={handleFinish} className="space-y-6">
               <ParsedInfo
                 conector={notification?.parsedConector}
                 encomenda={notification?.parsedEncomenda}
+                senderUser={notification?.SenderUser}
+                senderSector={notification?.SenderSector}
               />
 
               <LinkedConnector
@@ -84,16 +70,40 @@ export const NotificationActionModal: React.FC<Props> = ({
                 onNavigate={handleNavigateToSample}
               />
 
-              <FinishForm
-                quantityInput={quantityInput}
-                setQuantityInput={setQuantityInput}
-                onSubmit={handleFinish}
-                status={status}
-                errorMessage={errorMessage}
-                onCancel={onClose}
+              <NotificationStatus
+                completionType={completionType}
                 maxQuantity={notification?.linkedConnector?.Qty}
+                customNote={customNote}
+                setCompletionType={setCompletionType}
+                setCustomNote={setCustomNote}
               />
-            </>
+
+              <QuantityInput
+                completionType={completionType}
+                quantityInput={quantityInput}
+                maxQuantity={notification?.linkedConnector?.Qty}
+                setQuantityInput={setQuantityInput}
+              />
+
+              {/* Error */}
+              {status === "error" && (
+                <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
+                  <p className="text-sm text-red-400 text-center">
+                    {errorMessage}
+                  </p>
+                </div>
+              )}
+
+              <ActionButtons
+                quantityInput={quantityInput}
+                maxQuantity={notification?.linkedConnector?.Qty}
+                completionType={completionType}
+                customNote={customNote}
+                status={status}
+                setCompletionType={setCompletionType}
+                onCancel={onClose}
+              />
+            </form>
           )}
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Wrench } from "lucide-react";
-import { QRData, Accessory } from "@/types";
+import { QRData, Accessory } from "@/utils/types/types";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
 import { NotFoundPage } from "../common/NotFoundPage";

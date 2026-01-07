@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { QRData, Sample } from "@/types";
+import { QRData, Sample } from "@/utils/types/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   fetchSamplesThunk,

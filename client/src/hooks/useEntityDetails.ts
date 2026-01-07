@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
-import { MasterData } from "../types";
+import { MasterData } from "../utils/types/types";
 
 export interface EntityResolverContext {
   masterData: MasterData | null;

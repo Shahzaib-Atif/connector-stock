@@ -1,5 +1,5 @@
 import React from "react";
-import { Notification } from "@/types";
+import { Notification } from "@/utils/types/types";
 import { Bell, Package, Calendar } from "lucide-react";
 
 interface NotificationCardProps {
@@ -43,7 +43,9 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2 mb-2">
             <h3
-              className={`text-sm font-semibold ${notification.Read ? "text-gray-300" : "text-white"}`}
+              className={`text-sm font-semibold ${
+                notification.Read ? "text-gray-300" : "text-white"
+              }`}
             >
               {notification.Title || "Sample Request"}
             </h3>
@@ -64,7 +66,10 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
               <div className="flex items-center gap-1 bg-gray-700 px-2 py-1 rounded">
                 <Package size={14} className="text-green-400" />
                 <span className="text-gray-300">
-                  Connector: <span className="text-white font-mono">{notification.parsedConector}</span>
+                  Connector:{" "}
+                  <span className="text-white font-mono">
+                    {notification.parsedConector}
+                  </span>
                 </span>
               </div>
 
@@ -72,7 +77,10 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
                 <div className="flex items-center gap-1 bg-gray-700 px-2 py-1 rounded">
                   <Calendar size={14} className="text-yellow-400" />
                   <span className="text-gray-300">
-                    Order: <span className="text-white font-mono">{notification.parsedEncomenda}</span>
+                    Order:{" "}
+                    <span className="text-white font-mono">
+                      {notification.parsedEncomenda}
+                    </span>
                   </span>
                 </div>
               )}

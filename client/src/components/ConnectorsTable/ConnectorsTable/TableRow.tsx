@@ -1,5 +1,5 @@
 import React from "react";
-import { ConnectorReferenceApiResponse } from "@/types";
+import { ConnectorReferenceApiResponse } from "@/utils/types/types";
 import { ExternalLink, ImageIcon } from "lucide-react";
 import { API } from "@/utils/api";
 import { ROUTES } from "@/components/AppRoutes";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Minus, Plus } from "lucide-react";
-import { Accessory } from "../../../types";
+import { Accessory } from "../../../utils/types/types";
 import { InventoryListItem } from "../../common/InventoryListItem";
 import { API } from "@/utils/api";
 

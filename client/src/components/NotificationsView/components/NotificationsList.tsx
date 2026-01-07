@@ -1,5 +1,5 @@
 import React from "react";
-import { Notification } from "@/types";
+import { Notification } from "@/utils/types/types";
 import { NotificationCard } from "./NotificationCard";
 
 interface NotificationsListProps {

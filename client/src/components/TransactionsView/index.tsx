@@ -8,7 +8,7 @@ import { useTransactionsFilter } from "@/hooks/useTransactionsFilters";
 import { usePagination } from "@/hooks/usePagination";
 import Spinner from "../common/Spinner";
 import { Pagination } from "../common/Pagination";
-import { Department } from "@/types";
+import { Department } from "@/utils/types/types";
 import { ROUTES } from "../AppRoutes";
 
 export const TransactionsView: React.FC = () => {

@@ -3,7 +3,7 @@ import {
   AccessoryApiResponse,
   ConnectorReferenceApiResponse,
   MasterData,
-} from "@/types";
+} from "@/utils/types/types";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 interface MasterDataState {

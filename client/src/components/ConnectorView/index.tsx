@@ -1,6 +1,6 @@
 import React from "react";
 import { Wrench } from "lucide-react";
-import { Connector, QRData } from "../../types";
+import { Connector, QRData } from "../../utils/types/types";
 import { parseConnector } from "../../services/connectorService";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
@@ -12,7 +12,7 @@ import { AccessoryList } from "./components/AccessoryList";
 import { BoxShortcut } from "../common/BoxShortcut";
 import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 import { useAppSelector } from "../../store/hooks";
-import { UserRoles } from "../../types";
+import { UserRoles } from "../../utils/types/types";
 import { Edit2 } from "lucide-react";
 import { ConnectorEditForm } from "./components/ConnectorEditForm";
 import { RelatedImages } from "./components/RelatedImages";

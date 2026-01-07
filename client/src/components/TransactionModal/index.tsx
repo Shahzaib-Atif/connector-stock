@@ -2,7 +2,7 @@ import React, { useRef, useState, useMemo, useEffect } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEscKeyDown } from "@/hooks/useEscKeyDown";
-import { Department } from "@/types";
+import { Department } from "@/utils/types/types";
 import { DepartmentSelector } from "./components/DepartmentSelector";
 import { QuantitySelector } from "./components/QuantitySelector";
 import { TransactionHeader } from "./components/TransactionHeader";
@@ -111,7 +111,11 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               type === "IN"
                 ? "btn-primary"
                 : "bg-orange-600 hover:bg-orange-500"
-            } ${(!isAuthenticated || amount === 0) ? "opacity-50 cursor-not-allowed" : ""}`}
+            } ${
+              !isAuthenticated || amount === 0
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
             disabled={!isAuthenticated || amount === 0}
           >
             CONFIRM {type === "IN" ? "ENTRY" : "WITHDRAWAL"}

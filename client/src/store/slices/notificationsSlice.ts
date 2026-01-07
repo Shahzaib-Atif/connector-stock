@@ -1,8 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import {
-  Notification,
-  NotificationWithSample,
-} from "@/types";
+import { Notification, NotificationWithSample } from "@/utils/types/types";
 import {
   getUnfinishedNotifications,
   getNotificationWithSample,
@@ -47,12 +44,14 @@ export const finishNotificationThunk = createAsyncThunk(
     id,
     quantityTakenOut,
     finishedBy,
+    completionNote,
   }: {
     id: number;
     quantityTakenOut: number;
     finishedBy?: string;
+    completionNote?: string;
   }) => {
-    await finishNotification(id, quantityTakenOut, finishedBy);
+    await finishNotification(id, quantityTakenOut, finishedBy, completionNote);
     return id;
   }
 );
@@ -130,15 +129,18 @@ const notificationsSlice = createSlice({
         state.error = action.error.message || "Failed to finish notification";
       })
       // Mark as read
-      .addCase(markAsReadThunk.fulfilled, (state, action: PayloadAction<number>) => {
-        const notification = state.notifications.find(
-          (n) => n.id === action.payload
-        );
-        if (notification) {
-          notification.Read = true;
-          notification.ReadDate = new Date().toISOString();
+      .addCase(
+        markAsReadThunk.fulfilled,
+        (state, action: PayloadAction<number>) => {
+          const notification = state.notifications.find(
+            (n) => n.id === action.payload
+          );
+          if (notification) {
+            notification.Read = true;
+            notification.ReadDate = new Date().toISOString();
+          }
         }
-      });
+      );
   },
 });
 

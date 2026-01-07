@@ -6,7 +6,7 @@ import {
   AccessoryApiResponse,
   ConnectorReferenceApiResponse,
   Transaction,
-} from "@/types";
+} from "@/utils/types/types";
 import { updateAccessory, updateConnector } from "./masterDataSlice";
 
 interface TransactionState {

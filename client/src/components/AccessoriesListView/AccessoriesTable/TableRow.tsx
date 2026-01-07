@@ -1,5 +1,5 @@
 import React from "react";
-import { AccessoryApiResponse } from "@/types";
+import { AccessoryApiResponse } from "@/utils/types/types";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/components/AppRoutes";
 

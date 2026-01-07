@@ -1,5 +1,5 @@
 import React from "react";
-import { AccessoryApiResponse } from "@/types";
+import { AccessoryApiResponse } from "@/utils/types/types";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 

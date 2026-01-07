@@ -1,7 +1,7 @@
 import React from "react";
 import { useConnectorEditForm } from "./useConnectorEditForm";
 import ConnectorFormActions from "./ConnectorFormActions";
-import { Connector } from "@/types";
+import { Connector } from "@/utils/types/types";
 import { useAppSelector } from "@/store/hooks";
 
 interface Props {

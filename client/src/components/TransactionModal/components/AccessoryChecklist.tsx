@@ -1,5 +1,5 @@
 import { useAssociatedAccessories } from "@/hooks/useAssociatedAccessories";
-import { Accessory, AccessoryApiResponse } from "@/types";
+import { Accessory, AccessoryApiResponse } from "@/utils/types/types";
 
 interface Props {
   selectedAccessoryIds: string[];

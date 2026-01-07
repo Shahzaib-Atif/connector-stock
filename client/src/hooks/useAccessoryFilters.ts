@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { AccessoryApiResponse } from "@/types";
+import { AccessoryApiResponse } from "@/utils/types/types";
 
 export type AccessoryFilterColumn =
   | "all"

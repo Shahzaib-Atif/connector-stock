@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/store/hooks";
-import { suggestion } from "@/types";
+import { suggestion } from "@/utils/types/types";
 import { useEffect, useState } from "react";
 
 export function useSuggestions(

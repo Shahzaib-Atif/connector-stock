@@ -18,7 +18,7 @@ import { ChangePasswordModal } from "./ChangePasswordModal";
 import { useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "../AppRoutes";
-import { UserRoles } from "@/types";
+import { UserRoles } from "@/utils/types/types";
 import { fetchUnfinishedNotifications } from "@/store/slices/notificationsSlice";
 import { useEffect } from "react";
 

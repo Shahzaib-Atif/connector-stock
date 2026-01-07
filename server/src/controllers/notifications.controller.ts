@@ -38,6 +38,7 @@ export class NotificationsController {
       id,
       dto.quantityTakenOut,
       dto.finishedBy,
+      dto.completionNote,
     );
   }
 

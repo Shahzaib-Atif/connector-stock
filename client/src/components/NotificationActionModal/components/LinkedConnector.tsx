@@ -33,7 +33,7 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
   };
 
   const details = connector.Connectors_Details || {};
-  const { CODIVMAC, Vias } = connector;
+  const { CODIVMAC, Vias, Qty } = connector;
   const { Designa__o, Fabricante } = details;
 
   return (
@@ -43,14 +43,16 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
           <div className="flex items-center gap-2 text-blue-400 font-semibold">
             <Package size={18} />
             <span>Related Connector</span>
+            {!Qty && (
+              <span className="text-sm text-amber-400 text-center font-medium">
+                (out of stock)
+              </span>
+            )}
           </div>
 
           <div className="grid sm:grid-cols-2 gap-2 text-sm break-all">
             <MetaItem label="CODIVMAC" value={CODIVMAC}></MetaItem>
-            <MetaItem
-              label="Current Stock"
-              value={connector.Qty + " units"}
-            ></MetaItem>
+            <MetaItem label="Current Stock" value={Qty + " units"}></MetaItem>
             <MetaItem label="Description" value={Designa__o}></MetaItem>
             <MetaItem label="Manufacturer" value={Fabricante}></MetaItem>
             <MetaItem label="Vias" value={Vias}></MetaItem>

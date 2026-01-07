@@ -1,4 +1,4 @@
-import { Department, Transaction } from "@/types";
+import { Department, Transaction } from "@/utils/types/types";
 import { useState, useMemo } from "react";
 
 export function useTransactionsFilter(transactions: Transaction[]) {

@@ -6,7 +6,7 @@ import {
   fetchPositions,
   fetchFabricantes,
 } from "./metadataApi";
-import { MasterData } from "@/types";
+import { MasterData } from "@/utils/types/types";
 
 export const fetchMasterData = async (): Promise<MasterData> => {
   try {

@@ -1,6 +1,6 @@
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEscKeyDown } from "@/hooks/useEscKeyDown";
-import { QRData } from "@/types";
+import { QRData } from "@/utils/types/types";
 import { API } from "@/utils/api";
 import { Printer, Loader2, AlertTriangle } from "lucide-react";
 import React, { useRef, useState } from "react";
@@ -125,7 +125,8 @@ export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
           <div className="mb-6 flex items-center gap-2 px-3 py-2 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-400 text-xs text-left animate-in zoom-in-95">
             <AlertTriangle className="w-4 h-4 flex-shrink-0" />
             <span>
-              Warning: You are about to print <strong>{printQty}</strong> labels. Please confirm before proceeding.
+              Warning: You are about to print <strong>{printQty}</strong>{" "}
+              labels. Please confirm before proceeding.
             </span>
           </div>
         )}

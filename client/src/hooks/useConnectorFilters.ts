@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { ConnectorReferenceApiResponse } from "@/types";
+import { ConnectorReferenceApiResponse } from "@/utils/types/types";
 
 export type ConnectorFilterColumn = "all" | "id" | "type" | "fabricante";
 

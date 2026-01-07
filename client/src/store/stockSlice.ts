@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { Transaction } from "../types";
+import { Transaction } from "../utils/types/types";
 import { getTransactions } from "@/api/transactionsApi";
 
 interface StockState {

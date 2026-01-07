@@ -46,11 +46,12 @@ export const getNotificationWithSample = async (
 export const finishNotification = async (
   id: number,
   quantityTakenOut: number,
-  finishedBy?: string
+  finishedBy?: string,
+  completionNote?: string
 ): Promise<void> => {
   const response = await fetchWithAuth(`${API.notifications}/${id}/finish`, {
     method: "PATCH",
-    body: JSON.stringify({ quantityTakenOut, finishedBy }),
+    body: JSON.stringify({ quantityTakenOut, finishedBy, completionNote }),
   });
   if (!response.ok) throw new Error("Failed to finish notification");
   return response.json();

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MapPin, Users } from "lucide-react";
-import { Connector } from "../../../types";
+import { Connector } from "../../../utils/types/types";
 import { API } from "@/utils/api";
 import ImageBox from "@/components/common/ImageBox";
 import StockDiv from "@/components/common/StockDiv";
@@ -20,7 +20,6 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
 
   return (
     <div id="connector-summary" className={VIEW_SUMMARY_CLASS}>
-
       {/* Connector Image (if available) */}
       <ImageBox
         error={error}

@@ -1,4 +1,4 @@
-import { Connector, Box, Accessory, MasterData } from "../types";
+import { Connector, Box, Accessory, MasterData } from "../utils/types/types";
 import { getCoordinates } from "../utils/inventoryUtils";
 import { parseAccessory } from "./accessoryService";
 import { API } from "../utils/api";
@@ -121,17 +121,19 @@ export const searchConnectors = (
     }
   }
 
-
   return results;
 };
 
 import { fetchWithAuth } from "../utils/fetchClient";
 
 export const updateConnectorApi = async (connectorId: string, data: any) => {
-  const response = await fetchWithAuth(`${API.connectors}/${connectorId}/update`, {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
+  const response = await fetchWithAuth(
+    `${API.connectors}/${connectorId}/update`,
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+    }
+  );
 
   if (!response.ok) {
     const error = await response.json();

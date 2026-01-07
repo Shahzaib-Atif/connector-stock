@@ -1,6 +1,6 @@
 import React from "react";
 import { Pencil, Trash2, Printer } from "lucide-react";
-import { QRData, Sample } from "@/types";
+import { QRData, Sample } from "@/utils/types/types";
 import { formatDate } from "@/utils/formatDate";
 
 interface TableRowProps {

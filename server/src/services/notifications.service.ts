@@ -80,6 +80,7 @@ export class NotificationsService {
     id: number,
     quantityTakenOut: number,
     finishedBy?: string,
+    completionNote?: string,
   ): Promise<AppNotification> {
     // Get notification with sample
     const notificationData = await this.getNotificationWithSample(id);
@@ -127,6 +128,7 @@ export class NotificationsService {
       id,
       connectorUpdate,
       transactionDto,
+      completionNote,
     );
   }
 

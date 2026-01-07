@@ -3,7 +3,7 @@ import { useAppSelector } from "@/store/hooks";
 import { DetailHeader } from "../common/DetailHeader";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../AppRoutes";
-import { User, UserRoles } from "@/types";
+import { User, UserRoles } from "@/utils/types/types";
 import { Trash2, UserPlus } from "lucide-react";
 import { CreateUserModal } from "../CreateUserModal";
 import { useAppDispatch } from "@/store/hooks";

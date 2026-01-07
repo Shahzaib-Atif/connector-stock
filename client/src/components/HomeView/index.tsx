@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Scan } from "lucide-react";
 import ExampleLookup from "../ExampleLookup";
 import { DetailHeader } from "../common/DetailHeader";
-import { suggestion } from "@/types";
+import { suggestion } from "@/utils/types/types";
 import SearchInput from "./components/SearchInput";
 import SuggestionsList from "./components/SuggestionsList";
 import { useSuggestions } from "@/hooks/useSuggestions";

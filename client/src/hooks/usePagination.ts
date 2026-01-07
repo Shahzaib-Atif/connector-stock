@@ -1,4 +1,4 @@
-import { PaginatedData } from "@/types";
+import { PaginatedData } from "@/utils/types/types";
 import { useState, useMemo, useCallback } from "react";
 
 interface Props<T> {

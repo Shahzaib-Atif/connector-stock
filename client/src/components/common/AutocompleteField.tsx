@@ -1,6 +1,6 @@
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useSuggestionNavigation } from "@/hooks/useSuggestionNavigation";
-import { suggestion } from "@/types";
+import { suggestion } from "@/utils/types/types";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import SuggestionsList from "../HomeView/components/SuggestionsList";
 import { inputClass } from "../SamplesView/components/SampleFormModal/components/SampleFormFields";

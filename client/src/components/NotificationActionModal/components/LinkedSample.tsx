@@ -1,6 +1,6 @@
 import React from "react";
 import { CheckCircle2, ExternalLink, AlertCircle } from "lucide-react";
-import { Sample } from "@/types";
+import { Sample } from "@/utils/types/types";
 import MetaItem from "./MetaItem";
 import { CollapsibleSection } from "@/components/common/CollapsibleSection";
 
@@ -15,14 +15,9 @@ export const LinkedSample: React.FC<LinkedSampleProps> = ({
 }) => {
   if (!sample) {
     return (
-      <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
-        <p className="text-yellow-400 font-semibold flex items-center gap-2">
-          <AlertCircle size={18} />
-          No matching sample found
-        </p>
-        <p className="text-slate-400 text-sm mt-1">
-          The sample may not exist in the system yet.
-        </p>
+      <div className="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 flex items-center gap-3">
+        <AlertCircle className="w-5 h-5 text-slate-500" />
+        <p className="text-slate-400 text-sm">No matching sample found</p>
       </div>
     );
   }

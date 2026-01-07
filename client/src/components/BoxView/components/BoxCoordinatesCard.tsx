@@ -1,4 +1,4 @@
-import { Box } from "@/types";
+import { Box } from "@/utils/types/types";
 import { MapPin } from "lucide-react";
 
 interface Props {

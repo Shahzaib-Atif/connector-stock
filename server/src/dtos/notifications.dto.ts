@@ -19,6 +19,7 @@ export interface AppNotification {
 export interface FinishNotificationDto {
   quantityTakenOut: number;
   finishedBy?: string;
+  completionNote?: string;
 }
 
 export interface NotificationWithParsedData extends AppNotification {

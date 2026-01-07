@@ -1,5 +1,5 @@
 import React from "react";
-import { QRData, Sample } from "@/types";
+import { QRData, Sample } from "@/utils/types/types";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 

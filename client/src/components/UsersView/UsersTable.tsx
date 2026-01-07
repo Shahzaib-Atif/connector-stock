@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/store/hooks";
-import { User, UserRoles } from "@/types";
+import { User, UserRoles } from "@/utils/types/types";
 import { Trash2 } from "lucide-react";
 import React from "react";
 
@@ -59,9 +59,7 @@ function UsersTable({ setSelectedUser, setOpenDltDlg }: Props) {
                   {u.role}
                 </span>
               </td>
-              <td className="px-6 py-4 text-slate-300">
-                {u.dept || "--"}
-              </td>
+              <td className="px-6 py-4 text-slate-300">{u.dept || "--"}</td>
               <td className="px-6 py-4 text-right">
                 {role === UserRoles.Master && u.role !== UserRoles.Master && (
                   <button

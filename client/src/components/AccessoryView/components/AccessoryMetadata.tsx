@@ -1,5 +1,5 @@
 import CardInfoDiv from "@/components/common/CardInfoDiv";
-import { Accessory } from "@/types";
+import { Accessory } from "@/utils/types/types";
 
 interface Props {
   accessory: Accessory;

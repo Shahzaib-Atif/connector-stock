@@ -57,7 +57,7 @@ export interface Sample {
   LasUpdateBy?: string;
   DateOfCreation?: string;
   DateOfLastUpdate?: string;
-  IsActive: boolean;
+  IsActive?: boolean;
   ActualUser?: string;
   com_fio?: boolean;
 }
@@ -202,17 +202,6 @@ export interface Notification {
   parsedConector?: string;
   parsedEncomenda?: string;
 }
-
-// export interface NotificationWithSample extends Notification {
-//   linkedSample?: {
-//     ID: number;
-//     Amostra: string | null;
-//     EncDivmac: string | null;
-//     Cliente: string | null;
-//     Projeto: string | null;
-//     Quantidade: string | null;
-//   } | null;
-// }
 
 export interface NotificationWithSample extends Notification {
   linkedSample?: Sample | null;

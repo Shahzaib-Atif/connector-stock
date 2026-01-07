@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { X, UserPlus, Loader2, CheckCircle2, Building2 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { createUserThunk } from "@/store/slices/authSlice";
-import { UserRoles, Department } from "@/types";
+import { UserRoles, Department } from "@/utils/types/types";
+import ShowSucess from "./common/ShowSucess";
 
 interface Props {
   onClose: () => void;
@@ -78,11 +79,7 @@ export const CreateUserModal: React.FC<Props> = ({ onClose }) => {
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {status === "success" ? (
-            <div className="flex flex-col items-center justify-center py-6 space-y-3">
-              <CheckCircle2 className="w-16 h-16 text-green-500 animate-bounce" />
-              <p className="text-xl font-bold text-white">User Created!</p>
-              <p className="text-slate-400">Refreshing list...</p>
-            </div>
+            <ShowSucess title="User Created!" message="Refreshing list..." />
           ) : (
             <>
               <div>

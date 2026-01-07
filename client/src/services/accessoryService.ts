@@ -1,4 +1,4 @@
-import { Accessory, AccessoryApiResponse } from "@/types";
+import { Accessory, AccessoryApiResponse } from "@/utils/types/types";
 
 export const parseAccessory = (
   apiAccessory: AccessoryApiResponse
