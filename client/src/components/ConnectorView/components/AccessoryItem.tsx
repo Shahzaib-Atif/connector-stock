@@ -53,16 +53,16 @@ export const AccessoryItem: React.FC<Props> = ({
             <div className="text-slate-400">
               Type:{" "}
               <span className="text-slate-200">
-                {accessory.type?.toLowerCase()}
+                {accessory.AccessoryType?.toLowerCase()}
               </span>
             </div>
             <div className="text-slate-400 mt-1 space-y-1">
-              <p>Ref: {accessory.refClient || "N/A"}</p>
-              {accessory.capotAngle && (
-                <p className="text-blue-400">Angle: {accessory.capotAngle}</p>
+              <p>Ref: {accessory.RefClient || "N/A"}</p>
+              {accessory.CapotAngle && (
+                <p className="text-blue-400">Angle: {accessory.CapotAngle}</p>
               )}
-              {accessory.clipColor && (
-                <p className="text-emerald-400">Color: {accessory.clipColor}</p>
+              {accessory.ClipColor && (
+                <p className="text-emerald-400">Color: {accessory.ClipColor}</p>
               )}
             </div>
           </div>

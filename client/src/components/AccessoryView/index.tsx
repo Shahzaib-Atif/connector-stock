@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Wrench } from "lucide-react";
-import { QRData, Accessory } from "@/utils/types/types";
+import { Accessory } from "@/utils/types/types";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
 import { NotFoundPage } from "../common/NotFoundPage";
@@ -14,6 +14,7 @@ import StockDiv from "../common/StockDiv";
 import AccessoryMetadata from "./components/AccessoryMetadata";
 import { VIEW_SUMMARY_CLASS } from "@/utils/constants";
 import { parseAccessory } from "@/services/accessoryService";
+import { QRData } from "@/utils/types/shared";
 
 interface AccessoryViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -78,7 +79,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
           />
 
           {/* Stock Details */}
-          <StockDiv currentStock={accessory.stock} />
+          <StockDiv currentStock={accessory.Qty} />
 
           {/* Accessory Details */}
           <AccessoryMetadata accessory={accessory} />
@@ -94,7 +95,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
       <TransactionBar
         onRemove={() => onTransaction("OUT", accessory.id)}
         onAdd={() => onTransaction("IN", accessory.id)}
-        isRemoveDisabled={accessory.stock <= 0}
+        isRemoveDisabled={accessory.Qty <= 0}
       />
     </div>
   );

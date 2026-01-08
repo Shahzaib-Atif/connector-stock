@@ -25,7 +25,7 @@ export const AccessoryList: React.FC<Props> = ({
         <AccessoryItem
           key={acc.id}
           accessory={acc}
-          stock={acc.stock}
+          stock={acc.Qty}
           onInspect={onInspect}
           onTransaction={onTransaction}
         />
@@ -34,7 +34,7 @@ export const AccessoryList: React.FC<Props> = ({
         <AccessoryItem
           key={acc.id}
           accessory={acc}
-          stock={acc.stock}
+          stock={acc.Qty}
           onInspect={onInspect}
           onTransaction={onTransaction}
         />

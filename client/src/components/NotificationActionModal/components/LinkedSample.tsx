@@ -1,18 +1,14 @@
 import React from "react";
-import { CheckCircle2, ExternalLink, AlertCircle } from "lucide-react";
+import { CheckCircle2, AlertCircle } from "lucide-react";
 import { Sample } from "@/utils/types/types";
 import MetaItem from "./MetaItem";
-import { CollapsibleSection } from "@/components/common/CollapsibleSection";
 
 interface LinkedSampleProps {
   sample: Sample;
   onNavigate: () => void;
 }
 
-export const LinkedSample: React.FC<LinkedSampleProps> = ({
-  sample,
-  onNavigate,
-}) => {
+export const LinkedSample: React.FC<LinkedSampleProps> = ({ sample }) => {
   if (!sample) {
     return (
       <div className="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 flex items-center gap-3">

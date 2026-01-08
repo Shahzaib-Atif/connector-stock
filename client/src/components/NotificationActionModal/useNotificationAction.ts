@@ -45,7 +45,7 @@ export function useNotificationAction(
         if (!result.Read) {
           dispatch(markAsReadThunk(notificationId));
         }
-      } catch (err: any) {
+      } catch (err) {
         setErrorMessage(err.message || "Failed to load notification");
         setStatus("error");
       } finally {
@@ -122,7 +122,7 @@ export function useNotificationAction(
       setTimeout(() => {
         onClose();
       }, 1500);
-    } catch (err: any) {
+    } catch (err) {
       setErrorMessage(err.message || "Failed to finish notification");
       setStatus("error");
     }

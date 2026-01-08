@@ -21,7 +21,7 @@ export const RelatedImages: React.FC<RelatedImagesProps> = ({
         setLoading(true);
         const data = await fetchRelatedImages(connectorId);
         setImages(data);
-      } catch (err: any) {
+      } catch (err) {
         console.error("Failed to fetch related images:", err);
       } finally {
         setLoading(false);

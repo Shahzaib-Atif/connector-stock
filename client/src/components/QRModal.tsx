@@ -1,7 +1,7 @@
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEscKeyDown } from "@/hooks/useEscKeyDown";
-import { QRData } from "@/utils/types/types";
 import { API } from "@/utils/api";
+import { QRData } from "@/utils/types/shared";
 import { Printer, Loader2, AlertTriangle } from "lucide-react";
 import React, { useRef, useState } from "react";
 
@@ -55,6 +55,7 @@ export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
         });
       }
     } catch (error) {
+      console.error(error.message);
       setPrintStatus({
         type: "error",
         message: "Could not connect to print server",

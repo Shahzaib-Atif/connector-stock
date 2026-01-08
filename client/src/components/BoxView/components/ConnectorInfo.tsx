@@ -9,14 +9,14 @@ interface Props {
 
 function ConnectorInfo({ liveStock, conn }: Props) {
   const [imageError, setImageError] = useState(false);
-  const imageUrl = API.connectorImages(conn.id);
+  const imageUrl = API.connectorImages(conn.CODIVMAC);
 
   return (
     <>
       {!imageError ? (
         <img
           src={imageUrl}
-          alt={conn.id}
+          alt={conn.CODIVMAC}
           className={`w-12 h-12 rounded-lg object-cover border ${
             liveStock > 0 ? "border-blue-500/20" : "border-red-500/20"
           }`}
@@ -32,7 +32,9 @@ function ConnectorInfo({ liveStock, conn }: Props) {
         />
       )}
       <div>
-        <div className="font-mono font-bold text-white text-lg">{conn.id}</div>
+        <div className="font-mono font-bold text-white text-lg">
+          {conn.CODIVMAC}
+        </div>
         <div className="text-sm text-slate-400">
           {conn.colorNamePT} • {conn.viasName}
         </div>

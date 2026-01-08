@@ -9,11 +9,7 @@ interface Props {
 }
 
 function UsersTable({ setSelectedUser, setOpenDltDlg }: Props) {
-  const {
-    users,
-    role,
-    user: currentUsername,
-  } = useAppSelector((state) => state.auth);
+  const { users, role } = useAppSelector((state) => state.auth);
 
   return (
     <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-auto">

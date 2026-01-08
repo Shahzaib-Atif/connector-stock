@@ -1,6 +1,5 @@
 import { ROUTES } from "@/components/AppRoutes";
 import { Transaction } from "@/utils/types/types";
-import { formatDate } from "@/utils/formatDate";
 import { ExternalLink } from "lucide-react";
 
 interface Props {

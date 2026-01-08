@@ -9,7 +9,6 @@ import { SamplesView } from "./SamplesView";
 import { ConnectorsListView } from "./ConnectorsTable";
 import { AccessoriesListView } from "./AccessoriesListView";
 import { NotificationsView } from "./NotificationsView";
-import { QRData } from "@/utils/types/types";
 
 interface AppRoutesProps {
   onScan: (code: string) => void;
@@ -21,6 +20,7 @@ interface AppRoutesProps {
 
 import { Login } from "./Login";
 import { UsersView } from "./UsersView";
+import { QRData } from "@/utils/types/shared";
 
 export const AppRoutes: React.FC<AppRoutesProps> = ({
   onScan,

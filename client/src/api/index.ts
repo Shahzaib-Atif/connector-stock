@@ -37,7 +37,6 @@ export const fetchMasterData = async (): Promise<MasterData> => {
       connectorTypes,
       positions,
       connectors,
-      clients: {}, // Deprecated
       accessories,
       fabricantes,
     };

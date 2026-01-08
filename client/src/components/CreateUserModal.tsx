@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, UserPlus, Loader2, CheckCircle2, Building2 } from "lucide-react";
+import { X, UserPlus, Loader2, Building2 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { createUserThunk } from "@/store/slices/authSlice";
 import ShowSucess from "./common/ShowSucess";
@@ -49,7 +49,7 @@ export const CreateUserModal: React.FC<Props> = ({ onClose }) => {
       setTimeout(() => {
         onClose();
       }, 2000);
-    } catch (err: any) {
+    } catch (err) {
       setErrorMessage(err.message || "Failed to create user");
       setStatus("error");
     }

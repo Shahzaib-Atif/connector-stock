@@ -1,7 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { Html5Qrcode } from "html5-qrcode";
+import React from "react";
 import { X } from "lucide-react";
-import { startScanner } from "./startScanner";
 import { useQrScanner } from "./useQrScanner";
 
 interface CameraScannerProps {
@@ -62,7 +60,7 @@ export const CameraScanner: React.FC<CameraScannerProps> = ({
                       addresses.
                     </p>
                     <p className="font-bold text-blue-400">
-                      Fix: Use HTTPS or access via 'localhost'
+                      {"Fix: Use HTTPS or access via 'localhost'"}
                     </p>
                   </div>
                 ) : (

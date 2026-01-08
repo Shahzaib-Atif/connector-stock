@@ -1,9 +1,5 @@
 import { constructAccessoryId } from "@/services/accessoryService";
-import {
-  AccessoryApiResponse,
-  AccessoryType,
-  MasterData,
-} from "@/utils/types/types";
+import { Accessory, AccessoryType, MasterData } from "@/utils/types/types";
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
 
@@ -15,7 +11,7 @@ export const fetchAccessories = async (): Promise<
     throw new Error("Failed to fetch accessories");
   }
 
-  const data: AccessoryApiResponse[] = await response.json();
+  const data: Accessory[] = await response.json();
 
   const accessories = {};
   data.forEach((item) => {

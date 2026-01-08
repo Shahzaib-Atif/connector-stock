@@ -7,7 +7,8 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "lint": "eslint --fix --ext .ts,.tsx ."
   },
   "dependencies": {
     "@google/genai": "^1.30.0",

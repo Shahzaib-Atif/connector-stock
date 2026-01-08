@@ -1,4 +1,4 @@
-import { Sample } from "./types";
+import { Connector, Sample } from "./types";
 
 export type NotificationStatusType = "idle" | "loading" | "success" | "error";
 
@@ -20,5 +20,5 @@ export interface INotification {
   parsedConector?: string;
   parsedEncomenda?: string;
   linkedSample?: Sample | null;
-  linkedConnector?: any | null;
+  linkedConnector?: Connector | null;
 }

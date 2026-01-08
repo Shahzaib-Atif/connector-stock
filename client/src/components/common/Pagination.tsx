@@ -1,4 +1,4 @@
-import { PaginatedData } from "@/utils/types/types";
+import { PaginatedData } from "@/utils/types/shared";
 import React from "react";
 
 export const Pagination: React.FC<

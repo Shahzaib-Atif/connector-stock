@@ -1,24 +1,12 @@
 import React from "react";
-import { AccessoryApiResponse } from "@/utils/types/types";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "@/components/AppRoutes";
-
-interface AccessoryListItem extends AccessoryApiResponse {
-  id: string;
-}
+import { Accessory } from "@/utils/types/types";
 
 interface TableRowProps {
-  accessory: AccessoryListItem;
+  accessory: Accessory;
   index: number;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ accessory, index }) => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`${ROUTES.ACCESSORIES}/${accessory.id}`);
-  };
-
+const TableRow: React.FC<TableRowProps> = ({ accessory }) => {
   return (
     <tr
       // onClick={handleClick}

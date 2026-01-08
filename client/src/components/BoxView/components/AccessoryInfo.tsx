@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { Accessory } from "@/utils/types/types";
 import { API } from "@/utils/api";
@@ -32,9 +33,9 @@ function AccessoryInfo({ acc, liveStock }: Props) {
         />
       )}
       <div>
-        <div className="text-white">Conn: {acc.connectorId}</div>
+        <div className="text-white">Conn: {acc.ConnName}</div>
         <div className="text-slate-400 text-sm">
-          Type: {acc.type?.toLowerCase()}
+          Type: {acc.AccessoryType?.toLowerCase()}
         </div>
       </div>
     </>

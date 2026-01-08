@@ -1,6 +1,6 @@
 import React from "react";
-import { MapPin, CircuitBoard, Wrench, QrCode } from "lucide-react";
-import { Box, QRData } from "../../utils/types/types";
+import { MapPin, CircuitBoard, Wrench } from "lucide-react";
+import { Box } from "../../utils/types/types";
 import { getBoxDetails } from "../../services/connectorService";
 import { CollapsibleSection } from "../common/CollapsibleSection";
 import { DetailHeader } from "../common/DetailHeader";
@@ -13,6 +13,7 @@ import ConnectorInfo from "./components/ConnectorInfo";
 import StockBadge from "./components/StockBadge";
 import AccessoryInfo from "./components/AccessoryInfo";
 import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
+import { QRData } from "@/utils/types/shared";
 
 interface BoxViewProps {
   onOpenQR: (qrData: QRData) => void;
@@ -71,10 +72,10 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
           {box.connectors.map((conn) => {
             return (
               <InventoryListItem
-                key={conn.id}
-                onClick={() => handleConnectorScan(conn.id)}
-                left={<ConnectorInfo conn={conn} liveStock={conn.stock} />}
-                right={<StockBadge liveStock={conn.stock} />}
+                key={conn.CODIVMAC}
+                onClick={() => handleConnectorScan(conn.CODIVMAC)}
+                left={<ConnectorInfo conn={conn} liveStock={conn.Qty} />}
+                right={<StockBadge liveStock={conn.Qty} />}
               />
             );
           })}
@@ -92,8 +93,8 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
               <InventoryListItem
                 key={acc.id}
                 onClick={() => handleAccessoryScan(acc.id)}
-                left={<AccessoryInfo acc={acc} liveStock={acc.stock} />}
-                right={<StockBadge liveStock={acc.stock} />}
+                left={<AccessoryInfo acc={acc} liveStock={acc.Qty} />}
+                right={<StockBadge liveStock={acc.Qty} />}
               />
             );
           })}

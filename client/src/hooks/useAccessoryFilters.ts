@@ -1,5 +1,5 @@
+import { Accessory } from "@/utils/types/types";
 import { useState, useMemo, useCallback } from "react";
-import { AccessoryApiResponse } from "@/utils/types/types";
 
 export type AccessoryFilterColumn =
   | "all"
@@ -13,25 +13,16 @@ interface AccessoryFilters {
   searchQuery: string;
 }
 
-interface AccessoryListItem extends AccessoryApiResponse {
-  id: string;
-}
-
 interface UseAccessoryFiltersReturn {
   filters: AccessoryFilters;
   setFilterColumn: (column: AccessoryFilterColumn) => void;
   setSearchQuery: (query: string) => void;
-  filteredAccessories: AccessoryListItem[];
+  filteredAccessories: Accessory[];
   clearFilters: () => void;
 }
 
-// Helper to construct accessory ID (same as in accessoryService)
-// function constructAccessoryId(accessory: AccessoryApiResponse): string {
-//   return `${accessory.ConnName}_${accessory.AccessoryType}`;
-// }
-
 export function useAccessoryFilters(
-  accessories: Record<string, AccessoryApiResponse>
+  accessories: Record<string, Accessory>
 ): UseAccessoryFiltersReturn {
   const [filters, setFilters] = useState<AccessoryFilters>({
     filterColumn: "all",
@@ -51,7 +42,7 @@ export function useAccessoryFilters(
   }, []);
 
   // Convert Record to array with id
-  const accessoriesList = useMemo((): AccessoryListItem[] => {
+  const accessoriesList = useMemo((): Accessory[] => {
     return Object.entries(accessories).map(([id, accessory]) => ({
       id,
       ...accessory,
@@ -84,10 +75,7 @@ export function useAccessoryFilters(
   };
 }
 
-function matchesAnyField(
-  accessory: AccessoryListItem,
-  normalizedQuery: string
-) {
+function matchesAnyField(accessory: Accessory, normalizedQuery: string) {
   return (
     accessory.id.toLowerCase().includes(normalizedQuery) ||
     accessory.ConnName?.toLowerCase().includes(normalizedQuery) ||
@@ -100,7 +88,7 @@ function matchesAnyField(
 }
 
 const getColumnValue = (
-  accessory: AccessoryListItem,
+  accessory: Accessory,
   column: AccessoryFilterColumn
 ): string => {
   switch (column) {

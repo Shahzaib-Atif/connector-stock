@@ -1,3 +1,4 @@
+import React from "react";
 import CardInfoDiv from "@/components/common/CardInfoDiv";
 import { Accessory } from "@/utils/types/types";
 
@@ -10,14 +11,14 @@ function AccessoryMetadata({ accessory }: Props) {
       id="accessory-metadata"
       className="grid sm:grid-cols-2 gap-3 sm:gap-4 mb-4"
     >
-      <CardInfoDiv label="Type" value={accessory.type} />
-      <CardInfoDiv label="Connector" value={accessory.connectorId} />
-      <CardInfoDiv label="Ref Client" value={accessory.refClient} />
-      {accessory.capotAngle && (
-        <CardInfoDiv label="Capot Angle" value={accessory.capotAngle} />
+      <CardInfoDiv label="Type" value={accessory.AccessoryType} />
+      <CardInfoDiv label="Connector" value={accessory.ConnName} />
+      <CardInfoDiv label="Ref Client" value={accessory.RefClient} />
+      {accessory.CapotAngle && (
+        <CardInfoDiv label="Capot Angle" value={accessory.CapotAngle} />
       )}
-      {accessory.clipColor && (
-        <CardInfoDiv label="Clip Color" value={accessory.clipColor} />
+      {accessory.ClipColor && (
+        <CardInfoDiv label="Clip Color" value={accessory.ClipColor} />
       )}
     </div>
   );

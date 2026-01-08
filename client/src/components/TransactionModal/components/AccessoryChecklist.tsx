@@ -1,9 +1,9 @@
-import { useAssociatedAccessories } from "@/hooks/useAssociatedAccessories";
-import { Accessory, AccessoryApiResponse } from "@/utils/types/types";
+import React from "react";
+import { Accessory } from "@/utils/types/types";
 
 interface Props {
   selectedAccessoryIds: string[];
-  associatedAccessories: any[];
+  associatedAccessories: Accessory[];
   setSelectedAccessoryIds: React.Dispatch<React.SetStateAction<string[]>>;
   transactionType?: "IN" | "OUT";
 }
@@ -31,7 +31,7 @@ function AccessoryChecklist({
       </h3>
       <div className="space-y-2 max-h-40 overflow-y-auto custom-scrollbar">
         {associatedAccessories.map((acc) => {
-          const isOutOfStock = transactionType === "OUT" && acc.stock <= 0;
+          const isOutOfStock = transactionType === "OUT" && acc.Qty <= 0;
           return (
             <label
               key={acc.id}
@@ -51,19 +51,21 @@ function AccessoryChecklist({
               <div className="flex-1">
                 <div className="flex justify-between items-center">
                   <span className="font-medium text-slate-200">
-                    {acc.refClient || acc.id}
+                    {acc.RefClient || acc.id}
                   </span>
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full ${
-                      acc.stock > 0
+                      acc.Qty > 0
                         ? "text-slate-400 bg-slate-800"
                         : "text-red-400 bg-red-950/30"
                     }`}
                   >
-                    Qty: {acc.stock}
+                    Qty: {acc.Qty}
                   </span>
                 </div>
-                <div className="text-xs text-slate-400">{acc.type}</div>
+                <div className="text-xs text-slate-400">
+                  {acc.AccessoryType}
+                </div>
               </div>
             </label>
           );

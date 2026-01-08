@@ -1,5 +1,3 @@
-import { CollapsibleSection } from "@/components/common/CollapsibleSection";
-import { MessageCircleCodeIcon } from "lucide-react";
 import React from "react";
 
 interface NotificationInfoProps {
@@ -11,7 +9,6 @@ interface NotificationInfoProps {
 export const NotificationInfo: React.FC<NotificationInfoProps> = ({
   senderUser,
   senderSector,
-  message,
 }) => {
   return (
     // <CollapsibleSection

@@ -18,8 +18,6 @@ interface DetailHeaderProps {
 }
 
 export const DetailHeader: React.FC<DetailHeaderProps> = ({
-  label,
-  title,
   handleQRClick,
 }) => {
   const user = useAppSelector((state) => state.auth.user);
@@ -29,7 +27,6 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
   );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
-  const showCenterSection = label || title;
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   return (

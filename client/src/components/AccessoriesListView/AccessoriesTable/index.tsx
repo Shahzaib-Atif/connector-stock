@@ -1,14 +1,10 @@
 import React from "react";
-import { AccessoryApiResponse } from "@/utils/types/types";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
-
-interface AccessoryListItem extends AccessoryApiResponse {
-  id: string;
-}
+import { Accessory } from "@/utils/types/types";
 
 interface AccessoriesTableProps {
-  accessories: AccessoryListItem[];
+  accessories: Accessory[];
 }
 
 export const AccessoriesTable: React.FC<AccessoriesTableProps> = ({

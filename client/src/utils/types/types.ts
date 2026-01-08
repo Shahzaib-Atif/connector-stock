@@ -1,13 +1,13 @@
 export interface Accessory {
   id: string; // e.g., A255PR_1024
-  connectorId: string; // e.g. A255PR
-  posId: string; // e.g. A255
-  refClient: string;
-  refDV: string;
-  type: string;
-  stock: number;
-  capotAngle?: string;
-  clipColor?: string;
+  AccessoryType: string;
+  ConnName: string;
+  Qty: number;
+  RefClient?: string;
+  RefDV?: string;
+  CapotAngle?: string;
+  ClipColor?: string;
+  posId?: string; // e.g. A255
 }
 
 export interface Connector {
@@ -84,11 +84,10 @@ export interface MasterData {
   };
   vias: Record<string, string>;
   connectorTypes: string[];
-  clients: Record<string, string>;
   accessoryTypes: string[];
   positions: Record<string, { cv: string; ch: string }>;
   connectors: Record<string, Connector>;
-  accessories: Record<string, AccessoryApiResponse>;
+  accessories: Record<string, Accessory>;
   fabricantes: string[];
 }
 
@@ -118,14 +117,4 @@ export interface ConnPosition {
   CON: string;
   CV: string;
   CH: string;
-}
-
-export interface AccessoryApiResponse {
-  ConnName: string;
-  AccessoryType: string;
-  RefClient: string | null;
-  RefDV: string | null;
-  Qty: number | null;
-  CapotAngle: string | null;
-  ClipColor: string | null;
 }
