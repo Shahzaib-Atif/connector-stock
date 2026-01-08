@@ -1,8 +1,4 @@
-import {
-  ColorApiResponse,
-  ViasApiResponse,
-  PositionApiResponse,
-} from "@/utils/types/types";
+import { IColor, IVias, ConnPosition } from "@/utils/types/types";
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
 
@@ -15,7 +11,7 @@ export const fetchColors = async (): Promise<{
     if (!response.ok) {
       throw new Error("Failed to fetch colors");
     }
-    const data: ColorApiResponse[] = await response.json();
+    const data: IColor[] = await response.json();
 
     const colorsUK: Record<string, string> = {};
     const colorsPT: Record<string, string> = {};
@@ -38,7 +34,7 @@ export const fetchVias = async (): Promise<Record<string, string>> => {
     if (!response.ok) {
       throw new Error("Failed to fetch vias");
     }
-    const data: ViasApiResponse[] = await response.json();
+    const data: IVias[] = await response.json();
 
     const viasMap: Record<string, string> = {};
     data.forEach((item) => {
@@ -59,7 +55,7 @@ export const fetchPositions = async (): Promise<
   if (!response.ok) {
     throw new Error("Failed to fetch positions");
   }
-  const data: PositionApiResponse[] = await response.json();
+  const data: ConnPosition[] = await response.json();
 
   const positions: Record<string, { cv: string; ch: string }> = {};
   data.forEach((item) => {

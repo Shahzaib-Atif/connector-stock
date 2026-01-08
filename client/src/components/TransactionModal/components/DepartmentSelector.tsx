@@ -1,6 +1,6 @@
 import React from "react";
 import { ChevronDown } from "lucide-react";
-import { Department } from "@/utils/types/types";
+import { Department } from "@/utils/types/shared";
 
 interface DepartmentSelectorProps {
   value: Department;

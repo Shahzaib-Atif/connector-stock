@@ -1,6 +1,6 @@
 import React from "react";
 import { Wrench } from "lucide-react";
-import { Connector, QRData } from "../../utils/types/types";
+import { Connector } from "../../utils/types/types";
 import { parseConnector } from "../../services/connectorService";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
@@ -16,6 +16,7 @@ import { Edit2 } from "lucide-react";
 import { ConnectorEditForm } from "./components/ConnectorEditForm";
 import { RelatedImages } from "./components/RelatedImages";
 import { UserRoles } from "@/utils/types/userTypes";
+import { QRData } from "@/utils/types/shared";
 
 interface ConnectorViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;

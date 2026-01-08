@@ -87,29 +87,29 @@ export interface MasterData {
   fabricantes: string[];
 }
 
-export interface ColorApiResponse {
+export interface IColor {
   Cor_Id: string;
   CORES: string;
   Cores_UK: string;
 }
 
-export interface ViasApiResponse {
+export interface IVias {
   QtdVias: number;
   ContagemVias: string;
 }
 
-export interface AccessoryTypeApiResponse {
+export interface AccessoryType {
   ID: number;
   TypeDescription: string;
 }
 
-export interface ConnectorTypeApiResponse {
+export interface ConnectorType {
   ID: number;
   Type: string;
   Section: string;
 }
 
-export interface PositionApiResponse {
+export interface ConnPosition {
   CON: string;
   CV: string;
   CH: string;
@@ -136,38 +136,4 @@ export interface AccessoryApiResponse {
   Qty: number | null;
   CapotAngle: string | null;
   ClipColor: string | null;
-}
-
-export enum Department {
-  Comercial = "Comercial",
-  GT = "GT",
-  ID = "ID",
-  MTS = "MTS",
-  Maquinacao = "Maquinacao",
-  Montagem = "Montagem",
-  Planamento = "Planamento",
-  RH = "RH",
-}
-
-export type suggestion = {
-  id: string;
-  type?: "box" | "connector" | "accessory";
-};
-
-export interface PaginatedData<T> {
-  paginatedItems: T[];
-  currentPage: number;
-  totalPages: number;
-  itemsPerPage: number;
-  totalItems: number;
-  setCurrentPage: (page: number) => void;
-  setItemsPerPage: (count: number) => void;
-}
-
-export interface QRData {
-  id: string;
-  source?: "box" | "connector" | "sample";
-  refCliente?: string;
-  encomenda?: string;
-  qty?: number;
 }

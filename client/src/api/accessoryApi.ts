@@ -1,7 +1,7 @@
 import { constructAccessoryId } from "@/services/accessoryService";
 import {
   AccessoryApiResponse,
-  AccessoryTypeApiResponse,
+  AccessoryType,
   MasterData,
 } from "@/utils/types/types";
 import { API } from "@/utils/api";
@@ -33,7 +33,7 @@ export const fetchAccessoryTypes = async (): Promise<string[]> => {
   if (!response.ok) {
     throw new Error("Failed to fetch accessory types");
   }
-  const data: AccessoryTypeApiResponse[] = await response.json();
+  const data: AccessoryType[] = await response.json();
 
   return data.map((item) => item.TypeDescription);
 };

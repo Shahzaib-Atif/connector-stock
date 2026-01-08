@@ -2,12 +2,12 @@ import React, { useRef, useState, useMemo, useEffect } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEscKeyDown } from "@/hooks/useEscKeyDown";
-import { Department } from "@/utils/types/types";
 import { DepartmentSelector } from "./components/DepartmentSelector";
 import { QuantitySelector } from "./components/QuantitySelector";
 import { TransactionHeader } from "./components/TransactionHeader";
 import { useAssociatedAccessories } from "@/hooks/useAssociatedAccessories";
 import AccessoryChecklist from "./components/AccessoryChecklist";
+import { Department } from "@/utils/types/shared";
 
 interface TransactionModalProps {
   type: "IN" | "OUT";

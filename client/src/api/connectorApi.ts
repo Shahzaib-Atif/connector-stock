@@ -1,6 +1,6 @@
 import {
   ConnectorReferenceApiResponse,
-  ConnectorTypeApiResponse,
+  ConnectorType,
   MasterData,
 } from "@/utils/types/types";
 import { API } from "@/utils/api";
@@ -28,7 +28,7 @@ export const fetchConnectorTypes = async (): Promise<string[]> => {
   if (!response.ok) {
     throw new Error("Failed to fetch connector types");
   }
-  const data: ConnectorTypeApiResponse[] = await response.json();
+  const data: ConnectorType[] = await response.json();
 
   return data.map((item) => item.Type);
 };
