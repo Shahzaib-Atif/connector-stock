@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { ROUTES } from "../AppRoutes";
 import { ChangePasswordModal } from "./ChangePasswordModal";
-import { UserRoles } from "../../utils/types/types";
+import { UserRoles } from "@/utils/types/userTypes";
 
 interface DetailHeaderProps {
   label?: string;

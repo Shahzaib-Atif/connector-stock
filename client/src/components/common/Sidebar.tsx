@@ -14,13 +14,12 @@ import {
   Key,
   Bell,
 } from "lucide-react";
-import { ChangePasswordModal } from "./ChangePasswordModal";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "../AppRoutes";
-import { UserRoles } from "@/utils/types/types";
 import { fetchUnfinishedNotifications } from "@/store/slices/notificationsSlice";
 import { useEffect } from "react";
+import { UserRoles } from "@/utils/types/userTypes";
 
 interface Props {
   isMenuOpen: boolean;

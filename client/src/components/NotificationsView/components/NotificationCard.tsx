@@ -1,9 +1,9 @@
 import React from "react";
-import { Notification } from "@/utils/types/types";
 import { Bell, Package, Calendar } from "lucide-react";
+import { INotification } from "@/utils/types/notificationTypes";
 
 interface NotificationCardProps {
-  notification: Notification;
+  notification: INotification;
   onClick: () => void;
 }
 

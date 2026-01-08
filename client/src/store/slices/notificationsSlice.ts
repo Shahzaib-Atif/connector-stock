@@ -1,15 +1,15 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { Notification, NotificationWithSample } from "@/utils/types/types";
 import {
   getUnfinishedNotifications,
   getNotificationWithSample,
   finishNotification,
   markNotificationAsRead,
 } from "@/api/notificationsApi";
+import { INotification } from "@/utils/types/notificationTypes";
 
 interface NotificationsState {
-  notifications: Notification[];
-  selectedNotification: NotificationWithSample | null;
+  notifications: INotification[];
+  selectedNotification: INotification | null;
   loading: boolean;
   error: string | null;
   unfinishedCount: number;
@@ -81,7 +81,7 @@ const notificationsSlice = createSlice({
       })
       .addCase(
         fetchUnfinishedNotifications.fulfilled,
-        (state, action: PayloadAction<Notification[]>) => {
+        (state, action: PayloadAction<INotification[]>) => {
           state.loading = false;
           state.notifications = action.payload;
           state.unfinishedCount = action.payload.length;
@@ -98,7 +98,7 @@ const notificationsSlice = createSlice({
       })
       .addCase(
         fetchNotificationWithSample.fulfilled,
-        (state, action: PayloadAction<NotificationWithSample>) => {
+        (state, action: PayloadAction<INotification>) => {
           state.loading = false;
           state.selectedNotification = action.payload;
         }

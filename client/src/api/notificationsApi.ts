@@ -1,35 +1,10 @@
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
+import { INotification } from "@/utils/types/notificationTypes";
 
-export interface Notification {
-  id: number;
-  SenderSector: string;
-  SenderUser: string;
-  ReceiverUser: string;
-  ReceiverSector: string;
-  Message: string;
-  Read: boolean;
-  Title: string | null;
-  Finished: boolean;
-  CreationDate: string;
-  ReadDate: string | null;
-  FinishedDate: string | null;
-  parsedConector?: string;
-  parsedEncomenda?: string;
-}
-
-export interface NotificationWithSample extends Notification {
-  linkedSample?: {
-    ID: number;
-    Amostra: string | null;
-    EncDivmac: string | null;
-    Cliente: string | null;
-    Projeto: string | null;
-    Quantidade: string | null;
-  } | null;
-}
-
-export const getUnfinishedNotifications = async (): Promise<Notification[]> => {
+export const getUnfinishedNotifications = async (): Promise<
+  INotification[]
+> => {
   const response = await fetchWithAuth(API.notifications);
   if (!response.ok) throw new Error("Failed to fetch notifications");
   return response.json();
@@ -37,7 +12,7 @@ export const getUnfinishedNotifications = async (): Promise<Notification[]> => {
 
 export const getNotificationWithSample = async (
   id: number
-): Promise<NotificationWithSample> => {
+): Promise<INotification> => {
   const response = await fetchWithAuth(`${API.notifications}/${id}`);
   if (!response.ok) throw new Error("Failed to fetch notification");
   return response.json();

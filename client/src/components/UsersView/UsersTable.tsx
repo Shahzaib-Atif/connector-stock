@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/store/hooks";
-import { User, UserRoles } from "@/utils/types/types";
+import { User, UserRoles } from "@/utils/types/userTypes";
 import { Trash2 } from "lucide-react";
 import React from "react";
 

@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { X, UserPlus, Loader2, CheckCircle2, Building2 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { createUserThunk } from "@/store/slices/authSlice";
-import { UserRoles, Department } from "@/utils/types/types";
+import { Department } from "@/utils/types/types";
 import ShowSucess from "./common/ShowSucess";
+import { UserRoles } from "@/utils/types/userTypes";
 
 interface Props {
   onClose: () => void;

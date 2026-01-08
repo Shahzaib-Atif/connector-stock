@@ -171,39 +171,3 @@ export interface QRData {
   encomenda?: string;
   qty?: number;
 }
-
-export interface User {
-  userId: number;
-  username: string;
-  role: UserRoles;
-  password?: string;
-  dept?: string;
-}
-
-export enum UserRoles {
-  Master = "Master",
-  Admin = "Admin",
-  User = "User",
-}
-
-export interface Notification {
-  id: number;
-  SenderSector: string;
-  SenderUser: string;
-  ReceiverUser: string;
-  ReceiverSector: string;
-  Message: string;
-  Read: boolean;
-  Title: string | null;
-  Finished: boolean;
-  CreationDate: string;
-  ReadDate: string | null;
-  FinishedDate: string | null;
-  parsedConector?: string;
-  parsedEncomenda?: string;
-}
-
-export interface NotificationWithSample extends Notification {
-  linkedSample?: Sample | null;
-  linkedConnector?: any | null;
-}

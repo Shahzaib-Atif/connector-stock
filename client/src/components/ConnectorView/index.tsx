@@ -12,10 +12,10 @@ import { AccessoryList } from "./components/AccessoryList";
 import { BoxShortcut } from "../common/BoxShortcut";
 import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 import { useAppSelector } from "../../store/hooks";
-import { UserRoles } from "../../utils/types/types";
 import { Edit2 } from "lucide-react";
 import { ConnectorEditForm } from "./components/ConnectorEditForm";
 import { RelatedImages } from "./components/RelatedImages";
+import { UserRoles } from "@/utils/types/userTypes";
 
 interface ConnectorViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;

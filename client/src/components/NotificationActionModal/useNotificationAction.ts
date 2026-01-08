@@ -7,10 +7,10 @@ import {
   markAsReadThunk,
 } from "@/store/slices/notificationsSlice";
 import { ROUTES } from "../AppRoutes";
-import { NotificationWithSample } from "@/utils/types/types";
 import {
   NotificationStatusType,
   NotificationCompletionType,
+  INotification,
 } from "@/utils/types/notificationTypes";
 
 export function useNotificationAction(
@@ -20,8 +20,7 @@ export function useNotificationAction(
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [notification, setNotification] =
-    useState<NotificationWithSample>(null);
+  const [notification, setNotification] = useState<INotification>(null);
   const [loading, setLoading] = useState(true);
   const [quantityInput, setQuantityInput] = useState("");
   const [status, setStatus] = useState<NotificationStatusType>("idle");

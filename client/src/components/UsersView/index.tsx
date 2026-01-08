@@ -3,13 +3,13 @@ import { useAppSelector } from "@/store/hooks";
 import { DetailHeader } from "../common/DetailHeader";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../AppRoutes";
-import { User, UserRoles } from "@/utils/types/types";
-import { Trash2, UserPlus } from "lucide-react";
+import { UserPlus } from "lucide-react";
 import { CreateUserModal } from "../CreateUserModal";
 import { useAppDispatch } from "@/store/hooks";
 import { deleteUserThunk } from "@/store/slices/authSlice";
 import DeleteDialog from "../common/DeleteDialog";
 import UsersTable from "./UsersTable";
+import { User, UserRoles } from "@/utils/types/userTypes";
 
 export const UsersView: React.FC = () => {
   const navigate = useNavigate();
