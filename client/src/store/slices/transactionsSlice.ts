@@ -1,17 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { createTransaction, getTransactions } from "@/api/transactionsApi";
-import { parseConnector } from "@/services/connectorService";
 import { RootState } from "@/store";
 import {
   AccessoryApiResponse,
-  ConnectorReferenceApiResponse,
+  Connector,
   Transaction,
 } from "@/utils/types/types";
 import { updateAccessory, updateConnector } from "./masterDataSlice";
 
 interface TransactionState {
   transactions: Transaction[];
-  lastConnector: any | null;
+  lastConnector: Connector | null;
   lastAccessory: any | null;
   loading: boolean;
   error: string | null;
@@ -51,7 +50,7 @@ export const performTransactionThunk = createAsyncThunk(
 
     // Compute updated accessory if this is an accessory transaction
     let accessory: AccessoryApiResponse = null;
-    let connector: ConnectorReferenceApiResponse = null;
+    let connector: Connector = null;
 
     if (isAccessory) {
       // update masterData accessory

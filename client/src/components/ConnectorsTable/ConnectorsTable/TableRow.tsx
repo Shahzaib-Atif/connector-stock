@@ -1,15 +1,11 @@
 import React from "react";
-import { ConnectorReferenceApiResponse } from "@/utils/types/types";
-import { ExternalLink, ImageIcon } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { API } from "@/utils/api";
 import { ROUTES } from "@/components/AppRoutes";
-
-interface ConnectorListItem extends ConnectorReferenceApiResponse {
-  id: string;
-}
+import { Connector } from "@/utils/types/types";
 
 interface TableRowProps {
-  connector: ConnectorListItem;
+  connector: Connector;
   index: number;
   showImages?: boolean;
 }
@@ -27,7 +23,7 @@ const TableRow: React.FC<TableRowProps> = ({
   const imageUrl = API.connectorImages(connector.CODIVMAC);
 
   return (
-    <tr className={"table-row table-row-bg"} key={connector.id}>
+    <tr className={"table-row table-row-bg"} key={connector.CODIVMAC}>
       {/* Photo */}
       {showImages && (
         <td className="table-data py-2 px-2">
@@ -81,9 +77,13 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data">{connector.Cor || "-"}</td>
       <td className="table-data">{connector.Vias || "-"}</td>
       <td className="table-data">{connector.ConnType || "-"}</td>
-      <td className="table-data text-center">{connector.Family || "-"}</td>
-      <td className="table-data">{connector.Fabricante || "-"}</td>
-      <td className="table-data break-all">{connector.Refabricante || "-"}</td>
+      <td className="table-data text-center">
+        {connector.details.Family || "-"}
+      </td>
+      <td className="table-data">{connector.details.Fabricante || "-"}</td>
+      <td className="table-data break-all">
+        {connector.details.Refabricante || "-"}
+      </td>
       <td className="table-data text-center text-emerald-200">
         {connector.Qty ?? 0}
       </td>

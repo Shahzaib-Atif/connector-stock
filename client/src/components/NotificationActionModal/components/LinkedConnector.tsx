@@ -2,9 +2,10 @@ import React from "react";
 import { Package, ExternalLink, AlertCircle } from "lucide-react";
 import { ROUTES } from "../../AppRoutes";
 import MetaItem from "./MetaItem";
+import { Connector } from "@/utils/types/types";
 
 interface LinkedConnectorProps {
-  connector: any;
+  connector: Connector;
   onClose: () => void;
 }
 
@@ -32,7 +33,7 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
     onClose();
   };
 
-  const details = connector.Connectors_Details || {};
+  const details = connector.details;
   const { CODIVMAC, Vias, Qty } = connector;
   const { Designa__o, Fabricante } = details;
 

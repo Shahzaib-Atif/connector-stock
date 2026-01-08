@@ -1,7 +1,7 @@
 import { fetchMasterData } from "@/api";
 import {
   AccessoryApiResponse,
-  ConnectorReferenceApiResponse,
+  Connector,
   MasterData,
 } from "@/utils/types/types";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
@@ -31,7 +31,7 @@ export const masterDataSlice = createSlice({
       state,
       action: PayloadAction<{
         itemId: string;
-        connector: ConnectorReferenceApiResponse;
+        connector: Connector;
       }>
     ) => {
       const { itemId, connector } = action.payload;

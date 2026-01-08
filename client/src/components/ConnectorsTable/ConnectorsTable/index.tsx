@@ -1,14 +1,10 @@
 import React from "react";
-import { ConnectorReferenceApiResponse } from "@/utils/types/types";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
-
-interface ConnectorListItem extends ConnectorReferenceApiResponse {
-  id: string;
-}
+import { Connector } from "@/utils/types/types";
 
 interface ConnectorsTableProps {
-  connectors: ConnectorListItem[];
+  connectors: Connector[];
   showImages?: boolean;
 }
 
@@ -30,7 +26,7 @@ export const ConnectorsTable: React.FC<ConnectorsTableProps> = ({
           ) : (
             connectors.map((connector, index) => (
               <TableRow
-                key={connector.id}
+                key={connector.CODIVMAC}
                 connector={connector}
                 index={index}
                 showImages={showImages}

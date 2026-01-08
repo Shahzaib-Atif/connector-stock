@@ -1,10 +1,10 @@
 import { updateConnectorApi } from "@/services/connectorService";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch } from "@/store/hooks";
 import { initMasterData } from "@/store/slices/masterDataSlice";
 import { Connector } from "@/utils/types/types";
 import { useState } from "react";
 
-export interface ConnectorFormData {
+interface ConnectorFormData {
   Cor: string;
   Vias: string;
   ConnType: string;
@@ -14,18 +14,18 @@ export interface ConnectorFormData {
 }
 
 export function useConnectorEditForm(connector: Connector, onSave: () => void) {
-  const masterData = useAppSelector((state) => state.masterData.data);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { details: connDetails } = connector;
 
   const [formData, setFormData] = useState<ConnectorFormData>({
-    Cor: connector.colorCode,
-    Vias: connector.viasCode,
-    ConnType: connector.type,
-    Fabricante: connector.fabricante === "--" ? "" : connector.fabricante,
-    Family: connector.family || 1,
-    Qty: connector.stock || 0,
+    Cor: connector.Cor,
+    Vias: connector.Vias,
+    ConnType: connector.ConnType,
+    Fabricante: connDetails.Fabricante === "--" ? "" : connDetails.Fabricante,
+    Family: connDetails.Family || 1,
+    Qty: connector.Qty || 0,
   });
 
   const setQty = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +49,7 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
     setError(null);
 
     try {
-      await updateConnectorApi(connector.id, formData);
+      await updateConnectorApi(connector.CODIVMAC, formData);
       await dispatch(initMasterData());
       onSave();
     } catch (err: any) {

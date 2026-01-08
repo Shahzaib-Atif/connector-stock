@@ -2,14 +2,12 @@ import { Connector, Box, Accessory, MasterData } from "../utils/types/types";
 import { getCoordinates } from "../utils/inventoryUtils";
 import { parseAccessory } from "./accessoryService";
 import { API } from "../utils/api";
-import { SESSION_KEY } from "../utils/constants";
 
 export const parseConnector = (
   id: string,
   masterData: MasterData
 ): Connector | null => {
   const reference = masterData.connectors?.[id];
-
   if (!reference) {
     return null;
   }
@@ -18,8 +16,8 @@ export const parseConnector = (
   const colorCode = reference.Cor;
   const viasCode = reference.Vias;
   const type = reference.ConnType;
-  const fabricante = reference.Fabricante || "--";
-  const refabricante = reference.Refabricante || "";
+  const fabricante = reference.details.Fabricante || "--";
+  const refabricante = reference.details.Refabricante || "";
   const coords = getCoordinates(posId, masterData);
 
   // Find associated accessories from the real API data
@@ -33,25 +31,27 @@ export const parseConnector = (
   }
 
   return {
-    id,
-    posId,
-    colorCode,
-    viasCode,
+    CODIVMAC: id,
+    PosId: posId,
+    Cor: colorCode,
+    Vias: viasCode,
     colorName: masterData.colors?.colorsUK[colorCode] || "Unknown",
     colorNamePT: masterData.colors?.colorsPT?.[colorCode] || "Unknown",
     viasName: masterData.vias[viasCode] || "Standard",
     cv: coords?.cv ?? "?",
     ch: coords?.ch ?? "?",
-    fabricante,
-    refabricante,
-    type,
-    description: `${masterData.colors[colorCode] || "Generic"} / ${
-      masterData.vias[viasCode] || "Std"
-    }`,
-    stock: masterData.connectors[id].Qty,
-    family: reference.Family,
+    details: {
+      Family: reference.details.Family,
+      Fabricante: fabricante,
+      Refabricante: refabricante,
+      OBS: `${masterData.colors[colorCode] || "Generic"} / ${
+        masterData.vias[viasCode] || "Std"
+      }`,
+    },
+    ConnType: type,
+    Qty: masterData.connectors[id].Qty,
     accessories,
-    clientReferences: reference.ClientReferences || [],
+    clientReferences: reference.clientReferences || [],
   };
 };
 
@@ -126,7 +126,10 @@ export const searchConnectors = (
 
 import { fetchWithAuth } from "../utils/fetchClient";
 
-export const updateConnectorApi = async (connectorId: string, data: any) => {
+export const updateConnectorApi = async (
+  connectorId: string,
+  data: Partial<Connector>
+) => {
   const response = await fetchWithAuth(
     `${API.connectors}/${connectorId}/update`,
     {

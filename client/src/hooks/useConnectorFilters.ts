@@ -1,5 +1,5 @@
+import { Connector } from "@/utils/types/types";
 import { useState, useMemo, useCallback } from "react";
-import { ConnectorReferenceApiResponse } from "@/utils/types/types";
 
 export type ConnectorFilterColumn = "all" | "id" | "type" | "fabricante";
 
@@ -8,20 +8,16 @@ interface ConnectorFilters {
   searchQuery: string;
 }
 
-interface ConnectorListItem extends ConnectorReferenceApiResponse {
-  id: string;
-}
-
 interface UseConnectorFiltersReturn {
   filters: ConnectorFilters;
   setFilterColumn: (column: ConnectorFilterColumn) => void;
   setSearchQuery: (query: string) => void;
-  filteredConnectors: ConnectorListItem[];
+  filteredConnectors: Connector[];
   clearFilters: () => void;
 }
 
 export function useConnectorFilters(
-  connectors: Record<string, ConnectorReferenceApiResponse>
+  connectors: Record<string, Connector>
 ): UseConnectorFiltersReturn {
   const [filters, setFilters] = useState<ConnectorFilters>({
     filterColumn: "all",
@@ -41,7 +37,7 @@ export function useConnectorFilters(
   }, []);
 
   // Convert Record to array with id
-  const connectorsList = useMemo((): ConnectorListItem[] => {
+  const connectorsList = useMemo((): Connector[] => {
     return Object.entries(connectors).map(([id, connector]) => ({
       id,
       ...connector,
@@ -74,32 +70,29 @@ export function useConnectorFilters(
   };
 }
 
-function matchesAnyField(
-  connector: ConnectorListItem,
-  normalizedQuery: string
-) {
+function matchesAnyField(connector: Connector, normalizedQuery: string) {
   return (
-    connector.id.toLowerCase().includes(normalizedQuery) ||
+    connector.CODIVMAC.toLowerCase().includes(normalizedQuery) ||
     connector.CODIVMAC?.toLowerCase().includes(normalizedQuery) ||
     connector.ConnType?.toLowerCase().includes(normalizedQuery) ||
-    connector.Fabricante?.toLowerCase().includes(normalizedQuery) ||
-    connector.Refabricante?.toLowerCase().includes(normalizedQuery) ||
+    connector.details.Fabricante?.toLowerCase().includes(normalizedQuery) ||
+    connector.details.Refabricante?.toLowerCase().includes(normalizedQuery) ||
     connector.Cor?.toLowerCase().includes(normalizedQuery) ||
     connector.Vias?.toLowerCase().includes(normalizedQuery)
   );
 }
 
 const getColumnValue = (
-  connector: ConnectorListItem,
+  connector: Connector,
   column: ConnectorFilterColumn
 ): string => {
   switch (column) {
     case "id":
-      return connector.id?.toLowerCase() ?? "";
+      return connector.CODIVMAC?.toLowerCase() ?? "";
     case "type":
       return connector.ConnType?.toLowerCase() ?? "";
     case "fabricante":
-      return connector.Fabricante?.toLowerCase() ?? "";
+      return connector.details.Fabricante?.toLowerCase() ?? "";
     default:
       return "";
   }

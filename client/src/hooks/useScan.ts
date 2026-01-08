@@ -18,7 +18,7 @@ export const useScan = () => {
       return;
     }
 
-    let code = inputCode.trim();
+    const code = inputCode.trim();
 
     // 1. Check if it's a full URL (handle old IP stickers)
     if (code.startsWith("http")) {

@@ -26,9 +26,9 @@ interface UseAccessoryFiltersReturn {
 }
 
 // Helper to construct accessory ID (same as in accessoryService)
-function constructAccessoryId(accessory: AccessoryApiResponse): string {
-  return `${accessory.ConnName}_${accessory.AccessoryType}`;
-}
+// function constructAccessoryId(accessory: AccessoryApiResponse): string {
+//   return `${accessory.ConnName}_${accessory.AccessoryType}`;
+// }
 
 export function useAccessoryFilters(
   accessories: Record<string, AccessoryApiResponse>

@@ -11,23 +11,28 @@ export interface Accessory {
 }
 
 export interface Connector {
-  id: string; // e.g., A255PR (6 chars)
-  posId: string; // e.g., A255 (4 chars)
-  colorCode: string; // e.g., P
-  viasCode: string; // e.g., R
-  colorName: string;
-  colorNamePT: string;
-  viasName: string;
-  cv: string; // Vertical Coordinate
-  ch: string; // Horizontal Coordinate
-  fabricante: string;
-  refabricante: string;
-  type: string;
-  description: string;
-  stock: number;
-  family?: number;
+  PosId: string;
+  Cor: string;
+  Vias: string;
+  CODIVMAC: string;
+  Qty: number;
+  details: Connector_Details;
+  ConnType?: string;
+  colorName?: string;
+  colorNamePT?: string;
+  viasName?: string;
+  cv?: string; // Vertical Coordinate
+  ch?: string; // Horizontal Coordinate
   accessories: Accessory[]; // Linked accessories
   clientReferences?: string[]; // Legacy mappings (RefMARCA)
+}
+
+export interface Connector_Details {
+  Family: number;
+  Fabricante?: string;
+  Refabricante?: string;
+  OBS?: string;
+  Designa__o?: string;
 }
 
 export interface Box {
@@ -82,7 +87,7 @@ export interface MasterData {
   clients: Record<string, string>;
   accessoryTypes: string[];
   positions: Record<string, { cv: string; ch: string }>;
-  connectors: Record<string, ConnectorReferenceApiResponse>;
+  connectors: Record<string, Connector>;
   accessories: Record<string, AccessoryApiResponse>;
   fabricantes: string[];
 }
@@ -113,19 +118,6 @@ export interface ConnPosition {
   CON: string;
   CV: string;
   CH: string;
-}
-
-export interface ConnectorReferenceApiResponse {
-  PosId: string;
-  Cor: string;
-  Vias: string;
-  CODIVMAC: string;
-  ConnType: string;
-  Fabricante: string | null;
-  Refabricante: string | null;
-  Qty: number | null;
-  Family?: number;
-  ClientReferences?: string[];
 }
 
 export interface AccessoryApiResponse {

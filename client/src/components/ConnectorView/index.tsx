@@ -61,10 +61,10 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
     <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 pb-32 text-slate-200">
       <DetailHeader
         label="Connector"
-        title={connector.id}
+        title={connector.CODIVMAC}
         onBack={goBack}
         handleQRClick={() =>
-          onOpenQR({ id: connector.id, source: "connector" })
+          onOpenQR({ id: connector.CODIVMAC, source: "connector" })
         }
       />
 
@@ -105,18 +105,18 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
         )}
 
         {/* Related Images */}
-        <RelatedImages connectorId={connector.id} />
+        <RelatedImages connectorId={connector.CODIVMAC} />
 
         <BoxShortcut
-          posId={connector.posId}
-          onOpen={() => handleBoxOpen(connector.posId)}
+          posId={connector.PosId}
+          onOpen={() => handleBoxOpen(connector.PosId)}
         />
       </div>
 
       <TransactionBar
-        onRemove={() => onTransaction("OUT", connector.id)}
-        onAdd={() => onTransaction("IN", connector.id)}
-        isRemoveDisabled={connector.stock <= 0}
+        onRemove={() => onTransaction("OUT", connector.CODIVMAC)}
+        onAdd={() => onTransaction("IN", connector.CODIVMAC)}
+        isRemoveDisabled={connector.Qty <= 0}
       />
     </div>
   );

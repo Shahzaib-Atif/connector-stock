@@ -9,6 +9,7 @@ export const formatDate = (dateString: string | undefined | null): string => {
       year: "numeric",
     }).format(date);
   } catch (e) {
+    console.error(e.message);
     return dateString;
   }
 };
