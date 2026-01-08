@@ -1,8 +1,7 @@
 import React from "react";
-import { X, Loader2, Package } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 // Sub-components
-import { NotificationInfo } from "./components/NotificationInfo";
 import { ParsedInfo } from "./components/ParsedInfo";
 import { LinkedSample } from "./components/LinkedSample";
 import { LinkedConnector } from "./components/LinkedConnector";
@@ -11,7 +10,6 @@ import ShowSucess from "../common/ShowSucess";
 import ActionButtons from "./components/ActionButtons";
 import NotificationStatus from "./components/NotificationStatus";
 import QuantityInput from "./components/QuantityInput";
-import CustomNote from "./components/CustomNote";
 import NotificationHeader from "./components/NotificationHeader";
 
 interface Props {
