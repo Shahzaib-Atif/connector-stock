@@ -9,14 +9,14 @@ import { AppRoutes } from "./components/AppRoutes";
 import { useScan } from "./hooks/useScan";
 import { TransactionModal } from "./components/TransactionModal";
 import { initTransactionsData } from "./store/slices/transactionsSlice";
-import { QRData } from "./utils/types/types";
 import { initUsersList, logout } from "./store/slices/authSlice";
 import { AUTH_EXPIRED_EVENT } from "./utils/constants";
+import { QRData } from "./utils/types/shared";
 
 // Main App Component
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  useAppSelector((state) => state.auth);
   const { loading } = useAppSelector((state) => state.masterData);
   const [qrData, setQrData] = useState<QRData | null>(null);
   const { handleScan, error, clearError } = useScan();
