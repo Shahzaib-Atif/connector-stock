@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Scan } from "lucide-react";
-import ExampleLookup from "../ExampleLookup";
 import { DetailHeader } from "../common/DetailHeader";
-import { suggestion } from "@/utils/types/types";
 import SearchInput from "./components/SearchInput";
 import SuggestionsList from "./components/SuggestionsList";
 import { useSuggestions } from "@/hooks/useSuggestions";
@@ -12,18 +10,19 @@ import { useSuggestionNavigation } from "../../hooks/useSuggestionNavigation";
 import { useGlobalEnterKey } from "@/hooks/useGlobalEnterKey";
 import { NavigationCards } from "./components/NavigationCards";
 import { CameraScanner } from "../common/CameraScanner";
+import { suggestion } from "@/utils/types/shared";
 
-interface HomeViewProps {
+interface Props {
   onScan: (code: string) => void;
   scanError: string | null;
   onClearScanError: () => void;
 }
 
-export const HomeView: React.FC<HomeViewProps> = ({
+export const HomeView: React.FC<Props> = ({
   onScan,
   scanError,
   onClearScanError,
-}) => {
+}: Props) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showScanner, setShowScanner] = useState(false);

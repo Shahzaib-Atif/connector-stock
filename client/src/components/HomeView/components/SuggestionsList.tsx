@@ -1,4 +1,4 @@
-import { suggestion } from "@/utils/types/types";
+import { suggestion } from "@/utils/types/shared";
 import { Box, Zap, Wrench } from "lucide-react";
 
 interface Props {

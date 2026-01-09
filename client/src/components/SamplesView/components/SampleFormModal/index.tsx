@@ -8,11 +8,11 @@ import {
 import { useSampleForm } from "@/hooks/useSampleForm";
 import {
   FORM_FIELDS,
-  FORM_FIELDS_Type,
   inputClass,
   labelClass,
 } from "./components/SampleFormFields";
 import { FormField } from "./components/FormField";
+import { FORM_FIELDS_Type } from "./components/FormFieldType";
 
 interface SampleFormModalProps {
   sample: Sample | null;

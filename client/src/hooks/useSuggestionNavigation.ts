@@ -1,4 +1,4 @@
-import { suggestion } from "@/utils/types/types";
+import { suggestion } from "@/utils/types/shared";
 import { useState } from "react";
 
 export function useSuggestionNavigation(
