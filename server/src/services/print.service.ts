@@ -25,6 +25,7 @@ export class PrintService {
     try {
       // Generate TSPL commands
       const tsplCommands = this.generateTsplCommands(dto);
+
       // Write to temp file
       const tempFile = path.join(os.tmpdir(), `label_${Date.now()}.prn`);
       fs.writeFileSync(tempFile, tsplCommands, { encoding: 'ascii' });
@@ -36,7 +37,7 @@ export class PrintService {
       this.cleanupFile(tempFile);
 
       return { success: true, message: `Label printed for ${itemId}` };
-    } catch (error: any) {
+    } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       this.logger.error(`Print failed: ${message}`);
       return { success: false, message };
@@ -44,7 +45,7 @@ export class PrintService {
   }
 
   private generateTsplCommands(dto: PrintLabelDto): string {
-    const { itemId, itemUrl, refCliente, encomenda, source, qty } = dto;
+    const { itemId, itemUrl, source, qty } = dto;
     const { widthMm, heightMm, qrCodePos, center_X } = this.labelConfig;
     const { x: qr_x, y: qr_y } = qrCodePos;
 
@@ -58,41 +59,16 @@ export class PrintService {
 
     switch (source) {
       case 'sample': {
-        // QR Code
-        lines.push(`QRCODE ${qr_x},${qr_y},L,4,A,0,M2,S7,"${itemUrl}"`);
-
-        const textX = center_X + 15;
-        const textY = 200; // Near bottom edge
-
-        // ItemId
-        lines.push(`TEXT ${textX},${textY},"2",270,2,1,"${itemId}"`);
-
-        // RefCliente
-        let currentX = textX + 45; // Spacing for next line
-        if (refCliente) {
-          currentX = this.addRefClientTextVertical(
-            lines,
-            refCliente,
-            currentX,
-            textY,
-          );
-        }
-
-        // Encomenda
-        if (encomenda) {
-          lines.push(
-            `TEXT ${currentX + 15},${textY},"2",270,1,1,"${encomenda}"`,
-          );
-        }
-
+        this.handleSampleLines(lines, dto);
         break;
       }
 
       case 'box': {
         // add QR code and itemId
-        lines.push(`QRCODE ${qr_x},${qr_y + 20},L,5,A,0,M2,S7,"${itemUrl}"`);
-        lines.push(`TEXT ${qr_x},${qr_y - 10},"2",0,1,1,"${itemId}"`);
-        lines.push(`TEXT ${center_X + 20},90,"3",0,1,2,"${itemId}"`);
+        const x = qr_x + 5;
+        lines.push(`QRCODE ${x},${qr_y + 15},L,7,A,0,M2,S12,"${itemUrl}"`);
+        lines.push(`TEXT ${x},${qr_y - 15},"2",0,1,1,"${itemId}"`);
+        // lines.push(`TEXT ${center_X + 20},90,"3",0,1,2,"${itemId}"`);
         break;
       }
 
@@ -112,6 +88,37 @@ export class PrintService {
     const printQty = isNaN(qty) ? 1 : qty;
     lines.push(`PRINT ${printQty},1`);
     return lines.join('\r\n') + '\r\n';
+  }
+
+  private handleSampleLines(lines: string[], dto: PrintLabelDto) {
+    const { itemId, itemUrl, refCliente, encomenda } = dto;
+    const { qrCodePos, center_X } = this.labelConfig;
+    const { x: qr_x, y: qr_y } = qrCodePos;
+
+    // QR Code
+    lines.push(`QRCODE ${qr_x},${qr_y},L,6,A,0,M2,S7,"${itemUrl}"`);
+
+    const textX = center_X + 15;
+    const textY = 200; // Near bottom edge
+
+    // ItemId
+    lines.push(`TEXT ${textX},${textY},"2",270,2,1,"${itemId}"`);
+
+    // RefCliente
+    let currentX = textX + 45; // Spacing for next line
+    if (refCliente) {
+      currentX = this.addRefClientTextVertical(
+        lines,
+        refCliente,
+        currentX,
+        textY,
+      );
+    }
+
+    // Encomenda
+    if (encomenda) {
+      lines.push(`TEXT ${currentX + 15},${textY},"2",270,1,1,"${encomenda}"`);
+    }
   }
 
   private addRefClientTextVertical(
