@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Sample } from "@/utils/types/types";
+import { Sample } from "@/utils/types";
 
 export type SampleFormData = {
   Cliente: string;

@@ -1,5 +1,5 @@
 import { constructAccessoryId } from "@/services/accessoryService";
-import { Accessory, AccessoryType, MasterData } from "@/utils/types/types";
+import { Accessory, AccessoryType, MasterData } from "@/utils/types";
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
 

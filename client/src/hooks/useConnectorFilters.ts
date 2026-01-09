@@ -1,4 +1,4 @@
-import { Connector } from "@/utils/types/types";
+import { Connector } from "@/utils/types";
 import { useState, useMemo, useCallback } from "react";
 
 export type ConnectorFilterColumn = "all" | "id" | "type" | "fabricante";

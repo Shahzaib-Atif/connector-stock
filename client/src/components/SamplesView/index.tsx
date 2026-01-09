@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sample } from "@/utils/types/types";
+import { Sample } from "@/utils/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   fetchSamplesThunk,

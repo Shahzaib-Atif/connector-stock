@@ -1,5 +1,5 @@
 import { ROUTES } from "@/components/AppRoutes";
-import { Transaction } from "@/utils/types/types";
+import { Transaction } from "@/utils/types";
 import { ExternalLink } from "lucide-react";
 
 interface Props {

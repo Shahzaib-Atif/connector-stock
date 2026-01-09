@@ -1,7 +1,7 @@
 import { updateConnectorApi } from "@/services/connectorService";
 import { useAppDispatch } from "@/store/hooks";
 import { initMasterData } from "@/store/slices/masterDataSlice";
-import { Connector } from "@/utils/types/types";
+import { Connector } from "@/utils/types";
 import { useState } from "react";
 
 interface ConnectorFormData {

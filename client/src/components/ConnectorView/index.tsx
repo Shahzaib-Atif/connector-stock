@@ -1,6 +1,6 @@
 import React from "react";
 import { Wrench } from "lucide-react";
-import { Connector } from "../../utils/types/types";
+import { Connector } from "../../utils/types";
 import { parseConnector } from "../../services/connectorService";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";

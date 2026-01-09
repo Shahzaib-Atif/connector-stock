@@ -1,4 +1,4 @@
-import { PaginatedItems_T } from "./types";
+import type { PaginatedItems_T } from "./paginationTypes";
 
 export enum Department {
   Comercial = "Comercial",

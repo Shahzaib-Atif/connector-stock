@@ -5,7 +5,7 @@ import ImageBox from "@/components/common/ImageBox";
 import StockDiv from "@/components/common/StockDiv";
 import CardInfoDiv from "@/components/common/CardInfoDiv";
 import { VIEW_SUMMARY_CLASS } from "@/utils/constants";
-import { Connector } from "@/utils/types/types";
+import { Connector } from "@/utils/types";
 
 interface ConnectorSummaryProps {
   connector: Connector;

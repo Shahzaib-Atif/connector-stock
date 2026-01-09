@@ -1,5 +1,5 @@
 import React from "react";
-import { Accessory } from "../../../utils/types/types";
+import { Accessory } from "../../../utils/types";
 import { AccessoryItem } from "./AccessoryItem";
 import { CollapsibleSection } from "@/components/common/CollapsibleSection";
 import { Wrench } from "lucide-react";

@@ -2,7 +2,7 @@ import React from "react";
 import { ExternalLink } from "lucide-react";
 import { API } from "@/utils/api";
 import { ROUTES } from "@/components/AppRoutes";
-import { Connector } from "@/utils/types/types";
+import { Connector } from "@/utils/types";
 
 interface TableRowProps {
   connector: Connector;

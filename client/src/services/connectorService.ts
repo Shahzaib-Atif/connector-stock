@@ -1,4 +1,4 @@
-import { Connector, Box, Accessory, MasterData } from "../utils/types/types";
+import { Connector, Box, Accessory, MasterData } from "../utils/types";
 import { getCoordinates } from "../utils/inventoryUtils";
 import { parseAccessory } from "./accessoryService";
 import { API } from "../utils/api";

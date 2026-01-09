@@ -1,5 +1,5 @@
 import React from "react";
-import { Accessory } from "@/utils/types/types";
+import { Accessory } from "@/utils/types";
 
 interface TableRowProps {
   accessory: Accessory;

@@ -1,6 +1,6 @@
 import React from "react";
 import { CheckCircle2, AlertCircle } from "lucide-react";
-import { Sample } from "@/utils/types/types";
+import { Sample } from "@/utils/types";
 import MetaItem from "./MetaItem";
 
 interface LinkedSampleProps {

@@ -1,4 +1,4 @@
-import { Accessory } from "@/utils/types/types";
+import { Accessory } from "@/utils/types";
 import { useState, useMemo, useCallback } from "react";
 
 export type AccessoryFilterColumn =

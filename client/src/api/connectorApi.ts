@@ -1,4 +1,4 @@
-import { Connector, ConnectorType, MasterData } from "@/utils/types/types";
+import { Connector, ConnectorType, MasterData } from "@/utils/types";
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
 

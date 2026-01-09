@@ -1,4 +1,4 @@
-import { User } from "@/utils/types/types";
+import { User } from "@/utils/types";
 import { API } from "../utils/api";
 import { fetchWithAuth } from "../utils/fetchClient";
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Wrench } from "lucide-react";
-import { Accessory } from "@/utils/types/types";
+import { Accessory } from "@/utils/types";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
 import { NotFoundPage } from "../common/NotFoundPage";

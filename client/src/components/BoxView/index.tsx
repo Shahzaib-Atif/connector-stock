@@ -1,6 +1,6 @@
 import React from "react";
 import { MapPin, CircuitBoard, Wrench } from "lucide-react";
-import { Box } from "../../utils/types/types";
+import { Box } from "../../utils/types";
 import { getBoxDetails } from "../../services/connectorService";
 import { CollapsibleSection } from "../common/CollapsibleSection";
 import { DetailHeader } from "../common/DetailHeader";

@@ -1,7 +1,7 @@
 import React from "react";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
-import { Accessory } from "@/utils/types/types";
+import { Accessory } from "@/utils/types";
 
 interface AccessoriesTableProps {
   accessories: Accessory[];

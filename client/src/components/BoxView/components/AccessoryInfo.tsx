@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Accessory } from "@/utils/types/types";
+import { Accessory } from "@/utils/types";
 import { API } from "@/utils/api";
 
 interface Props {

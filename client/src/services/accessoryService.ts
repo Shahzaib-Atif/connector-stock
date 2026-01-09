@@ -1,4 +1,4 @@
-import { Accessory } from "@/utils/types/types";
+import { Accessory } from "@/utils/types";
 
 export const parseAccessory = (apiAccessory: Accessory): Accessory => {
   const connectorId = apiAccessory.ConnName || "";

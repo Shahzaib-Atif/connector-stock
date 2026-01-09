@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Connector } from "@/utils/types/types";
+import { Connector } from "@/utils/types";
 import { API } from "@/utils/api";
 
 interface Props {

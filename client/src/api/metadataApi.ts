@@ -1,4 +1,4 @@
-import { IColor, IVias, ConnPosition } from "@/utils/types/types";
+import { IColor, IVias, ConnPosition } from "@/utils/types";
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
 

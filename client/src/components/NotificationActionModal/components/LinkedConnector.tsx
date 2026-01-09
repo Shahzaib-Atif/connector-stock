@@ -2,7 +2,7 @@ import React from "react";
 import { Package, ExternalLink, AlertCircle } from "lucide-react";
 import { ROUTES } from "../../AppRoutes";
 import MetaItem from "./MetaItem";
-import { Connector } from "@/utils/types/types";
+import { Connector } from "@/utils/types";
 
 interface LinkedConnectorProps {
   connector: Connector;

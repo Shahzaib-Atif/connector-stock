@@ -10,7 +10,7 @@ import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
 import { Image, ImageOff } from "lucide-react";
-import { Connector } from "@/utils/types/types";
+import { Connector } from "@/utils/types";
 
 export const ConnectorsListView: React.FC = () => {
   const navigate = useNavigate();

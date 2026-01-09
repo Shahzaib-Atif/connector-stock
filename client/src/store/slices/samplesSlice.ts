@@ -5,7 +5,7 @@ import {
   updateSample,
   deleteSample,
 } from "@/api/samplesApi";
-import { Sample } from "@/utils/types/types";
+import { Sample } from "@/utils/types";
 
 interface SamplesState {
   samples: Sample[];

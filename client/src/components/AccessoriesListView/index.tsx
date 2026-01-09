@@ -9,7 +9,7 @@ import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { FilterBar } from "../common/FilterBar";
 import { ROUTES } from "../AppRoutes";
-import { Accessory } from "@/utils/types/types";
+import { Accessory } from "@/utils/types";
 
 export const AccessoriesListView: React.FC = () => {
   const navigate = useNavigate();

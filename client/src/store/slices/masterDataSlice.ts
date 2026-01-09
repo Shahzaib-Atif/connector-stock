@@ -1,5 +1,5 @@
 import { fetchMasterData } from "@/api";
-import { Accessory, Connector, MasterData } from "@/utils/types/types";
+import { Accessory, Connector, MasterData } from "@/utils/types";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 interface MasterDataState {

@@ -1,4 +1,5 @@
-import { Connector, Sample } from "./types";
+import type { Connector } from "./inventoryTypes";
+import type { Sample } from "./sampleTypes";
 
 export type NotificationStatusType = "idle" | "loading" | "success" | "error";
 

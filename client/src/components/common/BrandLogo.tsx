@@ -25,7 +25,7 @@ function BrandLogo() {
           fill="#f1f5f9"
           className="group-hover:fill-white transition-all"
         >
-          divmac
+          Divmac
         </text>
 
         {/* Red accent underline - matching brand */}

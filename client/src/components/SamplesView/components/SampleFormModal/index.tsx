@@ -1,5 +1,5 @@
 import React from "react";
-import { Sample } from "@/utils/types/types";
+import { Sample } from "@/utils/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   createSampleThunk,
