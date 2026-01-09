@@ -17,18 +17,7 @@ export class PrintService {
     '../../../scripts/RawPrinter.exe',
   );
 
-  // Label dimensions: 45x28mm @ 203 DPI (8 dots/mm)
-  private readonly labelConfig = {
-    widthMm: 45,
-    heightMm: 28,
-    qrCodePos: { x: 20, y: 40 },
-    center_X: 180, // (45*8)/2 = 180 dots
-    itemId_Y: 50,
-    refCliente_Y: 120,
-    encomenda_Y: 160,
-  };
-
-  async printLabel(
+  public async printLabel(
     dto: PrintLabelDto,
   ): Promise<{ success: boolean; message: string }> {
     const { itemId } = dto;
@@ -187,4 +176,15 @@ export class PrintService {
       }
     }, 5000);
   }
+
+  // Label dimensions: 45x28mm @ 203 DPI (8 dots/mm)
+  private readonly labelConfig = {
+    widthMm: 45,
+    heightMm: 28,
+    qrCodePos: { x: 20, y: 40 },
+    center_X: 180, // (45*8)/2 = 180 dots
+    itemId_Y: 50,
+    refCliente_Y: 120,
+    encomenda_Y: 160,
+  };
 }
