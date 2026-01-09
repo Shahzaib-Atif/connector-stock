@@ -10,6 +10,7 @@ interface Props {
   >;
   children: React.JSX.Element;
   title: string;
+  extraClasses?: string;
 }
 
 export const ModalWrapper: React.FC<Props> = ({
@@ -17,6 +18,7 @@ export const ModalWrapper: React.FC<Props> = ({
   Icon,
   children,
   title,
+  extraClasses = "",
 }) => {
   const ref = useRef(null);
   useClickOutside(ref, onClose);
@@ -25,11 +27,14 @@ export const ModalWrapper: React.FC<Props> = ({
   return (
     <div
       id="modal-wrapper"
-      className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4"
+      className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4 "
     >
       <div
         ref={ref}
-        className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200"
+        className={
+          "bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-200 w-full max-h-[95vh] overflow-y-auto " +
+          extraClasses
+        }
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">

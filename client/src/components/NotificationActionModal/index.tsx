@@ -17,6 +17,7 @@ export const NotificationActionModal: React.FC<Props> = ({
       title="Sample Request Details"
       Icon={Package}
       onClose={onClose}
+      extraClasses="max-w-2xl"
     >
       <NotificationActionForm
         notificationId={notificationId}

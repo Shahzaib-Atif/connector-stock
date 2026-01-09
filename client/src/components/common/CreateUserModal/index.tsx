@@ -9,7 +9,12 @@ interface Props {
 
 export const CreateUserModal: React.FC<Props> = ({ onClose }) => {
   return (
-    <ModalWrapper title="Create New User" onClose={onClose} Icon={UserPlus}>
+    <ModalWrapper
+      title="Create New User"
+      onClose={onClose}
+      Icon={UserPlus}
+      extraClasses="max-w-md"
+    >
       <CreateUserForm onClose={onClose} />
     </ModalWrapper>
   );
