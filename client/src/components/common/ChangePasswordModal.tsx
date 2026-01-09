@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Lock, Eye, EyeOff, Loader2, CheckCircle2 } from "lucide-react";
+import { X, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useAppDispatch } from "@/store/hooks";
 import { changePasswordThunk } from "@/store/slices/authSlice";
 import ShowSucess from "./ShowSucess";
@@ -41,7 +41,7 @@ export const ChangePasswordModal: React.FC<Props> = ({ onClose }) => {
       setTimeout(() => {
         onClose();
       }, 2000);
-    } catch (err: any) {
+    } catch (err) {
       setErrorMessage(err.message || "Failed to update password");
       setStatus("error");
     }

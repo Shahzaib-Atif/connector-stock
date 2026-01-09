@@ -19,7 +19,7 @@ export const startScanner = async (
 
     // Mark as running
     isRunningRef.current = true;
-  } catch (err: any) {
+  } catch (err) {
     // Fallback to user facing camera if environment not found or permission denied
     if (
       err?.toString().includes("NotFoundError") ||
