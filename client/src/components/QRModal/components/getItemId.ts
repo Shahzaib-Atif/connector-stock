@@ -5,7 +5,6 @@ export function getItemIdLink(itemId: string) {
   const upper = code.toUpperCase();
 
   // Return "Pure Data" string instead of a full URL
-  // This makes the physical sticker resilient to network changes
-  if (upper.length === 4) return `box:${itemId}`;
-  else return `connector:${itemId}`;
+  if (upper.length === 4) return `boxes/${itemId}`;
+  else return `connectors/${itemId}`;
 }
