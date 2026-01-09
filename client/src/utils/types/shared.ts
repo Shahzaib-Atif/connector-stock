@@ -1,3 +1,5 @@
+import { PaginatedItems_T } from "./types";
+
 export enum Department {
   Comercial = "Comercial",
   GT = "GT",
@@ -14,8 +16,8 @@ export type suggestion = {
   type?: "box" | "connector" | "accessory";
 };
 
-export interface PaginatedData<T> {
-  paginatedItems: T[];
+export interface PaginatedData {
+  paginatedItems: PaginatedItems_T;
   currentPage: number;
   totalPages: number;
   itemsPerPage: number;

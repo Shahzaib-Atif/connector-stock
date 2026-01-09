@@ -10,6 +10,7 @@ import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
 import { Image, ImageOff } from "lucide-react";
+import { Connector } from "@/utils/types/types";
 
 export const ConnectorsListView: React.FC = () => {
   const navigate = useNavigate();
@@ -94,7 +95,7 @@ export const ConnectorsListView: React.FC = () => {
 
           <div className="table-container-outer mt-4">
             <ConnectorsTable
-              connectors={paginatedConnectors}
+              connectors={paginatedConnectors as Connector[]}
               showImages={showImages}
             />
           </div>

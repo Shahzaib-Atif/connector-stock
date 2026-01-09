@@ -1,15 +1,16 @@
-import { PaginatedData } from "@/utils/types/types";
+import { PaginatedData } from "@/utils/types/shared";
+import { PaginatedItems_T } from "@/utils/types/types";
 import { useState, useMemo, useCallback } from "react";
 
-interface Props<T> {
-  items: T[];
+interface Props {
+  items: PaginatedItems_T;
   initialItemsPerPage?: number;
 }
 
-export function usePagination<T>({
+export function usePagination({
   items,
   initialItemsPerPage = 10,
-}: Props<T>): PaginatedData<T> {
+}: Props): PaginatedData {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
 

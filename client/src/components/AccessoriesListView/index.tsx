@@ -9,6 +9,7 @@ import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { FilterBar } from "../common/FilterBar";
 import { ROUTES } from "../AppRoutes";
+import { Accessory } from "@/utils/types/types";
 
 export const AccessoriesListView: React.FC = () => {
   const navigate = useNavigate();
@@ -61,7 +62,9 @@ export const AccessoriesListView: React.FC = () => {
           />
 
           <div className="table-container-outer">
-            <AccessoriesTable accessories={paginatedAccessories} />
+            <AccessoriesTable
+              accessories={paginatedAccessories as Accessory[]}
+            />
           </div>
 
           {filteredAccessories.length > 0 && (

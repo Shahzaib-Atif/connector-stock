@@ -1,6 +1,5 @@
 import React from "react";
 import { Transaction } from "@/utils/types/types";
-import { Link } from "react-router-dom";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 

@@ -2,7 +2,7 @@ import { PaginatedData } from "@/utils/types/shared";
 import React from "react";
 
 export const Pagination: React.FC<
-  Omit<PaginatedData<any>, "paginatedItems" | "resetPage">
+  Omit<PaginatedData, "paginatedItems" | "resetPage">
 > = ({
   currentPage,
   totalPages,
@@ -11,15 +11,6 @@ export const Pagination: React.FC<
   setCurrentPage: onPageChange,
   setItemsPerPage: onItemsPerPageChange,
 }) => {
-  const buttonClass = (isActive: boolean, isDisabled: boolean) =>
-    `px-3 py-1.5 rounded-lg font-medium text-sm transition-all ${
-      isDisabled
-        ? "bg-slate-700/50 text-slate-500 cursor-not-allowed"
-        : isActive
-        ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
-        : "bg-slate-700 text-slate-300 hover:bg-slate-600"
-    }`;
-
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
@@ -86,3 +77,12 @@ export const Pagination: React.FC<
     </div>
   );
 };
+
+const buttonClass = (isActive: boolean, isDisabled: boolean) =>
+  `px-3 py-1.5 rounded-lg font-medium text-sm transition-all ${
+    isDisabled
+      ? "bg-slate-700/50 text-slate-500 cursor-not-allowed"
+      : isActive
+      ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
+      : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+  }`;

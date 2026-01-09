@@ -7,9 +7,10 @@ import { FilterBar } from "./components/FilterBar";
 import { useTransactionsFilter } from "@/hooks/useTransactionsFilters";
 import { usePagination } from "@/hooks/usePagination";
 import Spinner from "../common/Spinner";
-import { Pagination } from "../common/Pagination";
 import { ROUTES } from "../AppRoutes";
 import { Department } from "@/utils/types/shared";
+import { Pagination } from "../common/Pagination";
+import { Transaction } from "@/utils/types/types";
 
 export const TransactionsView: React.FC = () => {
   const navigate = useNavigate();
@@ -85,7 +86,9 @@ export const TransactionsView: React.FC = () => {
           />
 
           <div className="table-container-outer">
-            <TransactionsTable transactions={paginatedTransactions} />
+            <TransactionsTable
+              transactions={paginatedTransactions as Transaction[]}
+            />
           </div>
 
           {filteredTransactions.length > 0 && (

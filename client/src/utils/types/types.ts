@@ -77,6 +77,12 @@ export interface Transaction {
   updatedAt?: number;
 }
 
+export type PaginatedItems_T =
+  | Sample[]
+  | Connector[]
+  | Accessory[]
+  | Transaction[];
+
 export interface MasterData {
   colors: {
     colorsUK: Record<string, string>;

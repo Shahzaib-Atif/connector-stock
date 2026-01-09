@@ -134,7 +134,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
 
           <div className="table-container-outer">
             <SamplesTable
-              samples={paginatedSamples}
+              samples={paginatedSamples as Sample[]}
               onEdit={handleEdit}
               onDelete={handleDelete}
               onOpenQR={onOpenQR}
