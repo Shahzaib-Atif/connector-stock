@@ -16,7 +16,6 @@ function ActionButtons({
   quantityInput,
   customNote,
   status,
-  setCompletionType,
   onCancel,
 }: Props) {
   return (

@@ -33,7 +33,7 @@ export const Login: React.FC = () => {
       dispatch(setUsersList(users));
 
       navigate(ROUTES.HOME);
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message || "Invalid credentials.");
     } finally {
       setIsLoading(false);

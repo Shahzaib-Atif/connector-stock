@@ -52,7 +52,7 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
       await updateConnectorApi(connector.CODIVMAC, formData);
       await dispatch(initMasterData());
       onSave();
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message || "Failed to update connector");
       setLoading(false);
     }

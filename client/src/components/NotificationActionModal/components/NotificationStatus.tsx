@@ -10,7 +10,6 @@ interface Props {
 
 export default function NotificationStatus({
   completionType,
-  maxQuantity,
   customNote,
   setCustomNote,
   setCompletionType,

@@ -14,11 +14,7 @@ import { User, UserRoles } from "@/utils/types/userTypes";
 export const UsersView: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {
-    users,
-    role,
-    user: currentUsername,
-  } = useAppSelector((state) => state.auth);
+  const { role, user: currentUsername } = useAppSelector((state) => state.auth);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [openDltDlg, setOpenDltDlg] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
