@@ -4,7 +4,7 @@ import { DetailHeader } from "../common/DetailHeader";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../AppRoutes";
 import { UserPlus } from "lucide-react";
-import { CreateUserModal } from "../CreateUserModal";
+import { CreateUserModal } from "../common/CreateUserModal";
 import { useAppDispatch } from "@/store/hooks";
 import { deleteUserThunk } from "@/store/slices/authSlice";
 import DeleteDialog from "../common/DeleteDialog";
