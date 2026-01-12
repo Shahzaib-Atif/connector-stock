@@ -44,9 +44,7 @@ export const parseConnector = (
       Family: reference.details.Family,
       Fabricante: fabricante,
       Refabricante: refabricante,
-      OBS: `${masterData.colors[colorCode] || "Generic"} / ${
-        masterData.vias[viasCode] || "Std"
-      }`,
+      OBS: reference.details.OBS,
     },
     ConnType: type,
     Qty: masterData.connectors[id].Qty,

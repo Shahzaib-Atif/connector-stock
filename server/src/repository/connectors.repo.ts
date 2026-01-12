@@ -31,6 +31,7 @@ export class ConnectorRepo {
               Fabricante: true,
               Refabricante: true,
               Family: true,
+              OBS: true,
             },
           },
         },

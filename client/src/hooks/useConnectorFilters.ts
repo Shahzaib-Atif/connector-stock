@@ -78,7 +78,8 @@ function matchesAnyField(connector: Connector, normalizedQuery: string) {
     connector.details.Fabricante?.toLowerCase().includes(normalizedQuery) ||
     connector.details.Refabricante?.toLowerCase().includes(normalizedQuery) ||
     connector.Cor?.toLowerCase().includes(normalizedQuery) ||
-    connector.Vias?.toLowerCase().includes(normalizedQuery)
+    connector.Vias?.toLowerCase().includes(normalizedQuery) ||
+    connector.details.OBS?.toLowerCase().includes(normalizedQuery)
   );
 }
 

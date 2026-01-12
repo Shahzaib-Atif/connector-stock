@@ -84,6 +84,7 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data break-all">
         {connector.details.Refabricante || "-"}
       </td>
+      <td className="table-data break-all">{connector.details.OBS || "-"}</td>
       <td className="table-data text-center text-emerald-200">
         {connector.Qty ?? 0}
       </td>

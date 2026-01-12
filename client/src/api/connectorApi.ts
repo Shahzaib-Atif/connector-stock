@@ -12,6 +12,7 @@ export const fetchConnectors = async (): Promise<MasterData["connectors"]> => {
   const references = {};
   data.forEach((item) => {
     if (item.CODIVMAC) {
+      delete item["Connectors_Details"];
       references[item.CODIVMAC.trim()] = item;
     }
   });
