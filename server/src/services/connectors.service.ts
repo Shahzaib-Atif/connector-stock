@@ -18,7 +18,7 @@ export class ConnectorsService {
     const connectors = await this.repo.getConnectors();
 
     // Fetch client references from legacy table
-    let clientMappings: any[] = [];
+    let clientMappings: { RefDIVMAC: string; RefMARCA: string }[] = [];
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       clientMappings = await (this.prisma as any).$queryRawUnsafe(`
