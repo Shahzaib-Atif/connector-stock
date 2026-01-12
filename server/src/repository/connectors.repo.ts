@@ -90,6 +90,8 @@ export class ConnectorRepo {
   async adjustQuantity(tx: TransactionClient, codivmac: string, delta: number) {
     if (!codivmac || !delta) return;
 
+    console.log(codivmac);
+
     await tx.connectors_Main.update({
       where: { CODIVMAC: codivmac },
       data: { Qty: { increment: delta } },

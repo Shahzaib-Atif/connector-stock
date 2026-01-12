@@ -1,8 +1,8 @@
 import React from "react";
 import { QRData, Sample } from "@/utils/types";
-import TableHeader from "./TableHeader";
-import TableRow from "./TableRow";
-import NoSamplesFound from "./NoSamplesFound";
+import TableHeader from "./components/TableHeader";
+import TableRow from "./components/TableRow";
+import NoSamplesFound from "./components/NoSamplesFound";
 
 interface SamplesTableProps {
   samples: Sample[];
