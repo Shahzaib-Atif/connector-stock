@@ -5,7 +5,7 @@ import {
   Get,
   UseGuards,
   Request,
-  UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -40,7 +40,7 @@ export class AuthController {
 
     // Admin can only create 'User' role
     if (currentUserRole === UserRoles.Admin && role !== UserRoles.User) {
-      throw new UnauthorizedException(
+      throw new ForbiddenException(
         'Admins can only create users with "User" role.',
       );
     }

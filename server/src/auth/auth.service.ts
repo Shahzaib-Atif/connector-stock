@@ -15,7 +15,7 @@ export class AuthService {
   async validateUser(username: string, pass: string): Promise<User> {
     const user = (await this.usersRepo.findByUsername(username)) as User;
     if (user) {
-      const isMatch = await bcrypt.compare(pass, user?.password);
+      const isMatch = await bcrypt.compare(pass, user.password);
       if (isMatch) {
         const { userId, username, role } = user;
         return {
