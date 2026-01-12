@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
@@ -90,12 +90,18 @@ export class ConnectorRepo {
   async adjustQuantity(tx: TransactionClient, codivmac: string, delta: number) {
     if (!codivmac || !delta) return;
 
-    console.log(codivmac);
-
-    await tx.connectors_Main.update({
-      where: { CODIVMAC: codivmac },
-      data: { Qty: { increment: delta } },
-    });
+    try {
+      await tx.connectors_Main.update({
+        where: { CODIVMAC: codivmac },
+        data: { Qty: { increment: delta } },
+      });
+    } catch (err) {
+      if (err.code === 'P2025') {
+        // Record doesn't exist
+        throw new NotFoundException(`Connector with ID ${codivmac} not found`);
+      }
+      throw err; // re-throw other errors
+    }
   }
 
   async upsertReferenceMapping(

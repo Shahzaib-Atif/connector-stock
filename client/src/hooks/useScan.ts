@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
 import { getBoxDetails, parseConnector } from "../services/connectorService";
 import { ROUTES } from "@/components/AppRoutes";
+import { getConnectorId } from "@/utils/idUtils";
 
 /** Hook for handling QR code scanning logic */
 export const useScan = () => {
@@ -52,6 +53,15 @@ export const useScan = () => {
 
     // 3. Falling back to length-based detection for raw IDs
     const upperCode = code.toUpperCase();
+
+    // Handle complex amostra strings (e.g. W382P2+C248P1)
+    if (code.includes("+")) {
+      const parsedId = getConnectorId(upperCode);
+      if (parsedId.length === 6) {
+        return handleConnectorNav(parsedId);
+      }
+    }
+
     if (code.length === 6) handleConnectorNav(upperCode);
     else if (code.length === 4) handleBoxNav(upperCode);
     else handleAccessoryNav(upperCode);

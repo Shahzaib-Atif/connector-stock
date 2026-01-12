@@ -53,8 +53,8 @@ export class SamplesRepo {
           DateOfLastUpdate: new Date().toISOString(),
         },
       });
-    } catch (ex: any) {
-      console.error('Failed to update sample:', ex.message);
+    } catch (ex) {
+      console.error(ex.message);
       return null;
     }
   }

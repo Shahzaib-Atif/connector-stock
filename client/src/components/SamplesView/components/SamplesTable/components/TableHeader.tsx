@@ -19,7 +19,9 @@ const TableHeader: React.FC<TableHeaderProps> = ({ showActions = true }) => {
         <th className="table-header-cell">Entregue_A</th>
         <th className="table-header-cell">Data Receção</th>
         <th className="table-header-cell w-32">Observacoes</th>
-        {showActions && <th className="table-header-cell text-center">Actions</th>}
+        {showActions && (
+          <th className="table-header-cell text-center">Actions</th>
+        )}
       </tr>
     </thead>
   );

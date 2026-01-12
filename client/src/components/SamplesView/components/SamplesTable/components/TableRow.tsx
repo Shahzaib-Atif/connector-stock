@@ -56,7 +56,7 @@ const TableRow: React.FC<TableRowProps> = ({
           "-"
         )}
       </td>
-      <td className="table-data">{Quantidade || "-"}</td>
+      <td className="table-data break-all">{Quantidade || "-"}</td>
       <td className="table-data">{N_Envio || "-"}</td>
       <td className="table-data break-all" title={Entregue_a}>
         {Entregue_a || "-"}

@@ -9,6 +9,7 @@ import { useSampleForm } from "@/hooks/useSampleForm";
 import { FormField } from "./FormField";
 import { FORM_FIELDS_Type } from "./FormFieldType";
 import { FORM_FIELDS, labelClass, inputClass } from "./SampleFormFields";
+import { getConnectorId } from "@/utils/idUtils";
 
 interface Props {
   sample: Sample | null;
@@ -67,6 +68,7 @@ export const SampleForm: React.FC<Props> = ({
             id: sample.ID,
             data: {
               ...formData,
+              Amostra: getConnectorId(formData.Amostra),
               LasUpdateBy: currentUser,
               ActualUser: currentUser,
             },
@@ -76,6 +78,7 @@ export const SampleForm: React.FC<Props> = ({
         await dispatch(
           createSampleThunk({
             ...formData,
+            Amostra: getConnectorId(formData.Amostra),
             CreatedBy: currentUser,
             ActualUser: currentUser,
           })

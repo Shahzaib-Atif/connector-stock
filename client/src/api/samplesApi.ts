@@ -40,7 +40,12 @@ export const updateSample = async (
     method: "PUT",
     body: JSON.stringify(sample),
   });
-  if (!response.ok) throw new Error("Failed to update sample");
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to update sample");
+  }
+
   return response.json();
 };
 
