@@ -68,7 +68,7 @@ export const SampleForm: React.FC<Props> = ({
             id: sample.ID,
             data: {
               ...formData,
-              Amostra: getConnectorId(formData.Amostra),
+              Amostra: formData.Amostra,
               LasUpdateBy: currentUser,
               ActualUser: currentUser,
             },
@@ -78,7 +78,7 @@ export const SampleForm: React.FC<Props> = ({
         await dispatch(
           createSampleThunk({
             ...formData,
-            Amostra: getConnectorId(formData.Amostra),
+            Amostra: formData.Amostra,
             CreatedBy: currentUser,
             ActualUser: currentUser,
           })

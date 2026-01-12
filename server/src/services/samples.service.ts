@@ -121,12 +121,27 @@ export class SamplesService {
 
   private async adjustConnectorQty(
     tx: TransactionClient,
-    codivmac?: string | null,
+    amostra?: string | null,
     delta?: number,
   ) {
-    if (!codivmac || !delta) return;
+    if (!amostra || !delta) return;
 
+    const codivmac = this.getConnectorId(amostra);
     await this.connectorRepo.adjustQuantity(tx, codivmac, delta);
+  }
+
+  private getConnectorId(amostra: string): string {
+    if (!amostra) return '';
+
+    const cleanAmostra = amostra.trim();
+
+    if (cleanAmostra.includes('+')) {
+      const partBeforePlus = cleanAmostra.split('+')[0].trim();
+      // Return first 6 characters as requested
+      return partBeforePlus.substring(0, 6);
+    }
+
+    return cleanAmostra;
   }
 
   private async upsertReferenceMapping(
