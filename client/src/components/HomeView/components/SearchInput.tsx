@@ -1,5 +1,5 @@
 import { suggestion } from "@/utils/types/shared";
-import { Search, ScanLine } from "lucide-react";
+import { Search } from "lucide-react";
 
 interface Props {
   searchQuery: string;
@@ -24,8 +24,8 @@ function SearchInput({
   setShowSuggestions,
   onKeyDown,
   onFocus,
-  onOpenScanner,
-}: Props) {
+}: // onOpenScanner,
+Props) {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Call parent handler first for navigation
     if (onKeyDown) {
@@ -53,8 +53,7 @@ function SearchInput({
       <input
         id="home-search-input"
         type="text"
-        className="bg-transparent border-none outline-none text-white placeholder-slate-400 p-2 sm:px-4 sm:py-3 min-w-0 flex-1 
-        font-mono text-base sm:text-lg uppercase"
+        className={inputClass1}
         placeholder="Search..."
         value={searchQuery}
         onChange={(e) => {
@@ -65,25 +64,37 @@ function SearchInput({
         onFocus={handleFocus}
         autoComplete="off"
       />
+
+      {/* Search Btn */}
       <button
+        id="general-search-btn"
         onClick={() => onScan(searchQuery)}
-        className="btn-primary p-2 sm:p-3 rounded-xl transition-colors flex-shrink-0"
+        className={btnClass1}
         title="Search"
       >
         <Search className="w-5 h-5" />
       </button>
 
-      {onOpenScanner && (
+      {/* Open scanner btn */}
+      {/* {onOpenScanner && (
         <button
+          id="open-scanner-btn"
           onClick={onOpenScanner}
-          className="ml-1 sm:ml-1.5 btn-primary p-2 sm:p-3 rounded-xl transition-colors flex-shrink-0"
+          className={btnClass1 + "ml-1 sm:ml-1.5 "}
           title="Scan with Camera"
         >
           <ScanLine className="w-5 h-5" />
         </button>
-      )}
+      )} */}
     </div>
   );
 }
 
 export default SearchInput;
+
+const inputClass1 =
+  "bg-transparent border-none outline-none text-white placeholder-slate-400 p-2 " +
+  "sm:px-4 sm:py-3 min-w-0 flex-1 font-mono text-base sm:text-lg uppercase";
+
+const btnClass1 =
+  "btn-primary p-2 sm:p-3 rounded-xl transition-colors flex-shrink-0 ";
