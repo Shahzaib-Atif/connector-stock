@@ -38,10 +38,10 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
           </div>
         </div>
       </div>
-      {/* Color, Vias & Type */}
+      {/* Color, Vias, Type, Family */}
       <div
-        id="connector-metadata"
-        className="grid sm:grid-cols-3 gap-3 sm:gap-4 mb-4"
+        id="connector-metadata-1"
+        className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4"
       >
         <CardInfoDiv label="Color" value={connector.colorName} />
         <CardInfoDiv label="Vias" value={connector.viasName} />
@@ -50,7 +50,22 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
           label="Family"
           value={connector.details.Family?.toString() || "-"}
         />
+      </div>
+      {/* Color, Vias, Type, Family */}
+      <div
+        id="connector-metadata-2"
+        className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4"
+      >
         <CardInfoDiv label="Fabricante" value={connector.details.Fabricante} />
+        <CardInfoDiv
+          label="Refabricante"
+          value={connector.details.Refabricante}
+        />
+        <CardInfoDiv
+          classnames="col-span-2"
+          label="Obs."
+          value={connector.details.OBS}
+        />
       </div>
 
       {/* Client References */}
