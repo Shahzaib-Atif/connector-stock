@@ -2,6 +2,7 @@ import React from "react";
 import { QRData, Sample } from "@/utils/types";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
+import NoSamplesFound from "./NoSamplesFound";
 
 interface SamplesTableProps {
   samples: Sample[];
@@ -26,14 +27,7 @@ export const SamplesTable: React.FC<SamplesTableProps> = ({
         <TableHeader showActions={showActions} />
         <tbody>
           {samples.length === 0 ? (
-            <tr>
-              <td
-                colSpan={showActions ? 10 : 9}
-                className="table-row-not-found"
-              >
-                No samples found
-              </td>
-            </tr>
+            <NoSamplesFound showActions={showActions} />
           ) : (
             samples.map((sample, index) => (
               <TableRow
