@@ -20,7 +20,7 @@ export const parseConnector = (
   const refabricante = reference.details.Refabricante || "";
   const coords = getCoordinates(posId, masterData);
 
-  // Find associated accessories from the real API data
+  // Find associated accessories
   const accessories: Accessory[] = [];
   if (masterData.accessories) {
     Object.values(masterData.accessories).forEach((acc) => {
