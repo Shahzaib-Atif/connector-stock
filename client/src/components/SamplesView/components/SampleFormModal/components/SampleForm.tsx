@@ -9,7 +9,6 @@ import { useSampleForm } from "@/hooks/useSampleForm";
 import { FormField } from "./FormField";
 import { FORM_FIELDS_Type } from "./FormFieldType";
 import { FORM_FIELDS, labelClass, inputClass } from "./SampleFormFields";
-import { getConnectorId } from "@/utils/idUtils";
 
 interface Props {
   sample: Sample | null;
