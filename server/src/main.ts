@@ -4,10 +4,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication, Logger } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-import * as fs from 'fs';
 
 async function bootstrap() {
-  const httpsOptions = getHttpsOptions();
+  // const httpsOptions = getHttpsOptions();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     // httpsOptions,
   });
@@ -63,6 +62,7 @@ function serveStaticFiles(app: NestExpressApplication) {
   });
 }
 
+/*
 // Load HTTPS options from certs folder
 function getHttpsOptions() {
   const certsPath = join(process.cwd(), 'certs');
@@ -82,3 +82,4 @@ function getHttpsOptions() {
   };
   return httpsOptions;
 }
+*/
