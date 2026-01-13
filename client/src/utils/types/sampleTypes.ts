@@ -1,16 +1,16 @@
 export interface Sample {
   ID: number;
-  Cliente?: string;
+  Cliente: string;
+  Ref_Descricao: string;
+  EncDivmac: string;
+  Quantidade: string;
+  Amostra: string;
   Projeto?: string;
-  EncDivmac?: string;
-  Ref_Descricao?: string;
   Ref_Fornecedor?: string;
-  Amostra?: string;
   Data_do_pedido?: string;
   Data_recepcao?: string;
   Entregue_a?: string;
   N_Envio?: string;
-  Quantidade?: string;
   Observacoes?: string;
   NumORC?: string;
   CreatedBy?: string;
@@ -22,7 +22,3 @@ export interface Sample {
   com_fio?: boolean;
   associatedItemIds?: string[];
 }
-
-
-
-

@@ -1,24 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Sample } from "@/utils/types";
 
-export type SampleFormData = {
-  Cliente: string;
-  Projeto: string;
-  EncDivmac: string;
-  Ref_Descricao: string;
-  Ref_Fornecedor: string;
-  Amostra: string;
-  Data_do_pedido: string;
-  Data_recepcao: string;
-  Entregue_a: string;
-  N_Envio: string;
-  Quantidade: string;
-  Observacoes: string;
-  NumORC: string;
-  CreatedBy: string;
-  ActualUser: string;
-  com_fio: boolean;
-};
+export type SampleFormData = Omit<Sample, "ID" | "associatedItemIds">;
 
 const initialFormData: SampleFormData = {
   Cliente: "",
@@ -103,4 +86,3 @@ export function useSampleForm(sample: Sample | null) {
     setSelectedAccessoryIds,
   };
 }
-
