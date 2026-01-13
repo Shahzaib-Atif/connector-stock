@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
+import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
 
 @Injectable()
 export class AccessoryRepo {
@@ -47,9 +48,10 @@ export class AccessoryRepo {
     }
   }
 
-  async update(searchItem: string, amount: number) {
+  async update(searchItem: string, amount: number, tx?: TransactionClient) {
     try {
-      return await this.prisma.rEG_AccessoriesSamples.updateMany({
+      const client = tx || this.prisma;
+      return await client.rEG_AccessoriesSamples.updateMany({
         where: {
           AccImagePath: {
             contains: searchItem,
@@ -63,5 +65,22 @@ export class AccessoryRepo {
       console.error(ex.message);
       return null;
     }
+  }
+
+  async adjustQuantity(
+    tx: TransactionClient,
+    searchItem: string,
+    delta: number,
+  ) {
+    if (!searchItem || !delta) return;
+
+    await tx.rEG_AccessoriesSamples.updateMany({
+      where: {
+        AccImagePath: {
+          contains: searchItem,
+        },
+      },
+      data: { Qty: { increment: delta } },
+    });
   }
 }

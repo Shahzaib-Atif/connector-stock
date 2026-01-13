@@ -9,6 +9,8 @@ import { useSampleForm } from "@/hooks/useSampleForm";
 import { FormField } from "./FormField";
 import { FORM_FIELDS_Type } from "./FormFieldType";
 import { FORM_FIELDS, labelClass, inputClass } from "./SampleFormFields";
+import { useAssociatedAccessories } from "@/hooks/useAssociatedAccessories";
+import AccessoryChecklist from "@/components/TransactionModal/components/AccessoryChecklist";
 
 interface Props {
   sample: Sample | null;
@@ -29,8 +31,24 @@ export const SampleForm: React.FC<Props> = ({
   );
   const { data: masterData } = useAppSelector((state) => state.masterData);
   const { user } = useAppSelector((state) => state.auth);
-  const { formData, handleChange } = useSampleForm(sample);
+  const {
+    formData,
+    handleChange,
+    selectedAccessoryIds,
+    setSelectedAccessoryIds,
+  } = useSampleForm(sample);
   const [formError, setFormError] = React.useState<string | null>(null);
+
+  // Extract connector ID for accessories
+  const connectorId = React.useMemo(() => {
+    const amostra = formData.Amostra || "";
+    if (amostra.includes("+")) {
+      return amostra.split("+")[0].trim().substring(0, 6);
+    }
+    return amostra.trim();
+  }, [formData.Amostra]);
+
+  const { associatedAccessories } = useAssociatedAccessories(connectorId);
 
   // Get connector options for autocomplete
   const connectorOptions = React.useMemo(() => {
@@ -58,6 +76,18 @@ export const SampleForm: React.FC<Props> = ({
       return;
     }
 
+    // Validate Connector Existence
+    const connectorExists =
+      masterData?.connectors &&
+      Object.keys(masterData.connectors).includes(formData.Amostra);
+
+    if (!connectorExists) {
+      setFormError(
+        `Connector ${formData.Amostra} not found in the inventory system.`
+      );
+      return;
+    }
+
     try {
       const currentUser = user || "system";
 
@@ -70,6 +100,7 @@ export const SampleForm: React.FC<Props> = ({
               Amostra: formData.Amostra,
               LasUpdateBy: currentUser,
               ActualUser: currentUser,
+              associatedItemIds: selectedAccessoryIds,
             },
           })
         ).unwrap();
@@ -80,12 +111,17 @@ export const SampleForm: React.FC<Props> = ({
             Amostra: formData.Amostra,
             CreatedBy: currentUser,
             ActualUser: currentUser,
+            associatedItemIds: selectedAccessoryIds,
           })
         ).unwrap();
       }
+
       onSuccess();
     } catch (err) {
       console.error(err);
+      setFormError(
+        typeof err === "string" ? err : err.message || "An error occurred."
+      );
     }
   };
 
@@ -134,6 +170,16 @@ export const SampleForm: React.FC<Props> = ({
           rows={2}
           className={inputClass}
           placeholder="Notes and observations"
+        />
+      </div>
+
+      {/* Associated Accessories Checklist */}
+      <div className="mt-6">
+        <AccessoryChecklist
+          associatedAccessories={associatedAccessories}
+          selectedAccessoryIds={selectedAccessoryIds}
+          setSelectedAccessoryIds={setSelectedAccessoryIds}
+          transactionType="IN"
         />
       </div>
 

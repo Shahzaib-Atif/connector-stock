@@ -16,6 +16,7 @@ export type CreateSampleDto = {
   CreatedBy?: string;
   ActualUser?: string;
   com_fio?: boolean;
+  associatedItemIds?: string[];
 };
 
 export type UpdateSampleDto = CreateSampleDto & {

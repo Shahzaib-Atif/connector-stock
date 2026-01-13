@@ -41,6 +41,9 @@ const initialFormData: SampleFormData = {
 
 export function useSampleForm(sample: Sample | null) {
   const [formData, setFormData] = useState<SampleFormData>(initialFormData);
+  const [selectedAccessoryIds, setSelectedAccessoryIds] = useState<string[]>(
+    []
+  );
 
   useEffect(() => {
     // If editing an existing sample, populate fields
@@ -89,7 +92,15 @@ export function useSampleForm(sample: Sample | null) {
 
   const reset = useCallback(() => {
     setFormData(initialFormData);
+    setSelectedAccessoryIds([]);
   }, []);
 
-  return { formData, handleChange, reset };
+  return {
+    formData,
+    handleChange,
+    reset,
+    selectedAccessoryIds,
+    setSelectedAccessoryIds,
+  };
 }
+

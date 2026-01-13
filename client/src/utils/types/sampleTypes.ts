@@ -20,7 +20,9 @@ export interface Sample {
   IsActive?: boolean;
   ActualUser?: string;
   com_fio?: boolean;
+  associatedItemIds?: string[];
 }
+
 
 
 

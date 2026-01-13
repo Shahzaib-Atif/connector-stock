@@ -30,10 +30,14 @@ export class SamplesRepo {
   }
 
   async createSample(dto: CreateSampleDto) {
+    // Remove associatedItemIds from dto before creating prisma record
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { associatedItemIds, ...sampleData } = dto;
+
     try {
       return await this.prisma.rEG_Amostras.create({
         data: {
-          ...dto,
+          ...sampleData,
           IsActive: true,
           DateOfCreation: new Date(),
         },
@@ -46,10 +50,13 @@ export class SamplesRepo {
 
   async updateSample(id: number, dto: UpdateSampleDto) {
     try {
+      // Remove associatedItemIds from dto before creating prisma record
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { associatedItemIds, ...sampleData } = dto;
       return await this.prisma.rEG_Amostras.update({
         where: { ID: id },
         data: {
-          ...dto,
+          ...sampleData,
           DateOfLastUpdate: new Date().toISOString(),
         },
       });

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateTransactionsDto } from 'src/dtos/transaction.dto';
+import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
 
 @Injectable()
 export class TransactionsRepo {
@@ -19,9 +20,10 @@ export class TransactionsRepo {
     }
   }
 
-  async addTransaction(dto: CreateTransactionsDto) {
+  async addTransaction(dto: CreateTransactionsDto, tx?: TransactionClient) {
     try {
-      return await this.prisma.transactions.create({ data: dto });
+      const client = tx || this.prisma;
+      return await client.transactions.create({ data: dto });
     } catch (ex) {
       console.error('Failed to add transaction:', ex);
       return null; // at least signals failure

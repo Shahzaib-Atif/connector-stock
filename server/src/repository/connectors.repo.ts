@@ -71,9 +71,10 @@ export class ConnectorRepo {
     }
   }
 
-  async update(codivmacId: string, amount: number) {
+  async update(codivmacId: string, amount: number, tx?: TransactionClient) {
     try {
-      return await this.prisma.connectors_Main.update({
+      const client = tx || this.prisma;
+      return await client.connectors_Main.update({
         where: {
           CODIVMAC: codivmacId,
         },
