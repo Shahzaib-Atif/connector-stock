@@ -248,3 +248,47 @@ model Notification_Users {
   FinishedDate   DateTime?
   CompletionNote String?   @db.VarChar(100)
 }
+
+model V_AnaliseTab {
+  Encomenda          String
+  NumLinha           Int
+  Estado             String
+  Quantidade         Float?
+  Artigo             String?
+  Descricao          String?
+  Conector           String
+  RefCliente         String
+  Cliente            String?
+  Sector             String?
+  DataAbertura       DateTime?
+  DataEntrega        DateTime?
+  CDU_ProjetoCliente String?
+
+  @@id([Encomenda, Conector, RefCliente])
+  @@map("V_AnaliseTab")
+}
+
+model V_RegAmostrasEnc {
+  cdu_projeto            String
+  CDU_ModuloRefCliente   String
+  nome                   String?
+  CDU_ProjetoCliente     String?
+  CDU_ModuloRefConetorDV String?
+  ID                     Int
+  Cliente                String
+  Projeto                String
+  NumORC                 String
+  EncDivmac              String
+  Ref_Descricao          String
+  Ref_Fornecedor         String
+  Amostra                String
+  Data_do_pedido         DateTime
+  Data_recepcao          DateTime
+  Entregue_a             String
+  N_Envio                String
+  Quantidade             String
+  Observacoes            String
+
+  @@id([cdu_projeto, CDU_ModuloRefCliente, ID])
+  @@map("V_RegAmostrasEnc")
+}
