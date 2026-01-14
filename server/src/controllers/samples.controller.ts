@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { SamplesService } from 'src/services/samples.service';
@@ -20,6 +21,24 @@ export class SamplesController {
   @Get('')
   async getAllSamples() {
     return await this.service.getAllSamples();
+  }
+
+  @Get('analise-tab/:refCliente')
+  async getAnaliseTabByRefCliente(@Param('refCliente') refCliente: string) {
+    return await this.service.getAnaliseTabByRefCliente(refCliente);
+  }
+
+  @Get('reg-amostras-enc/:refCliente')
+  async getRegAmostrasEnc(
+    @Param('refCliente') refCliente: string,
+    @Query('projeto') projeto: string,
+    @Query('conectorDV') conectorDV: string,
+  ) {
+    return await this.service.getRegAmostrasEnc(
+      refCliente,
+      projeto,
+      conectorDV,
+    );
   }
 
   @Get(':id')

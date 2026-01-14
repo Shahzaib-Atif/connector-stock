@@ -35,6 +35,16 @@ export class SamplesService {
     return this.samplesRepo.getSampleById(id);
   }
 
+  /** Get AnaliseTab data by RefCliente for multi-step sample creation */
+  getAnaliseTabByRefCliente(refCliente: string) {
+    return this.samplesRepo.getAnaliseTabByRefCliente(refCliente);
+  }
+
+  /** Get RegAmostrasEnc data with filters for multi-step sample creation */
+  getRegAmostrasEnc(refCliente: string, projeto: string, conectorDV: string) {
+    return this.samplesRepo.getRegAmostrasEnc(refCliente, projeto, conectorDV);
+  }
+
   // Create sample and process transactions atomically
   async createSample(dto: CreateSampleDto) {
     return await this.prisma.$transaction(async (tx) => {

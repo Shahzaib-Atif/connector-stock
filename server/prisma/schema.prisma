@@ -282,8 +282,8 @@ model V_RegAmostrasEnc {
   Ref_Descricao          String
   Ref_Fornecedor         String
   Amostra                String
-  Data_do_pedido         DateTime
-  Data_recepcao          DateTime
+  Data_do_pedido         String?
+  Data_recepcao          String?
   Entregue_a             String
   N_Envio                String
   Quantidade             String

@@ -82,4 +82,37 @@ export class SamplesRepo {
       return null;
     }
   }
+
+  /** Get AnaliseTab data by RefCliente for sample creation wizard */
+  async getAnaliseTabByRefCliente(refCliente: string) {
+    try {
+      return await this.prisma.v_AnaliseTab.findMany({
+        where: { RefCliente: refCliente },
+        orderBy: { DataAbertura: 'desc' },
+      });
+    } catch (ex: any) {
+      console.error('Failed to get AnaliseTab data:', ex.message);
+      return [];
+    }
+  }
+
+  /** Get RegAmostrasEnc data filtered by RefCliente, projeto, and conectorDV */
+  async getRegAmostrasEnc(
+    refCliente: string,
+    projeto: string,
+    conectorDV: string,
+  ) {
+    try {
+      return await this.prisma.v_RegAmostrasEnc.findMany({
+        where: {
+          CDU_ModuloRefCliente: refCliente,
+          cdu_projeto: projeto,
+          CDU_ModuloRefConetorDV: conectorDV,
+        },
+      });
+    } catch (ex: any) {
+      console.error('Failed to get RegAmostrasEnc data:', ex.message);
+      return [];
+    }
+  }
 }
