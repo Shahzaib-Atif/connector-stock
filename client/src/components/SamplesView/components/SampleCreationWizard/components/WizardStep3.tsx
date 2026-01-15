@@ -87,10 +87,10 @@ function WizardStep3({
                     <input
                       type="radio"
                       checked={
-                        selectedRegRow.CDU_ModuloRefCliente ===
-                          row.CDU_ModuloRefCliente &&
-                        selectedRegRow.CDU_ModuloRefConetorDV ===
-                          row.CDU_ModuloRefConetorDV
+                        selectedRegRow?.CDU_ModuloRefCliente ===
+                          row?.CDU_ModuloRefCliente &&
+                        selectedRegRow?.CDU_ModuloRefConetorDV ===
+                          row?.CDU_ModuloRefConetorDV
                       }
                       onChange={() => selectRegRow(row)}
                       className="w-4 h-4"
