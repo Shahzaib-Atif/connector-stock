@@ -110,6 +110,13 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
 
   const selectRegRow = useCallback((row: RegAmostrasEncRow) => {
     setSelectedRegRow(row);
+    
+    // Validate that ID is 0
+    if (row.ID !== 0) {
+      setError("Cannot create a register for a row with ID != 0. Please select a row with ID = 0.");
+    } else {
+      setError(null);
+    }
   }, []);
 
   const getPrefillData = useCallback((): Partial<SampleFormData> => {

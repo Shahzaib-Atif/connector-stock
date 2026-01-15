@@ -36,6 +36,12 @@ export const SampleCreationWizard: React.FC<SampleCreationWizardProps> = ({
   } = useSampleCreationWizard();
 
   const handleCreateRegister = () => {
+    // Validate that ID is 0
+    if (selectedRegRow && selectedRegRow.ID !== 0) {
+      // Error will be displayed in WizardStep3 via the error prop
+      return;
+    }
+    
     const prefillData = getPrefillData();
     onProceedToForm(prefillData);
     reset();
