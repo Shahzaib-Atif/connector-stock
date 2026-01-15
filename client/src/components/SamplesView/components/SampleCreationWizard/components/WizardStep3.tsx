@@ -86,7 +86,12 @@ function WizardStep3({
                   <td className="px-3 py-2">
                     <input
                       type="radio"
-                      checked={selectedRegRow === row}
+                      checked={
+                        selectedRegRow.CDU_ModuloRefCliente ===
+                          row.CDU_ModuloRefCliente &&
+                        selectedRegRow.CDU_ModuloRefConetorDV ===
+                          row.CDU_ModuloRefConetorDV
+                      }
                       onChange={() => selectRegRow(row)}
                       className="w-4 h-4"
                     />
