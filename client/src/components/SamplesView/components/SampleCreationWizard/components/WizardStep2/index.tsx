@@ -1,6 +1,7 @@
 import { AnaliseTabRow } from "@/types/sampleCreation";
-import { ArrowLeft, Database, Filter } from "lucide-react";
-import { useState, useMemo } from "react";
+import { ArrowLeft, Database } from "lucide-react";
+import Filters from "./Filters";
+import useFilters from "./useFilters";
 
 interface Props {
   loading: boolean;
@@ -22,24 +23,17 @@ function WizardStep2({
   selectAnaliseRow,
   proceedToRegAmostras,
 }: Props) {
-  const [estadoFilter, setEstadoFilter] = useState("");
-  const [encomendaFilter, setEncomendaFilter] = useState("");
-
-  // Filter the data based on estado and encomenda
-  const filteredData = useMemo(() => {
-    return analiseTabData.filter((row) => {
-      const matchesEstado = estadoFilter
-        ? row.Estado.toLowerCase().includes(estadoFilter.toLowerCase())
-        : true;
-      const matchesEncomenda = encomendaFilter
-        ? row.Encomenda.toLowerCase().includes(encomendaFilter.toLowerCase())
-        : true;
-      return matchesEstado && matchesEncomenda;
-    });
-  }, [analiseTabData, estadoFilter, encomendaFilter]);
+  const {
+    estadoFilter,
+    setEstadoFilter,
+    encomendaFilter,
+    setEncomendaFilter,
+    uniqueEstados,
+    filteredData,
+  } = useFilters(analiseTabData);
 
   return (
-    <div className="p-6">
+    <div className="p-6 min-w-[48rem]">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-white flex items-center">
           <Database className="w-5 h-5 mr-2" />
@@ -61,46 +55,13 @@ function WizardStep2({
       )}
 
       {/* Filters */}
-      <div className="mb-4 flex gap-3 items-center bg-slate-800/50 p-4 rounded-lg border border-slate-700">
-        <Filter className="w-5 h-5 text-slate-400" />
-        <div className="flex gap-3 flex-1">
-          <div className="flex-1">
-            <label className="block text-xs text-slate-400 mb-1">
-              Filter by Estado
-            </label>
-            <input
-              type="text"
-              value={estadoFilter}
-              onChange={(e) => setEstadoFilter(e.target.value)}
-              placeholder="Type to filter..."
-              className="w-full px-3 py-1.5 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div className="flex-1">
-            <label className="block text-xs text-slate-400 mb-1">
-              Filter by Encomenda
-            </label>
-            <input
-              type="text"
-              value={encomendaFilter}
-              onChange={(e) => setEncomendaFilter(e.target.value)}
-              placeholder="Type to filter..."
-              className="w-full px-3 py-1.5 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          {(estadoFilter || encomendaFilter) && (
-            <button
-              onClick={() => {
-                setEstadoFilter("");
-                setEncomendaFilter("");
-              }}
-              className="self-end px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-lg text-sm transition-colors"
-            >
-              Clear
-            </button>
-          )}
-        </div>
-      </div>
+      <Filters
+        encomendaFilter={encomendaFilter}
+        estadoFilter={estadoFilter}
+        setEncomendaFilter={setEncomendaFilter}
+        setEstadoFilter={setEstadoFilter}
+        uniqueEstados={uniqueEstados}
+      />
 
       <div className="mb-4 bg-slate-700/50 rounded-lg p-4 overflow-x-auto max-h-96">
         <table className="w-full text-sm">
