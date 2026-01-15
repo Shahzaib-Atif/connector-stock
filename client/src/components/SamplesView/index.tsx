@@ -12,6 +12,8 @@ import { DetailHeader } from "../common/DetailHeader";
 import { SamplesTable } from "./components/SamplesTable";
 import { Pagination } from "../common/Pagination";
 import { SampleFormModal } from "./components/SampleFormModal";
+import { SampleCreationWizard } from "./components/SampleCreationWizard";
+import { SampleFormData } from "@/hooks/useSampleForm";
 import Spinner from "../common/Spinner";
 import DeleteDialog from "../common/DeleteDialog";
 import { FilterBar } from "../common/FilterBar";
@@ -46,6 +48,8 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSample, setEditingSample] = useState<Sample | null>(null);
   const [duplicateSample, setDuplicateSample] = useState<Sample | null>(null);
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const [prefillData, setPrefillData] = useState<Partial<SampleFormData> | undefined>();
 
   // Fetch samples on mount (only if not already loaded)
   useEffect(() => {
@@ -86,10 +90,26 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
     setIsModalOpen(false);
     setEditingSample(null);
     setDuplicateSample(null);
+    setPrefillData(undefined);
   };
 
   const handleSaveSuccess = () => {
     handleModalClose();
+  };
+
+  const handleOpenWizard = () => {
+    setIsWizardOpen(true);
+  };
+
+  const handleWizardClose = () => {
+    setIsWizardOpen(false);
+  };
+
+  const handleProceedToForm = (data: Partial<SampleFormData>) => {
+    setPrefillData(data);
+    setEditingSample(null);
+    setDuplicateSample(null);
+    setIsModalOpen(true);
   };
 
   // Show spinner only when loading
@@ -108,14 +128,22 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
       <div id="samples-content" className="table-view-content">
         <div className="table-view-inner-content">
           {/* Action Bar */}
-          <div className="flex justify-end flex-none">
+          <div className="flex justify-end gap-3 flex-none">
             {isAuthenticated && (
-              <button
-                onClick={handleCreateNew}
-                className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-green-600/30"
-              >
-                + New Sample
-              </button>
+              <>
+                <button
+                  onClick={handleOpenWizard}
+                  className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-purple-600/30"
+                >
+                  Create from Reference
+                </button>
+                <button
+                  onClick={handleCreateNew}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-green-600/30"
+                >
+                  + New Sample
+                </button>
+              </>
             )}
           </div>
 
@@ -162,6 +190,14 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
           onClose={handleModalClose}
           onSuccess={handleSaveSuccess}
           forceCreate={!!duplicateSample}
+          initialData={prefillData}
+        />
+      )}
+
+      {isWizardOpen && (
+        <SampleCreationWizard
+          onClose={handleWizardClose}
+          onProceedToForm={handleProceedToForm}
         />
       )}
 

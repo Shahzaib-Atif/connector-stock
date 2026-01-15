@@ -5,7 +5,7 @@ import {
   createSampleThunk,
   updateSampleThunk,
 } from "@/store/slices/samplesSlice";
-import { useSampleForm } from "@/hooks/useSampleForm";
+import { useSampleForm, SampleFormData } from "@/hooks/useSampleForm";
 import { FormField } from "./FormField";
 import { FORM_FIELDS_Type } from "./FormFieldType";
 import { FORM_FIELDS, labelClass, inputClass } from "./SampleFormFields";
@@ -17,6 +17,7 @@ interface Props {
   onClose: () => void;
   onSuccess: () => void;
   isEditing: boolean;
+  initialData?: Partial<SampleFormData>;
 }
 
 export const SampleForm: React.FC<Props> = ({
@@ -24,6 +25,7 @@ export const SampleForm: React.FC<Props> = ({
   onClose,
   onSuccess,
   isEditing,
+  initialData,
 }) => {
   const dispatch = useAppDispatch();
   const { loading, error: reduxError } = useAppSelector(
@@ -36,7 +38,7 @@ export const SampleForm: React.FC<Props> = ({
     handleChange,
     selectedAccessoryIds,
     setSelectedAccessoryIds,
-  } = useSampleForm(sample);
+  } = useSampleForm(sample, initialData);
   const [formError, setFormError] = React.useState<string | null>(null);
 
   // Extract connector ID for accessories

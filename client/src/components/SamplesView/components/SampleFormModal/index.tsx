@@ -3,12 +3,14 @@ import { Sample } from "@/utils/types";
 import { ModalWrapper } from "@/components/common/ModalWrapper";
 import { FilePenLine } from "lucide-react";
 import { SampleForm } from "./components/SampleForm";
+import { SampleFormData } from "@/hooks/useSampleForm";
 
 interface SampleFormModalProps {
   sample: Sample | null;
   onClose: () => void;
   onSuccess: () => void;
   forceCreate?: boolean;
+  initialData?: Partial<SampleFormData>;
 }
 
 export const SampleFormModal: React.FC<SampleFormModalProps> = ({
@@ -16,6 +18,7 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
   onClose,
   onSuccess,
   forceCreate = false,
+  initialData,
 }) => {
   const isEditing = !!sample && !forceCreate;
 
@@ -31,7 +34,9 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
         isEditing={isEditing}
         onSuccess={onSuccess}
         onClose={onClose}
+        initialData={initialData}
       />
     </ModalWrapper>
   );
 };
+

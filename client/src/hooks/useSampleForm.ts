@@ -22,7 +22,10 @@ const initialFormData: SampleFormData = {
   com_fio: false,
 };
 
-export function useSampleForm(sample: Sample | null) {
+export function useSampleForm(
+  sample: Sample | null,
+  initialData?: Partial<SampleFormData>
+) {
   const [formData, setFormData] = useState<SampleFormData>(initialFormData);
   const [selectedAccessoryIds, setSelectedAccessoryIds] = useState<string[]>(
     []
@@ -49,11 +52,14 @@ export function useSampleForm(sample: Sample | null) {
         ActualUser: sample.ActualUser || "",
         com_fio: sample.com_fio ?? false,
       });
+    } else if (initialData) {
+      // If creating new with prefilled data from wizard, merge with initial
+      setFormData((prev) => ({ ...prev, ...initialData }));
     } else {
       // If creating new, reset to initial
       setFormData(initialFormData);
     }
-  }, [sample]);
+  }, [sample, initialData]);
 
   const handleChange = useCallback(
     (
