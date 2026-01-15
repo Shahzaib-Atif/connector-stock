@@ -1,5 +1,8 @@
 import { RegAmostrasEncRow } from "@/types/sampleCreation";
-import { ArrowLeft, FileCheck } from "lucide-react";
+import { ArrowLeft, FileCheck, ImageIcon } from "lucide-react";
+import { API } from "@/utils/api";
+import { getConnectorId } from "@/utils/idUtils";
+import { useState } from "react";
 
 interface Props {
   regAmostrasData: RegAmostrasEncRow[];
@@ -19,6 +22,12 @@ function WizardStep3({
   selectedRegRow,
   handleCreateRegister,
 }: Props) {
+  const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
+
+  const handleImgError = (id: string) => {
+    setImgErrors((prev) => ({ ...prev, [id]: true }));
+  };
+
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center justify-between">
@@ -45,7 +54,8 @@ function WizardStep3({
         <table className="w-full text-sm">
           <thead className="border-b border-slate-600">
             <tr className="text-slate-300">
-              <th className="px-3 py-2 text-left">Select</th>
+              <th className="px-3 py-2 text-left"></th>
+              <th className="px-3 py-2 text-left min-w-24">Picture</th>
               <th className="px-3 py-2 text-left">RefCliente</th>
               <th className="px-3 py-2 text-left min-w-32">Projeto</th>
               <th className="px-3 py-2 text-left">Amostra</th>
@@ -59,61 +69,82 @@ function WizardStep3({
             </tr>
           </thead>
           <tbody>
-            {regAmostrasData.map((row, idx) => (
-              <tr
-                key={idx}
-                className={`border-b border-slate-700 hover:bg-slate-600/50 cursor-pointer ${
-                  selectedRegRow === row ? "bg-blue-600/30" : ""
-                }`}
-                onClick={() => selectRegRow(row)}
-              >
-                <td className="px-3 py-2">
-                  <input
-                    type="radio"
-                    checked={selectedRegRow === row}
-                    onChange={() => selectRegRow(row)}
-                    className="w-4 h-4"
-                  />
-                </td>
-                <td className="px-3 py-2 text-white">
-                  {row.CDU_ModuloRefCliente}
-                </td>
-                <td className="px-3 py-2 text-white">
-                  {row.CDU_ProjetoCliente}
-                </td>
-                <td className="px-3 py-2 text-white">
-                  {row.CDU_ModuloRefConetorDV}
-                </td>
-                <td className="px-5 py-2 text-slate-300">{row.ID}</td>
-                <td className="px-3 py-2 text-slate-300">
-                  {row.nome?.trim() || "-"}
-                </td>
-                <td className="px-3 py-2 text-slate-300">
-                  {row.cdu_projeto.trim() || "-"}
-                </td>
-                <td className="px-3 py-2 text-slate-300">
-                  {row.Entregue_a.trim() || "-"}
-                </td>
-                <td className="px-3 py-2 text-slate-300">
-                  {row.N_Envio.trim() || "-"}
-                </td>
+            {regAmostrasData.map((row, idx) => {
+              const connectorId = getConnectorId(
+                row.CDU_ModuloRefConetorDV || ""
+              );
+              const hasError = imgErrors[connectorId];
 
-                <td className="px-3 py-2 text-slate-300">
-                  {row.Data_do_pedido
-                    ? (() => {
-                        try {
-                          const date = new Date(row.Data_do_pedido);
-                          return !isNaN(date.getTime())
-                            ? date.toLocaleDateString()
-                            : "-";
-                        } catch {
-                          return "-";
-                        }
-                      })()
-                    : "-"}
-                </td>
-              </tr>
-            ))}
+              return (
+                <tr
+                  key={idx}
+                  className={`border-b border-slate-700 hover:bg-slate-600/50 cursor-pointer ${
+                    selectedRegRow === row ? "bg-blue-600/30" : ""
+                  }`}
+                  onClick={() => selectRegRow(row)}
+                >
+                  <td className="px-3 py-2">
+                    <input
+                      type="radio"
+                      checked={selectedRegRow === row}
+                      onChange={() => selectRegRow(row)}
+                      className="w-4 h-4"
+                    />
+                  </td>
+                  <td className="px-3 py-2">
+                    <div className="w-16 h-16 rounded-lg bg-slate-800 border border-slate-700 overflow-hidden flex items-center justify-center">
+                      {!hasError ? (
+                        <img
+                          src={API.connectorImages(connectorId)}
+                          alt={connectorId}
+                          className="w-full h-full object-contain"
+                          onError={() => handleImgError(connectorId)}
+                        />
+                      ) : (
+                        <ImageIcon className="w-6 h-6 text-slate-600" />
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-3 py-2 text-white">
+                    {row.CDU_ModuloRefCliente}
+                  </td>
+                  <td className="px-3 py-2 text-white">
+                    {row.CDU_ProjetoCliente}
+                  </td>
+                  <td className="px-3 py-2 text-white">
+                    {row.CDU_ModuloRefConetorDV}
+                  </td>
+                  <td className="px-5 py-2 text-slate-300">{row.ID}</td>
+                  <td className="px-3 py-2 text-slate-300">
+                    {row.nome?.trim() || "-"}
+                  </td>
+                  <td className="px-3 py-2 text-slate-300">
+                    {row.cdu_projeto.trim() || "-"}
+                  </td>
+                  <td className="px-3 py-2 text-slate-300">
+                    {row.Entregue_a.trim() || "-"}
+                  </td>
+                  <td className="px-3 py-2 text-slate-300">
+                    {row.N_Envio.trim() || "-"}
+                  </td>
+
+                  <td className="px-3 py-2 text-slate-300">
+                    {row.Data_do_pedido
+                      ? (() => {
+                          try {
+                            const date = new Date(row.Data_do_pedido);
+                            return !isNaN(date.getTime())
+                              ? date.toLocaleDateString()
+                              : "-";
+                          } catch {
+                            return "-";
+                          }
+                        })()
+                      : "-"}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
