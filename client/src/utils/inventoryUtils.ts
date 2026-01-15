@@ -12,8 +12,11 @@ export const getCoordinates = (
   return null;
 };
 
-const BASE_URL = "http://192.168.3.164:59876";
+// const BASE_URL = "http://192.168.3.164:59876";
+const BASE_URL = import.meta.env.VITE_PRI_API_BASE_URL;
 export async function setLineStatus(CDU_Projeto: string, clientRef: string) {
+  if (!BASE_URL) console.error("VITE_PRI_API_BASE_URL was not found!");
+
   const serie = CDU_Projeto.slice(0, 2);
   const enc = CDU_Projeto.slice(2, 6);
 
