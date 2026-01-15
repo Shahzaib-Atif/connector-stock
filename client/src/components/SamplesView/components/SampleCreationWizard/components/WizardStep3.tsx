@@ -46,12 +46,11 @@ function WizardStep3({
           <thead className="border-b border-slate-600">
             <tr className="text-slate-300">
               <th className="px-3 py-2 text-left">Select</th>
-              <th className="px-3 py-2 text-left">CDU_ModuloRefCliente</th>
-              <th className="px-3 py-2 text-left">CDU_ProjetoCliente</th>
-              <th className="px-3 py-2 text-left">CDU_ModuloRefConetorDV</th>
-              <th className="px-3 py-2 text-left">ID</th>
-              <th className="px-3 py-2 text-left">Cliente</th>
+              <th className="px-3 py-2 text-left">RefCliente</th>
               <th className="px-3 py-2 text-left">Projeto</th>
+              <th className="px-3 py-2 text-left">Amostra</th>
+              <th className="px-5 py-2 text-left">ID</th>
+              <th className="px-3 py-2 text-left">Cliente</th>
               <th className="px-3 py-2 text-left">EncDivmac</th>
               <th className="px-3 py-2 text-left">Entregue_a</th>
               <th className="px-3 py-2 text-left">N_Envio</th>
@@ -85,14 +84,19 @@ function WizardStep3({
                 <td className="px-3 py-2 text-white">
                   {row.CDU_ModuloRefConetorDV}
                 </td>
-                <td className="px-3 py-2 text-slate-300">{row.ID}</td>
+                <td className="px-5 py-2 text-slate-300">{row.ID}</td>
                 <td className="px-3 py-2 text-slate-300">
-                  {row.Cliente?.trim() || "-"}
+                  {row.nome?.trim() || "-"}
                 </td>
-                <td className="px-3 py-2 text-slate-300">{row.Projeto}</td>
-                <td className="px-3 py-2 text-slate-300">{row.EncDivmac}</td>
-                <td className="px-3 py-2 text-slate-300">{row.Entregue_a}</td>
-                <td className="px-3 py-2 text-slate-300">{row.N_Envio}</td>
+                <td className="px-3 py-2 text-slate-300">
+                  {row.cdu_projeto.trim() || "-"}
+                </td>
+                <td className="px-3 py-2 text-slate-300">
+                  {row.Entregue_a.trim() || "-"}
+                </td>
+                <td className="px-3 py-2 text-slate-300">
+                  {row.N_Envio.trim() || "-"}
+                </td>
 
                 <td className="px-3 py-2 text-slate-300">
                   {row.Data_do_pedido

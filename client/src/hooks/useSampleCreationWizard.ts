@@ -1,8 +1,5 @@
 import { useState, useCallback } from "react";
-import {
-  AnaliseTabRow,
-  RegAmostrasEncRow,
-} from "@/types/sampleCreation";
+import { AnaliseTabRow, RegAmostrasEncRow } from "@/types/sampleCreation";
 import {
   fetchAnaliseTabData,
   fetchRegAmostrasEncData,
@@ -129,12 +126,12 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
     };
 
     return {
-      Cliente: selectedRegRow.Cliente,
-      Projeto: selectedRegRow.Projeto,
-      EncDivmac: selectedRegRow.EncDivmac,
-      Ref_Descricao: selectedRegRow.Ref_Descricao,
+      Ref_Descricao: selectedRegRow.CDU_ModuloRefCliente,
+      Amostra: selectedRegRow.CDU_ModuloRefConetorDV,
+      Projeto: selectedRegRow.CDU_ProjetoCliente,
+      EncDivmac: selectedRegRow.cdu_projeto,
+      Cliente: selectedRegRow.nome,
       Ref_Fornecedor: selectedRegRow.Ref_Fornecedor,
-      Amostra: selectedRegRow.Amostra,
       Data_do_pedido: formatDate(selectedRegRow.Data_do_pedido),
       Data_recepcao: formatDate(selectedRegRow.Data_recepcao),
       Entregue_a: selectedRegRow.Entregue_a,
