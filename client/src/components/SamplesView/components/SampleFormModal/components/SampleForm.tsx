@@ -84,6 +84,7 @@ export const SampleForm: React.FC<Props> = ({
       masterData?.connectors &&
       Object.keys(masterData.connectors).includes(formData.Amostra);
 
+    // show warning if connector does not exisit
     if (!connectorExists) {
       if (!firstWarningIssued) {
         setFormError(
@@ -91,7 +92,7 @@ export const SampleForm: React.FC<Props> = ({
         );
         setFirstWarningIssued(true);
         return;
-      } else setFirstWarningIssued(false); // reset
+      } else setFirstWarningIssued(false); // reset warning flag
     }
 
     try {

@@ -6,6 +6,7 @@ import {
   deleteSample,
 } from "@/api/samplesApi";
 import { Sample } from "@/utils/types";
+import { setLineStatus } from "@/utils/inventoryUtils";
 
 interface SamplesState {
   samples: Sample[];
@@ -41,7 +42,8 @@ export const createSampleThunk = createAsyncThunk(
       "ID" | "IsActive" | "DateOfCreation" | "DateOfLastUpdate"
     >
   ) => {
-    const sample = await createSample(sampleData);
+    const sample = await createSample(sampleData); // create sample
+    setLineStatus(sample.EncDivmac, sample.Ref_Descricao);
     return sample;
   }
 );
