@@ -47,10 +47,10 @@ function WizardStep3({
             <tr className="text-slate-300">
               <th className="px-3 py-2 text-left">Select</th>
               <th className="px-3 py-2 text-left">RefCliente</th>
-              <th className="px-3 py-2 text-left">Projeto</th>
+              <th className="px-3 py-2 text-left min-w-32">Projeto</th>
               <th className="px-3 py-2 text-left">Amostra</th>
               <th className="px-5 py-2 text-left">ID</th>
-              <th className="px-3 py-2 text-left">Cliente</th>
+              <th className="px-3 py-2 text-left min-w-32">Cliente</th>
               <th className="px-3 py-2 text-left">EncDivmac</th>
               <th className="px-3 py-2 text-left">Entregue_a</th>
               <th className="px-3 py-2 text-left">N_Envio</th>

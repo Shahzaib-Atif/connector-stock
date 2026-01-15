@@ -50,7 +50,7 @@ function WizardStep2({
               <th className="px-3 py-2 text-left">Select</th>
               <th className="px-3 py-2 text-left">Encomenda</th>
               <th className="px-3 py-2 text-left">Conector</th>
-              <th className="px-3 py-2 text-left">Cliente</th>
+              <th className="px-3 py-2 text-left min-w-32">Cliente</th>
               <th className="px-3 py-2 text-left">Estado</th>
               <th className="px-3 py-2 text-left">Quantidade</th>
             </tr>

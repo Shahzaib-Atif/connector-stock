@@ -22,7 +22,7 @@ function WizardStep1({
           <Search className="inline-block w-4 h-4 mr-1" />
           Enter RefCliente
         </label>
-        <div className="flex gap-3">
+        <div className="flex gap-5 sm:gap-3 flex-col sm:flex-row">
           <input
             type="text"
             value={refCliente}
