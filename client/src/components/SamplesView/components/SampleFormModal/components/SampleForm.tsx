@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Sample } from "@/utils/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
@@ -40,6 +40,7 @@ export const SampleForm: React.FC<Props> = ({
     setSelectedAccessoryIds,
   } = useSampleForm(sample, initialData);
   const [formError, setFormError] = React.useState<string | null>(null);
+  const [firstWarningIssued, setFirstWarningIssued] = useState(false);
 
   // Extract connector ID for accessories
   const connectorId = React.useMemo(() => {
@@ -84,10 +85,13 @@ export const SampleForm: React.FC<Props> = ({
       Object.keys(masterData.connectors).includes(formData.Amostra);
 
     if (!connectorExists) {
-      setFormError(
-        `Connector ${formData.Amostra} not found in the inventory system.`
-      );
-      return;
+      if (!firstWarningIssued) {
+        setFormError(
+          `Connector ${formData.Amostra} not found in the inventory system. Click the Create button again if you still want to proceed.`
+        );
+        setFirstWarningIssued(true);
+        return;
+      } else setFirstWarningIssued(false); // reset
     }
 
     try {
