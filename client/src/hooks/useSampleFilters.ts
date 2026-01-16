@@ -6,7 +6,8 @@ export type FilterColumn =
   | "cliente"
   | "refDescricao"
   | "encDivmac"
-  | "amostra";
+  | "amostra"
+  | "numORC";
 
 interface SampleFilters {
   filterColumn: FilterColumn;
@@ -83,5 +84,7 @@ const getColumnValue = (sample: Sample, column: string) => {
       return sample.EncDivmac?.toLowerCase() ?? "";
     case "amostra":
       return sample.Amostra?.toLowerCase() ?? "";
+    case "numORC":
+      return sample.NumORC?.toLowerCase() ?? "";
   }
 };

@@ -31,6 +31,7 @@ const TableRow: React.FC<TableRowProps> = ({
     Amostra,
     Quantidade,
     N_Envio,
+    NumORC,
     Data_recepcao,
     com_fio,
     Observacoes,
@@ -60,6 +61,7 @@ const TableRow: React.FC<TableRowProps> = ({
       </td>
       <td className="table-data break-all">{Quantidade || "-"}</td>
       <td className="table-data">{N_Envio || "-"}</td>
+      <td className="table-data">{NumORC || "-"}</td>
       <td className="table-data break-all" title={Entregue_a}>
         {Entregue_a || "-"}
       </td>

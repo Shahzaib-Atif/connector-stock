@@ -16,6 +16,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({ showActions = true }) => {
         <th className="table-header-cell w-40">Amostra</th>
         <th className="table-header-cell w-24">Qty.</th>
         <th className="table-header-cell w-48">N_Envio</th>
+        <th className="table-header-cell w-32">NumORC</th>
         <th className="table-header-cell">Entregue_A</th>
         <th className="table-header-cell">Data Receção</th>
         <th className="table-header-cell w-32">Observacoes</th>

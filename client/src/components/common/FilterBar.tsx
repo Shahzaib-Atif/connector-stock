@@ -10,7 +10,8 @@ type filterColumns =
   | "cliente"
   | "refDescricao"
   | "encDivmac"
-  | "amostra";
+  | "amostra"
+  | "numORC";
 
 interface Props {
   filterColumn: filterColumns;

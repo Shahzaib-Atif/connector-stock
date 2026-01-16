@@ -49,7 +49,9 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   const [editingSample, setEditingSample] = useState<Sample | null>(null);
   const [duplicateSample, setDuplicateSample] = useState<Sample | null>(null);
   const [isWizardOpen, setIsWizardOpen] = useState(false);
-  const [prefillData, setPrefillData] = useState<Partial<SampleFormData> | undefined>();
+  const [prefillData, setPrefillData] = useState<
+    Partial<SampleFormData> | undefined
+  >();
 
   // Fetch samples on mount (only if not already loaded)
   useEffect(() => {
@@ -155,6 +157,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
               "refDescricao",
               "encDivmac",
               "amostra",
+              "numORC",
             ]}
             onFilterColumnChange={setFilterColumn}
             onSearchQueryChange={setSearchQuery}
