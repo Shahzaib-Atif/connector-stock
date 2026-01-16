@@ -292,3 +292,48 @@ model V_RegAmostrasEnc {
   @@id([cdu_projeto, CDU_ModuloRefCliente, ID])
   @@map("V_RegAmostrasEnc")
 }
+
+model V_RegAmostrasSemEnc {
+  ID             Int
+  Cliente        String
+  Projeto        String
+  NumORC         String
+  EncDivmac      String
+  Ref_Descricao  String
+  Ref_Fornecedor String
+  Amostra        String
+  Data_do_pedido String?
+  Data_recepcao  String?
+  Entregue_a     String
+  N_Envio        String
+  Quantidade     String
+  Observacoes    String
+
+  @@id([ID])
+  @@map("V_RegAmostrasSemEnc")
+}
+
+model V_RegAmostrasFromORC {
+  orcDoc                 String
+  CDU_ModuloRefCliente   String
+  CDU_ProjetoCliente     String
+  CDU_ModuloRefConetorDV String
+  Nome                   String
+  ID                     Int
+  Cliente                String
+  Projeto                String
+  NumORC                 String
+  EncDivmac              String
+  Ref_Descricao          String
+  Ref_Fornecedor         String
+  Amostra                String
+  Data_do_pedido         String?
+  Data_recepcao          String?
+  Entregue_a             String
+  N_Envio                String
+  Quantidade             String
+  Observacoes            String
+
+  @@id([orcDoc, CDU_ModuloRefCliente, ID])
+  @@map("V_RegAmostrasFromORC")
+}
