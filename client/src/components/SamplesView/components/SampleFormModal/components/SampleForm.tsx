@@ -79,6 +79,12 @@ export const SampleForm: React.FC<Props> = ({
       return;
     }
 
+    // validate connector has minimum length 6
+    if (formData.Amostra?.length < 6) {
+      setFormError("Amostra is not valid!");
+      return;
+    }
+
     // Validate Connector Existence
     const connectorExists =
       masterData?.connectors &&

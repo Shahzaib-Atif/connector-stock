@@ -66,7 +66,7 @@ const TableRow: React.FC<TableRowProps> = ({
         {Entregue_a || "-"}
       </td>
       <td className="table-data font-mono">{Data_recepcao || "-"}</td>
-      <td className="table-data font-mono">
+      <td className="table-data font-mono break-all">
         {getObservation(Observacoes, com_fio)}
       </td>
       {/* Action buttons */}

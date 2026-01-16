@@ -27,7 +27,6 @@ export class SamplesController {
   async getAnaliseTabByRefCliente(@Param('refCliente') refCliente: string) {
     return await this.service.getAnaliseTabByRefCliente(refCliente);
   }
-
   @Get('reg-amostras-enc/:refCliente')
   async getRegAmostrasEnc(
     @Param('refCliente') refCliente: string,
@@ -39,6 +38,11 @@ export class SamplesController {
       projeto,
       conectorDV,
     );
+  }
+
+  @Get('from-orc')
+  async getSamplesFromORC(@Query('numorc') numorc: string) {
+    return await this.service.getSamplesFromORC(numorc);
   }
 
   @Get(':id')

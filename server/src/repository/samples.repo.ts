@@ -115,4 +115,13 @@ export class SamplesRepo {
       return [];
     }
   }
+
+  /** Get samples starting from ORC documents (using V_RegAmostrasFromORC) */
+  async getSamplesFromORC(numorc: string) {
+    return this.prisma.v_RegAmostrasFromORC.findMany({
+      where: {
+        orcDoc: numorc,
+      },
+    });
+  }
 }

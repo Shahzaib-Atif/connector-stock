@@ -1,20 +1,20 @@
-import { RegAmostrasEncRow } from "@/types/sampleCreation";
+import { RegAmostrasOrcRow } from "@/types/sampleCreation";
 import { ArrowLeft, FileCheck, ImageIcon } from "lucide-react";
 import { API } from "@/utils/api";
 import { getConnectorId } from "@/utils/idUtils";
 import { useState } from "react";
 
 interface Props {
-  regAmostrasData: RegAmostrasEncRow[];
-  selectedRegRow: RegAmostrasEncRow | null;
+  regAmostrasData: RegAmostrasOrcRow[];
+  selectedRegRow: RegAmostrasOrcRow | null;
   handleCreateRegister: () => void;
-  selectRegRow: (row: RegAmostrasEncRow) => void;
+  selectRegRow: (row: RegAmostrasOrcRow) => void;
   reset: () => void;
   goBack: () => void;
   error: string | null;
 }
 
-function WizardStep3({
+function WizardStep2Orc({
   goBack,
   error,
   regAmostrasData,
@@ -33,7 +33,7 @@ function WizardStep3({
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-white flex items-center">
           <FileCheck className="w-5 h-5 mr-2" />
-          Select Sample Register
+          Select Sample Register (From ORC)
         </h3>
         <button
           onClick={goBack}
@@ -61,10 +61,9 @@ function WizardStep3({
               <th className="px-3 py-2 text-left">Amostra</th>
               <th className="px-5 py-2 text-left">ID</th>
               <th className="px-3 py-2 text-left min-w-32">Cliente</th>
-              <th className="px-3 py-2 text-left">EncDivmac</th>
+              <th className="px-3 py-2 text-left">ORC</th>
               <th className="px-3 py-2 text-left">Entregue_a</th>
               <th className="px-3 py-2 text-left">N_Envio</th>
-
               <th className="px-3 py-2 text-left">Data Pedido</th>
             </tr>
           </thead>
@@ -74,6 +73,12 @@ function WizardStep3({
                 row.CDU_ModuloRefConetorDV || ""
               );
               const hasError = imgErrors[connectorId];
+
+              const refCliente = row.CDU_ModuloRefCliente;
+              const conector = row.CDU_ModuloRefConetorDV;
+              const projeto = row.CDU_ProjetoCliente;
+              const orc = row.orcDoc;
+              const clientName = row.Nome;
 
               return (
                 <tr
@@ -88,9 +93,9 @@ function WizardStep3({
                       type="radio"
                       checked={
                         selectedRegRow?.CDU_ModuloRefCliente ===
-                          row?.CDU_ModuloRefCliente &&
+                          row.CDU_ModuloRefCliente &&
                         selectedRegRow?.CDU_ModuloRefConetorDV ===
-                          row?.CDU_ModuloRefConetorDV
+                          row.CDU_ModuloRefConetorDV
                       }
                       onChange={() => selectRegRow(row)}
                       className="w-4 h-4"
@@ -110,27 +115,21 @@ function WizardStep3({
                       )}
                     </div>
                   </td>
-                  <td className="px-3 py-2 text-white">
-                    {row.CDU_ModuloRefCliente}
-                  </td>
-                  <td className="px-3 py-2 text-white">
-                    {row.CDU_ProjetoCliente}
-                  </td>
-                  <td className="px-3 py-2 text-white">
-                    {row.CDU_ModuloRefConetorDV}
-                  </td>
+                  <td className="px-3 py-2 text-white">{refCliente}</td>
+                  <td className="px-3 py-2 text-white">{projeto}</td>
+                  <td className="px-3 py-2 text-white">{conector}</td>
                   <td className="px-5 py-2 text-slate-300">{row.ID}</td>
                   <td className="px-3 py-2 text-slate-300">
-                    {row.nome?.trim() || "-"}
+                    {clientName?.trim() || "-"}
                   </td>
                   <td className="px-3 py-2 text-slate-300">
-                    {row.cdu_projeto.trim() || "-"}
+                    {orc?.trim() || "-"}
                   </td>
                   <td className="px-3 py-2 text-slate-300">
-                    {row.Entregue_a.trim() || "-"}
+                    {row.Entregue_a?.trim() || "-"}
                   </td>
                   <td className="px-3 py-2 text-slate-300">
-                    {row.N_Envio.trim() || "-"}
+                    {row.N_Envio?.trim() || "-"}
                   </td>
 
                   <td className="px-3 py-2 text-slate-300">
@@ -157,14 +156,16 @@ function WizardStep3({
       <div className="flex justify-end">
         <button
           onClick={handleCreateRegister}
-          disabled={!selectedRegRow}
+          disabled={!selectedRegRow || !!error}
           className="px-6 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-green-600/30 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Create Register
+          {error && selectedRegRow && selectedRegRow.ID !== 0
+            ? "Already Registered"
+            : "Create Register"}
         </button>
       </div>
     </div>
   );
 }
 
-export default WizardStep3;
+export default WizardStep2Orc;

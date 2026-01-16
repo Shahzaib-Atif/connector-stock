@@ -45,6 +45,11 @@ export class SamplesService {
     return this.samplesRepo.getRegAmostrasEnc(refCliente, projeto, conectorDV);
   }
 
+  /** Get samples starting from ORC documents */
+  getSamplesFromORC(numorc: string) {
+    return this.samplesRepo.getSamplesFromORC(numorc);
+  }
+
   // Create sample and process transactions atomically
   async createSample(dto: CreateSampleDto) {
     return await this.prisma.$transaction(async (tx) => {

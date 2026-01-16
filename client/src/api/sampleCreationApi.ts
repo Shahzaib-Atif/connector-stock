@@ -1,6 +1,6 @@
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
-import { AnaliseTabRow, RegAmostrasEncRow } from "@/types/sampleCreation";
+import { AnaliseTabRow, RegAmostrasEncRow, RegAmostrasOrcRow } from "@/types/sampleCreation";
 
 /**
  * Fetch AnaliseTab data by RefCliente for the sample creation wizard (Step 1)
@@ -31,6 +31,18 @@ export const fetchRegAmostrasEncData = async (
   );
   if (!response.ok) {
     throw new Error("Failed to fetch RegAmostrasEnc data");
+  }
+  return response.json();
+};
+
+
+/**
+ * Fetch data starting from ORC documents
+ */
+export const fetchSamplesFromOrc = async (numorc: string): Promise<RegAmostrasOrcRow[]> => {
+  const response = await fetchWithAuth(`${API.samples}/from-orc?numorc=${encodeURIComponent(numorc)}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch samples from ORC");
   }
   return response.json();
 };
