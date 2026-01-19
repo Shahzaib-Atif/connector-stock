@@ -4,7 +4,7 @@ import { RegAmostrasEncRow, RegAmostrasOrcRow } from "@/types/sampleCreation";
 import WizardStep1 from "./components/WizardStep1";
 import WizardStep2 from "./components/WizardStep2";
 import WizardStep3Enc from "./components/WizardStep3Enc";
-import WizardStep2Orc from "./components/WizardStep2Orc";
+import WizardStep2Orc from "./components/WizardStep2Orc/index";
 import { SampleFormData } from "@/hooks/useSampleForm";
 import SampleWizardModalHeader from "./components/SampleWizardModalHeader";
 

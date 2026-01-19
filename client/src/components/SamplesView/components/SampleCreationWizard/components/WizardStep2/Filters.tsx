@@ -16,11 +16,11 @@ export default function Filters({
   uniqueEstados,
 }: Props) {
   return (
-    <div className="mb-4 flex gap-3 items-center bg-slate-800/50 p-4 rounded-lg border border-slate-700">
-      <Filter className="w-5 h-5 text-slate-400" />
-      <div className="flex gap-3 flex-1">
+    <div className="w-fit mb-4 flex gap-3 items-center bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+      <Filter className="sm:block hidden w-5 h-5 text-slate-400" />
+      <div className="flex gap-3 flex-1 flex-col sm:flex-row ">
         {/* Filter by Encomenda */}
-        <div className="flex-1">
+        <div className={filterDivClass}>
           <label className={labelClass}>Filter by Encomenda</label>
           <input
             type="text"
@@ -32,7 +32,7 @@ export default function Filters({
         </div>
 
         {/* Filter By Estado */}
-        <div className="flex-1">
+        <div className={filterDivClass}>
           <label className={labelClass}>Filter by Estado</label>
           <select
             value={estadoFilter}
@@ -55,7 +55,7 @@ export default function Filters({
             setEncomendaFilter("");
           }}
           disabled={!(estadoFilter || encomendaFilter)}
-          className="self-end px-4 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-lg text-sm transition-colors"
+          className="self-start sm:self-end mt-1 sm:mt-0 px-4 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-lg text-sm transition-colors"
         >
           Clear
         </button>
@@ -67,3 +67,4 @@ export default function Filters({
 const labelClass = "block text-xs text-slate-400 mb-1";
 const inputClass =
   "w-full px-3 py-1.5 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+const filterDivClass = "flex-1 min-w-64";
