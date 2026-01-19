@@ -29,5 +29,7 @@ export class RolesGuard implements CanActivate {
     // make sure this role is allowed to get access
     const hasRole = requiredRoles.some((role) => user?.role === role);
     if (!hasRole) throw new ForbiddenException(); // 403
+
+    return true;
   }
 }
