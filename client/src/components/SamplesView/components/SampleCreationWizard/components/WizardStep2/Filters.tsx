@@ -24,10 +24,12 @@ export default function Filters({
           <label className={labelClass}>Filter by Encomenda</label>
           <input
             type="text"
+            name="encomendaFilter"
             value={encomendaFilter}
             onChange={(e) => setEncomendaFilter(e.target.value)}
             placeholder="Type to filter..."
             className={inputClass}
+            autoComplete="on"
           />
         </div>
 

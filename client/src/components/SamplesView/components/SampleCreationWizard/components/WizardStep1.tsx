@@ -52,12 +52,18 @@ function WizardStep1({
           <Search className="inline-block w-4 h-4 mr-1" />
           {flow === "ECL" ? "Enter RefCliente" : "Enter Budget Number (ORC)"}
         </label>
-        <div className="flex gap-5 sm:gap-3 flex-col sm:flex-row">
+        <form 
+          className="flex gap-5 sm:gap-3 flex-col sm:flex-row"
+          onSubmit={(e) => {
+            e.preventDefault();
+            searchAnaliseTab();
+          }}
+        >
           <input
             type="text"
+            name={flow === "ECL" ? "refCliente" : "orcNumber"}
             value={refCliente}
             onChange={(e) => setRefCliente(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && searchAnaliseTab()}
             placeholder={
               flow === "ECL"
                 ? "Enter client reference..."
@@ -65,15 +71,16 @@ function WizardStep1({
             }
             className="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             autoFocus
+            autoComplete="on"
           />
           <button
-            onClick={searchAnaliseTab}
+            type="submit"
             disabled={loading || !refCliente.trim()}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-blue-600/30 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Searching..." : "Search"}
           </button>
-        </div>
+        </form>
       </div>
 
       {error && (

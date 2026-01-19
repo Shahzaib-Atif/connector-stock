@@ -22,10 +22,12 @@ export default function Filters({
           <label className={labelClass}>Filter by Amostra</label>
           <input
             type="text"
+            name="amostraFilter"
             value={amostraFilter}
             onChange={(e) => setAmostraFilter(e.target.value)}
             placeholder="Type to filter..."
             className={inputClass}
+            autoComplete="on"
           />
         </div>
 
@@ -34,10 +36,12 @@ export default function Filters({
           <label className={labelClass}>Filter by RefCliente</label>
           <input
             type="text"
+            name="refClienteFilter"
             value={refClienteFilter}
             onChange={(e) => setRefClienteFilter(e.target.value)}
             placeholder="Type to filter..."
             className={inputClass}
+            autoComplete="on"
           />
         </div>
 
