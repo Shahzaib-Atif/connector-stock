@@ -4,6 +4,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication, Logger } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import * as dotenv from 'dotenv';
+const envPath = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
+dotenv.config({ path: envPath });
 
 async function bootstrap() {
   // const httpsOptions = getHttpsOptions();
