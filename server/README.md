@@ -15,7 +15,7 @@ Create a `.env` (development) or `.env.prod` (production) file at the project ro
 ```env
 PORT=4000
 DATABASE_URL="sqlserver://host;database=dbname;user=user;password=pass;encrypt=true;trustServerCertificate=true"
-JWT_SECRET="your-secret-key"
+JWT_SECRET="add secret here"
 ```
 
 Prisma schema is located at `prisma/schema.prisma` and is owned by the database. Do not manually edit it unless you know what you are doing.

@@ -1,20 +1,59 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Connector-Stock — Client
 
-# Run and deploy your AI Studio app
+This is the frontend application for the Connector-Stock management system, built with **React 19** and **Vite**. It provides a modern, responsive interface for managing sample registrations, tracking inventory, and generating labels.
 
-This contains everything you need to run your app locally.
+## Tech Stack
 
-View your app in AI Studio: https://ai.studio/apps/drive/1yt6nC7Fmqk7YCVlruDtrQDmujc076OwT
+- **Core**: React 19, TypeScript, Vite
+- **State Management**: Redux Toolkit
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React, Heroicons
 
-## Run Locally
+## Getting Started
 
-**Prerequisites:**  Node.js
+### Prerequisites
 
+- Node.js (v18+)
+- npm
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Installation
+
+1. Navigate to the client directory:
+   ```bash
+   cd client
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Development
+
+Run the development server:
+```bash
+npm start
+```
+
+## Production Build
+
+To build the application for production:
+```bash
+npm run build
+```
+The output will be generated in the `dist` folder. 
+
+> [!NOTE]
+> The NestJS backend is configured to serve this `dist` folder directly in production environments, providing a unified deployment experience.
+
+## Features
+
+- **Sample Creation Wizard**: Guided multi-step process for creating samples using Order (ENC) or Budget (ORC) data.
+- **Inventory Management**: Real-time tracking of connector and accessory stock.
+- **Responsive Design**: Optimized for both desktop and mobile usage in industrial environments.
+
+## Resources
+
+- [React Documentation](https://react.dev/)
+- [Vite Documentation](https://vitejs.dev/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
