@@ -1,7 +1,7 @@
 import { UserRoles, Department } from "@/utils/types";
 import { Building2, Loader2 } from "lucide-react";
 import React, { useState } from "react";
-import ShowSucess from "../ShowSucess";
+import ShowSuccess from "../ShowSuccess";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { createUserThunk } from "@/store/slices/authSlice";
 
@@ -62,7 +62,7 @@ function CreateUserForm({ onClose }: Props) {
   return (
     <form onSubmit={handleSubmit} className="p-6 space-y-4">
       {status === "success" ? (
-        <ShowSucess title="User Created!" message="Refreshing list..." />
+        <ShowSuccess title="User Created!" message="Refreshing list..." />
       ) : (
         <>
           <div>

@@ -5,7 +5,7 @@ interface Props {
   message: string;
 }
 
-function ShowSucess({ title, message }: Props) {
+function ShowSuccess({ title, message }: Props) {
   return (
     <div className="flex flex-col items-center justify-center py-6 space-y-3">
       <CheckCircle2 className="w-16 h-16 text-green-500 animate-bounce" />
@@ -15,4 +15,4 @@ function ShowSucess({ title, message }: Props) {
   );
 }
 
-export default ShowSucess;
+export default ShowSuccess;

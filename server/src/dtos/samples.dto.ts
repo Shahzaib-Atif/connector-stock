@@ -62,7 +62,6 @@ export type RegAmostrasEncDto = {
   Observacoes: string;
 };
 
-
 export type RegAmostrasOrcDto = {
   orcDoc: string;
   CDU_ModuloRefCliente: string;

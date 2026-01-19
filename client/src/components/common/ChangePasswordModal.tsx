@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { X, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useAppDispatch } from "@/store/hooks";
 import { changePasswordThunk } from "@/store/slices/authSlice";
-import ShowSucess from "./ShowSucess";
+import ShowSuccess from "./ShowSuccess";
 
 interface Props {
   onClose: () => void;
@@ -70,7 +70,7 @@ export const ChangePasswordModal: React.FC<Props> = ({ onClose }) => {
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {status === "success" ? (
-            <ShowSucess title="Password Updated!" message="Closing modal..." />
+            <ShowSuccess title="Password Updated!" message="Closing modal..." />
           ) : (
             <>
               <div>

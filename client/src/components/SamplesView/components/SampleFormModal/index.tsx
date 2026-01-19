@@ -2,7 +2,7 @@ import React from "react";
 import { Sample } from "@/utils/types";
 import { ModalWrapper } from "@/components/common/ModalWrapper";
 import { FilePenLine } from "lucide-react";
-import { SampleForm } from "./components/SampleForm";
+import { SampleForm } from "./SampleForm";
 import { SampleFormData } from "@/hooks/useSampleForm";
 
 interface SampleFormModalProps {
@@ -39,4 +39,3 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
     </ModalWrapper>
   );
 };
-

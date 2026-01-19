@@ -1,6 +1,6 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
-import ShowSucess from "@/components/common/ShowSucess";
+import ShowSuccess from "@/components/common/ShowSuccess";
 import { useNotificationAction } from "../useNotificationAction";
 import ActionButtons from "./ActionButtons";
 import { LinkedConnector } from "./LinkedConnector";
@@ -40,7 +40,7 @@ export const NotificationActionForm: React.FC<Props> = ({
           <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
         </div>
       ) : status === "success" ? (
-        <ShowSucess title="Request Completed!" message="Closing..." />
+        <ShowSuccess title="Request Completed!" message="Closing..." />
       ) : (
         <form onSubmit={handleFinish} className="space-y-6">
           <ParsedInfo

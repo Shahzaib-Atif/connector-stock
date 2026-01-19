@@ -1,5 +1,6 @@
 import React from "react";
 import { useSampleCreationWizard } from "@/hooks/useSampleCreationWizard";
+import { RegAmostrasEncRow, RegAmostrasOrcRow } from "@/types/sampleCreation";
 import WizardStep1 from "./components/WizardStep1";
 import WizardStep2 from "./components/WizardStep2";
 import WizardStep3Enc from "./components/WizardStep3Enc";
@@ -97,20 +98,20 @@ export const SampleCreationWizard: React.FC<SampleCreationWizardProps> = ({
                   error={error}
                   goBack={goBack}
                   handleCreateRegister={handleCreateRegister}
-                  regAmostrasData={regAmostrasData as any}
+                  regAmostrasData={regAmostrasData as RegAmostrasEncRow[]}
                   reset={reset}
-                  selectRegRow={selectRegRow as any}
-                  selectedRegRow={selectedRegRow as any}
+                  selectRegRow={selectRegRow as (row: RegAmostrasEncRow) => void}
+                  selectedRegRow={selectedRegRow as RegAmostrasEncRow | null}
                 />
               ) : (
                 <WizardStep2Orc
                   error={error}
                   goBack={goBack}
                   handleCreateRegister={handleCreateRegister}
-                  regAmostrasData={regAmostrasData as any}
+                  regAmostrasData={regAmostrasData as RegAmostrasOrcRow[]}
                   reset={reset}
-                  selectRegRow={selectRegRow as any}
-                  selectedRegRow={selectedRegRow as any}
+                  selectRegRow={selectRegRow as (row: RegAmostrasOrcRow) => void}
+                  selectedRegRow={selectedRegRow as RegAmostrasOrcRow | null}
                 />
               )}
             </>

@@ -23,7 +23,7 @@ export const FORM_FIELDS: FORM_FIELDS_Type[] = [
     name: "EncDivmac",
     label: "EncDivmac",
     placeholder: "EncDivmac",
-    required: true,
+    // required: true,
   },
   {
     name: "Ref_Descricao",
