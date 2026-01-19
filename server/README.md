@@ -10,35 +10,51 @@ Install dependencies:
 npm install
 ```
 
-Create a `.env` file at the project root with your `DATABASE_URL`. Example:
+Create a `.env` (development) or `.env.prod` (production) file at the project root with your environment variables.
 
 ```env
-# .env
-DATABASE_URL="postgresql://user:password@host:5432/dbname"
+PORT=4000
+DATABASE_URL="sqlserver://host;database=dbname;user=user;password=pass;encrypt=true;trustServerCertificate=true"
+JWT_SECRET="your-secret-key"
 ```
 
 Prisma schema is located at `prisma/schema.prisma` and is owned by the database. Do not manually edit it unless you know what you are doing.
 
-## Prisma — DB-first workflow (pull-only)
+## Frontend Static Hosting
 
-This repository follows a DB-first workflow. Use Prisma's introspection to sync the local `schema.prisma` from the database. Do NOT use `prisma db push` or run migrations from this repo.
+The NestJS server is configured to serve the built frontend application as static files. 
+- The server looks for the production build in `../../client/dist`.
+- Any request that does not start with `/api` will be redirected to the frontend's `index.html`, supporting Single Page Application (SPA) routing.
+- This allows a unified deployment where the backend handles both the API and the UI.
 
-- Pull the schema from the database (introspect):
+## Deployment with PM2
 
-```bash
-npx prisma db pull --schema=prisma/schema.prisma
-```
+The application is configured for process management using **PM2** and the `ecosystem.config.js` file.
 
-- After pulling, regenerate the Prisma Client:
+### Commands
 
-```bash
-npx prisma generate
-```
+- **Start with PM2**:
+  ```bash
+  pm2 start ecosystem.config.js
+  ```
 
-Notes and best practices:
-- `prisma db pull` updates `prisma/schema.prisma` to match the current database structure.
-- Avoid `prisma db push`, `prisma migrate dev`, or creating migrations here — those commands can overwrite or alter the production DB schema. If you need schema changes, coordinate with your DBA or the team that manages the central DB and apply changes from the authoritative source.
-- If you must inspect the schema without changing files, run `npx prisma db pull --print` to print the introspected schema.
+- **Restart**:
+  ```bash
+  pm2 restart csm-app
+  ```
+
+- **Logs**:
+  ```bash
+  pm2 logs csm-app
+  ```
+
+- **Monitor**:
+  ```bash
+  pm2 monit
+  ```
+
+### Ecosystem Configuration (`ecosystem.config.js`)
+The configuration enables **Cluster Mode** with 2 instances by default and sets the `NODE_ENV` to `prod`, which triggers the server to load `.env.prod`.
 
 ## Run the server
 
@@ -48,7 +64,7 @@ Notes and best practices:
 npm run start:dev
 ```
 
-- Production:
+- Production (Manual build & run):
 
 ```bash
 npm run build
@@ -66,3 +82,4 @@ npm run start:prod
 
 - NestJS docs: https://docs.nestjs.com
 - Prisma introspection docs: https://www.prisma.io/docs/concepts/components/introspection
+- PM2 Documentation: https://pm2.keymetrics.io/docs/usage/quick-start/
