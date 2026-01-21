@@ -77,6 +77,33 @@ npm run start:prod
 - Services: `src/services`
 - Repositories: `src/repository`
 - Prisma schema: `prisma/schema.prisma`
+- Print service: `src/services/print.service.ts`
+
+## Label Printing
+
+The application supports printing QR code labels using a **TSC TE200** printer.
+
+### Key Features
+- **QR Code Generation**: Automatically generates QR codes for samples, boxes, and connectors.
+- **Custom Dimensions**: Standard label size is **45x28mm** (with a 2mm gap).
+- **TSPL Commands**: Uses the TSPL language to communicate directly with the printer.
+
+### Technical Implementation
+- **PrintService**: Handles the generation of TSPL commands and manages the printing workflow.
+- **RawPrinter Utility**: A custom C# utility located in `scripts/RawPrinter.exe` is used to send raw commands to the Windows print spooler.
+- **Workflow**:
+  1. Generate TSPL commands as a `.prn` file.
+  2. Call `RawPrinter.exe` with the printer name and file path.
+  3. Clean up the temporary file.
+
+### Building the RawPrinter Utility
+If `scripts/RawPrinter.exe` is missing or needs updates, you can rebuild it using the provided batch script:
+```bash
+cd server/scripts
+./build.bat
+```
+> [!NOTE]
+> This requires the C# compiler (`csc.exe`) to be available in your system path.
 
 ## Resources
 
