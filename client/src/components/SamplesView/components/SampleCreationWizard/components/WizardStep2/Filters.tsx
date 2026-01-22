@@ -21,7 +21,7 @@ export default function Filters({
       <div className="flex gap-3 flex-1 flex-col sm:flex-row ">
         {/* Filter by Encomenda */}
         <div className={filterDivClass}>
-          <label className={labelClass}>Filter by Encomenda</label>
+          <label className="label-style-2">Filter by Encomenda</label>
           <input
             type="text"
             name="encomendaFilter"
@@ -35,7 +35,7 @@ export default function Filters({
 
         {/* Filter By Estado */}
         <div className={filterDivClass}>
-          <label className={labelClass}>Filter by Estado</label>
+          <label className="label-style-2">Filter by Estado</label>
           <select
             value={estadoFilter}
             onChange={(e) => setEstadoFilter(e.target.value)}
@@ -66,7 +66,6 @@ export default function Filters({
   );
 }
 
-const labelClass = "block text-xs text-slate-400 mb-1";
 const inputClass =
   "w-full px-3 py-1.5 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
 const filterDivClass = "flex-1 min-w-64";

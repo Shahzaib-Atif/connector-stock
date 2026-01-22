@@ -27,7 +27,10 @@ export const FilterBar: React.FC<Props> = ({
     "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
 
   return (
-    <div className="grid grid-cols-2 lg:flex gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700">
+    <div
+      id="filter-transactions"
+      className="grid grid-cols-2 lg:flex gap-3 md:gap-4 p-3 md:p-4 bg-slate-800/50 rounded-xl border border-slate-700"
+    >
       {/* Search Item ID */}
       <div className="w-full sm:w-64">
         <label htmlFor="ItemID" className={labelStyle}>
@@ -73,7 +76,7 @@ export const FilterBar: React.FC<Props> = ({
           value={itemType}
           onChange={(e) =>
             onItemTypeChange(
-              e.target.value as "all" | "connector" | "accessory"
+              e.target.value as "all" | "connector" | "accessory",
             )
           }
           className={selectStyle}

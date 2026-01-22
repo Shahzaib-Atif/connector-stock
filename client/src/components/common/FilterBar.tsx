@@ -51,10 +51,7 @@ export const FilterBar: React.FC<Props> = ({
     >
       {/* Filter Column Selector */}
       <div className="w-full sm:w-48">
-        <label
-          htmlFor="filters-table-filterBy"
-          className="block font-semibold mb-1 sm:mb-2"
-        >
+        <label htmlFor="filters-table-filterBy" className="label-style-1">
           Filter By
         </label>
         <select
@@ -76,10 +73,7 @@ export const FilterBar: React.FC<Props> = ({
 
       {/* Search Input */}
       <div className="w-full sm:w-64 relative">
-        <label
-          htmlFor="table-search"
-          className="block font-semibold mb-1 sm:mb-2"
-        >
+        <label htmlFor="table-search" className="label-style-1">
           Search
         </label>
 

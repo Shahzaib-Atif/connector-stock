@@ -65,7 +65,7 @@ export const TransactionsView: React.FC = () => {
   }
 
   return (
-    <div id="transactions-page" className="table-view-wrapper">
+    <div id="transactions-page" className="table-view-wrapper min-h-[600px]">
       <DetailHeader
         label="Transactions"
         title="Transaction History"

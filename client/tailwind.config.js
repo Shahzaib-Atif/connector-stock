@@ -51,6 +51,15 @@ export default {
         ".sidebar-btn-icon": {
           "@apply w-4 sm:w-5 w-4 sm:h-5": {},
         },
+        ".label-style-1": {
+          "@apply block font-semibold mb-1 sm:mb-2": {},
+        },
+          ".label-style-2": {
+          "@apply block text-xs text-slate-400 mb-1": {},
+        },
+        ".label-style-3": {
+          "@apply text-sm font-bold text-slate-400 uppercase tracking-wide": {},
+        },
       });
     },
   ],

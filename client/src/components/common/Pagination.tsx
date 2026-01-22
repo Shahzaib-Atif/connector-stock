@@ -15,7 +15,10 @@ export const Pagination: React.FC<
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700">
+    <div
+      id="pagination"
+      className="flex flex-col sm:flex-row items-center justify-between gap-4 p-3 md:p-4 bg-slate-800/50 rounded-xl border border-slate-700"
+    >
       {/* Items per page selector */}
       <div className="flex items-center gap-2 text-sm text-slate-300">
         <span>Show</span>
@@ -34,7 +37,7 @@ export const Pagination: React.FC<
       </div>
 
       {/* Item count display */}
-      <div className="text-sm text-slate-400 hidden sm:block">
+      <div className="text-sm text-slate-400 hidden md:block">
         Showing {startItem}-{endItem} of {totalItems} items
       </div>
 
@@ -83,6 +86,6 @@ const buttonClass = (isActive: boolean, isDisabled: boolean) =>
     isDisabled
       ? "bg-slate-700/50 text-slate-500 cursor-not-allowed"
       : isActive
-      ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
-      : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+        ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
+        : "bg-slate-700 text-slate-300 hover:bg-slate-600"
   }`;

@@ -25,7 +25,7 @@ export const Login: React.FC = () => {
           user: data.user.username,
           role: data.user.role,
           token: data.access_token,
-        })
+        }),
       );
 
       // Fetch users list after login
@@ -66,9 +66,7 @@ export const Login: React.FC = () => {
 
           {/* Username */}
           <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-400 uppercase tracking-wide">
-              Username
-            </label>
+            <label className="label-style-3">Username</label>
             <div className="relative">
               <User className="absolute left-4 top-3.5 w-5 h-5 text-slate-500" />
               <input
@@ -84,9 +82,7 @@ export const Login: React.FC = () => {
 
           {/* Password */}
           <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-400 uppercase tracking-wide">
-              Password
-            </label>
+            <label className="label-style-3">Password</label>
             <div className="relative">
               <Lock className="absolute left-4 top-3.5 w-5 h-5 text-slate-500" />
               <input
