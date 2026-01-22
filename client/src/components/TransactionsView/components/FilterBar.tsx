@@ -22,9 +22,9 @@ export const FilterBar: React.FC<Props> = ({
   department,
   onDepartmentChange,
 }) => {
-  const labelStyle = "block text-sm font-semibold text-slate-300 mb-2";
   const selectStyle =
     "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
+  const conainerDiv = "w-full sm:w-64";
 
   return (
     <div
@@ -32,8 +32,8 @@ export const FilterBar: React.FC<Props> = ({
       className="grid grid-cols-2 lg:flex gap-3 md:gap-4 p-3 md:p-4 bg-slate-800/50 rounded-xl border border-slate-700"
     >
       {/* Search Item ID */}
-      <div className="w-full sm:w-64">
-        <label htmlFor="ItemID" className={labelStyle}>
+      <div className={conainerDiv}>
+        <label htmlFor="ItemID" className="label-style-1">
           Search Item ID
         </label>
         <input
@@ -48,8 +48,8 @@ export const FilterBar: React.FC<Props> = ({
       </div>
 
       {/* Transaction Type Filter */}
-      <div className="w-full sm:w-64">
-        <label htmlFor="TransactionType" className={labelStyle}>
+      <div className={conainerDiv}>
+        <label htmlFor="TransactionType" className="label-style-1">
           Transaction Type
         </label>
         <select
@@ -67,8 +67,8 @@ export const FilterBar: React.FC<Props> = ({
       </div>
 
       {/* Item Type Filter */}
-      <div className="w-full sm:w-64">
-        <label htmlFor="ItemType" className={labelStyle}>
+      <div className={conainerDiv}>
+        <label htmlFor="ItemType" className="label-style-1">
           Item Type
         </label>
         <select
@@ -88,8 +88,8 @@ export const FilterBar: React.FC<Props> = ({
       </div>
 
       {/* Department Filter */}
-      <div className="w-full sm:w-64">
-        <label htmlFor="Department" className={labelStyle}>
+      <div className={conainerDiv}>
+        <label htmlFor="Department" className="label-style-1">
           Department
         </label>
         <select
