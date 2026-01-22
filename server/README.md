@@ -53,6 +53,27 @@ The application is configured for process management using **PM2** and the `ecos
   pm2 monit
   ```
 
+### Windows Startup (Service)
+To ensure PM2 starts automatically when Windows boots, use `pm2-windows-service`:
+
+1. **Install the service utility**:
+   ```bash
+   npm install -g pm2-windows-service
+   ```
+
+2. **Install PM2 as a Service**:
+   Open PowerShell/Cmd as **Administrator** and run:
+   ```bash
+   pm2-service-install
+   ```
+   *Follow the prompts (defaults are usually fine).*
+
+3. **Save Current Processes**:
+   Once your app is running (e.g., after `pm2 start ecosystem.config.js`), save the process list:
+   ```bash
+   pm2 save
+   ```
+
 ### Ecosystem Configuration (`ecosystem.config.js`)
 The configuration enables **Cluster Mode** with 2 instances by default and sets the `NODE_ENV` to `prod`, which triggers the server to load `.env.prod`.
 
