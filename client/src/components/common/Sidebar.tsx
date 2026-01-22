@@ -40,7 +40,7 @@ export function Sidebar({
   const location = useLocation();
 
   const unfinishedCount = useAppSelector(
-    (state) => state.notifications.unfinishedCount
+    (state) => state.notifications.unfinishedCount,
   );
 
   useEffect(() => {
@@ -70,14 +70,15 @@ export function Sidebar({
 
   return (
     <div
+      id="sidebar"
       ref={menuRef}
-      className={`fixed top-0 left-0 h-full w-64 bg-slate-800 border-r border-slate-700 shadow-2xl z-50 transform transition-transform duration-300 ease-out ${
+      className={`flex flex-col overflow-auto fixed top-0 left-0 h-full w-64 h-[100dvh] bg-slate-800 border-r border-slate-700 shadow-2xl z-50 transform transition-transform duration-300 ease-out ${
         isMenuOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
       {/* Sidebar Header with close button */}
-      <div className="flex items-center justify-between px-4 py-4 border-b border-slate-700">
-        <span className="text-lg font-semibold text-white">Menu</span>
+      <div className="flex items-center justify-between px-4 py-3 md:py-4 border-b border-slate-700 text-base md:text-lg">
+        <span className="font-semibold text-white">Menu</span>
         <button
           onClick={() => setIsMenuOpen(false)}
           className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
@@ -88,28 +89,28 @@ export function Sidebar({
       </div>
 
       {/* User info */}
-      <div className="px-4 py-4 border-b border-slate-700">
+      <div className="px-4 py-3 md:py-4 border-b border-slate-700 text-xs md:text-sm">
         {user ? (
-          <>
-            <p className="text-xs text-slate-500 uppercase tracking-wider">
-              Logged in as
-            </p>
-            <p className="text-white font-mono font-semibold mt-1">{user}</p>
+          <div>
+            <div className="my-1">
+              <span className="text-slate-500 tracking-wider">Username: </span>
+              <span className="text-white font-mono font-semibold">{user}</span>
+            </div>
             <button
               onClick={() => setShowPasswordModal(true)}
-              className="mt-2 text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors"
+              className="my-1 text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors"
             >
               <Key className="w-3 h-3" />
               Change Password
             </button>
-          </>
+          </div>
         ) : (
           <p className="text-white font-semibold">Not logged in</p>
         )}
       </div>
 
       {/* Menu items */}
-      <nav className="py-2">
+      <nav className="py-2 text-base md:text-lg">
         <Link
           to={ROUTES.HOME}
           id="home-btn"
@@ -199,7 +200,7 @@ export function Sidebar({
 
       {/* Login/Logout at bottom */}
       {user ? (
-        <div className="absolute bottom-0 left-0 right-0 border-t border-slate-700 p-2">
+        <div className="flex bottom-0 left-0 right-0 border-t border-slate-700 p-2">
           <button
             id="logout-btn"
             onClick={handleLogout}
@@ -210,7 +211,7 @@ export function Sidebar({
           </button>
         </div>
       ) : (
-        <div className="absolute bottom-0 left-0 right-0 border-t border-slate-700 p-2">
+        <div className="flex bottom-0 left-0 right-0 border-t border-slate-700 p-2">
           <Link
             to={ROUTES.LOGIN}
             id="login-nav-btn"
