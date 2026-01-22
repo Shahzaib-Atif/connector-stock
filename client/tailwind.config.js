@@ -20,14 +20,14 @@ export default {
           "@apply px-4 py-3": {},
         },
         ".table-view-wrapper": {
-          "@apply min-h-screen h-screen bg-gradient-to-br from-slate-800 to-slate-900 text-slate-200 flex flex-col overflow-hidden":
+          "@apply min-h-[500px] h-[100dvh] pb-2 bg-gradient-to-br from-slate-800 to-slate-900 text-slate-200 flex flex-col overflow-hidden":
             {},
         },
         ".table-view-content": {
           "@apply flex-1 overflow-auto sm:overflow-hidden": {},
         },
         ".table-view-inner-content": {
-          "@apply max-w-full mx-auto h-full p-4 flex flex-col gap-4 text-sm sm:text-[0.9rem]": {},
+          "@apply max-w-full mx-auto h-full p-3 sm:p-4 flex flex-col gap-4 text-sm sm:text-[0.9rem]": {},
         },
         ".table-container-inner": {
           "@apply h-full overflow-auto rounded-xl border border-slate-700 bg-slate-800/50":

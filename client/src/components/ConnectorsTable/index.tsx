@@ -15,7 +15,7 @@ import { Connector } from "@/utils/types";
 export const ConnectorsListView: React.FC = () => {
   const navigate = useNavigate();
   const { data: masterData, loading } = useAppSelector(
-    (state) => state.masterData
+    (state) => state.masterData,
   );
 
   // Photo visibility state with persistence
@@ -93,7 +93,7 @@ export const ConnectorsListView: React.FC = () => {
             </button>
           </FilterBar>
 
-          <div className="table-container-outer mt-4">
+          <div className="table-container-outer">
             <ConnectorsTable
               connectors={paginatedConnectors as Connector[]}
               showImages={showImages}

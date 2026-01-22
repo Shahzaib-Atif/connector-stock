@@ -48,7 +48,7 @@ export const HomeView: React.FC<Props> = ({
       suggestions,
       showSuggestions,
       setShowSuggestions,
-      handleSuggestionClick
+      handleSuggestionClick,
     );
 
   const handleInputFocus = () => {
@@ -75,7 +75,7 @@ export const HomeView: React.FC<Props> = ({
       <DetailHeader />
 
       {/* Main content - centered vertically on small content, scrollable on larger */}
-      <div className="flex-1 flex flex-col items-center justify-start sm:justify-center p-6 py-12">
+      <div className="flex-1 flex flex-col items-center justify-start sm:justify-center p-6">
         <div className="w-full max-w-4xl space-y-10 md:space-y-18">
           <div className="max-w-md mx-auto space-y-6 sm:space-y-8">
             {/* Title and description */}

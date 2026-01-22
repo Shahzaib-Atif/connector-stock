@@ -47,7 +47,7 @@ export const FilterBar: React.FC<Props> = ({
   return (
     <div
       id="filters-bar"
-      className="text-sm sm:text-base flex flex-col sm:flex-row gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700"
+      className="text-sm sm:text-base flex flex-col sm:flex-row gap-3 sm:gap-4 p-3 sm:p-4 bg-slate-800/50 rounded-xl border border-slate-700"
     >
       {/* Filter Column Selector */}
       <div className="w-full sm:w-48">
