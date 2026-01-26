@@ -6,13 +6,14 @@ import { Connector } from "@/utils/types";
 
 interface TableRowProps {
   connector: Connector;
-  index: number;
   showImages?: boolean;
+  isLegacyMode?: boolean;
 }
 
 const TableRow: React.FC<TableRowProps> = ({
   connector,
   showImages = false,
+  isLegacyMode = false,
 }) => {
   const handleOpenLink = (id: string, type: "box" | "connector") => {
     const route = type === "connector" ? ROUTES.CONNECTORS : ROUTES.BOXES;
@@ -46,13 +47,15 @@ const TableRow: React.FC<TableRowProps> = ({
         {" "}
         <div className="flex items-center gap-1 sm:gap-2">
           <span>{connector.CODIVMAC}</span>
-          <button
-            onClick={() => handleOpenLink(connector.CODIVMAC, "connector")}
-            className="text-slate-400 hover:text-blue-400 transition-colors p-1"
-            title={`Open ${connector.CODIVMAC} in new tab`}
-          >
-            <ExternalLink className="w-4 h-4" />
-          </button>
+          {!isLegacyMode && (
+            <button
+              onClick={() => handleOpenLink(connector.CODIVMAC, "connector")}
+              className="text-slate-400 hover:text-blue-400 transition-colors p-1"
+              title={`Open ${connector.CODIVMAC} in new tab`}
+            >
+              <ExternalLink className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </td>
 

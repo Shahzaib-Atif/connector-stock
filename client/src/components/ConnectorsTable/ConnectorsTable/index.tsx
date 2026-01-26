@@ -6,11 +6,13 @@ import { Connector } from "@/utils/types";
 interface ConnectorsTableProps {
   connectors: Connector[];
   showImages?: boolean;
+  isLegacyMode?: boolean;
 }
 
 export const ConnectorsTable: React.FC<ConnectorsTableProps> = ({
   connectors,
   showImages = false,
+  isLegacyMode = false,
 }) => {
   return (
     <div id="connectors-table" className="table-container-inner">
@@ -24,12 +26,12 @@ export const ConnectorsTable: React.FC<ConnectorsTableProps> = ({
               </td>
             </tr>
           ) : (
-            connectors.map((connector, index) => (
+            connectors.map((connector) => (
               <TableRow
                 key={connector.CODIVMAC}
                 connector={connector}
-                index={index}
                 showImages={showImages}
+                isLegacyMode={isLegacyMode}
               />
             ))
           )}

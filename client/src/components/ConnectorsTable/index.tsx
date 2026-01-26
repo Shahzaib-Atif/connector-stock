@@ -93,6 +93,7 @@ export const ConnectorsListView: React.FC = () => {
             <ConnectorsTable
               connectors={paginatedConnectors as Connector[]}
               showImages={showImages && !isLegacyMode}
+              isLegacyMode={isLegacyMode}
             />
           </div>
 
