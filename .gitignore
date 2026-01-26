@@ -3,3 +3,4 @@ client/package-lock.json
 server/.env.prod
 server/.env.dev
 server/certs
+client/.env
