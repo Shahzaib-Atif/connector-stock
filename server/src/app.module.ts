@@ -24,6 +24,7 @@ import { NotificationsService } from './services/notifications.service';
 import { NotificationsRepo } from './repository/notifications.repo';
 
 import { AuthModule } from './auth/auth.module';
+import { LegacyModule } from './modules/legacy/legacy.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AuthModule } from './auth/auth.module';
         : '.env',
     }),
     AuthModule,
+    LegacyModule,
   ],
   controllers: [
     ImageController,

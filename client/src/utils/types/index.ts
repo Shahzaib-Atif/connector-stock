@@ -8,6 +8,7 @@ export * from "./sampleTypes";
 export * from "./shared";
 export * from "./transactionTypes";
 export * from "./userTypes";
+export * from "./legacyTypes";
 
 // Master Data Types (Centralized here)
 export interface MasterData {
