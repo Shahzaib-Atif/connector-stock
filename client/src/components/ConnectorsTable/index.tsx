@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/store/hooks";
 import { usePagination } from "@/hooks/usePagination";
@@ -9,10 +9,11 @@ import { FilterBar } from "../common/FilterBar";
 import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
-import { Image, ImageOff, Database, History } from "lucide-react";
 import { Connector } from "@/utils/types";
-import { fetchLegacyBackups } from "@/api/legacyApi";
-import { mapLegacyToConnector } from "@/services/connectorService";
+import { useImageToggle } from "./ConnectorsTable/useImageToggle ";
+import { useLegacyData } from "./ConnectorsTable/useLegacyData";
+import LegacyToggleBtn from "./ConnectorsTable/LegacyToggleBtn";
+import ImageToggleBtn from "./ConnectorsTable/ImageToggleBtn";
 
 export const ConnectorsListView: React.FC = () => {
   const navigate = useNavigate();
@@ -21,40 +22,11 @@ export const ConnectorsListView: React.FC = () => {
   );
 
   // Photo visibility state with persistence
-  const [showImages, setShowImages] = useState<boolean>(() => {
-    const saved = localStorage.getItem("connectors_show_images");
-    return saved === "true"; // Default to false
-  });
+  const { showImages, setShowImages } = useImageToggle();
 
-  const [isLegacyMode, setIsLegacyMode] = useState(false);
-  const [legacyData, setLegacyData] = useState<Record<string, Connector>>({});
-  const [legacyLoading, setLegacyLoading] = useState(false);
-
-  useEffect(() => {
-    localStorage.setItem("connectors_show_images", String(showImages));
-  }, [showImages]);
-
-  useEffect(() => {
-    if (isLegacyMode && Object.keys(legacyData).length === 0 && masterData) {
-      const loadLegacy = async () => {
-        setLegacyLoading(true);
-        try {
-          const backups = await fetchLegacyBackups();
-          const mapped: Record<string, Connector> = {};
-          backups.forEach((b) => {
-            const connector = mapLegacyToConnector(b, masterData);
-            mapped[connector.CODIVMAC] = connector;
-          });
-          setLegacyData(mapped);
-        } catch (err) {
-          console.error("Failed to load legacy data", err);
-        } finally {
-          setLegacyLoading(false);
-        }
-      };
-      loadLegacy();
-    }
-  }, [isLegacyMode, masterData]);
+  // Legacy data handling
+  const { isLegacyMode, setIsLegacyMode, legacyData, legacyLoading } =
+    useLegacyData();
 
   // Get connectors from masterData or legacy data
   const connectors = isLegacyMode ? legacyData : (masterData?.connectors ?? {});
@@ -103,61 +75,28 @@ export const ConnectorsListView: React.FC = () => {
             onFilterColumnChange={setFilterColumn}
             onSearchQueryChange={setSearchQuery}
           >
+            {/* Toggle Buttons */}
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => setIsLegacyMode(!isLegacyMode)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 text-sm font-medium h-[42px] sm:h-auto ${
-                  isLegacyMode
-                    ? "bg-amber-500/10 border-amber-500/50 text-amber-400 hover:bg-amber-500/20"
-                    : "bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-300"
-                }`}
-                title={
-                  isLegacyMode ? "Switch to Live Data" : "Switch to Legacy Data"
-                }
-              >
-                {isLegacyMode ? (
-                  <>
-                    <Database className="w-4 h-4" />
-                    <span>View Live</span>
-                  </>
-                ) : (
-                  <>
-                    <History className="w-4 h-4" />
-                    <span>View Legacy</span>
-                  </>
-                )}
-              </button>
-
-              <button
-                onClick={() => setShowImages(!showImages)}
-                className={`w-40 hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 text-sm font-medium h-[42px] sm:h-auto ${
-                  showImages
-                    ? "bg-blue-500/10 border-blue-500/50 text-blue-400 hover:bg-blue-500/20"
-                    : "bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-300"
-                }`}
-              >
-                {showImages ? (
-                  <>
-                    <Image className="w-4 h-4" />
-                    <span>Photos: Show</span>
-                  </>
-                ) : (
-                  <>
-                    <ImageOff className="w-4 h-4" />
-                    <span>Photos: Hide</span>
-                  </>
-                )}
-              </button>
+              <ImageToggleBtn
+                showImages={showImages}
+                isLegacyMode={isLegacyMode}
+                setShowImages={setShowImages}
+              />{" "}
+              <LegacyToggleBtn
+                isLegacyMode={isLegacyMode}
+                setIsLegacyMode={setIsLegacyMode}
+              />
             </div>
           </FilterBar>
 
           <div className="table-container-outer">
             <ConnectorsTable
               connectors={paginatedConnectors as Connector[]}
-              showImages={showImages}
+              showImages={showImages && !isLegacyMode}
             />
           </div>
 
+          {/* Pagination */}
           {filteredConnectors.length > 0 && (
             <Pagination
               currentPage={currentPage}
