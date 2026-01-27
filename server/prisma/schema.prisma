@@ -117,7 +117,8 @@ model REG_Amostras {
   ActualUser       String?   @db.NVarChar(100)
   NumORC           String?   @db.VarChar(100)
   Ref_Fornecedor   String?   @db.NVarChar(100)
-  com_fio          Boolean?
+  qty_com_fio      Int?
+  qty_sem_fio      Int?
 }
 
 model Transactions {
