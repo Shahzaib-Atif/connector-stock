@@ -8,5 +8,6 @@ export interface FORM_FIELDS_Type {
   type?: "text" | "number" | "date" | "autocomplete" | "select" | "checkbox";
   fullWidth?: boolean;
   required?: boolean;
+  disabled?: boolean;
   options?: string[];
 }

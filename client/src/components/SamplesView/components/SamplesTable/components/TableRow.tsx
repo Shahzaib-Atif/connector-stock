@@ -33,7 +33,8 @@ const TableRow: React.FC<TableRowProps> = ({
     N_Envio,
     NumORC,
     Data_recepcao,
-    com_fio,
+    qty_com_fio,
+    qty_sem_fio,
     Observacoes,
     Entregue_a,
   } = sample;
@@ -67,7 +68,7 @@ const TableRow: React.FC<TableRowProps> = ({
       </td>
       <td className="table-data font-mono">{Data_recepcao || "-"}</td>
       <td className="table-data font-mono break-all">
-        {getObservation(Observacoes, com_fio)}
+        {getObservation(Observacoes, qty_com_fio, qty_sem_fio)}
       </td>
       {/* Action buttons */}
       {showActions && (

@@ -59,7 +59,7 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
       setError(
         `Please enter a ${
           flow === "ECL" ? "RefCliente" : "Budget Number (ORC)"
-        }`
+        }`,
       );
       return;
     }
@@ -110,7 +110,7 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
       const data = await fetchRegAmostrasEncData(
         selectedAnaliseRow.RefCliente,
         selectedAnaliseRow.Encomenda,
-        selectedAnaliseRow.Conector
+        selectedAnaliseRow.Conector,
       );
       setRegAmostrasData(data);
 
@@ -123,7 +123,7 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
       setError(
         err instanceof Error
           ? err.message
-          : "Failed to fetch RegAmostrasEnc data"
+          : "Failed to fetch RegAmostrasEnc data",
       );
     } finally {
       setLoading(false);
@@ -137,13 +137,13 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
       // Validate that ID is 0 (meaning no register exists yet)
       if (row.ID !== 0) {
         setError(
-          "Cannot create a register for a row that has already been registered (ID != 0)."
+          "Cannot create a register for a row that has already been registered (ID != 0).",
         );
       } else {
         setError(null);
       }
     },
-    []
+    [],
   );
 
   const getPrefillData = useCallback((): Partial<SampleFormData> => {
@@ -184,7 +184,6 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
       Quantidade: selectedRegRow.Quantidade,
       Observacoes: selectedRegRow.Observacoes,
       NumORC: orc,
-      com_fio: false,
     };
   }, [selectedRegRow]);
 
@@ -232,7 +231,7 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
 }
 
 function isEncRow(
-  row: RegAmostrasEncRow | RegAmostrasOrcRow
+  row: RegAmostrasEncRow | RegAmostrasOrcRow,
 ): row is RegAmostrasEncRow {
   return "cdu_projeto" in row;
 }

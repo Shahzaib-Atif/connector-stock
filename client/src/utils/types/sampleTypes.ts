@@ -19,6 +19,7 @@ export interface Sample {
   DateOfLastUpdate?: string;
   IsActive?: boolean;
   ActualUser?: string;
-  com_fio?: boolean;
+  qty_com_fio?: number;
+  qty_sem_fio?: number;
   associatedItemIds?: string[];
 }

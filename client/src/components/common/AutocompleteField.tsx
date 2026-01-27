@@ -7,7 +7,7 @@ import { suggestion } from "@/utils/types/shared";
 
 interface Props {
   name: string;
-  value: string | boolean;
+  value: string | boolean | number;
   onChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement

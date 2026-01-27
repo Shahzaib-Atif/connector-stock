@@ -15,7 +15,8 @@ export type CreateSampleDto = {
   NumORC?: string;
   CreatedBy?: string;
   ActualUser?: string;
-  com_fio?: boolean;
+  qty_com_fio?: number;
+  qty_sem_fio?: number;
   associatedItemIds?: string[];
 };
 

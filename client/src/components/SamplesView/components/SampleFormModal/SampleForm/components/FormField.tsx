@@ -6,7 +6,7 @@ import { inputClass, labelClass } from "./SampleFormFields";
 interface FormFieldProps {
   label: string;
   name: string;
-  value: string | boolean;
+  value: string | boolean | number;
   onChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -33,6 +33,10 @@ export const FormField: React.FC<FormFieldProps> = ({
   options = [],
 }) => {
   const renderInput = () => {
+    const disabledClass = disabled
+      ? "bg-slate-800/50 border-slate-700 opacity-60 cursor-not-allowed"
+      : "";
+
     switch (type) {
       // AUTOCOMPLETE FIELD
       case "autocomplete":
@@ -55,7 +59,7 @@ export const FormField: React.FC<FormFieldProps> = ({
             name={name}
             value={(value as string) || ""}
             onChange={onChange}
-            className={`${inputClass} pr-10`}
+            className={`${inputClass} ${disabledClass} pr-10`}
             disabled={disabled}
             required={required}
           >
@@ -71,7 +75,11 @@ export const FormField: React.FC<FormFieldProps> = ({
       // CHECKBOX FIELD
       case "checkbox":
         return (
-          <div className="flex items-center gap-3 h-full rounded-lg border border-slate-600 bg-slate-700/40 px-4 py-3">
+          <div
+            className={`flex items-center gap-3 h-full rounded-lg border border-slate-600 bg-slate-700/40 px-4 py-3 ${
+              disabled ? "opacity-50 grayscale" : ""
+            }`}
+          >
             <input
               type="checkbox"
               name={name}
@@ -101,7 +109,7 @@ export const FormField: React.FC<FormFieldProps> = ({
               name={name}
               value={(value as string) || ""}
               onChange={onChange}
-              className={`${inputClass} pl-10 [color-scheme:dark]`}
+              className={`${inputClass} ${disabledClass} pl-10 [color-scheme:dark]`}
               placeholder={placeholder}
               disabled={disabled}
               required={required}
@@ -115,13 +123,13 @@ export const FormField: React.FC<FormFieldProps> = ({
           <input
             type={type}
             name={name}
-            value={(value as string) || ""}
+            value={value === undefined || value === null ? "" : String(value)}
             onChange={onChange}
-            className={inputClass}
+            className={`${inputClass} ${disabledClass}`}
             placeholder={placeholder}
             disabled={disabled}
             required={required}
-            min={type === "number" ? 1 : undefined}
+            min={type === "number" ? 0 : undefined}
           />
         );
     }
