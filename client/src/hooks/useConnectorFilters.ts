@@ -7,17 +7,7 @@ interface ConnectorFilters {
   searchQuery: string;
 }
 
-interface UseConnectorFiltersReturn {
-  filters: ConnectorFilters;
-  setFilterColumn: (column: FilterColumnTypes) => void;
-  setSearchQuery: (query: string) => void;
-  filteredConnectors: Connector[];
-  clearFilters: () => void;
-}
-
-export function useConnectorFilters(
-  connectors: Record<string, Connector>,
-): UseConnectorFiltersReturn {
+export function useConnectorFilters(connectors: Record<string, Connector>) {
   const [filters, setFilters] = useState<ConnectorFilters>({
     filterColumn: "all",
     searchQuery: "",
@@ -92,6 +82,10 @@ const getColumnValue = (connector: Connector, column: FilterColumnTypes) => {
       return connector.details.Fabricante?.toLowerCase() ?? "";
     case "family":
       return connector.details.Family?.toString() ?? "";
+    case "vias":
+      return connector.Vias?.toLowerCase() ?? "";
+    case "color":
+      return connector.Cor?.toLowerCase() ?? "";
     default:
       return "";
   }

@@ -12,7 +12,9 @@ export type FilterColumnTypes =
   | "encDivmac"
   | "amostra"
   | "numORC"
-  | "family";
+  | "family"
+  | "vias"
+  | "color";
 
 interface Props {
   filterColumn: FilterColumnTypes;
