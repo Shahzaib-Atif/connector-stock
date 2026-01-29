@@ -1,32 +1,33 @@
 import { ROUTES } from "@/components/AppRoutes";
 import { Transaction } from "@/utils/types";
-import { ExternalLink } from "lucide-react";
+import { Link as LinkIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Props {
   tx: Transaction;
   index: number;
 }
 function TableRow({ tx, index }: Props) {
-  const handleOpenLink = () => {
+  const getLink = () => {
     const route =
       tx.itemType === "connector" ? ROUTES.CONNECTORS : ROUTES.ACCESSORIES;
     const url = `${route}/${tx.itemId}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    return url;
   };
 
   return (
     <tr key={tx.ID} className="table-row table-row-bg">
       <td className="table-data text-slate-300 font-mono text-xs">{index}</td>
       <td className="table-data">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <span className="text-slate-300 font-mono">{tx.itemId}</span>
-          <button
-            onClick={handleOpenLink}
+          <Link
+            to={getLink()}
             className="text-slate-400 hover:text-blue-400 transition-colors p-1"
             title={`Open ${tx.itemId} in new tab`}
           >
-            <ExternalLink className="w-4 h-4" />
-          </button>
+            <LinkIcon className="w-4 h-4" />
+          </Link>
         </div>
       </td>
       <td className="table-data">
