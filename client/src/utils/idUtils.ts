@@ -4,7 +4,7 @@
  * Otherwise, it returns the trimmed string.
  */
 export function getConnectorId(amostra: string | undefined): string {
-  if (!amostra) return "";
+  if (!amostra || amostra.length < 6) return "";
 
   const cleanAmostra = amostra.trim();
 
