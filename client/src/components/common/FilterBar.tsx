@@ -1,6 +1,6 @@
 import React from "react";
 import { X } from "lucide-react";
-type filterColumns =
+export type FilterColumnTypes =
   | "all"
   | "id"
   | "type"
@@ -11,13 +11,14 @@ type filterColumns =
   | "refDescricao"
   | "encDivmac"
   | "amostra"
-  | "numORC";
+  | "numORC"
+  | "family";
 
 interface Props {
-  filterColumn: filterColumns;
+  filterColumn: FilterColumnTypes;
   searchQuery: string;
-  filterByOptions: filterColumns[];
-  onFilterColumnChange: (column: filterColumns) => void;
+  filterByOptions: FilterColumnTypes[];
+  onFilterColumnChange: (column: FilterColumnTypes) => void;
   onSearchQueryChange: (query: string) => void;
   children?: React.ReactNode;
 }
@@ -58,7 +59,7 @@ export const FilterBar: React.FC<Props> = ({
           id="filters-table-filterBy"
           value={filterColumn}
           onChange={(e) =>
-            onFilterColumnChange(e.target.value as filterColumns)
+            onFilterColumnChange(e.target.value as FilterColumnTypes)
           }
           className={`${inputBase} ${inputFocus}`}
         >

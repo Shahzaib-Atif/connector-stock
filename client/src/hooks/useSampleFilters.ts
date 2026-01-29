@@ -1,22 +1,15 @@
 import { useState, useMemo, useCallback } from "react";
 import { Sample } from "@/utils/types";
-
-export type FilterColumn =
-  | "all"
-  | "cliente"
-  | "refDescricao"
-  | "encDivmac"
-  | "amostra"
-  | "numORC";
+import { FilterColumnTypes } from "@/components/common/FilterBar";
 
 interface SampleFilters {
-  filterColumn: FilterColumn;
+  filterColumn: FilterColumnTypes;
   searchQuery: string;
 }
 
 interface useSampleFiltersReturn {
   filters: SampleFilters;
-  setFilterColumn: (column: FilterColumn) => void;
+  setFilterColumn: (column: FilterColumnTypes) => void;
   setSearchQuery: (query: string) => void;
   filteredSamples: Sample[];
   clearFilters: () => void;
@@ -28,7 +21,7 @@ export function useSampleFilters(samples: Sample[]): useSampleFiltersReturn {
     searchQuery: "",
   });
 
-  const setFilterColumn = useCallback((column: FilterColumn) => {
+  const setFilterColumn = useCallback((column: FilterColumnTypes) => {
     setFilters((prev) => ({ ...prev, filterColumn: column }));
   }, []);
 
@@ -70,7 +63,8 @@ export function useSampleFilters(samples: Sample[]): useSampleFiltersReturn {
 function matchesAnyField(sample: Sample, normalizedQuery: string) {
   return Object.values(sample).some(
     (value) =>
-      typeof value === "string" && value.toLowerCase().includes(normalizedQuery)
+      typeof value === "string" &&
+      value.toLowerCase().includes(normalizedQuery),
   );
 }
 

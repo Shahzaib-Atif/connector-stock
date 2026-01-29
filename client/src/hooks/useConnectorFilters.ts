@@ -1,30 +1,29 @@
+import { FilterColumnTypes } from "@/components/common/FilterBar";
 import { Connector } from "@/utils/types";
 import { useState, useMemo, useCallback } from "react";
 
-export type ConnectorFilterColumn = "all" | "id" | "type" | "fabricante";
-
 interface ConnectorFilters {
-  filterColumn: ConnectorFilterColumn;
+  filterColumn: FilterColumnTypes;
   searchQuery: string;
 }
 
 interface UseConnectorFiltersReturn {
   filters: ConnectorFilters;
-  setFilterColumn: (column: ConnectorFilterColumn) => void;
+  setFilterColumn: (column: FilterColumnTypes) => void;
   setSearchQuery: (query: string) => void;
   filteredConnectors: Connector[];
   clearFilters: () => void;
 }
 
 export function useConnectorFilters(
-  connectors: Record<string, Connector>
+  connectors: Record<string, Connector>,
 ): UseConnectorFiltersReturn {
   const [filters, setFilters] = useState<ConnectorFilters>({
     filterColumn: "all",
     searchQuery: "",
   });
 
-  const setFilterColumn = useCallback((column: ConnectorFilterColumn) => {
+  const setFilterColumn = useCallback((column: FilterColumnTypes) => {
     setFilters((prev) => ({ ...prev, filterColumn: column }));
   }, []);
 
@@ -83,10 +82,7 @@ function matchesAnyField(connector: Connector, normalizedQuery: string) {
   );
 }
 
-const getColumnValue = (
-  connector: Connector,
-  column: ConnectorFilterColumn
-): string => {
+const getColumnValue = (connector: Connector, column: FilterColumnTypes) => {
   switch (column) {
     case "id":
       return connector.CODIVMAC?.toLowerCase() ?? "";
@@ -94,6 +90,8 @@ const getColumnValue = (
       return connector.ConnType?.toLowerCase() ?? "";
     case "fabricante":
       return connector.details.Fabricante?.toLowerCase() ?? "";
+    case "family":
+      return connector.details.Family?.toString() ?? "";
     default:
       return "";
   }

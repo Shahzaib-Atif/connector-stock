@@ -1,35 +1,29 @@
+import { FilterColumnTypes } from "@/components/common/FilterBar";
 import { Accessory } from "@/utils/types";
 import { useState, useMemo, useCallback } from "react";
 
-export type AccessoryFilterColumn =
-  | "all"
-  | "id"
-  | "type"
-  | "refClient"
-  | "connName";
-
 interface AccessoryFilters {
-  filterColumn: AccessoryFilterColumn;
+  filterColumn: FilterColumnTypes;
   searchQuery: string;
 }
 
 interface UseAccessoryFiltersReturn {
   filters: AccessoryFilters;
-  setFilterColumn: (column: AccessoryFilterColumn) => void;
+  setFilterColumn: (column: FilterColumnTypes) => void;
   setSearchQuery: (query: string) => void;
   filteredAccessories: Accessory[];
   clearFilters: () => void;
 }
 
 export function useAccessoryFilters(
-  accessories: Record<string, Accessory>
+  accessories: Record<string, Accessory>,
 ): UseAccessoryFiltersReturn {
   const [filters, setFilters] = useState<AccessoryFilters>({
     filterColumn: "all",
     searchQuery: "",
   });
 
-  const setFilterColumn = useCallback((column: AccessoryFilterColumn) => {
+  const setFilterColumn = useCallback((column: FilterColumnTypes) => {
     setFilters((prev) => ({ ...prev, filterColumn: column }));
   }, []);
 
@@ -89,7 +83,7 @@ function matchesAnyField(accessory: Accessory, normalizedQuery: string) {
 
 const getColumnValue = (
   accessory: Accessory,
-  column: AccessoryFilterColumn
+  column: FilterColumnTypes,
 ): string => {
   switch (column) {
     case "id":
