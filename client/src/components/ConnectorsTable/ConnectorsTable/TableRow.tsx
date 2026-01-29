@@ -1,8 +1,9 @@
 import React from "react";
-import { ExternalLink } from "lucide-react";
+import { Link } from "lucide-react";
 import { API } from "@/utils/api";
 import { ROUTES } from "@/components/AppRoutes";
 import { Connector } from "@/utils/types";
+import { useNavigate } from "react-router-dom";
 
 interface TableRowProps {
   connector: Connector;
@@ -15,10 +16,12 @@ const TableRow: React.FC<TableRowProps> = ({
   showImages = false,
   isLegacyMode = false,
 }) => {
+  const navigate = useNavigate();
   const handleOpenLink = (id: string, type: "box" | "connector") => {
     const route = type === "connector" ? ROUTES.CONNECTORS : ROUTES.BOXES;
     const url = `${route}/${id}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    // window.open(url, "_blank", "noopener,noreferrer");
+    navigate(url);
   };
 
   const imageUrl = API.connectorImages(connector.CODIVMAC);
@@ -45,15 +48,15 @@ const TableRow: React.FC<TableRowProps> = ({
       {/* ID */}
       <td className="table-data">
         {" "}
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-1 sm:gap-1.5">
           <span>{connector.CODIVMAC}</span>
           {!isLegacyMode && (
             <button
               onClick={() => handleOpenLink(connector.CODIVMAC, "connector")}
               className="text-slate-400 hover:text-blue-400 transition-colors p-1"
-              title={`Open ${connector.CODIVMAC} in new tab`}
+              title={`Go to ${connector.CODIVMAC} details`}
             >
-              <ExternalLink className="w-4 h-4" />
+              <Link className="w-4 h-4" />
             </button>
           )}
         </div>
@@ -62,15 +65,15 @@ const TableRow: React.FC<TableRowProps> = ({
       {/* PosId */}
       <td className="table-data">
         {" "}
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-1">
           <span>{connector.PosId}</span>
           {connector.PosId && (
             <button
               onClick={() => handleOpenLink(connector.PosId, "box")}
               className="text-slate-400 hover:text-blue-400 transition-colors p-1"
-              title={`Open ${connector.PosId} in new tab`}
+              title={`Go to ${connector.PosId} details`}
             >
-              <ExternalLink className="w-4 h-4" />
+              <Link className="w-4 h-4" />
             </button>
           )}
         </div>
