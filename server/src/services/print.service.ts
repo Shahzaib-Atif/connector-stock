@@ -11,7 +11,8 @@ const execAsync = promisify(exec);
 @Injectable()
 export class PrintService {
   private readonly logger = new Logger(PrintService.name);
-  private readonly printerName = 'TSC TE200';
+  // private readonly printerName = 'TSC TE200';
+  private readonly printerName = 'TSC TE200 on 10.2.2.49';
   private readonly rawPrinterExe = path.join(
     __dirname,
     '../../../scripts/RawPrinter.exe',
