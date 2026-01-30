@@ -21,7 +21,7 @@ export class ImageService {
       }
     }
 
-    if (!fullPath) throw new Error('Image not found!');
+    if (!fullPath) throw new Error(`Image not found: ${id}`);
 
     const ext = path.extname(fullPath).toLowerCase();
     const contentType = ext === '.png' ? 'image/png' : 'image/jpeg';
@@ -49,7 +49,8 @@ export class ImageService {
   getExtrasImageStream(filename: string) {
     const fullPath = path.join(this.basePath, '_Extras', filename);
 
-    if (!fs.existsSync(fullPath)) throw new Error('Image not found!');
+    if (!fs.existsSync(fullPath))
+      throw new Error(`Image not found: ${filename}`);
 
     const ext = path.extname(fullPath).toLowerCase();
     const contentType = ext === '.png' ? 'image/png' : 'image/jpeg';
