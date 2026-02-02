@@ -8,7 +8,7 @@ export class SamplesRepo {
 
   async getAllSamples() {
     try {
-      return await this.prisma.rEG_Amostras_bk.findMany({
+      return await this.prisma.rEG_Amostras.findMany({
         where: { IsActive: true },
         orderBy: { ID: 'desc' },
       });
@@ -20,7 +20,7 @@ export class SamplesRepo {
 
   async getSampleById(id: number) {
     try {
-      return await this.prisma.rEG_Amostras_bk.findUnique({
+      return await this.prisma.rEG_Amostras.findUnique({
         where: { ID: id },
       });
     } catch (ex: any) {
@@ -35,7 +35,7 @@ export class SamplesRepo {
     const { associatedItemIds, ...sampleData } = dto;
 
     try {
-      return await this.prisma.rEG_Amostras_bk.create({
+      return await this.prisma.rEG_Amostras.create({
         data: {
           ...sampleData,
           IsActive: true,
@@ -53,7 +53,7 @@ export class SamplesRepo {
       // Remove associatedItemIds from dto before creating prisma record
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { associatedItemIds, ...sampleData } = dto;
-      return await this.prisma.rEG_Amostras_bk.update({
+      return await this.prisma.rEG_Amostras.update({
         where: { ID: id },
         data: {
           ...sampleData,
@@ -69,7 +69,7 @@ export class SamplesRepo {
   /** Soft delete sample by setting IsActive to false   */
   async deleteSample(id: number, deletedBy?: string) {
     try {
-      return await this.prisma.rEG_Amostras_bk.update({
+      return await this.prisma.rEG_Amostras.update({
         where: { ID: id },
         data: {
           IsActive: false,
