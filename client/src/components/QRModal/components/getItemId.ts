@@ -1,6 +1,7 @@
 import { ROUTES } from "@/components/AppRoutes";
 import { getConnectorId } from "@/utils/idUtils";
 
+// Returns a link path for the given item ID, handling both boxes and connectors
 export function getItemIdLink(itemId: string) {
   if (!itemId) return itemId;
 
