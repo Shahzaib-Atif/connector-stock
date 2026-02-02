@@ -6,6 +6,7 @@ import { ConnectorRepo } from 'src/repository/connectors.repo';
 import { AccessoryRepo } from 'src/repository/accessories.repo';
 import { CreateSampleDto, UpdateSampleDto } from 'src/dtos/samples.dto';
 import { TransactionsService } from './transactions.service';
+import { getConnectorId } from 'src/utils/getConnectorId';
 
 @Injectable()
 export class SamplesService {
@@ -69,7 +70,7 @@ export class SamplesService {
       const quantity = this.parseQuantity(dto.Quantidade);
       if (quantity > 0) {
         // Connector Transaction (IN)
-        const connectorId = this.getConnectorId(dto.Amostra);
+        const connectorId = getConnectorId(dto.Amostra);
         if (connectorId) {
           try {
             await this.transactionsService.processTransaction(
@@ -155,8 +156,8 @@ export class SamplesService {
       const delta = newQty - previousQty;
 
       const targetAmostra = dto.Amostra ?? existing.Amostra;
-      const targetConnId = this.getConnectorId(targetAmostra);
-      const existingConnId = this.getConnectorId(existing.Amostra);
+      const targetConnId = getConnectorId(targetAmostra);
+      const existingConnId = getConnectorId(existing.Amostra);
 
       // Adjust connector quantity
       if (delta !== 0 || targetConnId !== existingConnId) {
@@ -278,7 +279,7 @@ export class SamplesService {
       // Revert stock (OUT)
       const qty = this.parseQuantity(existing.Quantidade);
       if (qty > 0) {
-        const connId = this.getConnectorId(existing.Amostra);
+        const connId = getConnectorId(existing.Amostra);
 
         // Revert Connector
         if (connId) {
@@ -338,20 +339,6 @@ export class SamplesService {
   private parseQuantity(qty?: string | null): number {
     const parsed = Number(qty);
     return Number.isFinite(parsed) ? parsed : 0;
-  }
-
-  private getConnectorId(amostra: string): string {
-    if (!amostra) return '';
-
-    const cleanAmostra = amostra.trim();
-
-    if (cleanAmostra.includes('+')) {
-      const partBeforePlus = cleanAmostra.split('+')[0].trim();
-      // Return first 6 characters as requested
-      return partBeforePlus.substring(0, 6);
-    }
-
-    return cleanAmostra;
   }
 
   private async upsertReferenceMapping(

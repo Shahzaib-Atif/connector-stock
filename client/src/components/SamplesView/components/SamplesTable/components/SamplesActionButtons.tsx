@@ -1,6 +1,6 @@
 import { Printer, Pencil, Trash2 } from "lucide-react";
 import { QRData, Sample } from "@/utils/types";
-import { btnClass1, getConnectorId } from "./utils";
+import { btnClass1 } from "./utils";
 
 interface Props {
   sample: Sample;
@@ -26,7 +26,8 @@ function SamplesActionButtons({
         <button
           onClick={() =>
             onOpenQR({
-              id: getConnectorId(Amostra),
+              // id: getConnectorId(Amostra),
+              id: Amostra,
               source: "sample",
               refCliente: Ref_Descricao,
               encomenda: EncDivmac,
