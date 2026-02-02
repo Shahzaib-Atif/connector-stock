@@ -129,6 +129,7 @@ model Transactions {
   department      String?   @db.VarChar(20)
   updatedAt       DateTime? @default(now(), map: "DF__Transacti__updat__531856C7") @db.DateTime
   itemType        String    @db.VarChar(11)
+  notes           String?   @db.VarChar(255)
 }
 
 model Connectors_Comps {
@@ -236,6 +237,22 @@ model Refer_ncias_bk {
 
 model Notification_Users {
   id             Int       @unique(map: "Notification_Users_UNIQUE") @default(autoincrement())
+  SenderSector   String    @db.NVarChar(100)
+  SenderUser     String    @db.NVarChar(100)
+  ReceiverUser   String    @db.NVarChar(100)
+  ReceiverSector String    @db.NVarChar(100)
+  Message        String    @db.NVarChar(200)
+  Read           Boolean
+  Title          String?   @db.NVarChar(20)
+  Finished       Boolean
+  CreationDate   DateTime
+  ReadDate       DateTime?
+  FinishedDate   DateTime?
+  CompletionNote String?   @db.VarChar(100)
+}
+
+model Notification_Users_old {
+  id             Int       @unique(map: "Notification_Users_old__UNIQUE") @default(autoincrement())
   SenderSector   String    @db.NVarChar(100)
   SenderUser     String    @db.NVarChar(100)
   ReceiverUser   String    @db.NVarChar(100)

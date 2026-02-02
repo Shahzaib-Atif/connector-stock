@@ -109,18 +109,22 @@ export class NotificationsService {
     // Prepare transaction if applicable
     let transactionDto: CreateTransactionsDto | undefined;
 
-    if (
-      notificationData.linkedConnector &&
-      quantityTakenOut > 0 &&
-      connectorUpdate
-    ) {
+    // Use extracted connector from message if linked connector doesn't exist
+    const connectorId =
+      notificationData.linkedConnector?.CODIVMAC ||
+      notificationData.parsedConector;
+
+    if (connectorId) {
       transactionDto = {
-        itemId: notificationData.linkedConnector.CODIVMAC,
+        itemId: connectorId,
         transactionType: 'OUT',
-        amount: quantityTakenOut,
+        amount: Number(quantityTakenOut) || 0,
         itemType: 'connector',
-        department: notificationData.SenderSector, // Taking department from sender sector
+        department: notificationData.SenderSector,
+        notes: completionNote,
       };
+    } else {
+      console.log('Skipping transaction logging: No connector ID available');
     }
 
     // Delegate transaction to repository

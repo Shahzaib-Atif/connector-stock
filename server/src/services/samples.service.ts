@@ -71,16 +71,23 @@ export class SamplesService {
         // Connector Transaction (IN)
         const connectorId = this.getConnectorId(dto.Amostra);
         if (connectorId) {
-          await this.transactionsService.processTransaction(
-            {
-              itemId: connectorId,
-              transactionType: 'IN',
-              amount: quantity,
-              itemType: 'connector',
-              department: dto.Entregue_a,
-            },
-            tx,
-          );
+          try {
+            await this.transactionsService.processTransaction(
+              {
+                itemId: connectorId,
+                transactionType: 'IN',
+                amount: quantity,
+                itemType: 'connector',
+                department: dto.Entregue_a,
+              },
+              tx,
+            );
+          } catch (e) {
+            console.error(
+              'Failed to log connector transaction (non-fatal):',
+              e.message,
+            );
+          }
         }
 
         // Accessories Transactions (IN)
@@ -155,44 +162,67 @@ export class SamplesService {
       if (delta !== 0 || targetConnId !== existingConnId) {
         if (targetConnId !== existingConnId) {
           // Revert old (OUT)
-          if (previousQty > 0) {
-            await this.transactionsService.processTransaction(
-              {
-                itemId: existingConnId,
-                transactionType: 'OUT',
-                amount: previousQty,
-                itemType: 'connector',
-                department: existing.Entregue_a,
-              },
-              tx,
-            );
+          if (previousQty > 0 && existingConnId) {
+            try {
+              await this.transactionsService.processTransaction(
+                {
+                  itemId: existingConnId,
+                  transactionType: 'OUT',
+                  amount: previousQty,
+                  itemType: 'connector',
+                  department: existing.Entregue_a,
+                },
+                tx,
+              );
+            } catch (e: any) {
+              console.error(
+                'Failed to revert old connector transaction:',
+                e.message,
+              );
+            }
           }
           // Add new (IN)
-          if (newQty > 0) {
-            await this.transactionsService.processTransaction(
-              {
-                itemId: targetConnId,
-                transactionType: 'IN',
-                amount: newQty,
-                itemType: 'connector',
-                department: dto.Entregue_a ?? existing.Entregue_a,
-              },
-              tx,
-            );
+          if (newQty > 0 && targetConnId) {
+            try {
+              await this.transactionsService.processTransaction(
+                {
+                  itemId: targetConnId,
+                  transactionType: 'IN',
+                  amount: newQty,
+                  itemType: 'connector',
+                  department: dto.Entregue_a ?? existing.Entregue_a,
+                },
+                tx,
+              );
+            } catch (e: any) {
+              console.error(
+                'Failed to log new connector transaction:',
+                e.message,
+              );
+            }
           }
         } else {
           // Same connector, adjust by delta
-          const type = delta > 0 ? 'IN' : 'OUT';
-          await this.transactionsService.processTransaction(
-            {
-              itemId: targetConnId,
-              transactionType: type,
-              amount: Math.abs(delta),
-              itemType: 'connector',
-              department: dto.Entregue_a ?? existing.Entregue_a,
-            },
-            tx,
-          );
+          if (targetConnId) {
+            const type = delta > 0 ? 'IN' : 'OUT';
+            try {
+              await this.transactionsService.processTransaction(
+                {
+                  itemId: targetConnId,
+                  transactionType: type,
+                  amount: Math.abs(delta),
+                  itemType: 'connector',
+                  department: dto.Entregue_a ?? existing.Entregue_a,
+                },
+                tx,
+              );
+            } catch (e: any) {
+              console.error(
+                'Failed to log connector adjustment transaction:',
+                e.message,
+              );
+            }
+          }
         }
       }
 
@@ -251,16 +281,22 @@ export class SamplesService {
         const connId = this.getConnectorId(existing.Amostra);
 
         // Revert Connector
-        await this.transactionsService.processTransaction(
-          {
-            itemId: connId,
-            transactionType: 'OUT',
-            amount: qty,
-            itemType: 'connector',
-            department: existing.Entregue_a,
-          },
-          tx,
-        );
+        if (connId) {
+          try {
+            await this.transactionsService.processTransaction(
+              {
+                itemId: connId,
+                transactionType: 'OUT',
+                amount: qty,
+                itemType: 'connector',
+                department: existing.Entregue_a,
+              },
+              tx,
+            );
+          } catch (e: any) {
+            console.error('Failed to revert connector on delete:', e.message);
+          }
+        }
 
         // Revert dynamically associated accessories
         const associatedAccessories = await tx.rEG_AccessoriesSamples.findMany({

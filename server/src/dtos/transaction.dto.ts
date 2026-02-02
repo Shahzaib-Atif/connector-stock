@@ -4,4 +4,5 @@ export type CreateTransactionsDto = {
   amount: number;
   itemType: 'connector' | 'accessory';
   department?: string;
+  notes?: string;
 };

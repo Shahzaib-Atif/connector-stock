@@ -17,7 +17,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
         <tbody>
           {transactions.length === 0 ? (
             <tr>
-              <td colSpan={7} className="table-row-not-found">
+              <td colSpan={8} className="table-row-not-found">
                 No transactions found
               </td>
             </tr>

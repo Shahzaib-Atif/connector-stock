@@ -10,6 +10,7 @@ function TableHeader() {
         <th className="table-header-cell">Item Type</th>
         <th className="table-header-cell">Amount</th>
         <th className="table-header-cell">Department</th>
+        <th className="table-header-cell">Notes</th>
         <th className="table-header-cell min-w-32">Date</th>
       </tr>
     </thead>

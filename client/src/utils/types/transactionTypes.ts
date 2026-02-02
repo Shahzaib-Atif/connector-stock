@@ -6,6 +6,7 @@ export interface Transaction {
   itemType: "connector" | "accessory";
   department?: string;
   updatedAt?: number;
+  notes?: string;
 }
 
 

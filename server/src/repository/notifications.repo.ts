@@ -129,9 +129,13 @@ export class NotificationsRepo {
 
       // 3. Create transaction record if provided
       if (transactionDto) {
-        await tx.transactions.create({
-          data: transactionDto,
-        });
+        try {
+          await tx.transactions.create({
+            data: transactionDto,
+          });
+        } catch (e: any) {
+          console.error('Failed to create transaction record:', e.message);
+        }
       }
 
       return updatedNotification;

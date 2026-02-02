@@ -38,7 +38,7 @@ export function useNotificationAction(
         ).unwrap();
         setNotification(result);
 
-        if (notification?.linkedConnector?.Qty == 0)
+        if (result?.linkedConnector?.Qty == 0)
           setCompletionType("outOfStock");
 
         // Mark as read when opened

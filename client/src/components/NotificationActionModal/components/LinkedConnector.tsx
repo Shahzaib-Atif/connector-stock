@@ -28,14 +28,14 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
     window.open(
       `${ROUTES.CONNECTORS}/${connector.CODIVMAC}`,
       "_blank",
-      "noopener,noreferrer"
+      "noopener,noreferrer",
     );
     onClose();
   };
 
   const details = connector.details;
   const { CODIVMAC, Vias, Qty } = connector;
-  const { Designa__o, Fabricante } = details;
+  const { Designa__o, Fabricante } = details || {};
 
   return (
     <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
