@@ -121,6 +121,31 @@ model REG_Amostras {
   qty_sem_fio      Int?
 }
 
+model REG_Amostras_bk {
+  ID               Int       @unique(map: "REG_Amostras_bk_UNIQUE") @default(autoincrement())
+  Cliente          String?   @db.NVarChar(100)
+  Projeto          String?   @db.NVarChar(150)
+  EncDivmac        String?   @db.NVarChar(100)
+  Ref_Descricao    String?   @db.NVarChar(Max)
+  Amostra          String?   @db.NVarChar(150)
+  Data_do_pedido   String?   @db.NVarChar(100)
+  Data_recepcao    String?   @db.NVarChar(100)
+  Entregue_a       String?   @db.NVarChar(100)
+  N_Envio          String?   @db.NVarChar(100)
+  Quantidade       String?   @db.NVarChar(Max)
+  Observacoes      String?   @db.NVarChar(Max)
+  CreatedBy        String?   @db.NVarChar(100)
+  LasUpdateBy      String?   @db.NVarChar(100)
+  DateOfCreation   DateTime? @db.DateTime
+  DateOfLastUpdate String?   @db.NVarChar(100)
+  IsActive         Boolean
+  ActualUser       String?   @db.NVarChar(100)
+  NumORC           String?   @db.VarChar(100)
+  Ref_Fornecedor   String?   @db.NVarChar(100)
+  qty_com_fio      Int?
+  qty_sem_fio      Int?
+}
+
 model Transactions {
   ID              Int       @id(map: "Transactions_PK") @default(autoincrement())
   itemId          String    @db.VarChar(30)
