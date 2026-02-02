@@ -82,10 +82,19 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         <div className="space-y-6 sm:space-y-10">
           {/* Wire Status Selection for Connectors */}
           {!targetId.includes("_") && (
-            <div className="flex flex-col gap-3 p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
-              <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">
-                Wire Status
-              </span>
+            <div className={`flex flex-col gap-3 p-4 rounded-xl border transition-all ${
+              !subType ? "bg-amber-500/5 border-amber-500/20" : "bg-slate-700/30 border-slate-600/50"
+            }`}>
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">
+                  Wire Status
+                </span>
+                {!subType && (
+                  <span className="text-[10px] font-black text-amber-500 uppercase tracking-tighter animate-pulse">
+                    Required
+                  </span>
+                )}
+              </div>
               <div className="flex gap-2">
                 {[
                   { label: "WITH WIRES", value: "COM_FIO" },
@@ -96,7 +105,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                     onClick={() => setSubType(opt.value)}
                     className={`flex-1 py-2 text-[12px] font-bold rounded-lg border transition-all ${
                       subType === opt.value
-                        ? "bg-blue-600/20 border-blue-500 text-blue-300"
+                        ? "bg-blue-600/20 border-blue-500 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.1)]"
                         : "bg-slate-800 border-slate-700 text-slate-500 hover:border-slate-600"
                     }`}
                   >
@@ -147,7 +156,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
           <button
             onClick={() => {
-              if (amount > 0 && isAuthenticated) {
+              const isConnector = !targetId.includes("_");
+              const isWireStatusSelected = subType !== undefined;
+              
+              if (amount > 0 && isAuthenticated && (!isConnector || isWireStatusSelected)) {
                 onConfirm(
                   amount,
                   type === "OUT" ? dept : undefined,
@@ -162,11 +174,11 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 ? "btn-primary"
                 : "bg-orange-600 hover:bg-orange-500"
             } ${
-              !isAuthenticated || amount === 0
+              !isAuthenticated || amount === 0 || (!targetId.includes("_") && !subType)
                 ? "opacity-50 cursor-not-allowed"
                 : ""
             }`}
-            disabled={!isAuthenticated || amount === 0}
+            disabled={!isAuthenticated || amount === 0 || (!targetId.includes("_") && !subType)}
           >
             CONFIRM {type === "IN" ? "ENTRY" : "WITHDRAWAL"}
           </button>
