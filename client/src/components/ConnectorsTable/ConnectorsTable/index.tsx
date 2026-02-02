@@ -21,7 +21,7 @@ export const ConnectorsTable: React.FC<ConnectorsTableProps> = ({
         <tbody>
           {connectors.length === 0 ? (
             <tr>
-              <td colSpan={showImages ? 9 : 8} className="table-row-not-found">
+              <td colSpan={showImages ? 13 : 12} className="table-row-not-found">
                 No connectors found
               </td>
             </tr>

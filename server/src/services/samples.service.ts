@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
@@ -58,7 +59,8 @@ export class SamplesService {
       // Remove associatedItemIds from dto before creating prisma record
       const { associatedItemIds, ...sampleData } = dto;
 
-      const created = await tx.rEG_Amostras.create({
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const created = await tx.rEG_Amostras_bk.create({
         data: {
           ...sampleData,
           IsActive: true,
@@ -66,39 +68,78 @@ export class SamplesService {
         },
       });
 
-      // 2. Process Stock Transactions (if quantity > 0)
-      const quantity = this.parseQuantity(dto.Quantidade);
-      if (quantity > 0) {
-        // Connector Transaction (IN)
+      // 2. Process Stock Transactions
+      const qtyComFio = dto.qty_com_fio || 0;
+      const qtySemFio = dto.qty_sem_fio || 0;
+      const totalQuantity = this.parseQuantity(dto.Quantidade);
+
+      if (qtyComFio > 0 || qtySemFio > 0 || totalQuantity > 0) {
         const connectorId = getConnectorId(dto.Amostra);
         if (connectorId) {
-          try {
-            await this.transactionsService.processTransaction(
-              {
-                itemId: connectorId,
-                transactionType: 'IN',
-                amount: quantity,
-                itemType: 'connector',
-                department: dto.Entregue_a,
-              },
-              tx,
-            );
-          } catch (e) {
-            console.error(
-              'Failed to log connector transaction (non-fatal):',
-              e.message,
-            );
+          // Process COM FIO
+          if (qtyComFio > 0) {
+            try {
+              await this.transactionsService.processTransaction(
+                {
+                  itemId: connectorId,
+                  transactionType: 'IN',
+                  amount: qtyComFio,
+                  itemType: 'connector',
+                  subType: 'COM_FIO',
+                  department: dto.Entregue_a,
+                },
+                tx,
+              );
+            } catch (e) {
+              console.error('Failed to log COM_FIO transaction:', e.message);
+            }
+          }
+          // Process SEM FIO
+          if (qtySemFio > 0) {
+            try {
+              await this.transactionsService.processTransaction(
+                {
+                  itemId: connectorId,
+                  transactionType: 'IN',
+                  amount: qtySemFio,
+                  itemType: 'connector',
+                  subType: 'SEM_FIO',
+                  department: dto.Entregue_a,
+                },
+                tx,
+              );
+            } catch (e) {
+              console.error('Failed to log SEM_FIO transaction:', e.message);
+            }
+          }
+          // Fallback if only total quantity is provided
+          if (qtyComFio === 0 && qtySemFio === 0 && totalQuantity > 0) {
+            try {
+              await this.transactionsService.processTransaction(
+                {
+                  itemId: connectorId,
+                  transactionType: 'IN',
+                  amount: totalQuantity,
+                  itemType: 'connector',
+                  department: dto.Entregue_a,
+                },
+                tx,
+              );
+            } catch (e) {
+              console.error('Failed to log total quantity transaction:', e.message);
+            }
           }
         }
 
-        // Accessories Transactions (IN)
+        // Accessories Transactions (IN) - use total quantity
         if (associatedItemIds && associatedItemIds.length > 0) {
+          const accAmount = qtyComFio + qtySemFio || totalQuantity;
           for (const accId of associatedItemIds) {
             await this.transactionsService.processTransaction(
               {
                 itemId: accId,
                 transactionType: 'IN',
-                amount: quantity,
+                amount: accAmount,
                 itemType: 'accessory',
                 department: dto.Entregue_a,
               },
@@ -132,7 +173,8 @@ export class SamplesService {
     // 1. Create sample metadata
     return await this.prisma.$transaction(async (tx) => {
       // Fetch existing sample
-      const existing = await tx.rEG_Amostras.findUnique({
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const existing = await tx.rEG_Amostras_bk.findUnique({
         where: { ID: id },
       });
 
@@ -141,7 +183,8 @@ export class SamplesService {
       }
 
       // Update sample record
-      const updated = await tx.rEG_Amostras.update({
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const updated = await tx.rEG_Amostras_bk.update({
         where: { ID: id },
         data: {
           ...sampleData,
@@ -160,70 +203,77 @@ export class SamplesService {
       const existingConnId = getConnectorId(existing.Amostra);
 
       // Adjust connector quantity
-      if (delta !== 0 || targetConnId !== existingConnId) {
-        if (targetConnId !== existingConnId) {
-          // Revert old (OUT)
-          if (previousQty > 0 && existingConnId) {
-            try {
-              await this.transactionsService.processTransaction(
-                {
-                  itemId: existingConnId,
-                  transactionType: 'OUT',
-                  amount: previousQty,
-                  itemType: 'connector',
-                  department: existing.Entregue_a,
-                },
-                tx,
-              );
-            } catch (e: any) {
-              console.error(
-                'Failed to revert old connector transaction:',
-                e.message,
-              );
-            }
+      const prevQtyComFio = existing.qty_com_fio || 0;
+      const prevQtySemFio = existing.qty_sem_fio || 0;
+      const newQtyComFio = dto.qty_com_fio ?? prevQtyComFio;
+      const newQtySemFio = dto.qty_sem_fio ?? prevQtySemFio;
+
+      if (targetConnId !== existingConnId) {
+        // Revert old
+        if (existingConnId) {
+          if (prevQtyComFio > 0) {
+            await this.safeProcessTransaction({
+              itemId: existingConnId, transactionType: 'OUT', amount: prevQtyComFio,
+              itemType: 'connector', subType: 'COM_FIO', department: existing.Entregue_a
+            }, tx);
           }
-          // Add new (IN)
-          if (newQty > 0 && targetConnId) {
-            try {
-              await this.transactionsService.processTransaction(
-                {
-                  itemId: targetConnId,
-                  transactionType: 'IN',
-                  amount: newQty,
-                  itemType: 'connector',
-                  department: dto.Entregue_a ?? existing.Entregue_a,
-                },
-                tx,
-              );
-            } catch (e: any) {
-              console.error(
-                'Failed to log new connector transaction:',
-                e.message,
-              );
-            }
+          if (prevQtySemFio > 0) {
+            await this.safeProcessTransaction({
+              itemId: existingConnId, transactionType: 'OUT', amount: prevQtySemFio,
+              itemType: 'connector', subType: 'SEM_FIO', department: existing.Entregue_a
+            }, tx);
           }
-        } else {
-          // Same connector, adjust by delta
-          if (targetConnId) {
-            const type = delta > 0 ? 'IN' : 'OUT';
-            try {
-              await this.transactionsService.processTransaction(
-                {
-                  itemId: targetConnId,
-                  transactionType: type,
-                  amount: Math.abs(delta),
-                  itemType: 'connector',
-                  department: dto.Entregue_a ?? existing.Entregue_a,
-                },
-                tx,
-              );
-            } catch (e: any) {
-              console.error(
-                'Failed to log connector adjustment transaction:',
-                e.message,
-              );
-            }
+          if (prevQtyComFio === 0 && prevQtySemFio === 0 && previousQty > 0) {
+            await this.safeProcessTransaction({
+              itemId: existingConnId, transactionType: 'OUT', amount: previousQty,
+              itemType: 'connector', department: existing.Entregue_a
+            }, tx);
           }
+        }
+        // Add new
+        if (targetConnId) {
+          if (newQtyComFio > 0) {
+            await this.safeProcessTransaction({
+              itemId: targetConnId, transactionType: 'IN', amount: newQtyComFio,
+              itemType: 'connector', subType: 'COM_FIO', department: dto.Entregue_a ?? existing.Entregue_a
+            }, tx);
+          }
+          if (newQtySemFio > 0) {
+            await this.safeProcessTransaction({
+              itemId: targetConnId, transactionType: 'IN', amount: newQtySemFio,
+              itemType: 'connector', subType: 'SEM_FIO', department: dto.Entregue_a ?? existing.Entregue_a
+            }, tx);
+          }
+          if (newQtyComFio === 0 && newQtySemFio === 0 && newQty > 0) {
+            await this.safeProcessTransaction({
+              itemId: targetConnId, transactionType: 'IN', amount: newQty,
+              itemType: 'connector', department: dto.Entregue_a ?? existing.Entregue_a
+            }, tx);
+          }
+        }
+      } else if (targetConnId) {
+        // Adjust delta for same connector
+        const deltaComFio = newQtyComFio - prevQtyComFio;
+        const deltaSemFio = newQtySemFio - prevQtySemFio;
+
+        if (deltaComFio !== 0) {
+          await this.safeProcessTransaction({
+            itemId: targetConnId, transactionType: deltaComFio > 0 ? 'IN' : 'OUT', amount: Math.abs(deltaComFio),
+            itemType: 'connector', subType: 'COM_FIO', department: dto.Entregue_a ?? existing.Entregue_a
+          }, tx);
+        }
+        if (deltaSemFio !== 0) {
+          await this.safeProcessTransaction({
+            itemId: targetConnId, transactionType: deltaSemFio > 0 ? 'IN' : 'OUT', amount: Math.abs(deltaSemFio),
+            itemType: 'connector', subType: 'SEM_FIO', department: dto.Entregue_a ?? existing.Entregue_a
+          }, tx);
+        }
+        // Fallback for total delta if sub-quantities are not used
+        if (delta !== 0 && deltaComFio === 0 && deltaSemFio === 0) {
+          await this.safeProcessTransaction({
+            itemId: targetConnId, transactionType: delta > 0 ? 'IN' : 'OUT', amount: Math.abs(delta),
+            itemType: 'connector', department: dto.Entregue_a ?? existing.Entregue_a
+          }, tx);
         }
       }
 
@@ -268,7 +318,8 @@ export class SamplesService {
   // Soft delete sample and revert all stock atomically
   async deleteSample(id: number, deletedBy?: string) {
     return await this.prisma.$transaction(async (tx) => {
-      const existing = await tx.rEG_Amostras.findUnique({
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const existing = await tx.rEG_Amostras_bk.findUnique({
         where: { ID: id },
       });
 
@@ -277,25 +328,32 @@ export class SamplesService {
       }
 
       // Revert stock (OUT)
-      const qty = this.parseQuantity(existing.Quantidade);
+      const qty = this.parseQuantity(existing?.Quantidade);
       if (qty > 0) {
-        const connId = getConnectorId(existing.Amostra);
+        const connId = getConnectorId(existing?.Amostra);
 
         // Revert Connector
         if (connId) {
-          try {
-            await this.transactionsService.processTransaction(
-              {
-                itemId: connId,
-                transactionType: 'OUT',
-                amount: qty,
-                itemType: 'connector',
-                department: existing.Entregue_a,
-              },
-              tx,
-            );
-          } catch (e: any) {
-            console.error('Failed to revert connector on delete:', e.message);
+          const qtyComFio = existing.qty_com_fio || 0;
+          const qtySemFio = existing.qty_sem_fio || 0;
+
+          if (qtyComFio > 0) {
+            await this.safeProcessTransaction({
+              itemId: connId, transactionType: 'OUT', amount: qtyComFio,
+              itemType: 'connector', subType: 'COM_FIO', department: existing.Entregue_a
+            }, tx);
+          }
+          if (qtySemFio > 0) {
+            await this.safeProcessTransaction({
+              itemId: connId, transactionType: 'OUT', amount: qtySemFio,
+              itemType: 'connector', subType: 'SEM_FIO', department: existing.Entregue_a
+            }, tx);
+          }
+          if (qtyComFio === 0 && qtySemFio === 0 && qty > 0) {
+            await this.safeProcessTransaction({
+              itemId: connId, transactionType: 'OUT', amount: qty,
+              itemType: 'connector', department: existing.Entregue_a
+            }, tx);
           }
         }
 
@@ -315,6 +373,7 @@ export class SamplesService {
                 transactionType: 'OUT',
                 amount: qty,
                 itemType: 'accessory',
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 department: existing.Entregue_a,
               },
               tx,
@@ -323,7 +382,7 @@ export class SamplesService {
         }
       }
 
-      return await tx.rEG_Amostras.update({
+      return await tx.rEG_Amostras_bk.update({
         where: { ID: id },
         data: {
           IsActive: false,
@@ -339,6 +398,14 @@ export class SamplesService {
   private parseQuantity(qty?: string | null): number {
     const parsed = Number(qty);
     return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  private async safeProcessTransaction(dto: any, tx: TransactionClient) {
+    try {
+      await this.transactionsService.processTransaction(dto, tx);
+    } catch (e: any) {
+      console.error(`Failed to process transaction for ${dto.itemId}:`, e.message);
+    }
   }
 
   private async upsertReferenceMapping(

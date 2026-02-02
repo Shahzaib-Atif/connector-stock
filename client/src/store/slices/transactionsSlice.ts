@@ -27,7 +27,8 @@ export const performTransactionThunk = createAsyncThunk(
       itemId,
       delta,
       department,
-    }: { itemId: string; delta: number; department?: string },
+      subType,
+    }: { itemId: string; delta: number; department?: string; subType?: string },
     { getState, dispatch }
   ) => {
     const state = getState() as RootState;
@@ -39,6 +40,7 @@ export const performTransactionThunk = createAsyncThunk(
       transactionType: delta > 0 ? "IN" : "OUT",
       amount: Math.abs(delta),
       itemType: isAccessory ? "accessory" : "connector",
+      subType,
       department,
     };
 
@@ -60,10 +62,18 @@ export const performTransactionThunk = createAsyncThunk(
     } else {
       // update masterData connector
       connector = masterData.connectors[itemId];
+      const updatedConnector = { ...connector, Qty: (connector.Qty ?? 0) + delta };
+      
+      if (subType === 'COM_FIO') {
+        updatedConnector.Qty_com_fio = (connector.Qty_com_fio ?? 0) + delta;
+      } else if (subType === 'SEM_FIO') {
+        updatedConnector.Qty_sem_fio = (connector.Qty_sem_fio ?? 0) + delta;
+      }
+
       dispatch(
         updateConnector({
           itemId,
-          connector: { ...connector, Qty: (connector.Qty ?? 0) + delta },
+          connector: updatedConnector,
         })
       );
     }

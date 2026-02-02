@@ -15,13 +15,13 @@ export class TransactionsService {
   ) {}
 
   async processTransaction(dto: CreateTransactionsDto, tx?: TransactionClient) {
-    const { itemId, transactionType, itemType } = dto;
+    const { itemId, transactionType, itemType, subType } = dto;
 
     // make amount positive or negative
     const amount = transactionType === 'IN' ? dto.amount : dto.amount * -1;
 
     // update stock of accessory or connector
-    await this.updateStock(itemId, amount, itemType, tx);
+    await this.updateStock(itemId, amount, itemType, subType, tx);
 
     // update transactions table
     return await this.txRepo.addTransaction(dto, tx);
@@ -31,6 +31,7 @@ export class TransactionsService {
     itemId: string,
     amount: number,
     itemType: string,
+    subType?: string,
     tx?: TransactionClient,
   ) {
     switch (itemType) {
@@ -38,7 +39,7 @@ export class TransactionsService {
         await this.handleAccessoryTx(itemId, amount, tx);
         break;
       case 'connector':
-        await this.connRepo.update(itemId, amount, tx);
+        await this.connRepo.update(itemId, amount, subType, tx);
         break;
       default:
         throw new Error('unknown itemType!');

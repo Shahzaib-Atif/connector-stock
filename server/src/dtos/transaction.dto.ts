@@ -3,6 +3,7 @@ export type CreateTransactionsDto = {
   transactionType: 'IN' | 'OUT';
   amount: number;
   itemType: 'connector' | 'accessory';
+  subType?: string; // 'COM_FIO', 'SEM_FIO'
   department?: string;
   notes?: string;
 };

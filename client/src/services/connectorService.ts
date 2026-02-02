@@ -35,6 +35,8 @@ export const mapLegacyToConnector = (
     },
     ConnType: legacy.ConnType,
     Qty: 0, // Default for legacy
+    Qty_com_fio: 0, // Default for legacy
+    Qty_sem_fio: 0, // Default for legacy
     accessories: [],
     clientReferences: [],
   };
@@ -82,6 +84,8 @@ export const parseConnector = (
     },
     ConnType: reference.ConnType,
     Qty: masterData.connectors[id].Qty,
+    Qty_com_fio: masterData.connectors[id].Qty_com_fio,
+    Qty_sem_fio: masterData.connectors[id].Qty_sem_fio,
     accessories,
     clientReferences: reference.clientReferences || [],
   };

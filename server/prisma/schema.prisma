@@ -154,6 +154,7 @@ model Transactions {
   department      String?   @db.VarChar(20)
   updatedAt       DateTime? @default(now(), map: "DF__Transacti__updat__531856C7") @db.DateTime
   itemType        String    @db.VarChar(11)
+  subType         String?   @db.VarChar(20) // 'COM_FIO', 'SEM_FIO', etc.
   notes           String?   @db.VarChar(255)
 }
 
@@ -200,6 +201,8 @@ model Connectors_Main {
   Vias                  String                 @db.NVarChar(1)
   CODIVMAC              String                 @id(map: "PK_Connector_Main") @db.NVarChar(8)
   Qty                   Int                    @default(0, map: "DF__Connectors___Qty__55F4C372")
+  Qty_com_fio           Int                    @default(0)
+  Qty_sem_fio           Int                    @default(0)
   ESTADO                Boolean                @default(true, map: "DF__Connector__ESTAD__56E8E7AB")
   Imagem                String?                @db.NVarChar(Max)
   ConnType              String?                @db.NVarChar(100)

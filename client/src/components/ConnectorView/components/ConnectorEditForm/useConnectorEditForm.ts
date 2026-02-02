@@ -11,6 +11,8 @@ interface ConnectorFormData {
   Fabricante: string;
   Family: number;
   Qty: number;
+  Qty_com_fio: number;
+  Qty_sem_fio: number;
 }
 
 export function useConnectorEditForm(connector: Connector, onSave: () => void) {
@@ -26,11 +28,17 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
     Fabricante: connDetails.Fabricante === "--" ? "" : connDetails.Fabricante,
     Family: connDetails.Family || 1,
     Qty: connector.Qty || 0,
+    Qty_com_fio: connector.Qty_com_fio || 0,
+    Qty_sem_fio: connector.Qty_sem_fio || 0,
   });
 
-  const setQty = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseInt(e.target.value) || 0;
-    setFormData({ ...formData, Qty: Math.max(0, val) });
+  const setQtyField = (field: "Qty_com_fio" | "Qty_sem_fio", value: number) => {
+    const val = Math.max(0, value);
+    setFormData((prev) => {
+      const newData = { ...prev, [field]: val };
+      newData.Qty = newData.Qty_com_fio + newData.Qty_sem_fio;
+      return newData;
+    });
   };
 
   const setField = <K extends keyof ConnectorFormData>(
@@ -58,5 +66,5 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
     }
   };
 
-  return { formData, loading, error, setQty, setField, handleSubmit };
+  return { formData, loading, error, setQtyField, setField, handleSubmit };
 }

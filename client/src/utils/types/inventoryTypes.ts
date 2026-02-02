@@ -27,6 +27,8 @@ export interface Connector {
   Vias: string;
   CODIVMAC: string;
   Qty: number;
+  Qty_com_fio: number;
+  Qty_sem_fio: number;
   details: Connector_Details;
   ConnType?: string;
   colorName?: string;

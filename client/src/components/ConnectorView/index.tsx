@@ -25,7 +25,7 @@ interface ConnectorViewProps {
 
 const connectorResolver: EntityResolver<Connector> = (
   connectorId,
-  { masterData }
+  { masterData },
 ) => {
   if (connectorId.length !== 6 || !masterData) return null;
   return parseConnector(connectorId, masterData);
@@ -41,6 +41,8 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
   const { entity: connector } = useEntityDetails<Connector>(connectorResolver);
   const { goBack, goToAccessory, goToBox } = useInventoryNavigation();
   const [isEditing, setIsEditing] = React.useState(false);
+
+  console.log(connector);
 
   // Enable Back key to go back
   useGlobalBackNavigation(goBack);

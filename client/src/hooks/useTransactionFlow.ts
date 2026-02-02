@@ -26,7 +26,8 @@ export const useTransactionFlow = () => {
   const handleSubmit = async (
     amount: number,
     department?: Department,
-    associatedItemIds: string[] = []
+    associatedItemIds: string[] = [],
+    subType?: string
   ) => {
     if (!targetId || !masterData) return;
 
@@ -38,6 +39,7 @@ export const useTransactionFlow = () => {
           itemId: targetId,
           delta,
           department,
+          subType,
         })
       );
 

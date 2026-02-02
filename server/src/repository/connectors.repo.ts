@@ -26,6 +26,8 @@ export class ConnectorRepo {
           CODIVMAC: true,
           ConnType: true,
           Qty: true,
+          Qty_com_fio: true,
+          Qty_sem_fio: true,
           Connectors_Details: {
             select: {
               Fabricante: true,
@@ -53,6 +55,8 @@ export class ConnectorRepo {
           CODIVMAC: true,
           ConnType: true,
           Qty: true,
+          Qty_com_fio: true,
+          Qty_sem_fio: true,
           Imagem: true,
           Connectors_Details: {
             select: {
@@ -71,16 +75,29 @@ export class ConnectorRepo {
     }
   }
 
-  async update(codivmacId: string, amount: number, tx?: TransactionClient) {
+  async update(
+    codivmacId: string,
+    amount: number,
+    subType?: string,
+    tx?: TransactionClient,
+  ) {
     try {
       const client = tx || this.prisma;
+      const data: any = {
+        Qty: { increment: amount },
+      };
+
+      if (subType === 'COM_FIO') {
+        data.Qty_com_fio = { increment: amount };
+      } else if (subType === 'SEM_FIO') {
+        data.Qty_sem_fio = { increment: amount };
+      }
+
       return await client.connectors_Main.update({
         where: {
           CODIVMAC: codivmacId,
         },
-        data: {
-          Qty: { increment: amount },
-        },
+        data: data,
       });
     } catch (ex: any) {
       console.error(ex.message);
@@ -88,13 +105,26 @@ export class ConnectorRepo {
     }
   }
 
-  async adjustQuantity(tx: TransactionClient, codivmac: string, delta: number) {
+  async adjustQuantity(
+    tx: TransactionClient,
+    codivmac: string,
+    delta: number,
+    subType?: string,
+  ) {
     if (!codivmac || !delta) return;
 
     try {
+      const data: any = { Qty: { increment: delta } };
+
+      if (subType === 'COM_FIO') {
+        data.Qty_com_fio = { increment: delta };
+      } else if (subType === 'SEM_FIO') {
+        data.Qty_sem_fio = { increment: delta };
+      }
+
       await tx.connectors_Main.update({
         where: { CODIVMAC: codivmac },
-        data: { Qty: { increment: delta } },
+        data: data,
       });
     } catch (err) {
       if (err.code === 'P2025') {

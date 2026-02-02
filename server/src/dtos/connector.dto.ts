@@ -5,6 +5,8 @@ export class UpdateConnectorDto {
   Fabricante: string;
   Family: number;
   Qty: number;
+  Qty_com_fio: number;
+  Qty_sem_fio: number;
 }
 
 export class ConnectorDto {
@@ -13,6 +15,8 @@ export class ConnectorDto {
   Vias: string;
   ConnType: string;
   Qty: number;
+  Qty_com_fio: number;
+  Qty_sem_fio: number;
   Connectors_Details: {
     Fabricante: string;
     Family: number;

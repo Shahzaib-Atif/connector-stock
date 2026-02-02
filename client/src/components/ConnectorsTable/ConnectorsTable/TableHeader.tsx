@@ -18,7 +18,9 @@ const TableHeader: React.FC<TableHeaderProps> = ({ showImages = false }) => {
         <th className="table-header-cell w-32">Fabricante</th>
         <th className="table-header-cell w-32">Ref. Fabricante</th>
         <th className="table-header-cell w-32">OBS</th>
-        <th className="table-header-cell w-20 text-center">Stock</th>
+        <th className="table-header-cell w-20 text-center text-blue-300">Total</th>
+        <th className="table-header-cell w-16 text-center text-slate-400">CF</th>
+        <th className="table-header-cell w-16 text-center text-slate-400">SF</th>
       </tr>
     </thead>
   );

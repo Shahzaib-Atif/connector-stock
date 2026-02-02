@@ -16,7 +16,7 @@ export const ConnectorEditForm: React.FC<Props> = ({
   onSave,
 }) => {
   const masterData = useAppSelector((state) => state.masterData.data);
-  const { formData, loading, error, setQty, setField, handleSubmit } =
+  const { formData, loading, error, setQtyField, setField, handleSubmit } =
     useConnectorEditForm(connector, onSave);
 
   return (
@@ -81,18 +81,6 @@ export const ConnectorEditForm: React.FC<Props> = ({
           />
         </div>
 
-        {/* Quantity Input */}
-        <div className="space-y-1.5">
-          <label className={labelClass}>Quantity</label>
-          <input
-            type="number"
-            min="0"
-            value={formData.Qty}
-            onChange={setQty}
-            className={inputClass}
-          />
-        </div>
-
         {/* Fabricante dropdown */}
         <div className="space-y-1.5">
           <label className={labelClass}>Fabricante</label>
@@ -107,6 +95,44 @@ export const ConnectorEditForm: React.FC<Props> = ({
               </option>
             ))}
           </select>
+        </div>
+
+        {/* Breakdown Quantities */}
+        <div className="space-y-1.5">
+          <label className={labelClass}>With Wires</label>
+          <input
+            type="number"
+            min="0"
+            value={formData.Qty_com_fio}
+            onChange={(e) =>
+              setQtyField("Qty_com_fio", parseInt(e.target.value) || 0)
+            }
+            className={inputClass}
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className={labelClass}>No Wires</label>
+          <input
+            type="number"
+            min="0"
+            value={formData.Qty_sem_fio}
+            onChange={(e) =>
+              setQtyField("Qty_sem_fio", parseInt(e.target.value) || 0)
+            }
+            className={inputClass}
+          />
+        </div>
+
+        {/* Total Quantity Input (Read-only as it sums others) */}
+        <div className="space-y-1.5">
+          <label className={labelClass}>Total Quantity</label>
+          <input
+            type="number"
+            value={formData.Qty}
+            disabled
+            className={disabledInputClass}
+          />
         </div>
       </div>
 

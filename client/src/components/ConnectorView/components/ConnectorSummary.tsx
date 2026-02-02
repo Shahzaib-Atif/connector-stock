@@ -29,7 +29,27 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
       />
       {/* Stock Header */}
       <div className="flex justify-between items-start">
-        <StockDiv currentStock={Qty} />
+        <div className="flex flex-col">
+          <StockDiv currentStock={Qty} />
+          <div className="flex gap-3 mb-3">
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase text-slate-500 font-bold">
+                With Wires
+              </span>
+              <span className="text-sm font-semibold text-slate-300">
+                {connector.Qty_com_fio || 0}
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase text-slate-500 font-bold">
+                No Wires
+              </span>
+              <span className="text-sm font-semibold text-slate-300">
+                {connector.Qty_sem_fio || 0}
+              </span>
+            </div>
+          </div>
+        </div>
         <div id="connector-position" className="flex flex-col items-center">
           <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1 bg-blue-500/10 text-blue-300 rounded-full text-xs sm:text-sm font-bold border border-blue-500/20">
             <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />

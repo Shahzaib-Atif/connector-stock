@@ -16,7 +16,8 @@ interface TransactionModalProps {
   onConfirm: (
     amount: number,
     department?: Department,
-    associatedItemIds?: string[]
+    associatedItemIds?: string[],
+    subType?: string,
   ) => void;
 }
 
@@ -28,6 +29,8 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 }) => {
   const [amount, setAmount] = useState(1);
   const [dept, setDept] = useState<Department>(Department.GT);
+  const [subType, setSubType] = useState<string | undefined>(undefined);
+
   const {
     selectedAccessoryIds,
     associatedAccessories,
@@ -48,16 +51,18 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
       return masterData.accessories?.[targetId]?.Qty || 0;
     }
     // Otherwise it's a connector
-    return masterData.connectors?.[targetId]?.Qty || 0;
-  }, [masterData, targetId]);
+    const connector = masterData.connectors?.[targetId];
+    if (!connector) return 0;
+
+    if (subType === "COM_FIO") return connector.Qty_com_fio || 0;
+    if (subType === "SEM_FIO") return connector.Qty_sem_fio || 0;
+    return connector.Qty || 0;
+  }, [masterData, targetId, subType]);
 
   // If type is OUT, ensure amount doesn't exceed stock
   useEffect(() => {
     if (type === "OUT" && amount > currentStock) {
-      setAmount(Math.max(1, currentStock));
-    }
-    if (type === "OUT" && currentStock === 0) {
-      setAmount(0);
+      setAmount(Math.max(0, currentStock));
     }
   }, [currentStock, type]);
 
@@ -73,6 +78,33 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         <TransactionHeader type={type} onClose={onClose} targetId={targetId} />
 
         <div className="space-y-6 sm:space-y-10">
+          {/* Wire Status Selection for Connectors */}
+          {!targetId.includes("_") && (
+            <div className="flex flex-col gap-3 p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                Wire Status
+              </span>
+              <div className="flex gap-2">
+                {[
+                  { label: "WITH WIRES", value: "COM_FIO" },
+                  { label: "NO WIRES", value: "SEM_FIO" },
+                ].map((opt) => (
+                  <button
+                    key={opt.label}
+                    onClick={() => setSubType(opt.value)}
+                    className={`flex-1 py-2 text-[10px] font-bold rounded-lg border transition-all ${
+                      subType === opt.value
+                        ? "bg-blue-600/20 border-blue-500 text-blue-300"
+                        : "bg-slate-800 border-slate-700 text-slate-500 hover:border-slate-600"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <QuantitySelector
             amount={amount}
             onChange={setAmount}
@@ -103,7 +135,8 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 onConfirm(
                   amount,
                   type === "OUT" ? dept : undefined,
-                  selectedAccessoryIds
+                  selectedAccessoryIds,
+                  subType,
                 );
               }
             }}

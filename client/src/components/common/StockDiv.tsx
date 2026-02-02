@@ -6,7 +6,7 @@ interface Props {
 
 function StockDiv({ currentStock }: Props) {
   return (
-    <div id="stock-div" className="flex justify-between items-start mb-6">
+    <div id="stock-div" className="flex justify-between items-start">
       <div>
         <h2 className="text-lg sm:text-2xl font-bold text-white">
           {currentStock}
