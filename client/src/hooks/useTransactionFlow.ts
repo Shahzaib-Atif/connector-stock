@@ -27,7 +27,8 @@ export const useTransactionFlow = () => {
     amount: number,
     department?: Department,
     associatedItemIds: string[] = [],
-    subType?: string
+    subType?: string,
+    encomenda?: string
   ) => {
     if (!targetId || !masterData) return;
 
@@ -40,6 +41,7 @@ export const useTransactionFlow = () => {
           delta,
           department,
           subType,
+          encomenda,
         })
       );
 

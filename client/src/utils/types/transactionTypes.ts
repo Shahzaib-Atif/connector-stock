@@ -5,6 +5,7 @@ export interface Transaction {
   amount: number;
   itemType: "connector" | "accessory";
   subType?: string; // 'COM_FIO', 'SEM_FIO'
+  encomenda?: string;
   department?: string;
   updatedAt?: number;
   notes?: string;

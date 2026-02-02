@@ -28,7 +28,14 @@ export const performTransactionThunk = createAsyncThunk(
       delta,
       department,
       subType,
-    }: { itemId: string; delta: number; department?: string; subType?: string },
+      encomenda,
+    }: { 
+      itemId: string; 
+      delta: number; 
+      department?: string; 
+      subType?: string;
+      encomenda?: string;
+    },
     { getState, dispatch }
   ) => {
     const state = getState() as RootState;
@@ -41,6 +48,7 @@ export const performTransactionThunk = createAsyncThunk(
       amount: Math.abs(delta),
       itemType: isAccessory ? "accessory" : "connector",
       subType,
+      encomenda,
       department,
     };
 

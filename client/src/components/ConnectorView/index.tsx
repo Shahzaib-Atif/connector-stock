@@ -42,8 +42,6 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
   const { goBack, goToAccessory, goToBox } = useInventoryNavigation();
   const [isEditing, setIsEditing] = React.useState(false);
 
-  console.log(connector);
-
   // Enable Back key to go back
   useGlobalBackNavigation(goBack);
 

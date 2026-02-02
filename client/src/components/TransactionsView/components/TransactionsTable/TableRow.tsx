@@ -43,6 +43,9 @@ function TableRow({ tx, index }: Props) {
       </td>
       <td className="table-data capitalize">{tx.itemType}</td>
       <td className="table-data font-semibold">{tx.amount}</td>
+      <td className="table-data text-xs font-mono text-slate-400">
+        {tx.encomenda || "-"}
+      </td>
       <td className="table-data">{tx.department || ""}</td>
       <td className="table-data text-xs text-slate-400 italic">
         {tx.notes || "-"}

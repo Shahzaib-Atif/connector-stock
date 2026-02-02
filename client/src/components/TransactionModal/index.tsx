@@ -18,6 +18,7 @@ interface TransactionModalProps {
     department?: Department,
     associatedItemIds?: string[],
     subType?: string,
+    encomenda?: string
   ) => void;
 }
 
@@ -30,6 +31,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   const [amount, setAmount] = useState(1);
   const [dept, setDept] = useState<Department>(Department.GT);
   const [subType, setSubType] = useState<string | undefined>(undefined);
+  const [encomenda, setEncomenda] = useState("");
 
   const {
     selectedAccessoryIds,
@@ -120,7 +122,21 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           />
 
           {type === "OUT" && (
-            <DepartmentSelector value={dept} onChange={setDept} />
+            <div className="space-y-4">
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">
+                  Encomenda
+                </label>
+                <input
+                  type="text"
+                  value={encomenda}
+                  onChange={(e) => setEncomenda(e.target.value)}
+                  placeholder="Order number (optional)"
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500/50 outline-none transition-all placeholder:text-slate-600"
+                />
+              </div>
+              <DepartmentSelector value={dept} onChange={setDept} />
+            </div>
           )}
 
           {!isAuthenticated && (
@@ -137,6 +153,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                   type === "OUT" ? dept : undefined,
                   selectedAccessoryIds,
                   subType,
+                  type === "OUT" ? encomenda : undefined
                 );
               }
             }}

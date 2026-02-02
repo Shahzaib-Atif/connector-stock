@@ -155,6 +155,7 @@ model Transactions {
   updatedAt       DateTime? @default(now(), map: "DF__Transacti__updat__531856C7") @db.DateTime
   itemType        String    @db.VarChar(11)
   subType         String?   @db.VarChar(20) // 'COM_FIO', 'SEM_FIO', etc.
+  encomenda       String?   @db.VarChar(50)
   notes           String?   @db.VarChar(255)
 }
 
