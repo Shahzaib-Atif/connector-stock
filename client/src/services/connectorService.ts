@@ -49,19 +49,16 @@ export const parseConnector = (
     return null;
   }
 
-  const posId = reference.PosId;
-  const colorCode = reference.Cor;
-  const viasCode = reference.Vias;
-  const type = reference.ConnType;
-  const fabricante = reference.details.Fabricante || "--";
-  const refabricante = reference.details.Refabricante || "";
-  const coords = getCoordinates(posId, masterData);
+  const { PosId, details, Cor, Vias } = reference;
+  const fabricante = details.Fabricante || "--";
+  const refabricante = details.Refabricante || "";
+  const coords = getCoordinates(PosId, masterData);
 
   // Find associated accessories
   const accessories: Accessory[] = [];
   if (masterData.accessories) {
     Object.values(masterData.accessories).forEach((acc) => {
-      if (acc.ConnName === id) {
+      if (id.includes(acc.ConnName)) {
         accessories.push(parseAccessory(acc));
       }
     });
@@ -69,21 +66,21 @@ export const parseConnector = (
 
   return {
     CODIVMAC: id,
-    PosId: posId,
-    Cor: colorCode,
-    Vias: viasCode,
-    colorName: masterData.colors?.colorsUK[colorCode] || "Unknown",
-    colorNamePT: masterData.colors?.colorsPT?.[colorCode] || "Unknown",
-    viasName: masterData.vias[viasCode] || "Standard",
+    PosId,
+    Cor,
+    Vias,
+    colorName: masterData.colors?.colorsUK[Cor] || "Unknown",
+    colorNamePT: masterData.colors?.colorsPT?.[Cor] || "Unknown",
+    viasName: masterData.vias[Vias] || "Standard",
     cv: coords?.cv ?? "?",
     ch: coords?.ch ?? "?",
     details: {
-      Family: reference.details.Family,
+      Family: details.Family,
       Fabricante: fabricante,
       Refabricante: refabricante,
-      OBS: reference.details.OBS,
+      OBS: details.OBS,
     },
-    ConnType: type,
+    ConnType: reference.ConnType,
     Qty: masterData.connectors[id].Qty,
     accessories,
     clientReferences: reference.clientReferences || [],
@@ -111,8 +108,7 @@ export const getBoxDetails = (
     });
   }
 
-  // No fallback to demo variations. If no connectors found, return empty list.
-
+  // Aggregate accessories from all connectors in the box
   const accessories: Accessory[] = [];
   connectors.forEach((conn) => {
     accessories.push(...conn.accessories);
