@@ -18,7 +18,7 @@ interface TransactionModalProps {
     department?: Department,
     associatedItemIds?: string[],
     subType?: string,
-    encomenda?: string
+    encomenda?: string,
   ) => void;
 }
 
@@ -83,7 +83,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           {/* Wire Status Selection for Connectors */}
           {!targetId.includes("_") && (
             <div className="flex flex-col gap-3 p-4 bg-slate-700/30 rounded-xl border border-slate-600/50">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+              <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">
                 Wire Status
               </span>
               <div className="flex gap-2">
@@ -94,7 +94,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                   <button
                     key={opt.label}
                     onClick={() => setSubType(opt.value)}
-                    className={`flex-1 py-2 text-[10px] font-bold rounded-lg border transition-all ${
+                    className={`flex-1 py-2 text-[12px] font-bold rounded-lg border transition-all ${
                       subType === opt.value
                         ? "bg-blue-600/20 border-blue-500 text-blue-300"
                         : "bg-slate-800 border-slate-700 text-slate-500 hover:border-slate-600"
@@ -153,7 +153,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                   type === "OUT" ? dept : undefined,
                   selectedAccessoryIds,
                   subType,
-                  type === "OUT" ? encomenda : undefined
+                  type === "OUT" ? encomenda : undefined,
                 );
               }
             }}
