@@ -108,11 +108,14 @@ export const getBoxDetails = (
     });
   }
 
-  // Aggregate accessories from all connectors in the box
-  const accessories: Accessory[] = [];
+  // Aggregate unique accessories from all connectors in the box
+  const accessoryMap = new Map<string, Accessory>();
   connectors.forEach((conn) => {
-    accessories.push(...conn.accessories);
+    conn.accessories.forEach((acc) => {
+      accessoryMap.set(acc.id, acc);
+    });
   });
+  const accessories = Array.from(accessoryMap.values());
 
   return {
     id: boxId,
