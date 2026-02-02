@@ -96,7 +96,7 @@ const TableRow: React.FC<TableRowProps> = ({
         <div className="flex flex-col items-center gap-0.5">
           <div className="flex items-center gap-1 group">
             <div className="w-1 h-1 rounded-full bg-blue-400 opacity-60" />
-            <span className="text-slate-400 text-[10px] font-mono">
+            <span className="text-slate-400 text-sm font-mono">
               {connector.Qty_com_fio ?? 0}
             </span>
           </div>
@@ -106,7 +106,7 @@ const TableRow: React.FC<TableRowProps> = ({
         <div className="flex flex-col items-center gap-0.5">
           <div className="flex items-center gap-1 group">
             <div className="w-1 h-1 rounded-full bg-slate-500 opacity-60" />
-            <span className="text-slate-500 text-[10px] font-mono">
+            <span className="text-slate-500 text-sm font-mono">
               {connector.Qty_sem_fio ?? 0}
             </span>
           </div>
