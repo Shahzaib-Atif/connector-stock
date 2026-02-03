@@ -3,7 +3,17 @@ export const getHash = (str: string) =>
 
 export const getCoordinates = (
   posId: string,
-  masterData?: { positions: Record<string, { cv: string; ch: string }> }
+  masterData?: {
+    positions: Record<
+      string,
+      {
+        cv: string | null;
+        ch: string | null;
+        cv_ma: string | null;
+        ch_ma: string | null;
+      }
+    >;
+  }
 ) => {
   if (masterData?.positions?.[posId]) {
     return masterData.positions[posId];

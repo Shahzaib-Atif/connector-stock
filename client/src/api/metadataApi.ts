@@ -57,19 +57,33 @@ export const fetchPositions = async (): Promise<
   }
   const data: ConnPosition[] = await response.json();
 
-  const positions: Record<string, { cv: string; ch: string }> = {};
+  const positions: Record<
+    string,
+    {
+      cv: string | null;
+      ch: string | null;
+      cv_ma: string | null;
+      ch_ma: string | null;
+    }
+  > = {};
   data.forEach((item) => {
     if (item.CON) {
       const key = item.CON.trim();
       positions[key] = {
-        cv: String(item.CV).trim(),
-        ch: String(item.CH).trim(),
+        cv: normalizeString(item.CV),
+        ch: normalizeString(item.CH),
+        cv_ma: normalizeString(item.CV_Ma),
+        ch_ma: normalizeString(item.CH_Ma),
       };
     }
   });
 
   return positions;
 };
+
+function normalizeString(str: string) {
+  return str ? String(str).trim() : null;
+}
 
 export const fetchFabricantes = async (): Promise<string[]> => {
   const response = await fetchWithAuth(API.fabricantes);

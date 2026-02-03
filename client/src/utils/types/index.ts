@@ -19,7 +19,12 @@ export interface MasterData {
   vias: Record<string, string>;
   connectorTypes: string[];
   accessoryTypes: string[];
-  positions: Record<string, { cv: string; ch: string }>;
+  positions: Record<string, { 
+    cv: string | null; 
+    ch: string | null; 
+    cv_ma: string | null; 
+    ch_ma: string | null; 
+  }>;
   connectors: Record<string, Connector>;
   accessories: Record<string, Accessory>;
   fabricantes: string[];
@@ -49,6 +54,8 @@ export interface ConnectorType {
 
 export interface ConnPosition {
   CON: string;
-  CV: string;
-  CH: string;
+  CV: string | null;
+  CH: string | null;
+  CV_Ma: string | null;
+  CH_Ma: string | null;
 }

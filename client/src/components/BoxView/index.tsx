@@ -32,8 +32,8 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
   // Enable Back key to go back
   useGlobalBackNavigation(goBack);
 
-  // show not found page if box not found
-  if (!box || box.ch === "?" || box.cv === "?") {
+  // show not found page if box not found or has no coordinates
+  if (!box || (!box.ch && !box.cv && !box.ch_ma && !box.cv_ma)) {
     return <NotFoundPage label="Box" icon={MapPin} onBack={goBack} />;
   }
 

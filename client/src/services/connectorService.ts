@@ -24,8 +24,10 @@ export const mapLegacyToConnector = (
     colorName: masterData.colors?.colorsUK[legacy.Cor] || "-",
     colorNamePT: masterData.colors?.colorsPT?.[legacy.Cor] || "-",
     viasName: legacy.Vias ? masterData.vias[legacy.Vias] : "-",
-    cv: coords?.cv ?? "?",
-    ch: coords?.ch ?? "?",
+    cv: coords?.cv ?? null,
+    ch: coords?.ch ?? null,
+    cv_ma: coords?.cv_ma ?? null,
+    ch_ma: coords?.ch_ma ?? null,
     details: {
       Family: 1, // Default for legacy
       Fabricante: legacy.Fabricante || "--",
@@ -74,8 +76,10 @@ export const parseConnector = (
     colorName: masterData.colors?.colorsUK[Cor] || "Unknown",
     colorNamePT: masterData.colors?.colorsPT?.[Cor] || "Unknown",
     viasName: masterData.vias[Vias] || "Standard",
-    cv: coords?.cv ?? "?",
-    ch: coords?.ch ?? "?",
+    cv: coords?.cv ?? null,
+    ch: coords?.ch ?? null,
+    cv_ma: coords?.cv_ma ?? null,
+    ch_ma: coords?.ch_ma ?? null,
     details: {
       Family: details.Family,
       Fabricante: fabricante,
@@ -123,8 +127,10 @@ export const getBoxDetails = (
 
   return {
     id: boxId,
-    cv: coords?.cv ?? "?",
-    ch: coords?.ch ?? "?",
+    cv: coords?.cv ?? null,
+    ch: coords?.ch ?? null,
+    cv_ma: coords?.cv_ma ?? null,
+    ch_ma: coords?.ch_ma ?? null,
     connectors,
     accessories,
   };

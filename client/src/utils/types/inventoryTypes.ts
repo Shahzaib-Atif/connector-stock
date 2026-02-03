@@ -34,16 +34,20 @@ export interface Connector {
   colorName?: string;
   colorNamePT?: string;
   viasName?: string;
-  cv?: string; // Vertical Coordinate
-  ch?: string; // Horizontal Coordinate
+  cv?: string | null; // Vertical Coordinate
+  ch?: string | null; // Horizontal Coordinate
+  cv_ma?: string | null; // Morocco Vertical Coordinate
+  ch_ma?: string | null; // Morocco Horizontal Coordinate
   accessories: Accessory[]; // Linked accessories
   clientReferences?: string[]; // Legacy mappings (RefMARCA)
 }
 
 export interface Box {
   id: string; // e.g., A255 (4 chars)
-  cv: string;
-  ch: string;
+  cv: string | null;
+  ch: string | null;
+  cv_ma: string | null;
+  ch_ma: string | null;
   connectors: Connector[]; // List of connectors known in this box
   accessories: Accessory[]; // List of accessories in this box
 }
