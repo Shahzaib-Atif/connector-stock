@@ -12,7 +12,7 @@ export const NotificationsView: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { notifications, loading, unfinishedCount } = useAppSelector(
-    (state) => state.notifications
+    (state) => state.notifications,
   );
   const [selectedNotificationId, setSelectedNotificationId] = useState<
     number | null
@@ -32,6 +32,12 @@ export const NotificationsView: React.FC = () => {
     dispatch(fetchUnfinishedNotifications());
   };
 
+  if (notifications.length === 0) {
+    <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+      <p className="text-lg">No pending notifications</p>
+    </div>;
+  }
+
   if (loading && notifications.length === 0) {
     return <Spinner />;
   }
@@ -46,16 +52,10 @@ export const NotificationsView: React.FC = () => {
 
       <div id="notifications-content" className="table-view-content">
         <div className="table-view-inner-content max-w-xl md:max-w-4xl overflow-auto">
-          {notifications.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-              <p className="text-lg">No pending notifications</p>
-            </div>
-          ) : (
-            <NotificationsList
-              notifications={notifications}
-              onNotificationClick={handleNotificationClick}
-            />
-          )}
+          <NotificationsList
+            notifications={notifications}
+            onNotificationClick={handleNotificationClick}
+          />
         </div>
       </div>
 
