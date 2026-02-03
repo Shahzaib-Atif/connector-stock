@@ -163,6 +163,8 @@ export class ConnectorRepo {
             Vias: data.Vias,
             ConnType: data.ConnType,
             Qty: data.Qty,
+            Qty_com_fio: data.Qty_com_fio,
+            Qty_sem_fio: data.Qty_sem_fio,
           },
         });
 
