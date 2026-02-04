@@ -74,9 +74,7 @@ export const AccessoryItem: React.FC<Props> = ({
             onClick={() => onTransaction("OUT", accessory.id)}
             disabled={stock <= 0}
             className={`${stockBtnClass} ${
-              stock <= 0
-                ? "bg-slate-800 text-slate-600 cursor-not-allowed"
-                : "bg-slate-700 hover:bg-slate-600 text-slate-200"
+              stock <= 0 ? "btn-secondary cursor-not-allowed" : "btn-secondary"
             }`}
           >
             <Minus className="w-4 h-4" />

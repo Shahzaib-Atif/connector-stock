@@ -57,7 +57,7 @@ export default function Filters({
             setEncomendaFilter("");
           }}
           disabled={!(estadoFilter || encomendaFilter)}
-          className="self-start sm:self-end mt-1 sm:mt-0 px-4 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-lg text-sm transition-colors"
+          className="self-start sm:self-end mt-1 sm:mt-0 px-4 py-1.5 btn-secondary rounded-lg text-sm transition-colors"
         >
           Clear
         </button>

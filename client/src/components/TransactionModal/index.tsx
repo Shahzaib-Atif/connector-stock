@@ -68,6 +68,25 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
     }
   }, [currentStock, type]);
 
+  const handleSubmit = () => {
+    const isConnector = !targetId.includes("_");
+    const isWireStatusSelected = subType !== undefined;
+
+    if (
+      amount > 0 &&
+      isAuthenticated &&
+      (!isConnector || isWireStatusSelected)
+    ) {
+      onConfirm(
+        amount,
+        type === "OUT" ? dept : undefined,
+        selectedAccessoryIds,
+        subType,
+        type === "OUT" ? encomenda : undefined,
+      );
+    }
+  };
+
   return (
     <div
       id="transaction-modal"
@@ -82,9 +101,13 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         <div className="space-y-6 sm:space-y-10">
           {/* Wire Status Selection for Connectors */}
           {!targetId.includes("_") && (
-            <div className={`flex flex-col gap-3 p-4 rounded-xl border transition-all ${
-              !subType ? "bg-amber-500/5 border-amber-500/20" : "bg-slate-700/30 border-slate-600/50"
-            }`}>
+            <div
+              className={`flex flex-col gap-3 p-4 rounded-xl border transition-all ${
+                !subType
+                  ? "bg-amber-500/5 border-amber-500/20"
+                  : "bg-slate-700/30 border-slate-600/50"
+              }`}
+            >
               <div className="flex justify-between items-center">
                 <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">
                   Wire Status
@@ -130,6 +153,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             transactionType={type}
           />
 
+          {/* Encomenda */}
           {type === "OUT" && (
             <div className="space-y-4">
               <div className="flex flex-col gap-2">
@@ -155,30 +179,21 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           )}
 
           <button
-            onClick={() => {
-              const isConnector = !targetId.includes("_");
-              const isWireStatusSelected = subType !== undefined;
-              
-              if (amount > 0 && isAuthenticated && (!isConnector || isWireStatusSelected)) {
-                onConfirm(
-                  amount,
-                  type === "OUT" ? dept : undefined,
-                  selectedAccessoryIds,
-                  subType,
-                  type === "OUT" ? encomenda : undefined,
-                );
-              }
-            }}
+            onClick={handleSubmit}
             className={`w-full py-4 rounded-xl font-bold text-base sm:text-lg shadow-lg transition-transform active:scale-[0.98] ${
-              type === "IN"
-                ? "btn-primary"
-                : "bg-orange-600 hover:bg-orange-500"
+              type === "IN" ? "btn-primary" : "btn-secondary"
             } ${
-              !isAuthenticated || amount === 0 || (!targetId.includes("_") && !subType)
+              !isAuthenticated ||
+              amount === 0 ||
+              (!targetId.includes("_") && !subType)
                 ? "opacity-50 cursor-not-allowed"
                 : ""
             }`}
-            disabled={!isAuthenticated || amount === 0 || (!targetId.includes("_") && !subType)}
+            disabled={
+              !isAuthenticated ||
+              amount === 0 ||
+              (!targetId.includes("_") && !subType)
+            }
           >
             CONFIRM {type === "IN" ? "ENTRY" : "WITHDRAWAL"}
           </button>

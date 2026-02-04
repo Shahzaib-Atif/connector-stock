@@ -12,7 +12,7 @@ export default function QuantitySelector({ printQty, setPrintQty }: Props) {
       <div className="flex items-center gap-3">
         <button
           onClick={() => setPrintQty(Math.max(1, printQty - 1))}
-          className="w-8 h-8 rounded-full bg-slate-700 hover:bg-slate-600 text-white flex items-center justify-center border border-slate-600 transition-colors"
+          className="w-8 h-8 rounded-full btn-secondary text-white flex items-center justify-center border border-slate-600 transition-colors"
         >
           -
         </button>
@@ -27,7 +27,7 @@ export default function QuantitySelector({ printQty, setPrintQty }: Props) {
         />
         <button
           onClick={() => setPrintQty(printQty + 1)}
-          className="w-8 h-8 rounded-full bg-slate-700 hover:bg-slate-600 text-white flex items-center justify-center border border-slate-600 transition-colors"
+          className="w-8 h-8 rounded-full btn-secondary text-white flex items-center justify-center border border-slate-600 transition-colors"
         >
           +
         </button>

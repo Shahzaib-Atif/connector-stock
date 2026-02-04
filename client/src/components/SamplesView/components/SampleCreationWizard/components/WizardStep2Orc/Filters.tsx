@@ -52,7 +52,7 @@ export default function Filters({
             setRefClienteFilter("");
           }}
           disabled={!(amostraFilter || refClienteFilter)}
-          className="self-end px-4 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-lg text-sm transition-colors"
+          className="self-end px-4 py-1.5 btn-secondary rounded-lg text-sm transition-colors"
         >
           Clear
         </button>

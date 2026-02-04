@@ -29,7 +29,7 @@ function ActionButtons({ isPrinting, onClose, handlePrint }: Props) {
       </button>
       <button
         onClick={onClose}
-        className="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-colors border border-slate-600"
+        className="flex-1 py-3 btn-secondary font-bold rounded-xl transition-colors border border-slate-600"
       >
         Close
       </button>

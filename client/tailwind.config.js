@@ -10,6 +10,9 @@ export default {
         ".btn-primary": {
           "@apply bg-blue-600 hover:bg-blue-500 text-white": {},
         },
+        ".btn-secondary": {
+          "@apply bg-slate-700 hover:bg-slate-600 text-slate-100": {},
+        }, 
         ".table-header": {
           "@apply border-b border-slate-700 bg-slate-800 uppercase text-xs": {},
         },
