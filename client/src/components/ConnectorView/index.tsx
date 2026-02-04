@@ -1,22 +1,22 @@
 import React from "react";
 import { Wrench } from "lucide-react";
-import { Connector } from "../../utils/types";
-import { parseConnector } from "../../services/connectorService";
-import { DetailHeader } from "../common/DetailHeader";
-import { TransactionBar } from "../common/TransactionBar";
-import { NotFoundPage } from "../common/NotFoundPage";
-import { useInventoryNavigation } from "../../hooks/useInventoryNavigation";
-import { useEntityDetails, EntityResolver } from "../../hooks/useEntityDetails";
 import { ConnectorSummary } from "./components/ConnectorSummary";
 import { AccessoryList } from "./components/AccessoryList";
 import { BoxShortcut } from "../common/BoxShortcut";
-import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
-import { useAppSelector } from "../../store/hooks";
 import { Edit2 } from "lucide-react";
 import { ConnectorEditForm } from "./components/ConnectorEditForm";
 import { RelatedImages } from "./components/RelatedImages";
 import { UserRoles } from "@/utils/types/userTypes";
 import { QRData } from "@/utils/types/shared";
+import { EntityResolver, useEntityDetails } from "@/hooks/useEntityDetails";
+import { Connector } from "@/utils/types";
+import { parseConnector } from "@/services/connectorService";
+import { useAppSelector } from "@/store/hooks";
+import { useInventoryNavigation } from "@/hooks/useInventoryNavigation";
+import { useGlobalBackNavigation } from "@/hooks/useGlobalBackNavigation";
+import { NotFoundPage } from "../common/NotFoundPage";
+import { DetailHeader } from "../common/DetailHeader";
+import { TransactionBar } from "../common/TransactionBar";
 
 interface ConnectorViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;

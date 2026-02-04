@@ -19,23 +19,8 @@ export class ConnectorRepo {
   async getConnectors() {
     try {
       return await this.prisma.connectors_Main.findMany({
-        select: {
-          PosId: true,
-          Cor: true,
-          Vias: true,
-          CODIVMAC: true,
-          ConnType: true,
-          Qty: true,
-          Qty_com_fio: true,
-          Qty_sem_fio: true,
-          Connectors_Details: {
-            select: {
-              Fabricante: true,
-              Refabricante: true,
-              Family: true,
-              OBS: true,
-            },
-          },
+        include: {
+          Connectors_Details: true,
         },
       });
     } catch (ex: any) {
@@ -48,25 +33,8 @@ export class ConnectorRepo {
     try {
       return await this.prisma.connectors_Main.findUnique({
         where: { CODIVMAC: codivmac },
-        select: {
-          PosId: true,
-          Cor: true,
-          Vias: true,
-          CODIVMAC: true,
-          ConnType: true,
-          Qty: true,
-          Qty_com_fio: true,
-          Qty_sem_fio: true,
-          Imagem: true,
-          Connectors_Details: {
-            select: {
-              Designa__o: true,
-              Fabricante: true,
-              Refabricante: true,
-              Family: true,
-              OBS: true,
-            },
-          },
+        include: {
+          Connectors_Details: true,
         },
       });
     } catch (ex: any) {

@@ -60,7 +60,6 @@ export class NotificationsRepo {
     encomenda: string,
   ): Promise<UpdateSampleDto | null> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const samples: UpdateSampleDto[] =
         await this.prisma.rEG_Amostras.findMany({
           where: {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
@@ -59,7 +58,6 @@ export class SamplesService {
       // Remove associatedItemIds from dto before creating prisma record
       const { associatedItemIds, ...sampleData } = dto;
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const created = await tx.rEG_Amostras.create({
         data: {
           ...sampleData,
@@ -176,7 +174,7 @@ export class SamplesService {
     // 1. Create sample metadata
     return await this.prisma.$transaction(async (tx) => {
       // Fetch existing sample
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
       const existing = await tx.rEG_Amostras.findUnique({
         where: { ID: id },
       });
@@ -186,7 +184,7 @@ export class SamplesService {
       }
 
       // Update sample record
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
       const updated = await tx.rEG_Amostras.update({
         where: { ID: id },
         data: {
@@ -381,7 +379,6 @@ export class SamplesService {
   // Soft delete sample and revert all stock atomically
   async deleteSample(id: number, deletedBy?: string) {
     return await this.prisma.$transaction(async (tx) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const existing = await tx.rEG_Amostras.findUnique({
         where: { ID: id },
       });
@@ -456,7 +453,7 @@ export class SamplesService {
                 transactionType: 'OUT',
                 amount: qty,
                 itemType: 'accessory',
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
                 department: existing.Entregue_a,
               },
               tx,
