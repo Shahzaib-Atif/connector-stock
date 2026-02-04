@@ -127,8 +127,17 @@ export const transactionsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || "Transaction failed";
       })
+      .addCase(initTransactionsData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(initTransactionsData.fulfilled, (state, action) => {
         state.transactions = action.payload.transactions;
+        state.loading = false;
+      })
+      .addCase(initTransactionsData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Failed to load transactions";
       });
   },
 });

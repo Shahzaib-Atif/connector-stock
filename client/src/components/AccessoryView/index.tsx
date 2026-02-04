@@ -27,7 +27,7 @@ interface AccessoryViewProps {
  */
 const accessoryResolver: EntityResolver<Accessory> = (
   accessoryId,
-  { masterData } // Data from Redux store
+  { masterData }, // Data from Redux store
 ) => {
   // Basic validation: ID must have underscores and we need master data
   if (!accessoryId.includes("_") || !masterData || !masterData.accessories)

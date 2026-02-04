@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { QrCode, Menu, LogIn, Bell } from "lucide-react";
-import BrandLogo from "./BrandLogo";
-import Sidebar from "./Sidebar";
-import { useAppSelector } from "../../store/hooks";
+import { QrCode, Menu, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
-
-import { Breadcrumbs } from "./Breadcrumbs";
-import { ROUTES } from "../AppRoutes";
-import { ChangePasswordModal } from "./ChangePasswordModal";
 import { UserRoles } from "@/utils/types/userTypes";
+import RefreshButton from "./RefreshButton";
+import { useAppSelector } from "@/store/hooks";
+import { Breadcrumbs } from "../Breadcrumbs";
+import BrandLogo from "../BrandLogo";
+import { ROUTES } from "@/components/AppRoutes";
+import { ChangePasswordModal } from "../ChangePasswordModal";
+import Sidebar from "../Sidebar";
+import NotificationBell from "./NotificationBell";
 
 interface DetailHeaderProps {
   label?: string;
@@ -22,18 +23,16 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
 }) => {
   const user = useAppSelector((state) => state.auth.user);
   const role = useAppSelector((state) => state.auth.role);
-  const unfinishedCount = useAppSelector(
-    (state) => state.notifications.unfinishedCount
-  );
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
 
   return (
     <>
       <header
         id="detail-header"
-        className="bg-slate-900/80 backdrop-blur-md sticky top-0 z-20 border-b border-slate-800 p-2.5 sm:p-3.5 shadow-sm"
+        className="bg-slate-900/80 backdrop-blur-md sticky top-0 z-20 border-b border-slate-800 p-2 py-2.5 sm:p-3.5 shadow-sm"
       >
         <div className="mx-auto w-full flex items-center justify-between min-h-[44px] relative">
           {/* Left side - Menu button */}
@@ -54,13 +53,14 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
             </div>
           </div>
 
-          {/* Breadcrumbs - Absolutely centered */}
+          {/* Breadcrumbs */}
           <div className="text-center w-full flex items-center justify-center">
             <Breadcrumbs />
           </div>
 
-          {/* Right side - QR button and Login button */}
-          <div className="flex items-center gap-2">
+          {/* Right side - QR, refresh and Login button */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            {/* LOGIN Button */}
             {!user && (
               <Link
                 to={ROUTES.LOGIN}
@@ -71,6 +71,8 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
                 <span>Login</span>
               </Link>
             )}
+
+            {/* QR Code Button */}
             {handleQRClick && user && (
               <button
                 id="qr-code-btn"
@@ -84,21 +86,10 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
             )}
 
             {/* Notification Bell */}
-            {user && isAdmin && (
-              <Link
-                to={ROUTES.NOTIFICATIONS}
-                className="p-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg flex-shrink-0 relative"
-                title="Notifications"
-                aria-label="View notifications"
-              >
-                <Bell className="w-6 h-6" />
-                {unfinishedCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white border-2 border-slate-900 animate-pulse">
-                    {unfinishedCount}
-                  </span>
-                )}
-              </Link>
-            )}
+            {user && isAdmin && <NotificationBell />}
+
+            {/* Refresh Button */}
+            <RefreshButton />
           </div>
         </div>
       </header>

@@ -14,7 +14,7 @@ import { Accessory } from "@/utils/types";
 export const AccessoriesListView: React.FC = () => {
   const navigate = useNavigate();
   const { data: masterData, loading } = useAppSelector(
-    (state) => state.masterData
+    (state) => state.masterData,
   );
 
   // Get accessories from masterData (default to empty object if not loaded)
