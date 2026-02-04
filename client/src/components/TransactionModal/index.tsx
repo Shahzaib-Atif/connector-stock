@@ -1,13 +1,16 @@
-import React, { useRef, useState, useMemo, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEscKeyDown } from "@/hooks/useEscKeyDown";
-import { DepartmentSelector } from "./components/DepartmentSelector";
 import { QuantitySelector } from "./components/QuantitySelector";
 import { TransactionHeader } from "./components/TransactionHeader";
 import { useAssociatedAccessories } from "@/hooks/useAssociatedAccessories";
 import AccessoryChecklist from "./components/AccessoryChecklist";
 import { Department } from "@/utils/types/shared";
+import WireStatusCard from "./components/WireStatusCard";
+import useStockCalculations from "./components/useStockCalculations";
+import ActionButton from "./components/ActionButton";
+import WithdrawalDetails from "./components/WithdrawalDetails";
 
 interface TransactionModalProps {
   type: "IN" | "OUT";
@@ -28,10 +31,12 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   onClose,
   onConfirm,
 }) => {
-  const [amount, setAmount] = useState(1);
-  const [dept, setDept] = useState<Department>(Department.GT);
-  const [subType, setSubType] = useState<string | undefined>(undefined);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const [encomenda, setEncomenda] = useState("");
+  const [dept, setDept] = useState<Department>(Department.GT);
+
+  const { currentStock, amount, subType, setSubType, setAmount } =
+    useStockCalculations(targetId, type);
 
   const {
     selectedAccessoryIds,
@@ -42,31 +47,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   const ref = useRef(null);
   useClickOutside(ref, onClose);
   useEscKeyDown(ref, onClose);
-
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const masterData = useAppSelector((state) => state.masterData.data);
-
-  const currentStock = useMemo(() => {
-    if (!masterData) return 0;
-    // Check if targetId is an accessory (has underscore)
-    if (targetId.includes("_")) {
-      return masterData.accessories?.[targetId]?.Qty || 0;
-    }
-    // Otherwise it's a connector
-    const connector = masterData.connectors?.[targetId];
-    if (!connector) return 0;
-
-    if (subType === "COM_FIO") return connector.Qty_com_fio || 0;
-    if (subType === "SEM_FIO") return connector.Qty_sem_fio || 0;
-    return connector.Qty || 0;
-  }, [masterData, targetId, subType]);
-
-  // If type is OUT, ensure amount doesn't exceed stock
-  useEffect(() => {
-    if (type === "OUT" && amount > currentStock) {
-      setAmount(Math.max(0, currentStock));
-    }
-  }, [currentStock, type]);
 
   const handleSubmit = () => {
     const isConnector = !targetId.includes("_");
@@ -101,42 +81,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         <div className="space-y-6 sm:space-y-10">
           {/* Wire Status Selection for Connectors */}
           {!targetId.includes("_") && (
-            <div
-              className={`flex flex-col gap-3 p-4 rounded-xl border transition-all ${
-                !subType
-                  ? "bg-amber-500/5 border-amber-500/20"
-                  : "bg-slate-700/30 border-slate-600/50"
-              }`}
-            >
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">
-                  Wire Status
-                </span>
-                {!subType && (
-                  <span className="text-[10px] font-black text-amber-500 uppercase tracking-tighter animate-pulse">
-                    Required
-                  </span>
-                )}
-              </div>
-              <div className="flex gap-2">
-                {[
-                  { label: "WITH WIRES", value: "COM_FIO" },
-                  { label: "NO WIRES", value: "SEM_FIO" },
-                ].map((opt) => (
-                  <button
-                    key={opt.label}
-                    onClick={() => setSubType(opt.value)}
-                    className={`flex-1 py-2 text-[12px] font-bold rounded-lg border transition-all ${
-                      subType === opt.value
-                        ? "bg-blue-600/20 border-blue-500 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.1)]"
-                        : "bg-slate-800 border-slate-700 text-slate-500 hover:border-slate-600"
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <WireStatusCard subType={subType} setSubType={setSubType} />
           )}
 
           <QuantitySelector
@@ -153,23 +98,14 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             transactionType={type}
           />
 
-          {/* Encomenda */}
+          {/*  */}
           {type === "OUT" && (
-            <div className="space-y-4">
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">
-                  Encomenda
-                </label>
-                <input
-                  type="text"
-                  value={encomenda}
-                  onChange={(e) => setEncomenda(e.target.value)}
-                  placeholder="Order number (optional)"
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500/50 outline-none transition-all placeholder:text-slate-600"
-                />
-              </div>
-              <DepartmentSelector value={dept} onChange={setDept} />
-            </div>
+            <WithdrawalDetails
+              dept={dept}
+              setDept={setDept}
+              encomenda={encomenda}
+              setEncomenda={setEncomenda}
+            />
           )}
 
           {!isAuthenticated && (
@@ -178,25 +114,14 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             </p>
           )}
 
-          <button
-            onClick={handleSubmit}
-            className={`w-full py-4 rounded-xl font-bold text-base sm:text-lg shadow-lg transition-transform active:scale-[0.98] ${
-              type === "IN" ? "btn-primary" : "btn-secondary"
-            } ${
-              !isAuthenticated ||
-              amount === 0 ||
-              (!targetId.includes("_") && !subType)
-                ? "opacity-50 cursor-not-allowed"
-                : ""
-            }`}
-            disabled={
-              !isAuthenticated ||
-              amount === 0 ||
-              (!targetId.includes("_") && !subType)
-            }
-          >
-            CONFIRM {type === "IN" ? "ENTRY" : "WITHDRAWAL"}
-          </button>
+          <ActionButton
+            amount={amount}
+            handleSubmit={handleSubmit}
+            isAuthenticated={isAuthenticated}
+            subType={subType}
+            targetId={targetId}
+            type={type}
+          />
         </div>
       </div>
     </div>
