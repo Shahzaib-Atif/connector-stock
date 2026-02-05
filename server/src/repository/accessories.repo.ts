@@ -25,6 +25,7 @@ export class AccessoryRepo {
           Qty: true,
           CapotAngle: true,
           ClipColor: true,
+          RefDV: true,
         },
       });
     } catch (ex: any) {
