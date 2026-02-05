@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { UpdateConnectorDto } from 'src/dtos/connector.dto';
+import { WireTypes } from 'src/dtos/transaction.dto';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
 
 @Injectable()
@@ -46,7 +47,7 @@ export class ConnectorRepo {
   async update(
     codivmacId: string,
     amount: number,
-    subType?: string,
+    subType?: WireTypes,
     tx?: TransactionClient,
   ) {
     try {
@@ -55,9 +56,9 @@ export class ConnectorRepo {
         Qty: { increment: amount },
       };
 
-      if (subType === 'COM_FIO') {
+      if (subType === WireTypes.COM_FIO) {
         data.Qty_com_fio = { increment: amount };
-      } else if (subType === 'SEM_FIO') {
+      } else if (subType === WireTypes.SEM_FIO) {
         data.Qty_sem_fio = { increment: amount };
       }
 
@@ -77,16 +78,16 @@ export class ConnectorRepo {
     tx: TransactionClient,
     codivmac: string,
     delta: number,
-    subType?: string,
+    subType?: WireTypes,
   ) {
     if (!codivmac || !delta) return;
 
     try {
       const data: any = { Qty: { increment: delta } };
 
-      if (subType === 'COM_FIO') {
+      if (subType === WireTypes.COM_FIO) {
         data.Qty_com_fio = { increment: delta };
-      } else if (subType === 'SEM_FIO') {
+      } else if (subType === WireTypes.SEM_FIO) {
         data.Qty_sem_fio = { increment: delta };
       }
 

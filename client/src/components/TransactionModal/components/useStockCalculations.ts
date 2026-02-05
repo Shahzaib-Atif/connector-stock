@@ -1,4 +1,5 @@
 import { useAppSelector } from "@/store/hooks";
+import { WireTypes } from "@/utils/types";
 import { useEffect, useMemo, useState } from "react";
 
 export default function useStockCalculations(
@@ -20,8 +21,8 @@ export default function useStockCalculations(
     const connector = masterData.connectors?.[targetId];
     if (!connector) return 0;
 
-    if (subType === "COM_FIO") return connector.Qty_com_fio || 0;
-    if (subType === "SEM_FIO") return connector.Qty_sem_fio || 0;
+    if (subType === WireTypes.COM_FIO) return connector.Qty_com_fio || 0;
+    if (subType === WireTypes.SEM_FIO) return connector.Qty_sem_fio || 0;
     return connector.Qty || 0;
   }, [masterData, targetId, subType]);
 

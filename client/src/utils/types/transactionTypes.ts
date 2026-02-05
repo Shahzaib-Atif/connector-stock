@@ -4,12 +4,14 @@ export interface Transaction {
   transactionType: "IN" | "OUT";
   amount: number;
   itemType: "connector" | "accessory";
-  subType?: string; // 'COM_FIO', 'SEM_FIO'
+  subType?: WireTypes;
   encomenda?: string;
   department?: string;
   updatedAt?: number;
   notes?: string;
 }
 
-
-
+export enum WireTypes {
+  COM_FIO = "COM_FIO",
+  SEM_FIO = "SEM_FIO",
+}

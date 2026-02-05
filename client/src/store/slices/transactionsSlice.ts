@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { createTransaction, getTransactions } from "@/api/transactionsApi";
 import { RootState } from "@/store";
-import { Accessory, Connector, Transaction } from "@/utils/types";
+import { Accessory, Connector, Transaction, WireTypes } from "@/utils/types";
 import { updateAccessory, updateConnector } from "./masterDataSlice";
 
 interface TransactionState {
@@ -29,14 +29,14 @@ export const performTransactionThunk = createAsyncThunk(
       department,
       subType,
       encomenda,
-    }: { 
-      itemId: string; 
-      delta: number; 
-      department?: string; 
+    }: {
+      itemId: string;
+      delta: number;
+      department?: string;
       subType?: string;
       encomenda?: string;
     },
-    { getState, dispatch }
+    { getState, dispatch },
   ) => {
     const state = getState() as RootState;
     const masterData = state.masterData.data!;
@@ -65,16 +65,19 @@ export const performTransactionThunk = createAsyncThunk(
         updateAccessory({
           itemId,
           accessory: { ...accessory, Qty: accessory.Qty + delta },
-        })
+        }),
       );
     } else {
       // update masterData connector
       connector = masterData.connectors[itemId];
-      const updatedConnector = { ...connector, Qty: (connector.Qty ?? 0) + delta };
-      
-      if (subType === 'COM_FIO') {
+      const updatedConnector = {
+        ...connector,
+        Qty: (connector.Qty ?? 0) + delta,
+      };
+
+      if (subType === WireTypes.COM_FIO) {
         updatedConnector.Qty_com_fio = (connector.Qty_com_fio ?? 0) + delta;
-      } else if (subType === 'SEM_FIO') {
+      } else if (subType === WireTypes.SEM_FIO) {
         updatedConnector.Qty_sem_fio = (connector.Qty_sem_fio ?? 0) + delta;
       }
 
@@ -82,12 +85,12 @@ export const performTransactionThunk = createAsyncThunk(
         updateConnector({
           itemId,
           connector: updatedConnector,
-        })
+        }),
       );
     }
 
     return { connector, accessory, transaction };
-  }
+  },
 );
 
 // Loads stock map and transactions into initial Redux state.
@@ -96,7 +99,7 @@ export const initTransactionsData = createAsyncThunk(
   async () => {
     const transactions = await getTransactions();
     return { transactions };
-  }
+  },
 );
 
 export const transactionsSlice = createSlice({

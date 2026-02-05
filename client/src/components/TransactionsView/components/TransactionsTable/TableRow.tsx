@@ -1,5 +1,5 @@
 import { ROUTES } from "@/components/AppRoutes";
-import { Transaction } from "@/utils/types";
+import { Transaction, WireTypes } from "@/utils/types";
 import { Link as LinkIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -50,9 +50,20 @@ function TableRow({ tx, index }: Props) {
       <td className="table-data text-xs text-slate-400 italic">
         {tx.notes || "-"}
       </td>
+      <td className="table-data text-xs text-slate-400 italic">
+        {getCfioStatus(tx.subType)}
+      </td>
       <td className="table-data font-mono">{tx.updatedAt || "-"}</td>
     </tr>
   );
+}
+
+function getCfioStatus(subType?: WireTypes) {
+  if (subType === WireTypes.COM_FIO) {
+    return "c/fio";
+  } else if (subType === WireTypes.SEM_FIO) {
+    return "sem/fio";
+  } else return "-";
 }
 
 export default TableRow;

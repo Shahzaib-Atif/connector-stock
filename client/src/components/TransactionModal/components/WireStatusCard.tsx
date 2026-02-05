@@ -1,11 +1,13 @@
+import { WireTypes } from "@/utils/types";
+
 interface Props {
   subType: string;
   setSubType: (value: string) => void;
 }
 
 const labels = [
-  { label: "WITH WIRES", value: "COM_FIO" },
-  { label: "NO WIRES", value: "SEM_FIO" },
+  { label: "c/fio", value: WireTypes.COM_FIO },
+  { label: "sem/fio", value: WireTypes.SEM_FIO },
 ];
 
 function WireStatusCard({ subType, setSubType }: Props) {
