@@ -89,6 +89,7 @@ export const ConnectorEditForm: React.FC<Props> = ({
             onChange={(e) => setField("Fabricante", e.target.value)}
             className={inputClass + " appearance-none cursor-pointer"}
           >
+            <option value="">unknown</option>
             {masterData.fabricantes.map((f) => (
               <option key={f} value={f}>
                 {f}
