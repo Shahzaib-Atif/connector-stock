@@ -62,7 +62,7 @@ export const ConnectorEditForm: React.FC<Props> = ({
             onChange={(e) => setField("ConnType", e.target.value)}
             className={inputClass + " appearance-none cursor-pointer"}
           >
-            {masterData.connectorTypes.map((type) => (
+            {masterData?.connectorTypes.map((type) => (
               <option key={type} value={type}>
                 {type}
               </option>
@@ -90,7 +90,7 @@ export const ConnectorEditForm: React.FC<Props> = ({
             className={inputClass + " appearance-none cursor-pointer"}
           >
             <option value="">unknown</option>
-            {masterData.fabricantes.map((f) => (
+            {masterData?.fabricantes.map((f) => (
               <option key={f} value={f}>
                 {f}
               </option>
