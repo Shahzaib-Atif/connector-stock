@@ -18,6 +18,7 @@ export const ConnectorEditForm: React.FC<Props> = ({
   const masterData = useAppSelector((state) => state.masterData.data);
   const { formData, loading, error, setQtyField, setField, handleSubmit } =
     useConnectorEditForm(connector, onSave);
+  const isActualViasEnabled = connector?.details?.ActualViaCount;
 
   return (
     <form
@@ -68,6 +69,23 @@ export const ConnectorEditForm: React.FC<Props> = ({
               </option>
             ))}
           </select>
+        </div>
+
+        {/* Actual Via Count */}
+        <div className="space-y-1.5">
+          {" "}
+          <label className={labelClass}>Actual Vias Count</label>
+          <input
+            disabled={!isActualViasEnabled}
+            type="number"
+            value={
+              isActualViasEnabled ? formData.ActualViaCount : connector.viasName
+            }
+            onChange={(e) =>
+              setField("ActualViaCount", parseInt(e.target.value))
+            }
+            className={isActualViasEnabled ? inputClass : disabledInputClass}
+          />
         </div>
 
         {/* Family Input */}

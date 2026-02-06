@@ -144,10 +144,12 @@ export class ConnectorRepo {
             ConnId: codivmac,
             Fabricante: data.Fabricante,
             Family: data.Family,
+            ActualViaCount: data.ActualViaCount,
           },
           update: {
             Fabricante: data.Fabricante,
             Family: data.Family,
+            ActualViaCount: data.ActualViaCount,
           },
         });
 

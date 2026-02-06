@@ -13,6 +13,7 @@ interface ConnectorFormData {
   Qty: number;
   Qty_com_fio: number;
   Qty_sem_fio: number;
+  ActualViaCount?: number;
 }
 
 export function useConnectorEditForm(connector: Connector, onSave: () => void) {
@@ -30,6 +31,8 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
     Qty: connector.Qty || 0,
     Qty_com_fio: connector.Qty_com_fio || 0,
     Qty_sem_fio: connector.Qty_sem_fio || 0,
+    ActualViaCount:
+      connDetails.ActualViaCount || parseInt(connector.viasName || "0") || 0,
   });
 
   const setQtyField = (field: "Qty_com_fio" | "Qty_sem_fio", value: number) => {
@@ -43,7 +46,7 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
 
   const setField = <K extends keyof ConnectorFormData>(
     field: K,
-    value: ConnectorFormData[K]
+    value: ConnectorFormData[K],
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -60,8 +63,10 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
       await updateConnectorApi(connector.CODIVMAC, formData);
       await dispatch(initMasterData());
       onSave();
-    } catch (err) {
-      setError(err.message || "Failed to update connector");
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message);
+      else setError("Failed to update connector");
+
       setLoading(false);
     }
   };

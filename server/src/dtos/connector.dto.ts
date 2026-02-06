@@ -7,6 +7,7 @@ export class UpdateConnectorDto {
   Qty: number;
   Qty_com_fio: number;
   Qty_sem_fio: number;
+  ActualViaCount?: number;
 }
 
 export class ConnectorDto {
