@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
+import { UpdateAccessoryDto } from 'src/dtos/accessory.dto';
 
 @Injectable()
 export class AccessoryRepo {
@@ -49,6 +50,7 @@ export class AccessoryRepo {
     }
   }
 
+  // update stock
   async update(searchItem: string, amount: number, tx?: TransactionClient) {
     try {
       const client = tx || this.prisma;
@@ -83,5 +85,36 @@ export class AccessoryRepo {
       },
       data: { Qty: { increment: delta } },
     });
+  }
+
+  async updateAccessoryProperties(
+    searchItem: string,
+    data: UpdateAccessoryDto,
+  ) {
+    try {
+      const normalizedData = {
+        CapotAngle: data.CapotAngle === '' ? undefined : data.CapotAngle,
+        ClipColor: data.ClipColor === '' ? undefined : data.ClipColor,
+        Qty: data.Qty,
+      };
+
+      const updateData = Object.fromEntries(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        Object.entries(normalizedData).filter(([_, v]) => v !== undefined),
+      );
+
+      // Update the accessory
+      return await this.prisma.rEG_AccessoriesSamples.updateMany({
+        where: {
+          AccImagePath: {
+            contains: searchItem,
+          },
+        },
+        data: updateData,
+      });
+    } catch (ex: any) {
+      console.error('Error updating accessory properties:', ex.message);
+      throw ex;
+    }
   }
 }

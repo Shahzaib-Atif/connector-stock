@@ -16,6 +16,7 @@ import { SamplesController } from './controllers/samples.controller';
 import { SamplesRepo } from './repository/samples.repo';
 import { SamplesService } from './services/samples.service';
 import { ConnectorsService } from './services/connectors.service';
+import { AccessoriesService } from './services/accessories.service';
 import { PrintController } from './controllers/print.controller';
 import { PrintService } from './services/print.service';
 import { UsersRepo } from './repository/users.repo';
@@ -52,6 +53,7 @@ import { LegacyModule } from './modules/legacy/legacy.module';
     ImageService,
     MetadataRepo,
     AccessoryRepo,
+    AccessoriesService,
     ConnectorRepo,
     ConnectorsService,
     TransactionsService,

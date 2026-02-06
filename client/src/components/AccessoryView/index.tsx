@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Wrench } from "lucide-react";
+import { Wrench, Edit2 } from "lucide-react";
 import { Accessory } from "@/utils/types";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
@@ -15,6 +15,9 @@ import AccessoryMetadata from "./components/AccessoryMetadata";
 import { VIEW_SUMMARY_CLASS } from "@/utils/constants";
 import { parseAccessory } from "@/services/accessoryService";
 import { QRData } from "@/utils/types/shared";
+import { AccessoryEditForm } from "./components/AccessoryEditForm";
+import { useAppSelector } from "@/store/hooks";
+import { UserRoles } from "@/utils/types/userTypes";
 
 interface AccessoryViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -50,6 +53,8 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
   const { entity: accessory } = useEntityDetails<Accessory>(accessoryResolver);
   const { goBack, goToBox } = useInventoryNavigation();
   const [error, setError] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const { role } = useAppSelector((state) => state.auth);
 
   // Enable Escape key to go back
   useGlobalBackNavigation(goBack);
@@ -62,7 +67,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
   const imageUrl = API.accessoryImages(accessory.id);
 
   const handleBoxOpen = (boxId: string) => {
-    goToBox(boxId);
+    if (boxId) goToBox(boxId);
   };
 
   return (
@@ -70,25 +75,46 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
       <DetailHeader label="Accessory" title={accessory.id} onBack={goBack} />
 
       <div className="max-w-3xl mx-auto p-4 space-y-4">
-        <div id="accessory-summary" className={VIEW_SUMMARY_CLASS}>
-          {/* Accessory Image */}
-          <ImageBox
-            error={error}
-            imageUrl={imageUrl}
-            handleError={() => setError(true)}
+        {isEditing ? (
+          <AccessoryEditForm
+            accessory={accessory}
+            onCancel={() => setIsEditing(false)}
+            onSave={() => setIsEditing(false)}
           />
+        ) : (
+          <div className="relative">
+            <div id="accessory-summary" className={VIEW_SUMMARY_CLASS}>
+              {/* Accessory Image */}
+              <ImageBox
+                error={error}
+                imageUrl={imageUrl}
+                handleError={() => setError(true)}
+              />
 
-          {/* Stock Details */}
-          <StockDiv currentStock={accessory.Qty} />
+              {/* Stock Details */}
+              <StockDiv currentStock={accessory.Qty} />
 
-          {/* Accessory Details */}
-          <AccessoryMetadata accessory={accessory} />
-        </div>
+              {/* Accessory Details */}
+              <AccessoryMetadata accessory={accessory} />
+            </div>
+            {role === UserRoles.Master && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 bg-slate-800/80 backdrop-blur-md border border-slate-700 hover:border-blue-500/50 hover:bg-slate-700 text-slate-300 hover:text-blue-400 rounded-xl transition-all shadow-lg group"
+              >
+                <Edit2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <span className="text-xs font-bold uppercase tracking-wider">
+                  Edit
+                </span>
+              </button>
+            )}
+          </div>
+        )}
 
         {/* View Box option */}
         <BoxShortcut
-          posId={accessory.posId}
-          onOpen={() => handleBoxOpen(accessory.posId)}
+          posId={accessory.posId || ""}
+          onOpen={() => handleBoxOpen(accessory.posId || "")}
         />
       </div>
 

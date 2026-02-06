@@ -38,8 +38,8 @@ export function useAccessoryFilters(
   // Convert Record to array with id
   const accessoriesList = useMemo((): Accessory[] => {
     return Object.entries(accessories).map(([id, accessory]) => ({
-      id,
       ...accessory,
+      id,
     }));
   }, [accessories]);
 
@@ -71,13 +71,15 @@ export function useAccessoryFilters(
 
 function matchesAnyField(accessory: Accessory, normalizedQuery: string) {
   return (
-    accessory.id.toLowerCase().includes(normalizedQuery) ||
-    accessory.ConnName?.toLowerCase().includes(normalizedQuery) ||
-    accessory.AccessoryType?.toLowerCase().includes(normalizedQuery) ||
-    accessory.RefClient?.toLowerCase().includes(normalizedQuery) ||
-    accessory.RefDV?.toLowerCase().includes(normalizedQuery) ||
-    accessory.CapotAngle?.toLowerCase().includes(normalizedQuery) ||
-    accessory.ClipColor?.toLowerCase().includes(normalizedQuery)
+    accessory.id.toLowerCase()?.includes(normalizedQuery) ||
+    accessory.ConnName?.toLowerCase()?.includes(normalizedQuery) ||
+    accessory.AccessoryType?.toLowerCase()?.includes(normalizedQuery) ||
+    accessory.RefClient?.toLowerCase()?.includes(normalizedQuery) ||
+    accessory.RefDV?.toLowerCase()?.includes(normalizedQuery) ||
+    accessory.CapotAngle?.toString()
+      ?.toLowerCase()
+      ?.includes(normalizedQuery) ||
+    accessory.ClipColor?.toLowerCase()?.includes(normalizedQuery)
   );
 }
 
