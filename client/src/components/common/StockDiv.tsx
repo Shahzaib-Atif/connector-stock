@@ -8,7 +8,7 @@ interface Props {
 
 function StockDiv({ currentStock, connector }: Props) {
   return (
-    <div id="stock-div" className="flex flex-col gap-3">
+    <div id="stock-div" className="flex flex-col gap-3 mb-2">
       <div>
         <h2 className="text-lg sm:text-2xl font-bold text-white">
           {currentStock}

@@ -1,4 +1,3 @@
-import React from "react";
 import CardInfoDiv from "@/components/common/CardInfoDiv";
 import { Accessory } from "@/utils/types";
 
