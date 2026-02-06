@@ -33,7 +33,7 @@ function AccessoryInfo({ acc, liveStock }: Props) {
         />
       )}
       <div>
-        <div className="text-white">Conn: {acc.ConnName}</div>
+        <div className="text-white">Ref: {acc.RefClient}</div>
         <div className="text-slate-400 text-sm">
           Type: {acc.AccessoryType?.toLowerCase()}
         </div>
