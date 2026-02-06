@@ -20,5 +20,6 @@ export class ConnectorDto {
   Connectors_Details: {
     Fabricante: string;
     Family: number;
+    ActualViaCount?: number;
   };
 }

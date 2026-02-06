@@ -85,6 +85,7 @@ export const parseConnector = (
       Fabricante: fabricante,
       Refabricante: refabricante,
       OBS: details.OBS,
+      ActualViaCount: details.ActualViaCount,
     },
     ConnType: reference.ConnType,
     Qty: masterData.connectors[id].Qty,

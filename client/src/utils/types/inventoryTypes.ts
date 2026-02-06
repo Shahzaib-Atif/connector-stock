@@ -11,13 +11,13 @@ export interface Accessory {
   connectorId?: string; // Reference to parent connector
 }
 
-
 export interface Connector_Details {
   Family: number;
   Fabricante?: string;
   Refabricante?: string;
   OBS?: string;
   Designa__o?: string;
+  ActualViaCount?: number;
 }
 
 export interface Connector {
@@ -51,6 +51,3 @@ export interface Box {
   connectors: Connector[]; // List of connectors known in this box
   accessories: Accessory[]; // List of accessories in this box
 }
-
-
-

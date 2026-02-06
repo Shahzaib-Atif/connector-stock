@@ -17,7 +17,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
 }) => {
   const [error, setError] = useState(false);
   const imageUrl = API.connectorImages(connector.CODIVMAC);
-  const { PosId, colorName, viasName, Qty, ConnType, details } = connector;
+  const { PosId, colorName, Qty, ConnType, details } = connector;
   const { Fabricante, Refabricante, Family, OBS } = details;
 
   return (
@@ -40,7 +40,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
         className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4"
       >
         <CardInfoDiv label="Color" value={colorName} />
-        <CardInfoDiv label="Vias" value={viasName} />
+        <CardInfoDiv label="Vias" value={getViasValue(connector)} />
         <CardInfoDiv label="Type" value={ConnType} />
         <CardInfoDiv label="Family" value={Family?.toString() || "-"} />
       </div>
@@ -68,3 +68,11 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
     </div>
   );
 };
+
+function getViasValue(connector: Connector) {
+  console.log(connector.CODIVMAC, connector.details.ActualViaCount);
+
+  if (connector.details.ActualViaCount)
+    return `${connector.Vias} (${connector.details.ActualViaCount})`;
+  return `${connector.Vias} (${connector.viasName})`;
+}
