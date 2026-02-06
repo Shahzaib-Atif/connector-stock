@@ -18,6 +18,7 @@ import { QRData } from "@/utils/types/shared";
 import { AccessoryEditForm } from "./components/AccessoryEditForm";
 import { useAppSelector } from "@/store/hooks";
 import { UserRoles } from "@/utils/types/userTypes";
+import { RelatedAccessoryImages } from "./components/RelatedAccessoryImages";
 
 interface AccessoryViewProps {
   onTransaction: (type: "IN" | "OUT", id?: string) => void;
@@ -110,6 +111,9 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
             )}
           </div>
         )}
+
+        {/* Related Images */}
+        <RelatedAccessoryImages accessoryId={accessory.id} />
 
         {/* View Box option */}
         <BoxShortcut

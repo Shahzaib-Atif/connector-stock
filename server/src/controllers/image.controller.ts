@@ -64,4 +64,28 @@ export class ImageController {
       res.sendStatus(404);
     }
   }
+
+  @ApiOperation({ summary: 'Get related accessory images filenames' })
+  @Get('accessory-extras/:accessoryId')
+  getRelatedAccessoryImages(@Param('accessoryId') accessoryId: string) {
+    return this.imageService.getRelatedAccessoryImages(accessoryId);
+  }
+
+  @ApiOperation({ summary: 'Get individual accessory extras image' })
+  @Get('accessory-extras/file/:filename')
+  getAccessoryExtrasImage(
+    @Param('filename') filename: string,
+    @Res() res: Response,
+  ) {
+    try {
+      const { contentType, stream } =
+        this.imageService.getAccessoryExtrasImageStream(filename);
+
+      res.setHeader('Content-Type', contentType);
+      stream.pipe(res);
+    } catch (e) {
+      console.error(e.message);
+      res.sendStatus(404);
+    }
+  }
 }

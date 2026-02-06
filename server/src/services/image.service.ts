@@ -58,4 +58,38 @@ export class ImageService {
 
     return { contentType, stream };
   }
+
+  getRelatedAccessoryImages(accessoryId: string): string[] {
+    const extrasPath = path.join(this.basePath, '_Accessories', '_Extras');
+    if (!fs.existsSync(extrasPath)) return [];
+
+    try {
+      const files = fs.readdirSync(extrasPath);
+      // Filter files that include the accessoryId (case-insensitive)
+      return files.filter((file) =>
+        file.toLowerCase().includes(accessoryId.toLowerCase()),
+      );
+    } catch (e) {
+      console.error('Error reading _Accessories/_Extras directory:', e.message);
+      return [];
+    }
+  }
+
+  getAccessoryExtrasImageStream(filename: string) {
+    const fullPath = path.join(
+      this.basePath,
+      '_Accessories',
+      '_Extras',
+      filename,
+    );
+
+    if (!fs.existsSync(fullPath))
+      throw new Error(`Image not found: ${filename}`);
+
+    const ext = path.extname(fullPath).toLowerCase();
+    const contentType = ext === '.png' ? 'image/png' : 'image/jpeg';
+    const stream = fs.createReadStream(fullPath);
+
+    return { contentType, stream };
+  }
 }

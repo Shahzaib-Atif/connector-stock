@@ -13,6 +13,10 @@ const accessories = {
   accessoryImages: (id: string) => `${API_BASE_URL}/images/accessory/${id}`,
   accessoryTypes: `${API_BASE_URL}/accessories/types`,
   accessories: `${API_BASE_URL}/accessories`,
+  accessoryRelatedImages: (id: string) =>
+    `${API_BASE_URL}/images/accessory-extras/${id}`,
+  accessoryExtrasImage: (filename: string) =>
+    `${API_BASE_URL}/images/accessory-extras/file/${filename}`,
 };
 
 const metadata = {
