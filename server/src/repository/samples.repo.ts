@@ -60,8 +60,8 @@ export class SamplesRepo {
           DateOfLastUpdate: new Date().toISOString(),
         },
       });
-    } catch (ex) {
-      console.error(ex.message);
+    } catch (ex: unknown) {
+      console.error(ex instanceof Error ? ex.message : 'Unknown error');
       return null;
     }
   }
@@ -87,7 +87,7 @@ export class SamplesRepo {
   async getAnaliseTabByRefCliente(refCliente: string) {
     try {
       return await this.prisma.v_AnaliseTab.findMany({
-        where: { RefCliente: refCliente },
+        where: { RefCliente: { contains: refCliente } },
         orderBy: { DataAbertura: 'desc' },
       });
     } catch (ex: any) {
@@ -105,9 +105,9 @@ export class SamplesRepo {
     try {
       return await this.prisma.v_RegAmostrasEnc.findMany({
         where: {
-          CDU_ModuloRefCliente: refCliente,
-          cdu_projeto: projeto,
-          CDU_ModuloRefConetorDV: conectorDV,
+          CDU_ModuloRefCliente: { contains: refCliente },
+          cdu_projeto: { contains: projeto },
+          CDU_ModuloRefConetorDV: { contains: conectorDV },
         },
       });
     } catch (ex: any) {

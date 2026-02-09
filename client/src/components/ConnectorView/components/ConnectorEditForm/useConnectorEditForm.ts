@@ -25,8 +25,8 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
   const [formData, setFormData] = useState<ConnectorFormData>({
     Cor: connector.Cor,
     Vias: connector.Vias,
-    ConnType: connector.ConnType,
-    Fabricante: connDetails.Fabricante === "--" ? "" : connDetails.Fabricante,
+    ConnType: connector.ConnType || "",
+    Fabricante: connDetails.Fabricante || "",
     Family: connDetails.Family || 1,
     Qty: connector.Qty || 0,
     Qty_com_fio: connector.Qty_com_fio || 0,
