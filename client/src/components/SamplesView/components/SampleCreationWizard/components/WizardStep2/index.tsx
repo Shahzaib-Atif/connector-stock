@@ -70,7 +70,10 @@ function WizardStep2({
               <th className="px-3 py-2 text-left">Select</th>
               <th className="px-3 py-2 text-left">Encomenda</th>
               <th className="px-3 py-2 text-left">Conector</th>
-              <th className="px-3 py-2 text-left min-w-32">Cliente</th>
+              <th className="px-3 py-2 text-left min-w-40">Cliente</th>
+              <th className="px-3 py-2 text-left">RefCliente</th>
+              <th className="px-3 py-2 text-left">CDU_ProjetoCliente</th>
+              <th className="px-3 py-2 text-left">DataAbertura</th>
               <th className="px-3 py-2 text-left">Estado</th>
               <th className="px-3 py-2 text-left">Quantidade</th>
             </tr>
@@ -95,6 +98,11 @@ function WizardStep2({
                 <td className="px-3 py-2 text-white">{row.Encomenda}</td>
                 <td className="px-3 py-2 text-white">{row.Conector}</td>
                 <td className="px-3 py-2 text-white">{row.Cliente}</td>
+                <td className="px-3 py-2 text-white">{row.RefCliente}</td>
+                <td className="px-3 py-2 text-slate-300">
+                  {row.CDU_ProjetoCliente}
+                </td>
+                <td className="px-3 py-2 text-slate-300">{row.DataAbertura}</td>
                 <td className="px-3 py-2 text-slate-300">{row.Estado}</td>
                 <td className="px-3 py-2 text-slate-300">
                   {row.Quantidade || "-"}
