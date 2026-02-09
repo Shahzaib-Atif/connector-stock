@@ -88,6 +88,7 @@ export class SamplesRepo {
     try {
       return await this.prisma.v_AnaliseTab.findMany({
         where: { RefCliente: { contains: refCliente } },
+        distinct: ['Encomenda', 'Conector', 'Cliente', 'RefCliente'],
         orderBy: { DataAbertura: 'desc' },
       });
     } catch (ex: any) {
