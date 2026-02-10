@@ -5,4 +5,5 @@ export interface PrintLabelDto {
   encomenda?: string;
   source?: 'box' | 'connector' | 'sample';
   qty?: number;
+  printer?: string;
 }

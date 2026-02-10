@@ -7,6 +7,9 @@ export default function usePrinting(qrData: QRData, itemIdLink: string) {
 
   const [isPrinting, setIsPrinting] = useState(false);
   const [printQty, setPrintQty] = useState(qty || 1);
+  const [selectedPrinter, setSelectedPrinter] = useState<string>(() => {
+    return localStorage.getItem("selected_printer") || "PRINTER_1";
+  });
   const [printStatus, setPrintStatus] = useState<{
     type: "success" | "error";
     message: string;
@@ -29,6 +32,7 @@ export default function usePrinting(qrData: QRData, itemIdLink: string) {
           refCliente,
           encomenda,
           qty: printQty,
+          printer: selectedPrinter,
         }),
       });
 
@@ -39,11 +43,11 @@ export default function usePrinting(qrData: QRData, itemIdLink: string) {
       } else {
         setPrintStatus({
           type: "error",
-          message: result.message || "Print failed",
+          message: "Print failed! Please check the printer connection.",
         });
       }
     } catch (error) {
-      console.error(error.message);
+      console.error("Print error:", error);
       setPrintStatus({
         type: "error",
         message: "Could not connect to print server",
@@ -53,5 +57,18 @@ export default function usePrinting(qrData: QRData, itemIdLink: string) {
     }
   };
 
-  return { isPrinting, printStatus, printQty, handlePrint, setPrintQty };
+  const updatePrinter = (printer: string) => {
+    setSelectedPrinter(printer);
+    localStorage.setItem("selected_printer", printer);
+  };
+
+  return {
+    isPrinting,
+    printStatus,
+    printQty,
+    handlePrint,
+    setPrintQty,
+    selectedPrinter,
+    setSelectedPrinter: updatePrinter,
+  };
 }

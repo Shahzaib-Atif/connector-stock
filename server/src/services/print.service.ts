@@ -11,8 +11,6 @@ const execAsync = promisify(exec);
 @Injectable()
 export class PrintService {
   private readonly logger = new Logger(PrintService.name);
-  // private readonly printerName = process.env.PRINTER_2;
-  private readonly printerName = process.env.PRINTER_1;
   private readonly rawPrinterExe = path.join(
     __dirname,
     '../../../scripts/RawPrinter.exe',
@@ -32,7 +30,11 @@ export class PrintService {
       fs.writeFileSync(tempFile, tsplCommands, { encoding: 'ascii' });
 
       // Send to printer
-      await this.sendToPrinter(tempFile);
+      let printer = dto.printer || 'PRINTER_1';
+      if (printer === 'PRINTER_1') printer = process.env.PRINTER_1;
+      else if (printer === 'PRINTER_2') printer = process.env.PRINTER_2;
+
+      await this.sendToPrinter(tempFile, printer);
 
       // Cleanup
       this.cleanupFile(tempFile);
@@ -156,7 +158,10 @@ export class PrintService {
     return startX + chunks.length * LINE_SPACING; // Return next X position
   }
 
-  private async sendToPrinter(filePath: string): Promise<void> {
+  private async sendToPrinter(
+    filePath: string,
+    printerName: string,
+  ): Promise<void> {
     // Check if RawPrinter.exe exists
     if (!fs.existsSync(this.rawPrinterExe)) {
       throw new Error(
@@ -164,7 +169,7 @@ export class PrintService {
       );
     }
 
-    const command = `"${this.rawPrinterExe}" "${this.printerName}" "${filePath}"`;
+    const command = `"${this.rawPrinterExe}" "${printerName}" "${filePath}"`;
     this.logger.log(`Executing: ${command}`);
 
     const { stdout, stderr } = await execAsync(command, { timeout: 30000 });

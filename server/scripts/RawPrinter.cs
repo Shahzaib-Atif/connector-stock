@@ -85,7 +85,7 @@ class RawPrinter
             // Open printer
             if (!OpenPrinter(printerName, out hPrinter, IntPtr.Zero))
             {
-                Console.Error.WriteLine("ERROR: Failed to open printer '" + printerName + "'. Error: " + Marshal.GetLastWin32Error());
+                Console.Error.WriteLine("ERROR: Failed to open printer!");
                 return false;
             }
             Console.WriteLine("Opened printer: " + printerName);
