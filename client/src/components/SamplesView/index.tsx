@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sample } from "@/utils/types";
+import { Sample, UserRoles } from "@/utils/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   fetchSamplesThunk,
@@ -28,8 +28,9 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { samples, loading } = useAppSelector((state) => state.samples);
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, role } = useAppSelector((state) => state.auth);
   const [openDltDlg, setOpenDltDlg] = useState(false);
+  const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
 
   // Custom hook for filters
   const { filters, setFilterColumn, setSearchQuery, filteredSamples } =
@@ -65,7 +66,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
     setCurrentPage(1);
   }, [filters]);
 
-  const handleCreateNew = () => {
+  const handleCreateNew: () => void = () => {
     setEditingSample(null);
     setDuplicateSample(null);
     setIsModalOpen(true);
@@ -130,8 +131,8 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
       <div id="samples-content" className="table-view-content">
         <div className="table-view-inner-content">
           {/* Action Bar */}
-          <div className="flex justify-end gap-3 flex-none">
-            {isAuthenticated && (
+          {isAuthenticated && isAdmin && (
+            <div className="flex justify-end gap-3 flex-none">
               <>
                 <button
                   onClick={handleOpenWizard}
@@ -146,8 +147,8 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
                   + New Sample
                 </button>
               </>
-            )}
-          </div>
+            </div>
+          )}
 
           <FilterBar
             filterColumn={filters.filterColumn}
@@ -170,7 +171,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
               onDelete={handleDelete}
               onOpenQR={onOpenQR}
               onClone={handleClone}
-              showActions={isAuthenticated}
+              showActions={isAuthenticated && isAdmin}
             />
           </div>
 
@@ -210,7 +211,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
           setOpen={setOpenDltDlg}
           msg="Are you sure you want to delete this sample?"
           title="Delete Sample"
-          onDelete={() => dispatch(deleteSampleThunk(editingSample.ID))}
+          onDelete={() => dispatch(deleteSampleThunk(editingSample?.ID))}
         />
       )}
     </div>

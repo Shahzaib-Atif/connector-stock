@@ -30,7 +30,7 @@ export const fetchSamplesThunk = createAsyncThunk(
   async () => {
     const samples = await getSamples();
     return samples;
-  }
+  },
 );
 
 // Create a new sample
@@ -40,12 +40,12 @@ export const createSampleThunk = createAsyncThunk(
     sampleData: Omit<
       Sample,
       "ID" | "IsActive" | "DateOfCreation" | "DateOfLastUpdate"
-    >
+    >,
   ) => {
     const sample = await createSample(sampleData); // create sample
     setLineStatus(sample.EncDivmac, sample.Ref_Descricao);
     return sample;
-  }
+  },
 );
 
 // Update an existing sample
@@ -54,16 +54,19 @@ export const updateSampleThunk = createAsyncThunk(
   async ({ id, data }: { id: number; data: Partial<Sample> }) => {
     const sample = await updateSample(id, data);
     return sample;
-  }
+  },
 );
 
 // Delete (soft delete) a sample
 export const deleteSampleThunk = createAsyncThunk(
   "samples/delete",
-  async (id: number) => {
+  async (id: number | undefined, { rejectWithValue }) => {
+    if (id == null) {
+      return rejectWithValue("Missing sample id");
+    }
     await deleteSample(id);
     return id;
-  }
+  },
 );
 
 export const samplesSlice = createSlice({
@@ -107,7 +110,7 @@ export const samplesSlice = createSlice({
       })
       .addCase(updateSampleThunk.fulfilled, (state, action) => {
         const index = state.samples.findIndex(
-          (s) => s.ID === action.payload.ID
+          (s) => s.ID === action.payload.ID,
         );
         if (index !== -1) {
           state.samples[index] = action.payload;
