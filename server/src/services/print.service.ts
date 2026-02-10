@@ -11,8 +11,8 @@ const execAsync = promisify(exec);
 @Injectable()
 export class PrintService {
   private readonly logger = new Logger(PrintService.name);
-  // private readonly printerName = 'TSC TE200';
-  private readonly printerName = '\\\\10.2.2.49\\TSC TE200';
+  // private readonly printerName = process.env.PRINTER_2;
+  private readonly printerName = process.env.PRINTER_1;
   private readonly rawPrinterExe = path.join(
     __dirname,
     '../../../scripts/RawPrinter.exe',
@@ -85,8 +85,10 @@ export class PrintService {
       }
     }
 
-    // Finalize - use qty if provided, otherwise 1
-    const printQty = isNaN(qty) ? 1 : qty;
+    // use qty if provided, otherwise 1
+    const n = Number(qty);
+    const printQty = Number.isInteger(n) && n > 0 ? n : 1; // positive integer only
+
     lines.push(`PRINT ${printQty},1`);
     return lines.join('\r\n') + '\r\n';
   }
