@@ -1,7 +1,6 @@
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEscKeyDown } from "@/hooks/useEscKeyDown";
 import { QRData } from "@/utils/types/shared";
-import { Printer } from "lucide-react";
 import React, { useRef } from "react";
 import ActionButtons from "./components/ActionButtons";
 import { getItemIdLink } from "./components/getItemId";
@@ -9,6 +8,8 @@ import usePrinting from "./components/usePrinting";
 import QuantitySelector from "./components/QuantitySelector";
 import PrintWarning from "./components/PrintWarning";
 import PrintStatus from "./components/PrintStatus";
+import SelectPrinterBtn from "./components/SelectPrinterBtn";
+import { Printer_t } from "@/types/printers";
 
 interface QRModalProps {
   qrData: QRData;
@@ -29,7 +30,7 @@ export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
     setSelectedPrinter,
   } = usePrinting(qrData, itemIdLink);
 
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   useClickOutside(ref, onClose);
   useEscKeyDown(ref, onClose);
 
@@ -70,33 +71,24 @@ export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
         {/* Print Status */}
         {printStatus && <PrintStatus printStatus={printStatus} />}
 
-        <div className="mb-6 flex items-center justify-center gap-2">
+        <div className="mb-6 flex flex-col items-center justify-center gap-2">
           {/* Printer Selection */}
           <div
-            className={`flex items-center gap-2 p-1 rounded-lg bg-slate-700/50 border border-slate-600 transition-all`}
+            className={`flex items-center gap-3 p-1 rounded-lg bg-slate-700/50 border border-slate-600 transition-all`}
           >
-            <button
-              onClick={() => setSelectedPrinter("PRINTER_1")}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-2 ${
-                selectedPrinter === "PRINTER_1"
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              <Printer className="w-3.5 h-3.5" />
-              Printer 1
-            </button>
-            <button
-              onClick={() => setSelectedPrinter("PRINTER_2")}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-2 ${
-                selectedPrinter === "PRINTER_2"
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              <Printer className="w-3.5 h-3.5" />
-              Printer 2
-            </button>
+            {/* printer 1 */}
+            <SelectPrinterBtn
+              myPrinter={Printer_t.PRINTER_1}
+              selectedPrinter={selectedPrinter}
+              setSelectedPrinter={setSelectedPrinter}
+            />
+
+            {/* printer 2 */}
+            <SelectPrinterBtn
+              myPrinter={Printer_t.PRINTER_2}
+              selectedPrinter={selectedPrinter}
+              setSelectedPrinter={setSelectedPrinter}
+            />
           </div>
         </div>
 

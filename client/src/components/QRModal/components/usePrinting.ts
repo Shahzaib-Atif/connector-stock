@@ -1,3 +1,4 @@
+import { Printer_t } from "@/types/printers";
 import { API } from "@/utils/api";
 import { QRData } from "@/utils/types";
 import { useState } from "react";
@@ -7,9 +8,14 @@ export default function usePrinting(qrData: QRData, itemIdLink: string) {
 
   const [isPrinting, setIsPrinting] = useState(false);
   const [printQty, setPrintQty] = useState(qty || 1);
-  const [selectedPrinter, setSelectedPrinter] = useState<string>(() => {
-    return localStorage.getItem("selected_printer") || "PRINTER_1";
+
+  const [selectedPrinter, setSelectedPrinter] = useState<Printer_t>(() => {
+    const stored = localStorage.getItem("selected_printer");
+    return Object.values(Printer_t).includes(stored as Printer_t)
+      ? (stored as Printer_t)
+      : Printer_t.PRINTER_1;
   });
+
   const [printStatus, setPrintStatus] = useState<{
     type: "success" | "error";
     message: string;
@@ -57,7 +63,7 @@ export default function usePrinting(qrData: QRData, itemIdLink: string) {
     }
   };
 
-  const updatePrinter = (printer: string) => {
+  const updatePrinter = (printer: Printer_t) => {
     setSelectedPrinter(printer);
     localStorage.setItem("selected_printer", printer);
   };
