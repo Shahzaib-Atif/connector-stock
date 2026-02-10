@@ -8,6 +8,8 @@ import { CreateSampleDto, UpdateSampleDto } from 'src/dtos/samples.dto';
 import { TransactionsService } from './transactions.service';
 import { getConnectorId } from 'src/utils/getConnectorId';
 import { WireTypes } from 'src/dtos/transaction.dto';
+import getErrorMsg from 'src/utils/getErrorMsg';
+import { Transaction } from 'src/utils/types';
 
 @Injectable()
 export class SamplesService {
@@ -89,8 +91,11 @@ export class SamplesService {
                 },
                 tx,
               );
-            } catch (e) {
-              console.error('Failed to log COM_FIO transaction:', e.message);
+            } catch (e: unknown) {
+              console.error(
+                'Failed to log COM_FIO transaction:',
+                getErrorMsg(e),
+              );
             }
           }
           // Process SEM FIO
@@ -107,8 +112,11 @@ export class SamplesService {
                 },
                 tx,
               );
-            } catch (e) {
-              console.error('Failed to log SEM_FIO transaction:', e.message);
+            } catch (e: unknown) {
+              console.error(
+                'Failed to log SEM_FIO transaction:',
+                getErrorMsg(e),
+              );
             }
           }
           // Fallback if only total quantity is provided
@@ -124,10 +132,10 @@ export class SamplesService {
                 },
                 tx,
               );
-            } catch (e) {
+            } catch (e: unknown) {
               console.error(
                 'Failed to log total quantity transaction:',
-                e.message,
+                getErrorMsg(e),
               );
             }
           }
@@ -202,7 +210,7 @@ export class SamplesService {
 
       const targetAmostra = dto.Amostra ?? existing.Amostra;
       const targetConnId = getConnectorId(targetAmostra);
-      const existingConnId = getConnectorId(existing.Amostra);
+      const existingConnId = getConnectorId(existing.Amostra ?? '');
 
       // Adjust connector quantity
       const prevQtyComFio = existing.qty_com_fio || 0;
@@ -221,7 +229,7 @@ export class SamplesService {
                 amount: prevQtyComFio,
                 itemType: 'connector',
                 subType: WireTypes.COM_FIO,
-                department: existing.Entregue_a,
+                department: existing.Entregue_a || '',
               },
               tx,
             );
@@ -234,7 +242,7 @@ export class SamplesService {
                 amount: prevQtySemFio,
                 itemType: 'connector',
                 subType: WireTypes.SEM_FIO,
-                department: existing.Entregue_a,
+                department: existing.Entregue_a || '',
               },
               tx,
             );
@@ -246,7 +254,7 @@ export class SamplesService {
                 transactionType: 'OUT',
                 amount: previousQty,
                 itemType: 'connector',
-                department: existing.Entregue_a,
+                department: existing.Entregue_a || '',
               },
               tx,
             );
@@ -262,7 +270,7 @@ export class SamplesService {
                 amount: newQtyComFio,
                 itemType: 'connector',
                 subType: WireTypes.COM_FIO,
-                department: dto.Entregue_a ?? existing.Entregue_a,
+                department: dto.Entregue_a ?? (existing.Entregue_a || ''),
               },
               tx,
             );
@@ -275,7 +283,7 @@ export class SamplesService {
                 amount: newQtySemFio,
                 itemType: 'connector',
                 subType: WireTypes.SEM_FIO,
-                department: dto.Entregue_a ?? existing.Entregue_a,
+                department: dto.Entregue_a ?? (existing.Entregue_a || ''),
               },
               tx,
             );
@@ -287,7 +295,7 @@ export class SamplesService {
                 transactionType: 'IN',
                 amount: newQty,
                 itemType: 'connector',
-                department: dto.Entregue_a ?? existing.Entregue_a,
+                department: dto.Entregue_a ?? (existing.Entregue_a || ''),
               },
               tx,
             );
@@ -306,7 +314,7 @@ export class SamplesService {
               amount: Math.abs(deltaComFio),
               itemType: 'connector',
               subType: WireTypes.COM_FIO,
-              department: dto.Entregue_a ?? existing.Entregue_a,
+              department: dto.Entregue_a ?? (existing.Entregue_a || ''),
             },
             tx,
           );
@@ -319,7 +327,7 @@ export class SamplesService {
               amount: Math.abs(deltaSemFio),
               itemType: 'connector',
               subType: WireTypes.SEM_FIO,
-              department: dto.Entregue_a ?? existing.Entregue_a,
+              department: dto.Entregue_a ?? (existing.Entregue_a || ''),
             },
             tx,
           );
@@ -332,7 +340,7 @@ export class SamplesService {
               transactionType: delta > 0 ? 'IN' : 'OUT',
               amount: Math.abs(delta),
               itemType: 'connector',
-              department: dto.Entregue_a ?? existing.Entregue_a,
+              department: dto.Entregue_a ?? (existing.Entregue_a || ''),
             },
             tx,
           );
@@ -354,7 +362,7 @@ export class SamplesService {
                 transactionType: type,
                 amount: Math.abs(accDelta),
                 itemType: 'accessory',
-                department: dto.Entregue_a ?? existing.Entregue_a,
+                department: dto.Entregue_a ?? (existing.Entregue_a || ''),
               },
               tx,
             );
@@ -391,7 +399,7 @@ export class SamplesService {
       // Revert stock (OUT)
       const qty = this.parseQuantity(existing?.Quantidade);
       if (qty > 0) {
-        const connId = getConnectorId(existing?.Amostra);
+        const connId = getConnectorId(existing?.Amostra || '');
 
         // Revert Connector
         if (connId) {
@@ -406,7 +414,7 @@ export class SamplesService {
                 amount: qtyComFio,
                 itemType: 'connector',
                 subType: WireTypes.COM_FIO,
-                department: existing.Entregue_a,
+                department: existing.Entregue_a || '',
               },
               tx,
             );
@@ -419,7 +427,7 @@ export class SamplesService {
                 amount: qtySemFio,
                 itemType: 'connector',
                 subType: WireTypes.SEM_FIO,
-                department: existing.Entregue_a,
+                department: existing.Entregue_a || '',
               },
               tx,
             );
@@ -431,7 +439,7 @@ export class SamplesService {
                 transactionType: 'OUT',
                 amount: qty,
                 itemType: 'connector',
-                department: existing.Entregue_a,
+                department: existing.Entregue_a || '',
               },
               tx,
             );
@@ -454,8 +462,7 @@ export class SamplesService {
                 transactionType: 'OUT',
                 amount: qty,
                 itemType: 'accessory',
-
-                department: existing.Entregue_a,
+                department: existing.Entregue_a || '',
               },
               tx,
             );
@@ -481,13 +488,16 @@ export class SamplesService {
     return Number.isFinite(parsed) ? parsed : 0;
   }
 
-  private async safeProcessTransaction(dto: any, tx: TransactionClient) {
+  private async safeProcessTransaction(
+    tx: Omit<Transaction, 'ID'>,
+    txClient: TransactionClient,
+  ) {
     try {
-      await this.transactionsService.processTransaction(dto, tx);
-    } catch (e: any) {
+      await this.transactionsService.processTransaction(tx, txClient);
+    } catch (e: unknown) {
       console.error(
-        `Failed to process transaction for ${dto.itemId}:`,
-        e.message,
+        `Failed to process transaction for ${tx.itemId}:`,
+        getErrorMsg(e),
       );
     }
   }
@@ -522,8 +532,8 @@ export class SamplesService {
         refDescricao,
         currentUser,
       );
-    } catch (error) {
-      console.error('Error upserting reference mapping:', error.message);
+    } catch (e: unknown) {
+      console.error('Error upserting reference mapping:', getErrorMsg(e));
       // We log but don't necessarily want to fail the main sample update if mapping fails
     }
   }
