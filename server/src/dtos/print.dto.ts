@@ -6,4 +6,5 @@ export interface PrintLabelDto {
   source?: 'box' | 'connector' | 'sample';
   qty?: number;
   printer?: string;
+  useSmallLabels?: boolean;
 }

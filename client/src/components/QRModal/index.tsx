@@ -8,8 +8,8 @@ import usePrinting from "./components/usePrinting";
 import QuantitySelector from "./components/QuantitySelector";
 import PrintWarning from "./components/PrintWarning";
 import PrintStatus from "./components/PrintStatus";
-import SelectPrinterBtn from "./components/SelectPrinterBtn";
-import { Printer_t } from "@/types/printers";
+import LabelSizeSelector from "./components/LabelSizeSelector";
+import PrinterSelector from "./components/PrinterSelector";
 
 interface QRModalProps {
   qrData: QRData;
@@ -24,8 +24,10 @@ export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
     isPrinting,
     printStatus,
     printQty,
+    useSmallLabels,
     handlePrint,
     setPrintQty,
+    setUseSmallLabels,
     selectedPrinter,
     setSelectedPrinter,
   } = usePrinting(qrData, itemIdLink);
@@ -33,6 +35,8 @@ export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   useClickOutside(ref, onClose);
   useEscKeyDown(ref, onClose);
+
+  const qrServerUrl = import.meta.env.VITE_QRSERVER_URL;
 
   return (
     <div
@@ -52,7 +56,7 @@ export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
         {/* Image */}
         <div className="bg-white p-4 rounded-xl inline-block mb-6 shadow-inner">
           <img
-            src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${itemIdLink}`}
+            src={`${qrServerUrl}${itemIdLink}`}
             alt="QR Code"
             className="w-48 h-48"
           />
@@ -71,25 +75,18 @@ export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
         {/* Print Status */}
         {printStatus && <PrintStatus printStatus={printStatus} />}
 
-        <div className="mb-6 flex flex-col items-center justify-center gap-2">
+        <div className="mb-6 flex flex-col items-center justify-center gap-3">
           {/* Printer Selection */}
-          <div
-            className={`flex items-center gap-3 p-1 rounded-lg bg-slate-700/50 border border-slate-600 transition-all`}
-          >
-            {/* printer 1 */}
-            <SelectPrinterBtn
-              myPrinter={Printer_t.PRINTER_1}
-              selectedPrinter={selectedPrinter}
-              setSelectedPrinter={setSelectedPrinter}
-            />
+          <PrinterSelector
+            selectedPrinter={selectedPrinter}
+            setSelectedPrinter={setSelectedPrinter}
+          />
 
-            {/* printer 2 */}
-            <SelectPrinterBtn
-              myPrinter={Printer_t.PRINTER_2}
-              selectedPrinter={selectedPrinter}
-              setSelectedPrinter={setSelectedPrinter}
-            />
-          </div>
+          {/* Label Size Selection */}
+          <LabelSizeSelector
+            useSmallLabels={useSmallLabels}
+            setUseSmallLabels={setUseSmallLabels}
+          />
         </div>
 
         <ActionButtons

@@ -21,6 +21,15 @@ export default function usePrinting(qrData: QRData, itemIdLink: string) {
     message: string;
   } | null>(null);
 
+  const [useSmallLabels, setUseSmallLabels] = useState<boolean>(() => {
+    return localStorage.getItem("use_small_labels") === "true";
+  });
+
+  const updateLabelSize = (val: boolean) => {
+    setUseSmallLabels(val);
+    localStorage.setItem("use_small_labels", String(val));
+  };
+
   const handlePrint = async () => {
     setIsPrinting(true);
     setPrintStatus(null);
@@ -39,6 +48,7 @@ export default function usePrinting(qrData: QRData, itemIdLink: string) {
           encomenda,
           qty: printQty,
           printer: selectedPrinter,
+          useSmallLabels,
         }),
       });
 
@@ -72,8 +82,10 @@ export default function usePrinting(qrData: QRData, itemIdLink: string) {
     isPrinting,
     printStatus,
     printQty,
+    useSmallLabels,
     handlePrint,
     setPrintQty,
+    setUseSmallLabels: updateLabelSize,
     selectedPrinter,
     setSelectedPrinter: updatePrinter,
   };

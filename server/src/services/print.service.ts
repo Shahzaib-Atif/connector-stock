@@ -16,7 +16,11 @@ export class PrintService {
   public async printLabel(
     dto: PrintLabelDto,
   ): Promise<{ success: boolean; message: string }> {
-    const { itemId } = dto;
+    const { itemId, useSmallLabels } = dto;
+    this.logger.log(
+      `Processing print request for ${itemId}. Small labels: ${useSmallLabels}`,
+    );
+    throw new Error('under process');
 
     try {
       // Generate TSPL commands
