@@ -17,11 +17,11 @@ export function addQrCode(
   x: number,
   y: number,
   data: string,
-  size = 6, // module size
-  model = 'L', // QR model
-  rotation = 0,
+  size = 4, // module size
   m = 2,
   s = 7,
+  model = 'L', // QR model
+  rotation = 0,
 ) {
   lines.push(
     `QRCODE ${x},${y},${model},${size},A,${rotation},M${m},S${s},"${data}"`,

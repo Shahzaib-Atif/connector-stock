@@ -6,7 +6,7 @@ import * as path from 'path';
 import * as os from 'os';
 import { PrintLabelDto } from 'src/dtos/print.dto';
 import getErrorMsg from 'src/utils/getErrorMsg';
-import { addText } from 'src/utils/printFuncs';
+import { addQrCode, addText } from 'src/utils/printFuncs';
 
 const execAsync = promisify(exec);
 
@@ -91,14 +91,16 @@ export class PrintService {
       case 'box': {
         // add QR code and itemId
         const x = qr_x + 5;
-        lines.push(`QRCODE ${x},${qr_y + 15},L,7,A,0,M2,S12,"${itemUrl}"`);
+        // lines.push(`QRCODE ${x},${qr_y + 15},L,7,A,0,M2,S12,"${itemUrl}"`);
+        addQrCode(lines, x, qr_y + 15, itemUrl, 7, 2, 12);
         addText(lines, x, qr_y - 15, itemId);
         break;
       }
 
       case 'connector': {
         // add QR code and itemId
-        lines.push(`QRCODE ${qr_x},${qr_y + 20},L,4,A,0,M2,S7,"${itemUrl}"`);
+        // lines.push(`QRCODE ${qr_x},${qr_y + 20},L,4,A,0,M2,S7,"${itemUrl}"`);
+        addQrCode(lines, qr_x, qr_y + 20, itemUrl);
         addText(lines, center_X + 10, 90, itemId, '"3"', 1, 2);
         break;
       }
@@ -115,7 +117,8 @@ export class PrintService {
     const { x: qr_x, y: qr_y } = qrCodePos;
 
     // QR Code
-    lines.push(`QRCODE ${qr_x},${qr_y},L,6,A,0,M2,S7,"${itemUrl}"`);
+    // lines.push(`QRCODE ${qr_x},${qr_y},L,6,A,0,M2,S7,"${itemUrl}"`);
+    addQrCode(lines, qr_x, qr_y, itemUrl, 6);
 
     const textX = center_X + 15;
     const textY = 200; // Near bottom edge
