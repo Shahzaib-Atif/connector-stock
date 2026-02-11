@@ -66,7 +66,7 @@ const App: React.FC = () => {
       {tx.isOpen && (
         <TransactionModal
           type={tx.txType}
-          targetId={tx.targetId}
+          targetId={tx.targetId || ""}
           onClose={tx.closeTransaction}
           onConfirm={tx.handleSubmit}
         />
