@@ -8,25 +8,26 @@ import {
 } from "@/store/slices/notificationsSlice";
 import { ROUTES } from "../AppRoutes";
 import {
-  NotificationStatusType,
-  NotificationCompletionType,
+  NotificationStatus_T,
+  NotificationCompletion_T,
   INotification,
 } from "@/utils/types/notificationTypes";
+import getErrorMsg from "@/utils/getErrorMsg";
 
 export function useNotificationAction(
   notificationId: number,
-  onClose: () => void
+  onClose: () => void,
 ) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [notification, setNotification] = useState<INotification>(null);
+  const [notification, setNotification] = useState<INotification | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantityInput, setQuantityInput] = useState("");
-  const [status, setStatus] = useState<NotificationStatusType>("idle");
+  const [status, setStatus] = useState<NotificationStatus_T>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [completionType, setCompletionType] =
-    useState<NotificationCompletionType>("fulfilled");
+    useState<NotificationCompletion_T>("fulfilled");
   const [customNote, setCustomNote] = useState("");
 
   useEffect(() => {
@@ -34,19 +35,18 @@ export function useNotificationAction(
       try {
         setLoading(true);
         const result = await dispatch(
-          fetchNotificationWithSample(notificationId)
+          fetchNotificationWithSample(notificationId),
         ).unwrap();
         setNotification(result);
 
-        if (result?.linkedConnector?.Qty == 0)
-          setCompletionType("outOfStock");
+        if (result?.linkedConnector?.Qty == 0) setCompletionType("outOfStock");
 
         // Mark as read when opened
         if (!result.Read) {
           dispatch(markAsReadThunk(notificationId));
         }
       } catch (err) {
-        setErrorMessage(err.message || "Failed to load notification");
+        setErrorMessage(getErrorMsg(err, "Failed to load notification"));
         setStatus("error");
       } finally {
         setLoading(false);
@@ -79,7 +79,7 @@ export function useNotificationAction(
       const availableStock = notification?.linkedConnector?.Qty ?? Infinity;
       if (qty > availableStock) {
         setErrorMessage(
-          `Cannot take out more than available stock (${availableStock})`
+          `Cannot take out more than available stock (${availableStock})`,
         );
         setStatus("error");
         return;
@@ -102,7 +102,7 @@ export function useNotificationAction(
     } else if (completionType === "other") {
       finalNote = `Other: ${customNote}`;
     } else {
-      finalNote = "Fulfilled";
+      finalNote = "Delivery in progress";
     }
 
     // Append custom note if provided and not "Other" (since it's already included)
@@ -116,14 +116,14 @@ export function useNotificationAction(
           id: notificationId,
           quantityTakenOut: qty,
           completionNote: finalNote,
-        })
+        }),
       ).unwrap();
       setStatus("success");
       setTimeout(() => {
         onClose();
       }, 1500);
     } catch (err) {
-      setErrorMessage(err.message || "Failed to finish notification");
+      setErrorMessage(getErrorMsg(err, "Failed to finish notification"));
       setStatus("error");
     }
   };

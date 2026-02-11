@@ -1,11 +1,12 @@
+import { NotificationCompletion_T } from "@/utils/types";
 import { Loader2 } from "lucide-react";
 
 interface Props {
-  completionType: "fulfilled" | "outOfStock" | "other";
+  completionType: NotificationCompletion_T;
   maxQuantity?: number;
   quantityInput: string;
   customNote: string;
-  setCompletionType: (val: "fulfilled" | "outOfStock" | "other") => void;
+  setCompletionType: (val: NotificationCompletion_T) => void;
   onCancel: () => void;
   status: "idle" | "loading" | "success" | "error";
 }

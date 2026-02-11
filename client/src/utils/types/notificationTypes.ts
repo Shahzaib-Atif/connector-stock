@@ -1,9 +1,9 @@
 import type { Connector } from "./inventoryTypes";
 import type { Sample } from "./sampleTypes";
 
-export type NotificationStatusType = "idle" | "loading" | "success" | "error";
+export type NotificationStatus_T = "idle" | "loading" | "success" | "error";
 
-export type NotificationCompletionType = "fulfilled" | "outOfStock" | "other";
+export type NotificationCompletion_T = "fulfilled" | "outOfStock" | "other";
 
 export interface INotification {
   id: number;

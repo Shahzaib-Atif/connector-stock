@@ -1,8 +1,10 @@
+import { NotificationCompletion_T } from "@/utils/types";
+
 interface Props {
   quantityInput: string;
   setQuantityInput: (val: string) => void;
   maxQuantity?: number;
-  completionType: "fulfilled" | "outOfStock" | "other";
+  completionType: NotificationCompletion_T;
 }
 
 function QuantityInput({

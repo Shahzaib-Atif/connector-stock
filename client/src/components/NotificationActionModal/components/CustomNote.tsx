@@ -1,5 +1,7 @@
+import { NotificationCompletion_T } from "@/utils/types";
+
 interface Props {
-  completionType: "fulfilled" | "outOfStock" | "other";
+  completionType: NotificationCompletion_T;
   customNote: string;
   setCustomNote: (val: string) => void;
 }
