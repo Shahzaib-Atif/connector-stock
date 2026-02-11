@@ -1,6 +1,7 @@
 import { PrintLabelDto } from 'src/dtos/print.dto';
 import { addQrCode, addText, labelConfig } from './printUtils';
 
+// Layout logic
 export class TsplBuilder {
   build(dto: PrintLabelDto) {
     // Start building TSPL commands

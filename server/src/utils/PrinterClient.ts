@@ -7,6 +7,7 @@ import * as os from 'os';
 
 const execAsync = promisify(exec);
 
+// OS + printer communication
 export class PrinterClient {
   private readonly logger = new Logger(PrinterClient.name);
   private readonly rawPrinterExe = path.join(
