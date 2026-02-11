@@ -23,10 +23,10 @@ function SelectPrinterBtn({
     >
       <Printer className="w-3.5 h-3.5" />
 
-      <div className="flex flex-col leading-tight text-left">
+      <div className="flex flex-col leading-tight text-center">
         <span>Printer {myPrinter.split("_")[1]}</span>
         <span className="text-xs opacity-90 text-slate-300">
-          ({myPrinter === Printer_t.PRINTER_1 ? "upstairs" : "downstairs"})
+          ({myPrinter === Printer_t.PRINTER_1 ? "samples" : "GT"})
         </span>
       </div>
     </button>

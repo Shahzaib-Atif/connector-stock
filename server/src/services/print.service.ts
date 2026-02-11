@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import { PrintLabelDto } from 'src/dtos/print.dto';
+import getErrorMsg from 'src/utils/getErrorMsg';
 
 const execAsync = promisify(exec);
 
@@ -30,10 +31,9 @@ export class PrintService {
       fs.writeFileSync(tempFile, tsplCommands, { encoding: 'ascii' });
 
       // Send to printer
-      let printer = dto.printer || 'PRINTER_1';
-      if (printer === 'PRINTER_1') printer = process.env.PRINTER_1;
-      else if (printer === 'PRINTER_2') printer = process.env.PRINTER_2;
-
+      const printer = this.getSelectedPrinter(dto.printer || 'PRINTER_1');
+      if (!printer)
+        return { success: false, message: 'Printer not configured' };
       await this.sendToPrinter(tempFile, printer);
 
       // Cleanup
@@ -41,16 +41,21 @@ export class PrintService {
 
       return { success: true, message: `Label printed for ${itemId}` };
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      this.logger.error(`Print failed: ${message}`);
+      const message = getErrorMsg(error);
+      this.logger.error(`Print failed: `, message);
       return { success: false, message };
     }
   }
 
+  private getSelectedPrinter(printerKey: string): string {
+    if (printerKey === 'PRINTER_1') return process.env.PRINTER_1 || '';
+    else if (printerKey === 'PRINTER_2') return process.env.PRINTER_2 || '';
+    else return '';
+  }
+
   private generateTsplCommands(dto: PrintLabelDto): string {
-    const { itemId, itemUrl, source, qty } = dto;
-    const { widthMm, heightMm, qrCodePos, center_X } = this.labelConfig;
-    const { x: qr_x, y: qr_y } = qrCodePos;
+    const { qty } = dto;
+    const { widthMm, heightMm } = this.labelConfig;
 
     // Start building TSPL commands
     const lines = [
@@ -59,6 +64,22 @@ export class PrintService {
       'CLS',
       'DIRECTION 1,0',
     ];
+
+    // Add source-specific formatting (QR code, text positions, etc.)
+    this.applySourceFormatting(dto, lines);
+
+    // determine print quantity (default to 1 if invalid)
+    const n = Number(qty);
+    const printQty = Number.isInteger(n) && n > 0 ? n : 1; // positive integer only
+
+    lines.push(`PRINT ${printQty},1`);
+    return lines.join('\r\n') + '\r\n';
+  }
+
+  private applySourceFormatting(dto: PrintLabelDto, lines: string[]) {
+    const { itemId, itemUrl, source } = dto;
+    const { qrCodePos, center_X } = this.labelConfig;
+    const { x: qr_x, y: qr_y } = qrCodePos;
 
     switch (source) {
       case 'sample': {
@@ -71,7 +92,6 @@ export class PrintService {
         const x = qr_x + 5;
         lines.push(`QRCODE ${x},${qr_y + 15},L,7,A,0,M2,S12,"${itemUrl}"`);
         lines.push(`TEXT ${x},${qr_y - 15},"2",0,1,1,"${itemId}"`);
-        // lines.push(`TEXT ${center_X + 20},90,"3",0,1,2,"${itemId}"`);
         break;
       }
 
@@ -86,13 +106,6 @@ export class PrintService {
         break;
       }
     }
-
-    // use qty if provided, otherwise 1
-    const n = Number(qty);
-    const printQty = Number.isInteger(n) && n > 0 ? n : 1; // positive integer only
-
-    lines.push(`PRINT ${printQty},1`);
-    return lines.join('\r\n') + '\r\n';
   }
 
   private handleSampleLines(lines: string[], dto: PrintLabelDto) {
