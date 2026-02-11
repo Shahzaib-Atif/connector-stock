@@ -45,16 +45,18 @@ export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
     >
       <div
         ref={ref}
-        className="bg-slate-800 w-full max-w-sm rounded-2xl p-6 shadow-2xl text-center border border-slate-700"
+        className="bg-slate-800 w-full max-w-md rounded-2xl p-4 sm:p-8 shadow-2xl text-center border border-slate-700"
       >
         {/* Title */}
         <div className="mb-6">
-          <h3 className="text-lg font-bold text-white">Scan Code</h3>
+          <h3 className="text-xl font-bold text-white tracking-tight">
+            Scan Code
+          </h3>
           <p className="text-slate-400 text-sm">Print this for {itemId}</p>
         </div>
 
         {/* Image */}
-        <div className="bg-white p-4 rounded-xl inline-block mb-6 shadow-inner">
+        <div className="bg-white p-4 rounded-xl inline-block mb-6 shadow-md">
           <img
             src={`${qrServerUrl}${itemIdLink}`}
             alt="QR Code"
@@ -62,39 +64,64 @@ export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
           />
         </div>
 
-        <div className="font-mono text-xl font-bold text-white mb-4 tracking-wider break-all">
+        <div className="font-mono text-2xl font-bold text-white mb-6 tracking-widest break-all">
           {itemId}
         </div>
 
         {/* Quantity selector */}
-        <QuantitySelector printQty={printQty} setPrintQty={setPrintQty} />
+        <div className="mb-8">
+          <QuantitySelector printQty={printQty} setPrintQty={setPrintQty} />
+        </div>
 
         {/* Warning for large quantity */}
         {printQty > 10 && <PrintWarning printQty={printQty} />}
 
         {/* Print Status */}
-        {printStatus && <PrintStatus printStatus={printStatus} />}
-
-        <div className="mb-6 flex flex-col items-center justify-center gap-3">
-          {/* Printer Selection */}
-          <PrinterSelector
-            selectedPrinter={selectedPrinter}
-            setSelectedPrinter={setSelectedPrinter}
-          />
-
-          {/* Label Size Selection */}
-          <LabelSizeSelector
-            useSmallLabels={useSmallLabels}
-            setUseSmallLabels={setUseSmallLabels}
-          />
-        </div>
+        {printStatus && (
+          <div className="mb-6">
+            <PrintStatus printStatus={printStatus} />
+          </div>
+        )}
 
         <ActionButtons
           isPrinting={isPrinting}
           handlePrint={handlePrint}
           onClose={onClose}
         />
+
+        {/* Separator Divider */}
+        <div className="relative flex items-center gap-4 my-2 mt-8 py-2">
+          <div className="flex-grow h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent" />
+          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] whitespace-nowrap bg-slate-800 px-2">
+            Extra Settings
+          </span>
+          <div className="flex-grow h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent" />
+        </div>
+
+        <div className="flex flex-col gap-5 w-full">
+          {/* Printer Selection Row */}
+          <div className={divStyle1}>
+            <span className={labelStyle1}>Printer:</span>
+            <PrinterSelector
+              selectedPrinter={selectedPrinter}
+              setSelectedPrinter={setSelectedPrinter}
+            />
+          </div>
+
+          {/* Label Size Selection Row */}
+          <div className={divStyle1}>
+            <span className={labelStyle1}>Label Size:</span>
+            <LabelSizeSelector
+              useSmallLabels={useSmallLabels}
+              setUseSmallLabels={setUseSmallLabels}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
 };
+
+const divStyle1 = "flex flex-row justify-center gap-2 items-center w-full px-2";
+const labelStyle1 =
+  "text-xs font-bold text-slate-500 uppercase tracking-widest";

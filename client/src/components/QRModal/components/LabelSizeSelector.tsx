@@ -24,9 +24,6 @@ const LabelSizeSelector: React.FC<LabelSizeSelectorProps> = ({
         <Maximize2 className="w-3.5 h-3.5" />
         <div className="flex flex-col leading-tight text-center">
           <span>Normal</span>
-          <span className="text-[10px] opacity-80 text-slate-300">
-            (Standard)
-          </span>
         </div>
       </button>
 
@@ -42,9 +39,6 @@ const LabelSizeSelector: React.FC<LabelSizeSelectorProps> = ({
         <Minimize2 className="w-3.5 h-3.5" />
         <div className="flex flex-col leading-tight text-center">
           <span>Small</span>
-          <span className="text-[10px] opacity-80 text-slate-300">
-            (Samples)
-          </span>
         </div>
       </button>
     </div>
