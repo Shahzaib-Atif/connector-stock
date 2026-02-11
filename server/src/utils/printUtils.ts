@@ -1,4 +1,14 @@
-// Utility functions for generating TSPL commands for label printing
+// Label dimensions: 45x28mm @ 203 DPI (8 dots/mm)
+export const labelConfig = {
+  widthMm: 45,
+  heightMm: 28,
+  qrCodePos: { x: 20, y: 40 },
+  center_X: 180, // (45*8)/2 = 180 dots
+  itemId_Y: 50,
+  refCliente_Y: 120,
+  encomenda_Y: 160,
+};
+
 export function addText(
   lines: string[],
   x: number,

@@ -6,7 +6,7 @@ import * as path from 'path';
 import * as os from 'os';
 import { PrintLabelDto } from 'src/dtos/print.dto';
 import getErrorMsg from 'src/utils/getErrorMsg';
-import { addQrCode, addText } from 'src/utils/printFuncs';
+import { addQrCode, addText, labelConfig } from 'src/utils/printUtils';
 
 const execAsync = promisify(exec);
 
@@ -56,7 +56,7 @@ export class PrintService {
 
   private generateTsplCommands(dto: PrintLabelDto): string {
     const { qty } = dto;
-    const { widthMm, heightMm } = this.labelConfig;
+    const { widthMm, heightMm } = labelConfig;
 
     // Start building TSPL commands
     const lines = [
@@ -67,7 +67,7 @@ export class PrintService {
     ];
 
     // Add source-specific formatting (QR code, text positions, etc.)
-    this.applySourceFormatting(dto, lines);
+    this.buildLayout(dto, lines);
 
     // determine print quantity (default to 1 if invalid)
     const n = Number(qty);
@@ -77,31 +77,20 @@ export class PrintService {
     return lines.join('\r\n') + '\r\n';
   }
 
-  private applySourceFormatting(dto: PrintLabelDto, lines: string[]) {
-    const { itemId, itemUrl, source } = dto;
-    const { qrCodePos, center_X } = this.labelConfig;
-    const { x: qr_x, y: qr_y } = qrCodePos;
-
-    switch (source) {
+  private buildLayout(dto: PrintLabelDto, lines: string[]) {
+    switch (dto.source) {
       case 'sample': {
-        this.handleSampleLines(lines, dto);
+        this.buildSampleLayout(lines, dto);
         break;
       }
 
       case 'box': {
-        // add QR code and itemId
-        const x = qr_x + 5;
-        // lines.push(`QRCODE ${x},${qr_y + 15},L,7,A,0,M2,S12,"${itemUrl}"`);
-        addQrCode(lines, x, qr_y + 15, itemUrl, 7, 2, 12);
-        addText(lines, x, qr_y - 15, itemId);
+        this.buildBoxLayout(dto, lines);
         break;
       }
 
       case 'connector': {
-        // add QR code and itemId
-        // lines.push(`QRCODE ${qr_x},${qr_y + 20},L,4,A,0,M2,S7,"${itemUrl}"`);
-        addQrCode(lines, qr_x, qr_y + 20, itemUrl);
-        addText(lines, center_X + 10, 90, itemId, '"3"', 1, 2);
+        this.buildConnectorLayout(dto, lines);
         break;
       }
 
@@ -111,19 +100,36 @@ export class PrintService {
     }
   }
 
-  private handleSampleLines(lines: string[], dto: PrintLabelDto) {
-    const { itemId, itemUrl, refCliente, encomenda } = dto;
-    const { qrCodePos, center_X } = this.labelConfig;
+  private buildBoxLayout(dto: PrintLabelDto, lines: string[]) {
+    const { itemId, itemUrl } = dto;
+    const { qrCodePos } = labelConfig;
     const { x: qr_x, y: qr_y } = qrCodePos;
 
-    // QR Code
-    // lines.push(`QRCODE ${qr_x},${qr_y},L,6,A,0,M2,S7,"${itemUrl}"`);
-    addQrCode(lines, qr_x, qr_y, itemUrl, 6);
+    const x = qr_x + 5;
+    addQrCode(lines, x, qr_y + 15, itemUrl, 7, 2, 12);
+    addText(lines, x, qr_y - 15, itemId);
+  }
 
+  private buildConnectorLayout(dto: PrintLabelDto, lines: string[]) {
+    const { itemId, itemUrl } = dto;
+    const { qrCodePos, center_X } = labelConfig;
+    const { x: qr_x, y: qr_y } = qrCodePos;
+
+    addQrCode(lines, qr_x, qr_y + 20, itemUrl);
+    addText(lines, center_X + 10, 90, itemId, '"3"', 1, 2);
+  }
+
+  private buildSampleLayout(lines: string[], dto: PrintLabelDto) {
+    const { itemId, itemUrl, refCliente, encomenda } = dto;
+    const { qrCodePos, center_X } = labelConfig;
+    const { x: qr_x, y: qr_y } = qrCodePos;
+
+    // Add QR Code
+    addQrCode(lines, qr_x - 10, qr_y + 20, itemUrl, 5);
+
+    // Add Text
     const textX = center_X + 15;
-    const textY = 200; // Near bottom edge
-
-    // ItemId
+    const textY = itemId?.length > 12 ? 210 : 200; // Near bottom edge (224)
     addText(lines, textX, textY, itemId, '"2"', 2, 1, 270);
 
     // RefCliente
@@ -207,15 +213,4 @@ export class PrintService {
       }
     }, 5000);
   }
-
-  // Label dimensions: 45x28mm @ 203 DPI (8 dots/mm)
-  private readonly labelConfig = {
-    widthMm: 45,
-    heightMm: 28,
-    qrCodePos: { x: 20, y: 40 },
-    center_X: 180, // (45*8)/2 = 180 dots
-    itemId_Y: 50,
-    refCliente_Y: 120,
-    encomenda_Y: 160,
-  };
 }
