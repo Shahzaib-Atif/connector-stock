@@ -6,6 +6,7 @@ import * as path from 'path';
 import * as os from 'os';
 import { PrintLabelDto } from 'src/dtos/print.dto';
 import getErrorMsg from 'src/utils/getErrorMsg';
+import { addText } from 'src/utils/printFuncs';
 
 const execAsync = promisify(exec);
 
@@ -91,14 +92,14 @@ export class PrintService {
         // add QR code and itemId
         const x = qr_x + 5;
         lines.push(`QRCODE ${x},${qr_y + 15},L,7,A,0,M2,S12,"${itemUrl}"`);
-        lines.push(`TEXT ${x},${qr_y - 15},"2",0,1,1,"${itemId}"`);
+        addText(lines, x, qr_y - 15, itemId);
         break;
       }
 
       case 'connector': {
         // add QR code and itemId
         lines.push(`QRCODE ${qr_x},${qr_y + 20},L,4,A,0,M2,S7,"${itemUrl}"`);
-        lines.push(`TEXT ${center_X + 10},90,"3",0,1,2,"${itemId}"`);
+        addText(lines, center_X + 10, 90, itemId, '"3"', 1, 2);
         break;
       }
 
@@ -120,7 +121,7 @@ export class PrintService {
     const textY = 200; // Near bottom edge
 
     // ItemId
-    lines.push(`TEXT ${textX},${textY},"2",270,2,1,"${itemId}"`);
+    addText(lines, textX, textY, itemId, '"2"', 2, 1, 270);
 
     // RefCliente
     let currentX = textX + 45; // Spacing for next line
@@ -135,7 +136,7 @@ export class PrintService {
 
     // Encomenda
     if (encomenda) {
-      lines.push(`TEXT ${currentX + 15},${textY},"2",270,1,1,"${encomenda}"`);
+      addText(lines, currentX + 15, textY, encomenda, '"2"', 1, 1, 270);
     }
   }
 
@@ -163,9 +164,8 @@ export class PrintService {
     }
 
     chunks.forEach((text, index) => {
-      lines.push(
-        `TEXT ${startX + index * LINE_SPACING},${startY},"2",270,1,1,"${text}"`,
-      );
+      const x = startX + index * LINE_SPACING;
+      addText(lines, x, startY, text, '"2"', 1, 1, 270);
     });
 
     return startX + chunks.length * LINE_SPACING; // Return next X position
