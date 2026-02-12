@@ -37,7 +37,7 @@ export const ParsedInfo: React.FC<ParsedInfoProps> = ({
         )}
         {prodId && (
           <div className="flex items-center gap-2 bg-slate-700 px-3 py-2 rounded">
-            <span className="text-slate-400 text-sm">ProdId:</span>
+            <span className="text-slate-400 text-sm">Prod Id:</span>
             <span className="text-white font-mono font-semibold">{prodId}</span>
           </div>
         )}

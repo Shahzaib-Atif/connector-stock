@@ -89,7 +89,7 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
                 <div className="flex items-center gap-1 bg-gray-700 px-2 py-1 rounded">
                   <ShoppingCart size={14} className="text-blue-400" />
                   <span className="text-gray-300">
-                    ProdId:{" "}
+                    Prod Id:{" "}
                     <span className="text-white font-mono">
                       {notification.parsedProdId}
                     </span>
