@@ -44,7 +44,7 @@ export class TsplBuilder {
       }
 
       case 'connector': {
-        this.buildConnectorLayout(dto, lines);
+        this.buildConnectorLayout(dto, lines, useSmallLabels);
         break;
       }
 
@@ -64,13 +64,20 @@ export class TsplBuilder {
     addText(lines, x, qr_y - 15, itemId);
   }
 
-  private buildConnectorLayout(dto: PrintLabelDto, lines: string[]) {
-    const { itemId, itemUrl } = dto;
-    const { qrCodePos, center_X } = labelConfig;
-    const { x: qr_x, y: qr_y } = qrCodePos;
-
-    addQrCode(lines, qr_x, qr_y + 20, itemUrl);
-    addText(lines, center_X + 10, 90, itemId, '"3"', 1, 2);
+  private buildConnectorLayout(
+    dto: PrintLabelDto,
+    lines: string[],
+    useSmallLabels: boolean | undefined,
+  ) {
+    if (useSmallLabels) {
+      this.buildTsplForSmallLabels(lines, dto);
+    } else {
+      const { itemId, itemUrl } = dto;
+      const { qrCodePos, center_X } = labelConfig;
+      const { x: qr_x, y: qr_y } = qrCodePos;
+      addQrCode(lines, qr_x, qr_y + 20, itemUrl);
+      addText(lines, center_X + 10, 90, itemId, '"3"', 1, 2);
+    }
   }
 
   private buildSampleLayout(
