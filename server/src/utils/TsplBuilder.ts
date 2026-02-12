@@ -3,12 +3,12 @@ import { addQrCode, addText, labelConfig } from './printUtils';
 
 // Layout logic
 export class TsplBuilder {
-  build(dto: PrintLabelDto) {
+  build(dto: PrintLabelDto, useSmallLabels: boolean | undefined) {
     // Start building TSPL commands
     const lines = this.getInitialLines();
 
     // Add source-specific formatting (QR code, text positions, etc.)
-    this.buildLayout(dto, lines);
+    this.buildLayout(dto, lines, useSmallLabels);
 
     // determine print quantity (default to 1 if invalid)
     this.addPrintQty(dto.qty, lines);
@@ -27,10 +27,14 @@ export class TsplBuilder {
     ];
   }
 
-  private buildLayout(dto: PrintLabelDto, lines: string[]) {
+  private buildLayout(
+    dto: PrintLabelDto,
+    lines: string[],
+    useSmallLabels: boolean | undefined,
+  ) {
     switch (dto.source) {
       case 'sample': {
-        this.buildSampleLayout(lines, dto);
+        this.buildSampleLayout(lines, dto, useSmallLabels);
         break;
       }
 
@@ -69,10 +73,21 @@ export class TsplBuilder {
     addText(lines, center_X + 10, 90, itemId, '"3"', 1, 2);
   }
 
-  private buildSampleLayout(lines: string[], dto: PrintLabelDto) {
+  private buildSampleLayout(
+    lines: string[],
+    dto: PrintLabelDto,
+    useSmallLabels: boolean | undefined,
+  ) {
     const { itemId, itemUrl, refCliente, encomenda } = dto;
     const { qrCodePos, center_X } = labelConfig;
     const { x: qr_x, y: qr_y } = qrCodePos;
+
+    if (useSmallLabels) {
+      // const x = qr_x + 5;
+      // addQrCode(lines, x, qr_y + 15, itemUrl, 7, 2, 12);
+      // addText(lines, x, qr_y - 15, itemId);
+      return;
+    }
 
     // Add QR Code
     addQrCode(lines, qr_x - 10, qr_y + 20, itemUrl, 5);

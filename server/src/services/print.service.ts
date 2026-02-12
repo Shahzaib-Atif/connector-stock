@@ -20,12 +20,11 @@ export class PrintService {
     this.logger.log(
       `Processing print request for ${itemId}. Small labels: ${useSmallLabels}`,
     );
-    throw new Error('under process');
 
     try {
       // Generate TSPL commands
       const tsplBuilder = new TsplBuilder();
-      const tsplCommands = tsplBuilder.build(dto);
+      const tsplCommands = tsplBuilder.build(dto, useSmallLabels);
 
       // get printer
       const printer = this.getSelectedPrinter(dto.printer || 'PRINTER_1');
