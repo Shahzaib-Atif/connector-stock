@@ -78,39 +78,10 @@ export class TsplBuilder {
     dto: PrintLabelDto,
     useSmallLabels: boolean | undefined,
   ) {
-    const { itemId, itemUrl, refCliente, encomenda } = dto;
-    const { qrCodePos, center_X } = labelConfig;
-    const { x: qr_x, y: qr_y } = qrCodePos;
-
     if (useSmallLabels) {
-      // const x = qr_x + 5;
-      // addQrCode(lines, x, qr_y + 15, itemUrl, 7, 2, 12);
-      // addText(lines, x, qr_y - 15, itemId);
-      return;
-    }
-
-    // Add QR Code
-    addQrCode(lines, qr_x - 10, qr_y + 20, itemUrl, 5);
-
-    // Add Text
-    const textX = center_X + 15;
-    const textY = itemId?.length > 12 ? 210 : 200; // Near bottom edge (224)
-    addText(lines, textX, textY, itemId, '"2"', 2, 1, 270);
-
-    // RefCliente
-    let currentX = textX + 45; // Spacing for next line
-    if (refCliente) {
-      currentX = this.addRefClientTextVertical(
-        lines,
-        refCliente,
-        currentX,
-        textY,
-      );
-    }
-
-    // Encomenda
-    if (encomenda) {
-      addText(lines, currentX + 15, textY, encomenda, '"2"', 1, 1, 270);
+      this.buildTsplForSmallLabels(lines, dto);
+    } else {
+      this.buildTsplForNormalLabels(lines, dto);
     }
   }
 
@@ -143,6 +114,75 @@ export class TsplBuilder {
     });
 
     return startX + chunks.length * LINE_SPACING; // Return next X position
+  }
+
+  private buildTsplForSmallLabels(lines: string[], dto: PrintLabelDto) {
+    const { itemId, itemUrl } = dto;
+    const { center_X } = labelConfig;
+
+    const MAX_LENGTH = 10;
+    const LINE_SPACING = 25;
+
+    const qrSize = 3;
+    const qrLength = 85; // for size 3 => 85 dots (same width and height)
+    const padding = 20;
+
+    const qr_x = 20; // qrcode position
+    const qr_y = 20;
+    const text_x = qr_x - 10; // text position
+    const text_y = qr_y + qrLength + padding;
+
+    // first set of qrcode and text (left-half)
+    addQrCode(lines, qr_x, qr_y, itemUrl, qrSize);
+    for (let i = 0; i < itemId.length; i += MAX_LENGTH) {
+      addText(
+        lines,
+        text_x,
+        text_y + (i / MAX_LENGTH) * LINE_SPACING,
+        itemId.slice(i, i + MAX_LENGTH),
+      );
+    }
+
+    // second set of qrcode and text (right-half)
+    addQrCode(lines, center_X + qr_x, qr_y, itemUrl, qrSize);
+    for (let i = 0; i < itemId.length; i += MAX_LENGTH) {
+      addText(
+        lines,
+        center_X + text_x,
+        text_y + (i / MAX_LENGTH) * LINE_SPACING,
+        itemId.slice(i, i + MAX_LENGTH),
+      );
+    }
+  }
+
+  private buildTsplForNormalLabels(lines: string[], dto: PrintLabelDto) {
+    const { itemId, itemUrl, refCliente, encomenda } = dto;
+    const { qrCodePos, center_X } = labelConfig;
+    const { x: qr_x, y: qr_y } = qrCodePos;
+
+    // Add QR Code
+    addQrCode(lines, qr_x - 10, qr_y + 20, itemUrl, 5);
+
+    // Add Text
+    const textX = center_X + 15;
+    const textY = itemId?.length > 12 ? 210 : 200; // Near bottom edge (224)
+    addText(lines, textX, textY, itemId, '"2"', 2, 1, 270);
+
+    // RefCliente
+    let currentX = textX + 45; // Spacing for next line
+    if (refCliente) {
+      currentX = this.addRefClientTextVertical(
+        lines,
+        refCliente,
+        currentX,
+        textY,
+      );
+    }
+
+    // Encomenda
+    if (encomenda) {
+      addText(lines, currentX + 15, textY, encomenda, '"2"', 1, 1, 270);
+    }
   }
 
   private addPrintQty(qty: number | undefined, lines: string[]) {
