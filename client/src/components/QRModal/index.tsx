@@ -17,7 +17,7 @@ interface QRModalProps {
 }
 
 export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
-  const { id: itemId } = qrData;
+  const { id: itemId, source } = qrData;
   const itemIdLink = getItemIdLink(itemId);
 
   const {
@@ -109,13 +109,15 @@ export const QRModal: React.FC<QRModalProps> = ({ qrData, onClose }) => {
           </div>
 
           {/* Label Size Selection Row */}
-          <div className={divStyle1}>
-            <span className={labelStyle1}>Label Size:</span>
-            <LabelSizeSelector
-              useSmallLabels={useSmallLabels}
-              setUseSmallLabels={setUseSmallLabels}
-            />
-          </div>
+          {source !== "box" && (
+            <div className={divStyle1}>
+              <span className={labelStyle1}>Label Size:</span>
+              <LabelSizeSelector
+                useSmallLabels={useSmallLabels}
+                setUseSmallLabels={setUseSmallLabels}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
