@@ -1,8 +1,9 @@
 import React from "react";
 
 interface ParsedInfoProps {
-  conector: string | null;
-  encomenda: string | null;
+  conector: string;
+  encomenda: string;
+  prodId: string;
   senderUser: string;
   senderSector: string;
 }
@@ -10,6 +11,7 @@ interface ParsedInfoProps {
 export const ParsedInfo: React.FC<ParsedInfoProps> = ({
   conector,
   encomenda,
+  prodId,
   senderUser,
   senderSector,
 }) => {
@@ -31,6 +33,12 @@ export const ParsedInfo: React.FC<ParsedInfoProps> = ({
             <span className="text-white font-mono font-semibold">
               {encomenda}
             </span>
+          </div>
+        )}
+        {prodId && (
+          <div className="flex items-center gap-2 bg-slate-700 px-3 py-2 rounded">
+            <span className="text-slate-400 text-sm">ProdId:</span>
+            <span className="text-white font-mono font-semibold">{prodId}</span>
           </div>
         )}
       </div>

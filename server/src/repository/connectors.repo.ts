@@ -40,7 +40,7 @@ export class ConnectorRepo {
       });
     } catch (ex: any) {
       console.error('Error fetching connector by codivmac:', ex.message);
-      return null;
+      return undefined;
     }
   }
 

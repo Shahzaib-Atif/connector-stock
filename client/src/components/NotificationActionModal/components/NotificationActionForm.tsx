@@ -44,14 +44,15 @@ export const NotificationActionForm: React.FC<Props> = ({
       ) : (
         <form onSubmit={handleFinish} className="space-y-6">
           <ParsedInfo
-            conector={notification?.parsedConector}
-            encomenda={notification?.parsedEncomenda}
-            senderUser={notification?.SenderUser}
-            senderSector={notification?.SenderSector}
+            conector={notification?.parsedConector || ""}
+            encomenda={notification?.parsedEncomenda || ""}
+            prodId={notification?.parsedProdId || ""}
+            senderUser={notification?.SenderUser || ""}
+            senderSector={notification?.SenderSector || ""}
           />
 
           <LinkedConnector
-            connector={notification?.linkedConnector}
+            connector={notification?.linkedConnector || ""}
             onClose={onClose}
           />
 

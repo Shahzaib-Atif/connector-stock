@@ -29,3 +29,9 @@ export interface Transaction {
   updatedAt?: number;
   notes?: string;
 }
+
+export interface ParsedMessage {
+  conector?: string;
+  encomenda?: string;
+  prodId?: string;
+}

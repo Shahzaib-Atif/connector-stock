@@ -4,11 +4,6 @@ import { AppNotification } from 'src/dtos/notifications.dto';
 import { UpdateSampleDto } from 'src/dtos/samples.dto';
 import { CreateTransactionsDto } from 'src/dtos/transaction.dto';
 
-export interface ParsedMessage {
-  conector?: string;
-  encomenda?: string;
-}
-
 @Injectable()
 export class NotificationsRepo {
   constructor(private prisma: PrismaService) {}

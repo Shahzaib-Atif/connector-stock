@@ -1,5 +1,5 @@
 import React from "react";
-import { Bell, Package, Calendar } from "lucide-react";
+import { Bell, Package, Calendar, ShoppingCart } from "lucide-react";
 import { INotification } from "@/utils/types/notificationTypes";
 
 interface NotificationCardProps {
@@ -80,6 +80,18 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
                     Order:{" "}
                     <span className="text-white font-mono">
                       {notification.parsedEncomenda}
+                    </span>
+                  </span>
+                </div>
+              )}
+
+              {notification.parsedProdId && (
+                <div className="flex items-center gap-1 bg-gray-700 px-2 py-1 rounded">
+                  <ShoppingCart size={14} className="text-blue-400" />
+                  <span className="text-gray-300">
+                    ProdId:{" "}
+                    <span className="text-white font-mono">
+                      {notification.parsedProdId}
                     </span>
                   </span>
                 </div>

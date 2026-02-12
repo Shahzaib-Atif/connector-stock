@@ -20,6 +20,7 @@ export interface INotification {
   FinishedDate: string | null;
   parsedConector?: string;
   parsedEncomenda?: string;
-  linkedSample?: Sample | null;
-  linkedConnector?: Connector | null;
+  parsedProdId?: string;
+  linkedSample?: Sample;
+  linkedConnector?: Connector;
 }

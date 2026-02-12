@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  NotificationsRepo,
-  ParsedMessage,
-} from 'src/repository/notifications.repo';
+import { NotificationsRepo } from 'src/repository/notifications.repo';
 import { SamplesRepo } from 'src/repository/samples.repo';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
 import {
@@ -13,6 +10,7 @@ import {
 import { UpdateSampleDto } from 'src/dtos/samples.dto';
 import { ConnectorDto } from 'src/dtos/connector.dto';
 import { CreateTransactionsDto } from 'src/dtos/transaction.dto';
+import { ParsedMessage } from 'src/utils/types';
 
 @Injectable()
 export class NotificationsService {
@@ -33,6 +31,7 @@ export class NotificationsService {
         ...notification,
         parsedConector: parsed.conector,
         parsedEncomenda: parsed.encomenda,
+        parsedProdId: parsed.prodId,
       };
     });
   }
@@ -50,8 +49,8 @@ export class NotificationsService {
     const parsed = this.parseNotificationMessage(notification.Message);
 
     // Try to find matching sample and connector
-    let linkedSample: UpdateSampleDto = null;
-    let linkedConnector: ConnectorDto = null;
+    let linkedSample: UpdateSampleDto | undefined;
+    let linkedConnector: ConnectorDto | undefined;
 
     if (parsed.conector) {
       linkedConnector = await this.connectorRepo.getConnectorByCodivmac(
@@ -70,6 +69,7 @@ export class NotificationsService {
       ...notification,
       parsedConector: parsed.conector,
       parsedEncomenda: parsed.encomenda,
+      parsedProdId: parsed.prodId,
       linkedSample,
       linkedConnector,
     };
@@ -146,22 +146,25 @@ export class NotificationsService {
    * Expected format:
    * Pedido de amostra para montagem
    * Conector: I357C2
-   * Encomenda: 251120ProdId= 274886
+   * Encomenda: 251120
+   * ProdId= 274886
    */
   parseNotificationMessage(message: string): ParsedMessage {
     const parsed: ParsedMessage = {};
 
-    // Extract Conector - match "Conector: <value>"
-    const conectorMatch = message.match(/Conector:\s*([^\s\n]+)/i);
-    if (conectorMatch && conectorMatch[1]) {
-      parsed.conector = conectorMatch[1].trim();
+    const conectorMatch = message.match(/Conector:\s*(\S+)/i);
+    if (conectorMatch) {
+      parsed.conector = conectorMatch[1];
     }
 
-    // Extract Encomenda - match "Encomenda: <value>" (before "ProdId=" if present)
-    const encomendaMatch = message.match(/Encomenda:\s*([^\s\n]+)/i);
-    if (encomendaMatch && encomendaMatch[1]) {
-      // Remove "ProdId=" part if present
-      parsed.encomenda = encomendaMatch[1].replace(/ProdId=.*$/i, '').trim();
+    const encomendaMatch = message.match(/Encomenda:\s*(\d+)/i);
+    if (encomendaMatch) {
+      parsed.encomenda = encomendaMatch[1];
+    }
+
+    const prodIdMatch = message.match(/ProdId=\s*(\d+)/i);
+    if (prodIdMatch) {
+      parsed.prodId = prodIdMatch[1];
     }
 
     return parsed;
