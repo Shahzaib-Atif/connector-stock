@@ -1,11 +1,10 @@
 import React from "react";
-import { FolderOpen } from "lucide-react";
-import { useOpenFolder } from "@/hooks/useOpenFolder";
 import { Sample } from "@/utils/types";
 import { QRData } from "@/utils/types/shared";
 import { Link } from "react-router-dom";
 import { getConnectorId, getObservation } from "./utils";
 import SamplesActionButtons from "./SamplesActionButtons";
+import OpenFolderBtn from "./OpenFolderBtn";
 
 interface TableRowProps {
   sample: Sample;
@@ -41,8 +40,6 @@ const TableRow: React.FC<TableRowProps> = ({
     Entregue_a,
   } = sample;
 
-  const { openFolder, isOpeningFolder } = useOpenFolder();
-
   return (
     <tr className={"table-row table-row-bg"} key={sample.ID}>
       <td className="table-data font-mono">{sample.ID}</td>
@@ -63,23 +60,11 @@ const TableRow: React.FC<TableRowProps> = ({
         )}
       </td>
       <td className="table-data break-all">{Quantidade || "-"}</td>
-      <td className="table-data">
-        <div className="flex items-center gap-2 justify-between">
-          <span>{N_Envio || "-"}</span>
-          {N_Envio && (
-            <button
-              onClick={() => openFolder(N_Envio)}
-              disabled={isOpeningFolder}
-              className={`text-slate-400 hover:text-blue-400 transition-colors ${
-                isOpeningFolder ? "opacity-50 cursor-wait" : ""
-              }`}
-              title="Open Folder"
-            >
-              <FolderOpen className="w-4 h-4" />
-            </button>
-          )}
-        </div>
-      </td>
+      {
+        <td className="table-data">
+          <OpenFolderBtn N_Envio={N_Envio} showFolderBtn={showActions} />
+        </td>
+      }
       <td className="table-data">{NumORC || "-"}</td>
       <td className="table-data break-all" title={Entregue_a}>
         {Entregue_a || "-"}
