@@ -32,10 +32,10 @@ export const mapLegacyToConnector = (
       Family: 1, // Default for legacy
       Fabricante: legacy.Fabricante || "--",
       Refabricante: legacy.Refabricante || "",
-      OBS: legacy.OBS,
-      Designa__o: legacy.Designa__o,
+      OBS: legacy.OBS ?? "",
+      Designa__o: legacy.Designa__o ?? "",
     },
-    ConnType: legacy.ConnType,
+    ConnType: legacy.ConnType ?? "",
     Qty: 0, // Default for legacy
     Qty_com_fio: 0, // Default for legacy
     Qty_sem_fio: 0, // Default for legacy
@@ -53,7 +53,7 @@ export const parseConnector = (
     return null;
   }
 
-  const { PosId, details, Cor, Vias } = reference;
+  const { PosId, details, Cor, Vias, dimensions } = reference;
   const fabricante = details.Fabricante || "--";
   const refabricante = details.Refabricante || "";
   const coords = getCoordinates(PosId, masterData);
@@ -93,6 +93,7 @@ export const parseConnector = (
     Qty_sem_fio: masterData.connectors[id].Qty_sem_fio,
     accessories,
     clientReferences: reference.clientReferences || [],
+    dimensions,
   };
 };
 

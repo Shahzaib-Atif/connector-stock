@@ -44,6 +44,7 @@ export class ConnectorsService {
     return connectors.map((conn) => ({
       ...conn,
       details: conn.Connectors_Details || {},
+      dimensions: conn.Connectors_Dimensions || {},
       clientReferences: mappingStore[conn.CODIVMAC] || [],
     }));
   }

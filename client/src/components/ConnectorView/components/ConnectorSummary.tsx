@@ -17,8 +17,14 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
 }) => {
   const [error, setError] = useState(false);
   const imageUrl = API.connectorImages(connector.CODIVMAC);
-  const { PosId, colorName, Qty, ConnType, details } = connector;
+  const { PosId, colorName, Qty, ConnType, details, dimensions } = connector;
   const { Fabricante, Refabricante, Family, OBS } = details;
+
+  const hasDimensions =
+    !!dimensions &&
+    (dimensions.InternalDiameter != null ||
+      dimensions.ExternalDiameter != null ||
+      dimensions.Thickness != null);
 
   return (
     <div id="connector-summary" className={VIEW_SUMMARY_CLASS}>
@@ -39,25 +45,47 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
         id="connector-metadata-1"
         className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4"
       >
-        <CardInfoDiv label="Color" value={colorName} />
+        <CardInfoDiv label="Color" value={colorName ?? ""} />
         <CardInfoDiv label="Vias" value={getViasValue(connector)} />
-        <CardInfoDiv label="Type" value={ConnType} />
+        <CardInfoDiv label="Type" value={ConnType ?? ""} />
         <CardInfoDiv label="Family" value={Family?.toString() || "-"} />
       </div>
 
-      {/* Fabricante, Refabricante, Obs */}
+      {/* Fabricante, Refabricante, Obs, Dimensions */}
       <div
         id="connector-metadata-2"
         className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4"
       >
         <CardInfoDiv label="Fabricante" value={Fabricante || "--"} />
         <CardInfoDiv label="Refabricante" value={Refabricante || "--"} />
-        {OBS && (
-          <CardInfoDiv
-            classnames="col-span-2"
-            label="Obs."
-            value={OBS || "-"}
-          />
+        {OBS && <CardInfoDiv label="Obs." value={OBS || "-"} />}
+        {hasDimensions && (
+          <>
+            <CardInfoDiv
+              label="Internal Ø"
+              value={
+                dimensions?.InternalDiameter != null
+                  ? dimensions.InternalDiameter.toString()
+                  : "-"
+              }
+            />
+            <CardInfoDiv
+              label="External Ø"
+              value={
+                dimensions?.ExternalDiameter != null
+                  ? dimensions.ExternalDiameter.toString()
+                  : "-"
+              }
+            />
+            <CardInfoDiv
+              label="Thickness"
+              value={
+                dimensions?.Thickness != null
+                  ? dimensions.Thickness.toString()
+                  : "-"
+              }
+            />
+          </>
         )}
       </div>
 
@@ -70,8 +98,6 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
 };
 
 function getViasValue(connector: Connector) {
-  console.log(connector.CODIVMAC, connector.details.ActualViaCount);
-
   if (connector.details.ActualViaCount)
     return `${connector.Vias} (${connector.details.ActualViaCount})`;
   return `${connector.Vias} (${connector.viasName})`;

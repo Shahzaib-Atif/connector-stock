@@ -11,6 +11,12 @@ export interface Accessory {
   connectorId?: string; // Reference to parent connector
 }
 
+export interface Connector_Dimensions {
+  InternalDiameter?: number;
+  ExternalDiameter?: number;
+  Thickness?: number;
+}
+
 export interface Connector_Details {
   Family: number;
   Fabricante?: string;
@@ -40,6 +46,7 @@ export interface Connector {
   ch_ma?: string | null; // Morocco Horizontal Coordinate
   accessories: Accessory[]; // Linked accessories
   clientReferences?: string[]; // Legacy mappings (RefMARCA)
+  dimensions?: Connector_Dimensions;
 }
 
 export interface Box {
