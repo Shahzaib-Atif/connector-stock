@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
+import getErrorMsg from 'src/utils/getErrorMsg';
 
 @Injectable()
 export class ConnectorsService {
@@ -26,8 +27,8 @@ export class ConnectorsService {
         FROM ImageFeaturesDB.dbo.RefClientes_Marca 
         WHERE ESTADO = 1
       `);
-    } catch (error) {
-      console.error('Error fetching client mappings:', error.message);
+    } catch (e) {
+      console.error('Error fetching client mappings:', getErrorMsg(e));
     }
 
     // Group mappings by RefDIVMAC

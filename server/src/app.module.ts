@@ -6,6 +6,7 @@ import { ImageService } from './services/image.service';
 import { MetadataController } from './controllers/metadata.controller';
 import { AccessoryController } from './controllers/accessories.controller';
 import { ConnectorController } from './controllers/connectors.controller';
+import { FolderController } from './controllers/folder.controller';
 import { MetadataRepo } from './repository/metadata.repo';
 import { AccessoryRepo } from './repository/accessories.repo';
 import { ConnectorRepo } from './repository/connectors.repo';
@@ -23,6 +24,7 @@ import { UsersRepo } from './repository/users.repo';
 import { NotificationsController } from './controllers/notifications.controller';
 import { NotificationsService } from './services/notifications.service';
 import { NotificationsRepo } from './repository/notifications.repo';
+import { FolderService } from './services/folder.service';
 
 import { AuthModule } from './auth/auth.module';
 import { LegacyModule } from './modules/legacy/legacy.module';
@@ -47,6 +49,7 @@ import { LegacyModule } from './modules/legacy/legacy.module';
     SamplesController,
     PrintController,
     NotificationsController,
+    FolderController,
   ],
   providers: [
     PrismaService,
@@ -64,6 +67,7 @@ import { LegacyModule } from './modules/legacy/legacy.module';
     UsersRepo,
     NotificationsService,
     NotificationsRepo,
+    FolderService,
   ],
 })
 export class AppModule {}

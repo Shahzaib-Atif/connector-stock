@@ -2,6 +2,7 @@ import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { Response } from 'express';
 import { ImageService } from 'src/services/image.service';
+import getErrorMsg from 'src/utils/getErrorMsg';
 
 @Controller('api/images')
 export class ImageController {
@@ -22,7 +23,7 @@ export class ImageController {
       res.setHeader('Content-Type', contentType);
       stream.pipe(res);
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMsg(e));
       res.sendStatus(404);
     }
   }
@@ -39,7 +40,7 @@ export class ImageController {
       res.setHeader('Content-Type', contentType);
       stream.pipe(res);
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMsg(e));
       res.sendStatus(404);
     }
   }
@@ -60,7 +61,7 @@ export class ImageController {
       res.setHeader('Content-Type', contentType);
       stream.pipe(res);
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMsg(e));
       res.sendStatus(404);
     }
   }
@@ -84,7 +85,7 @@ export class ImageController {
       res.setHeader('Content-Type', contentType);
       stream.pipe(res);
     } catch (e) {
-      console.error(e.message);
+      console.error(getErrorMsg(e));
       res.sendStatus(404);
     }
   }

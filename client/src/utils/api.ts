@@ -36,12 +36,17 @@ const auth = {
   changePwd: `${API_BASE_URL}/auth/change-password`,
 };
 
+const folder = {
+  openFolder: `${API_BASE_URL}/folder/open`,
+};
+
 export const API = {
   ...connectors,
   ...accessories,
   ...metadata,
   ...print,
   ...auth,
+  ...folder,
   transactions: `${API_BASE_URL}/transactions`,
   samples: `${API_BASE_URL}/samples`,
   notifications: `${API_BASE_URL}/notifications`,

@@ -4,12 +4,12 @@ export { getConnectorId };
 
 export function getObservation(
   Observacoes: string,
-  qty_com_fio: number,
-  qty_sem_fio: number,
+  qty_com_fio?: number,
+  qty_sem_fio?: number,
 ) {
   // before observation, add c/fio and s/fio based on quantities
-  const com_fio = qty_com_fio > 0;
-  const sem_fio = qty_sem_fio > 0;
+  const com_fio = qty_com_fio && qty_com_fio > 0;
+  const sem_fio = qty_sem_fio && qty_sem_fio > 0;
 
   let obs = "";
   if (com_fio && sem_fio) {
