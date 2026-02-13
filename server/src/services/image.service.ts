@@ -10,7 +10,9 @@ export class ImageService {
     const possibleExtensions = ['.jpg', '.jpeg', '.png'];
     let fullPath: string | null = null;
     const _basePath =
-      _type === 'connector' ? this.basePath : this.basePath + '\\_Accessories';
+      _type === 'connector'
+        ? this.basePath + '\\_Connectors'
+        : this.basePath + '\\_Accessories';
 
     for (const ext of possibleExtensions) {
       const fp = path.join(_basePath, `${id}${ext}`);
