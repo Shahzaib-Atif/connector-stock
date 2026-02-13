@@ -48,7 +48,7 @@ export class ImageController {
   @ApiOperation({ summary: 'Get related images filenames' })
   @Get('extras/:connectorId')
   getRelatedImages(@Param('connectorId') connectorId: string) {
-    return this.imageService.getRelatedImages(connectorId);
+    return this.imageService.getRelatedImagesForConnectors(connectorId);
   }
 
   @ApiOperation({ summary: 'Get individual extras image' })
@@ -56,7 +56,7 @@ export class ImageController {
   getExtrasImage(@Param('filename') filename: string, @Res() res: Response) {
     try {
       const { contentType, stream } =
-        this.imageService.getExtrasImageStream(filename);
+        this.imageService.getExtrasImageStreamForConnectors(filename);
 
       res.setHeader('Content-Type', contentType);
       stream.pipe(res);
@@ -69,7 +69,7 @@ export class ImageController {
   @ApiOperation({ summary: 'Get related accessory images filenames' })
   @Get('accessory-extras/:accessoryId')
   getRelatedAccessoryImages(@Param('accessoryId') accessoryId: string) {
-    return this.imageService.getRelatedAccessoryImages(accessoryId);
+    return this.imageService.getRelatedImagesForAccessories(accessoryId);
   }
 
   @ApiOperation({ summary: 'Get individual accessory extras image' })
@@ -80,7 +80,7 @@ export class ImageController {
   ) {
     try {
       const { contentType, stream } =
-        this.imageService.getAccessoryExtrasImageStream(filename);
+        this.imageService.getExtrasImageStreamForAccessories(filename);
 
       res.setHeader('Content-Type', contentType);
       stream.pipe(res);

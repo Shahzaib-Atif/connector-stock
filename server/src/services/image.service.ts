@@ -1,18 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
+import getErrorMsg from 'src/utils/getErrorMsg';
 
 @Injectable()
 export class ImageService {
-  private readonly basePath = process.env.IMAGE_PROCESSOR_PATH;
+  private readonly connectorsBasePath: string;
+  private readonly accessoriesBasePath: string;
+  private readonly connectorsExtrasPath: string;
+  private readonly accessoriesExtrasPath: string;
+
+  constructor() {
+    this.connectorsBasePath = process.env.CONNECTORS_BASE_PATH ?? '';
+    this.connectorsExtrasPath = this.connectorsBasePath + '\\_Extras';
+
+    this.accessoriesBasePath = process.env.ACCESSORIES_BASE_PATH ?? '';
+    this.accessoriesExtrasPath = this.accessoriesBasePath + '\\_Extras';
+  }
 
   getImageStream(id: string, _type: 'connector' | 'accessory') {
     const possibleExtensions = ['.jpg', '.jpeg', '.png'];
     let fullPath: string | null = null;
     const _basePath =
       _type === 'connector'
-        ? this.basePath + '\\_Connectors'
-        : this.basePath + '\\_Accessories';
+        ? this.connectorsBasePath
+        : this.accessoriesBasePath;
 
     for (const ext of possibleExtensions) {
       const fp = path.join(_basePath, `${id}${ext}`);
@@ -32,9 +44,12 @@ export class ImageService {
     return { contentType, stream };
   }
 
-  getRelatedImages(connectorId: string): string[] {
-    const extrasPath = path.join(this.basePath, '_Extras');
-    if (!fs.existsSync(extrasPath)) return [];
+  getRelatedImagesForConnectors(connectorId: string): string[] {
+    const extrasPath = this.connectorsExtrasPath;
+    if (!fs.existsSync(extrasPath)) {
+      console.error('Path for extra images not found!');
+      return [];
+    }
 
     try {
       const files = fs.readdirSync(extrasPath);
@@ -43,13 +58,13 @@ export class ImageService {
         file.toLowerCase().includes(connectorId.toLowerCase()),
       );
     } catch (e) {
-      console.error('Error reading _Extras directory:', e.message);
+      console.error('Error reading _Extras directory:', getErrorMsg(e));
       return [];
     }
   }
 
-  getExtrasImageStream(filename: string) {
-    const fullPath = path.join(this.basePath, '_Extras', filename);
+  getExtrasImageStreamForConnectors(filename: string) {
+    const fullPath = path.join(this.connectorsExtrasPath, filename);
 
     if (!fs.existsSync(fullPath))
       throw new Error(`Image not found: ${filename}`);
@@ -61,9 +76,12 @@ export class ImageService {
     return { contentType, stream };
   }
 
-  getRelatedAccessoryImages(accessoryId: string): string[] {
-    const extrasPath = path.join(this.basePath, '_Accessories', '_Extras');
-    if (!fs.existsSync(extrasPath)) return [];
+  getRelatedImagesForAccessories(accessoryId: string): string[] {
+    const extrasPath = this.accessoriesExtrasPath;
+    if (!fs.existsSync(extrasPath)) {
+      console.error('Path for extra images not found!');
+      return [];
+    }
 
     try {
       const files = fs.readdirSync(extrasPath);
@@ -72,18 +90,16 @@ export class ImageService {
         file.toLowerCase().includes(accessoryId.toLowerCase()),
       );
     } catch (e) {
-      console.error('Error reading _Accessories/_Extras directory:', e.message);
+      console.error(
+        'Error reading _Accessories/_Extras directory:',
+        getErrorMsg(e),
+      );
       return [];
     }
   }
 
-  getAccessoryExtrasImageStream(filename: string) {
-    const fullPath = path.join(
-      this.basePath,
-      '_Accessories',
-      '_Extras',
-      filename,
-    );
+  getExtrasImageStreamForAccessories(filename: string) {
+    const fullPath = path.join(this.accessoriesExtrasPath, filename);
 
     if (!fs.existsSync(fullPath))
       throw new Error(`Image not found: ${filename}`);
