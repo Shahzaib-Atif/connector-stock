@@ -22,6 +22,11 @@ export class ConnectorRepo {
       return await this.prisma.connectors_Main.findMany({
         include: {
           Connectors_Details: true,
+          Connectors_Dimensions: {
+            where: {
+              InternalDiameter: { not: null },
+            },
+          },
         },
       });
     } catch (ex: any) {
@@ -36,6 +41,11 @@ export class ConnectorRepo {
         where: { CODIVMAC: codivmac },
         include: {
           Connectors_Details: true,
+          Connectors_Dimensions: {
+            where: {
+              InternalDiameter: { not: null },
+            },
+          },
         },
       });
     } catch (ex: any) {
