@@ -49,16 +49,17 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
         <CardInfoDiv label="Vias" value={getViasValue(connector)} />
         <CardInfoDiv label="Type" value={ConnType ?? ""} />
         <CardInfoDiv label="Family" value={Family?.toString() || "-"} />
-      </div>
 
-      {/* Fabricante, Refabricante, Obs, Dimensions */}
-      <div
-        id="connector-metadata-2"
-        className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4"
-      >
-        <CardInfoDiv label="Fabricante" value={Fabricante || "--"} />
+        {/* Fabricante, Refabricante, Obs */}
+        <CardInfoDiv
+          label="Fabricante"
+          value={Fabricante || "--"}
+          classnames="col-start-1"
+        />
         <CardInfoDiv label="Refabricante" value={Refabricante || "--"} />
         {OBS && <CardInfoDiv label="Obs." value={OBS || "-"} />}
+
+        {/* Dimensions */}
         {hasDimensions && (
           <>
             <CardInfoDiv
@@ -68,6 +69,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
                   ? dimensions.InternalDiameter.toString()
                   : "-"
               }
+              classnames="col-start-1"
             />
             <CardInfoDiv
               label="External Ø"
