@@ -13,7 +13,7 @@ export class NotificationsRepo {
     try {
       return await this.prisma.notification_Users.findMany({
         where: { Finished: false },
-        orderBy: { CreationDate: 'desc' },
+        orderBy: [{ Read: 'asc' }, { id: 'desc' }],
       });
     } catch (ex: any) {
       console.error('Failed to get unfinished notifications:', ex.message);
