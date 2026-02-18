@@ -12,6 +12,8 @@ export const useScan = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleScan = (inputCode: string) => {
+    console.log("handlescan called..");
+
     setError(null);
 
     if (!masterData.data || masterData.error) {
@@ -71,14 +73,14 @@ export const useScan = () => {
 
   //#region -- Helper functions
   const handleConnectorNav = (upperCode: string) => {
-    const connector = parseConnector(upperCode, masterData.data);
+    const connector = parseConnector(upperCode, masterData.data ?? undefined);
 
     if (connector) navigate(`${ROUTES.CONNECTORS}/${upperCode}`);
     else setError("Connector not found!");
   };
 
   const handleBoxNav = (upperCode: string) => {
-    const box = getBoxDetails(upperCode, masterData.data);
+    const box = getBoxDetails(upperCode, masterData.data ?? undefined);
 
     if (box) navigate(`${ROUTES.BOXES}/${upperCode}`);
     else setError("Box not found!");
@@ -86,7 +88,7 @@ export const useScan = () => {
 
   const handleAccessoryNav = (id: string) => {
     // Search for accessory by RefClient (clientRef field)
-    if (!masterData.data.accessories) {
+    if (!masterData?.data?.accessories) {
       setError("Accessory not found!");
       return;
     }

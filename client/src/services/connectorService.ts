@@ -46,10 +46,10 @@ export const mapLegacyToConnector = (
 
 export const parseConnector = (
   id: string,
-  masterData: MasterData,
+  masterData?: MasterData,
 ): Connector | null => {
-  const reference = masterData.connectors?.[id];
-  if (!reference) {
+  const reference = masterData?.connectors?.[id];
+  if (!reference || !masterData) {
     return null;
   }
 
@@ -99,9 +99,9 @@ export const parseConnector = (
 
 export const getBoxDetails = (
   boxId: string,
-  masterData: MasterData,
+  masterData?: MasterData,
 ): Box | null => {
-  if (boxId.length !== 4) return null;
+  if (!masterData || boxId.length !== 4) return null;
 
   const coords = getCoordinates(boxId, masterData);
   if (!coords) return null;
