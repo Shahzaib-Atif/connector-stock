@@ -49,10 +49,11 @@ export const NotificationActionForm: React.FC<Props> = ({
             prodId={notification?.parsedProdId || ""}
             senderUser={notification?.SenderUser || ""}
             senderSector={notification?.SenderSector || ""}
+            wireType={notification?.parsedWireType}
           />
 
           <LinkedConnector
-            connector={notification?.linkedConnector || ""}
+            connector={notification?.linkedConnector as any}
             onClose={onClose}
           />
 

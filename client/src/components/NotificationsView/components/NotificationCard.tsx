@@ -1,5 +1,12 @@
 import React from "react";
-import { Bell, Package, Calendar, ShoppingCart, Check } from "lucide-react";
+import {
+  Bell,
+  Package,
+  Calendar,
+  ShoppingCart,
+  Check,
+  Zap,
+} from "lucide-react";
 import { INotification } from "@/utils/types/notificationTypes";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { markAsReadThunk } from "@/store/slices/notificationsSlice";
@@ -80,8 +87,13 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
                 className="flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-lg transition-colors group"
                 title="Mark as Read"
               >
-                <Check size={14} className="group-hover:scale-110 transition-transform" />
-                <span className="text-[10px] uppercase font-bold tracking-wider">Mark Read</span>
+                <Check
+                  size={14}
+                  className="group-hover:scale-110 transition-transform"
+                />
+                <span className="text-[10px] uppercase font-bold tracking-wider">
+                  Mark Read
+                </span>
               </button>
             )}
           </div>
@@ -117,6 +129,17 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
                     Prod Id:{" "}
                     <span className="text-white font-mono">
                       {notification.parsedProdId}
+                    </span>
+                  </span>
+                </div>
+              )}
+
+              {notification.parsedWireType && (
+                <div className="flex items-center gap-1 bg-gray-700 px-2 py-1 rounded">
+                  <Zap size={14} className="text-purple-400" />
+                  <span className="text-gray-300">
+                    <span className="text-white font-mono">
+                      {notification.parsedWireType}
                     </span>
                   </span>
                 </div>

@@ -32,6 +32,7 @@ export class NotificationsService {
         parsedConector: parsed.conector,
         parsedEncomenda: parsed.encomenda,
         parsedProdId: parsed.prodId,
+        parsedWireType: parsed?.wireType,
       };
     });
   }
@@ -70,6 +71,7 @@ export class NotificationsService {
       parsedConector: parsed.conector,
       parsedEncomenda: parsed.encomenda,
       parsedProdId: parsed.prodId,
+      parsedWireType: parsed.wireType,
       linkedSample,
       linkedConnector,
     };
@@ -152,12 +154,14 @@ export class NotificationsService {
   parseNotificationMessage(message: string): ParsedMessage {
     const parsed: ParsedMessage = {};
 
-    const conectorMatch = message.match(/Conector:\s*(\S+)/i);
+    // Support both Portuguese (Conector) and English (Connector)
+    const conectorMatch = message.match(/(?:Conector|Connector):\s*(\S+)/i);
     if (conectorMatch) {
       parsed.conector = conectorMatch[1];
     }
 
-    const encomendaMatch = message.match(/Encomenda:\s*(\d+)/i);
+    // Support both Portuguese (Encomenda) and English (Order)
+    const encomendaMatch = message.match(/(?:Encomenda|Order):\s*(\d+)/i);
     if (encomendaMatch) {
       parsed.encomenda = encomendaMatch[1];
     }
@@ -165,6 +169,12 @@ export class NotificationsService {
     const prodIdMatch = message.match(/ProdId=\s*(\d+)/i);
     if (prodIdMatch) {
       parsed.prodId = prodIdMatch[1];
+    }
+
+    // Extract Wire information if present
+    const wireMatch = message.match(/Wire\s*:\s*(.*)/i);
+    if (wireMatch && wireMatch[1].trim()) {
+      parsed.wireType = wireMatch[1].trim();
     }
 
     return parsed;

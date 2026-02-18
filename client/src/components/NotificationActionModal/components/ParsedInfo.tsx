@@ -6,6 +6,7 @@ interface ParsedInfoProps {
   prodId: string;
   senderUser: string;
   senderSector: string;
+  wireType?: string;
 }
 
 export const ParsedInfo: React.FC<ParsedInfoProps> = ({
@@ -14,6 +15,7 @@ export const ParsedInfo: React.FC<ParsedInfoProps> = ({
   prodId,
   senderUser,
   senderSector,
+  wireType,
 }) => {
   if (!conector) return null;
 
@@ -39,6 +41,13 @@ export const ParsedInfo: React.FC<ParsedInfoProps> = ({
           <div className="flex items-center gap-2 bg-slate-700 px-3 py-2 rounded">
             <span className="text-slate-400 text-sm">Prod Id:</span>
             <span className="text-white font-mono font-semibold">{prodId}</span>
+          </div>
+        )}
+        {wireType && (
+          <div className="flex items-center gap-2 bg-slate-700 px-3 py-2 rounded border border-purple-500/30">
+            <span className="text-white font-mono font-semibold uppercase">
+              {wireType ?? "Yes"}
+            </span>
           </div>
         )}
       </div>

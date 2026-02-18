@@ -21,6 +21,7 @@ export interface INotification {
   parsedConector?: string;
   parsedEncomenda?: string;
   parsedProdId?: string;
+  parsedWireType?: string;
   linkedSample?: Sample;
   linkedConnector?: Connector;
 }
