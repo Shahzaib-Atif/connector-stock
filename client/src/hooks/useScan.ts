@@ -12,8 +12,6 @@ export const useScan = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleScan = (inputCode: string) => {
-    console.log("handlescan called..");
-
     setError(null);
 
     if (!masterData.data || masterData.error) {

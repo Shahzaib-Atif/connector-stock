@@ -1,5 +1,6 @@
 import { suggestion } from "@/utils/types/shared";
 import { Box, Zap, Wrench } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 interface Props {
   suggestions: suggestion[];
@@ -12,6 +13,17 @@ function SuggestionsList({
   handleSuggestionClick,
   selectedIndex = -1,
 }: Props) {
+  const selectedItemRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (selectedIndex >= 0 && selectedItemRef.current) {
+      selectedItemRef.current.scrollIntoView({
+        block: "nearest",
+        behavior: "smooth",
+      });
+    }
+  }, [selectedIndex]);
+
   const getIconConfig = (type: suggestion["type"]) => {
     switch (type) {
       case "box":
@@ -45,6 +57,7 @@ function SuggestionsList({
         return (
           <button
             key={`${suggestion.type}-${suggestion.id}`}
+            ref={isSelected ? selectedItemRef : null}
             type="button"
             onClick={() => handleSuggestionClick(suggestion)}
             className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-colors border-b border-slate-700 last:border-0 ${

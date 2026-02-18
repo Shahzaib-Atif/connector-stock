@@ -24,12 +24,13 @@ export const HomeView: React.FC<Props> = ({
   onClearScanError,
 }: Props) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterQuery, setFilterQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   // get suggestions
-  const { suggestions } = useSuggestions(searchQuery, setShowSuggestions);
+  const { suggestions } = useSuggestions(filterQuery, setShowSuggestions);
 
   // Close suggestions when clicking outside
   const handleClickOutside = useCallback(() => {
@@ -39,8 +40,10 @@ export const HomeView: React.FC<Props> = ({
 
   const handleSuggestionClick = (suggestion: suggestion) => {
     setSearchQuery(suggestion.id);
+    setFilterQuery(suggestion.id);
     setShowSuggestions(false);
     setSelectedIndex(-1);
+    onScan(suggestion.id);
   };
 
   const { handleKeyDown, selectedIndex, setSelectedIndex } =
@@ -49,6 +52,8 @@ export const HomeView: React.FC<Props> = ({
       showSuggestions,
       setShowSuggestions,
       handleSuggestionClick,
+      searchQuery,
+      setSearchQuery
     );
 
   const handleInputFocus = () => {
@@ -106,7 +111,11 @@ export const HomeView: React.FC<Props> = ({
                 suggestions={suggestions}
                 onClearScanError={onClearScanError}
                 onScan={onScan}
-                setSearchQuery={setSearchQuery}
+                setSearchQuery={(q) => {
+                  const query = typeof q === "function" ? q(searchQuery) : q;
+                  setSearchQuery(query);
+                  setFilterQuery(query);
+                }}
                 setShowSuggestions={setShowSuggestions}
                 onKeyDown={handleKeyDown}
                 onFocus={handleInputFocus}

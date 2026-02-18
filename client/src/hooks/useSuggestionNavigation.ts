@@ -5,9 +5,12 @@ export function useSuggestionNavigation(
   suggestions: suggestion[],
   showSuggestions: boolean,
   setShowSuggestions: React.Dispatch<React.SetStateAction<boolean>>,
-  handleSuggestionClick: (suggestion: suggestion) => void
+  handleSuggestionClick: (suggestion: suggestion) => void,
+  searchQuery: string,
+  setSearchQuery: (query: string) => void
 ) {
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [originalQuery, setOriginalQuery] = useState("");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!showSuggestions || suggestions.length === 0) return;
@@ -15,13 +18,24 @@ export function useSuggestionNavigation(
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault();
-        setSelectedIndex((prev) =>
-          prev < suggestions.length - 1 ? prev + 1 : prev
-        );
+        setSelectedIndex((prev) => {
+          const nextIndex = prev < suggestions.length - 1 ? prev + 1 : prev;
+          if (prev === -1) setOriginalQuery(searchQuery);
+          setSearchQuery(suggestions[nextIndex].id);
+          return nextIndex;
+        });
         break;
       case "ArrowUp":
         e.preventDefault();
-        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
+        setSelectedIndex((prev) => {
+          const nextIndex = prev > 0 ? prev - 1 : -1;
+          if (nextIndex === -1) {
+            setSearchQuery(originalQuery);
+          } else {
+            setSearchQuery(suggestions[nextIndex].id);
+          }
+          return nextIndex;
+        });
         break;
       case "Enter":
         e.preventDefault();
@@ -33,6 +47,7 @@ export function useSuggestionNavigation(
         e.preventDefault();
         setShowSuggestions(false);
         setSelectedIndex(-1);
+        if (selectedIndex !== -1) setSearchQuery(originalQuery);
         break;
     }
   };
