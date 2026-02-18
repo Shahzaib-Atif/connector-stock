@@ -1,6 +1,9 @@
 import React from "react";
-import { Bell, Package, Calendar, ShoppingCart } from "lucide-react";
+import { Bell, Package, Calendar, ShoppingCart, Check } from "lucide-react";
 import { INotification } from "@/utils/types/notificationTypes";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { markAsReadThunk } from "@/store/slices/notificationsSlice";
+import { UserRoles } from "@/utils/types/userTypes";
 
 interface NotificationCardProps {
   notification: INotification;
@@ -11,6 +14,15 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
   notification,
   onClick,
 }) => {
+  const dispatch = useAppDispatch();
+  const { role } = useAppSelector((state) => state.auth);
+
+  const canMarkAsRead = role === UserRoles.Admin || role === UserRoles.Master;
+
+  const handleMarkAsRead = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    dispatch(markAsReadThunk(notification.id));
+  };
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("pt-PT", {
@@ -54,11 +66,24 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
             </span>
           </div>
 
-          <div className="text-sm text-gray-400 mb-3">
-            <p className="mb-1">
-              <span className="text-gray-500">From:</span>{" "}
-              {notification.SenderUser} ({notification.SenderSector})
-            </p>
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <div className="text-sm text-gray-400">
+              <p className="">
+                <span className="text-gray-500">From:</span>{" "}
+                {notification.SenderUser} ({notification.SenderSector})
+              </p>
+            </div>
+
+            {!notification.Read && canMarkAsRead && (
+              <button
+                onClick={handleMarkAsRead}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-lg transition-colors group"
+                title="Mark as Read"
+              >
+                <Check size={14} className="group-hover:scale-110 transition-transform" />
+                <span className="text-[10px] uppercase font-bold tracking-wider">Mark Read</span>
+              </button>
+            )}
           </div>
 
           {notification.parsedConector && (

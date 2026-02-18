@@ -13,6 +13,7 @@ interface NotificationsState {
   loading: boolean;
   error: string | null;
   unfinishedCount: number;
+  unreadCount: number;
 }
 
 const initialState: NotificationsState = {
@@ -21,6 +22,7 @@ const initialState: NotificationsState = {
   loading: false,
   error: null,
   unfinishedCount: 0,
+  unreadCount: 0,
 };
 
 // Thunks
@@ -28,14 +30,14 @@ export const fetchUnfinishedNotifications = createAsyncThunk(
   "notifications/fetchUnfinished",
   async () => {
     return await getUnfinishedNotifications();
-  }
+  },
 );
 
 export const fetchNotificationWithSample = createAsyncThunk(
   "notifications/fetchWithSample",
   async (id: number) => {
     return await getNotificationWithSample(id);
-  }
+  },
 );
 
 export const finishNotificationThunk = createAsyncThunk(
@@ -53,7 +55,7 @@ export const finishNotificationThunk = createAsyncThunk(
   }) => {
     await finishNotification(id, quantityTakenOut, finishedBy, completionNote);
     return id;
-  }
+  },
 );
 
 export const markAsReadThunk = createAsyncThunk(
@@ -61,7 +63,7 @@ export const markAsReadThunk = createAsyncThunk(
   async (id: number) => {
     await markNotificationAsRead(id);
     return id;
-  }
+  },
 );
 
 const notificationsSlice = createSlice({
@@ -85,7 +87,10 @@ const notificationsSlice = createSlice({
           state.loading = false;
           state.notifications = action.payload;
           state.unfinishedCount = action.payload.length;
-        }
+          state.unreadCount = action.payload.filter(
+            (n) => !n.Read && !n.Finished,
+          ).length;
+        },
       )
       .addCase(fetchUnfinishedNotifications.rejected, (state, action) => {
         state.loading = false;
@@ -101,7 +106,7 @@ const notificationsSlice = createSlice({
         (state, action: PayloadAction<INotification>) => {
           state.loading = false;
           state.selectedNotification = action.payload;
-        }
+        },
       )
       .addCase(fetchNotificationWithSample.rejected, (state, action) => {
         state.loading = false;
@@ -116,13 +121,15 @@ const notificationsSlice = createSlice({
         finishNotificationThunk.fulfilled,
         (state, action: PayloadAction<number>) => {
           state.loading = false;
-          // Remove finished notification from list
           state.notifications = state.notifications.filter(
-            (n) => n.id !== action.payload
+            (n) => n.id !== action.payload,
           );
           state.unfinishedCount = state.notifications.length;
+          state.unreadCount = state.notifications.filter(
+            (n) => !n.Read && !n.Finished,
+          ).length;
           state.selectedNotification = null;
-        }
+        },
       )
       .addCase(finishNotificationThunk.rejected, (state, action) => {
         state.loading = false;
@@ -133,13 +140,16 @@ const notificationsSlice = createSlice({
         markAsReadThunk.fulfilled,
         (state, action: PayloadAction<number>) => {
           const notification = state.notifications.find(
-            (n) => n.id === action.payload
+            (n) => n.id === action.payload,
           );
           if (notification) {
+            if (!notification.Read) {
+              state.unreadCount = Math.max(0, state.unreadCount - 1);
+            }
             notification.Read = true;
             notification.ReadDate = new Date().toISOString();
           }
-        }
+        },
       );
   },
 });

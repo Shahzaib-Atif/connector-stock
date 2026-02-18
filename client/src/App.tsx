@@ -12,6 +12,7 @@ import { initTransactionsData } from "./store/slices/transactionsSlice";
 import { initUsersList, logout } from "./store/slices/authSlice";
 import { AUTH_EXPIRED_EVENT } from "./utils/constants";
 import { QRData } from "./utils/types/shared";
+import { NotificationPopup } from "./components/common/NotificationPopup";
 
 // Main App Component
 const App: React.FC = () => {
@@ -60,6 +61,8 @@ const App: React.FC = () => {
         onOpenQR={handleOpenQR}
         onTransaction={tx.openTransaction}
       />
+
+      <NotificationPopup />
 
       {qrData && <QRModal qrData={qrData} onClose={() => setQrData(null)} />}
 
