@@ -55,27 +55,26 @@ export class NotificationsRepo {
     encomenda: string,
   ): Promise<UpdateSampleDto | null> {
     try {
-      const samples: UpdateSampleDto[] =
-        await this.prisma.rEG_Amostras.findMany({
-          where: {
-            Amostra: conector,
-            EncDivmac: encomenda,
-            IsActive: true,
-          },
-          select: {
-            ID: true,
-            Amostra: true,
-            EncDivmac: true,
-            Cliente: true,
-            Projeto: true,
-            Quantidade: true,
-            Ref_Descricao: true,
-          },
-          take: 1,
-          orderBy: { ID: 'desc' },
-        });
+      const samples = await this.prisma.rEG_Amostras.findMany({
+        where: {
+          Amostra: conector,
+          EncDivmac: encomenda,
+          IsActive: true,
+        },
+        select: {
+          ID: true,
+          Amostra: true,
+          EncDivmac: true,
+          Cliente: true,
+          Projeto: true,
+          Quantidade: true,
+          Ref_Descricao: true,
+        },
+        take: 1,
+        orderBy: { ID: 'desc' },
+      });
 
-      return samples.length > 0 ? samples[0] : null;
+      return samples.length > 0 ? (samples[0] as UpdateSampleDto) : null;
     } catch (ex: any) {
       console.error('Failed to find matching sample:', ex.message);
       return null;
