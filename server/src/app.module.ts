@@ -29,6 +29,8 @@ import { FolderService } from './services/folder.service';
 import { AuthModule } from './auth/auth.module';
 import { LegacyModule } from './modules/legacy/legacy.module';
 
+import { ScheduleModule } from '@nestjs/schedule';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -37,6 +39,7 @@ import { LegacyModule } from './modules/legacy/legacy.module';
         ? `.env.${process.env.NODE_ENV}`
         : '.env',
     }),
+    ScheduleModule.forRoot(),
     AuthModule,
     LegacyModule,
   ],

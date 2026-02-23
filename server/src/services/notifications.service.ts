@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { NotificationsRepo } from 'src/repository/notifications.repo';
-import { SamplesRepo } from 'src/repository/samples.repo';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
 import {
   NotificationWithParsedData,
@@ -16,7 +15,6 @@ import { ParsedMessage } from 'src/utils/types';
 export class NotificationsService {
   constructor(
     private readonly notificationsRepo: NotificationsRepo,
-    private readonly samplesRepo: SamplesRepo,
     private readonly connectorRepo: ConnectorRepo,
   ) {}
 
