@@ -4,8 +4,7 @@ import { Sample } from "@/utils/types";
 import MetaItem from "./MetaItem";
 
 interface LinkedSampleProps {
-  sample: Sample;
-  onNavigate: () => void;
+  sample?: Sample;
 }
 
 export const LinkedSample: React.FC<LinkedSampleProps> = ({ sample }) => {
@@ -30,7 +29,7 @@ export const LinkedSample: React.FC<LinkedSampleProps> = ({ sample }) => {
           </p>
           <div className="grid gap-2 text-sm break-all">
             <MetaItem label="Ref_Descricao" value={Ref_Descricao} />
-            <MetaItem label="Project" value={Projeto} />
+            <MetaItem label="Project" value={Projeto ?? ""} />
             <MetaItem label="Client" value={Cliente} />
             <MetaItem label="Quantity" value={Quantidade || "0"} />
           </div>

@@ -1,19 +1,18 @@
-import { NotificationCompletion_T } from "@/utils/types";
+import { DeliveryStatus } from "@/utils/types/notificationTypes";
 import CustomNote from "./CustomNote";
 
 interface Props {
-  completionType: NotificationCompletion_T;
-  setCompletionType: (val: NotificationCompletion_T) => void;
-  maxQuantity: number;
+  deliveryStatus: DeliveryStatus;
+  setDeliveryStatus: (val: DeliveryStatus) => void;
   customNote: string;
   setCustomNote: (val: string) => void;
 }
 
 export default function NotificationStatus({
-  completionType,
+  deliveryStatus,
   customNote,
+  setDeliveryStatus,
   setCustomNote,
-  setCompletionType,
 }: Props) {
   return (
     <div className="space-y-3">
@@ -23,9 +22,9 @@ export default function NotificationStatus({
       <div className="grid grid-cols-3 gap-3">
         <button
           type="button"
-          onClick={() => setCompletionType("fulfilled")}
+          onClick={() => setDeliveryStatus(DeliveryStatus.Fulfilled)}
           className={`px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
-            completionType === "fulfilled"
+            deliveryStatus === DeliveryStatus.Fulfilled
               ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-600/20"
               : buttonClass2
           }`}
@@ -34,9 +33,9 @@ export default function NotificationStatus({
         </button>
         <button
           type="button"
-          onClick={() => setCompletionType("outOfStock")}
+          onClick={() => setDeliveryStatus(DeliveryStatus.OutOfStock)}
           className={`px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
-            completionType === "outOfStock"
+            deliveryStatus === DeliveryStatus.OutOfStock
               ? "bg-amber-600 border-amber-500 text-white shadow-lg shadow-amber-600/20"
               : buttonClass2
           }`}
@@ -45,9 +44,9 @@ export default function NotificationStatus({
         </button>
         <button
           type="button"
-          onClick={() => setCompletionType("other")}
+          onClick={() => setDeliveryStatus(DeliveryStatus.Other)}
           className={`px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
-            completionType === "other"
+            deliveryStatus === DeliveryStatus.Other
               ? "bg-purple-600 border-purple-500 text-white shadow-lg shadow-purple-600/20"
               : buttonClass2
           }`}
@@ -57,7 +56,7 @@ export default function NotificationStatus({
       </div>
 
       <CustomNote
-        completionType={completionType}
+        deliveryStatus={deliveryStatus}
         customNote={customNote}
         setCustomNote={setCustomNote}
       />

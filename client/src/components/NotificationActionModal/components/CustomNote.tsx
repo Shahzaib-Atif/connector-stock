@@ -1,20 +1,20 @@
-import { NotificationCompletion_T } from "@/utils/types";
+import { DeliveryStatus } from "@/utils/types";
 
 interface Props {
-  completionType: NotificationCompletion_T;
+  deliveryStatus: DeliveryStatus;
   customNote: string;
   setCustomNote: (val: string) => void;
 }
 
-function CustomNote({ completionType, customNote, setCustomNote }: Props) {
+function CustomNote({ deliveryStatus, customNote, setCustomNote }: Props) {
   return (
-    completionType === "other" && (
+    deliveryStatus === DeliveryStatus.Other && (
       <div className="space-y-2">
         <label
           htmlFor="note"
           className="block text-sm font-medium text-slate-400"
         >
-          {completionType === "other"
+          {deliveryStatus === DeliveryStatus.Other
             ? "Description (Required)"
             : "Additional Note (Optional)"}
         </label>
@@ -24,11 +24,11 @@ function CustomNote({ completionType, customNote, setCustomNote }: Props) {
           onChange={(e) => setCustomNote(e.target.value)}
           className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all resize-none h-24"
           placeholder={
-            completionType === "other"
+            deliveryStatus === DeliveryStatus.Other
               ? "Please explain..."
               : "Add any details here..."
           }
-          required={completionType === "other"}
+          required={deliveryStatus === DeliveryStatus.Other}
         />
       </div>
     )

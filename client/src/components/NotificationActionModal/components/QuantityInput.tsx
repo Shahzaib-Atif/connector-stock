@@ -1,19 +1,20 @@
-import { NotificationCompletion_T } from "@/utils/types";
+import { DeliveryStatus } from "@/utils/types";
 
 interface Props {
   quantityInput: string;
   setQuantityInput: (val: string) => void;
   maxQuantity?: number;
-  completionType: NotificationCompletion_T;
+  deliveryStatus: DeliveryStatus;
 }
 
 function QuantityInput({
-  completionType,
+  deliveryStatus,
   maxQuantity,
   quantityInput,
   setQuantityInput,
 }: Props) {
-  const isDisabled = completionType === "outOfStock" || maxQuantity === 0;
+  const isDisabled =
+    deliveryStatus === DeliveryStatus.OutOfStock || maxQuantity === 0;
 
   return (
     <div

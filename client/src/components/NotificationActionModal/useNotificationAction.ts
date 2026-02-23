@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/store/hooks";
 import {
   fetchNotificationWithSample,
   finishNotificationThunk,
   markAsReadThunk,
 } from "@/store/slices/notificationsSlice";
-import { ROUTES } from "../AppRoutes";
 import {
-  NotificationStatus_T,
-  NotificationCompletion_T,
+  NotificationStatus,
+  DeliveryStatus,
   INotification,
 } from "@/utils/types/notificationTypes";
 import getErrorMsg from "@/utils/getErrorMsg";
@@ -19,15 +17,15 @@ export function useNotificationAction(
   onClose: () => void,
 ) {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const [notification, setNotification] = useState<INotification | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantityInput, setQuantityInput] = useState("");
-  const [status, setStatus] = useState<NotificationStatus_T>("idle");
+  const [status, setStatus] = useState<NotificationStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const [completionType, setCompletionType] =
-    useState<NotificationCompletion_T>("fulfilled");
+  const [deliveryStatus, setDeliveryStatus] = useState<DeliveryStatus>(
+    DeliveryStatus.Fulfilled,
+  );
   const [customNote, setCustomNote] = useState("");
 
   useEffect(() => {
@@ -39,7 +37,8 @@ export function useNotificationAction(
         ).unwrap();
         setNotification(result);
 
-        if (result?.linkedConnector?.Qty == 0) setCompletionType("outOfStock");
+        if (result?.linkedConnector?.Qty == 0)
+          setDeliveryStatus(DeliveryStatus.OutOfStock);
 
         // Mark as read when opened
         if (!result.Read) {
@@ -56,19 +55,21 @@ export function useNotificationAction(
     loadNotification();
   }, [notificationId, dispatch]);
 
+  // If notification is out of stock, force quantity to 0
   useEffect(() => {
-    if (completionType === "outOfStock") {
+    if (deliveryStatus === DeliveryStatus.OutOfStock) {
       setQuantityInput("0");
     }
-  }, [completionType]);
+  }, [deliveryStatus]);
 
+  // Validate and submit the completion of the notification
   const handleFinish = async (e: React.FormEvent) => {
     e.preventDefault();
     let qty = 0;
 
     // Only parse quantity if not out of stock (where it's forced 0)
     // For "other" we might still want quantity
-    if (completionType !== "outOfStock") {
+    if (deliveryStatus !== DeliveryStatus.OutOfStock) {
       qty = parseInt(quantityInput);
       if (isNaN(qty) || qty < 0) {
         setErrorMessage("Please enter a valid quantity");
@@ -85,7 +86,7 @@ export function useNotificationAction(
         return;
       }
 
-      if (qty == 0 && completionType === "fulfilled") {
+      if (qty == 0 && deliveryStatus === DeliveryStatus.Fulfilled) {
         setErrorMessage("Qty cannot be 0 while fulfilling the order!");
         setStatus("error");
         return;
@@ -97,16 +98,16 @@ export function useNotificationAction(
 
     // Construct final completion note
     let finalNote = "";
-    if (completionType === "outOfStock") {
+    if (deliveryStatus === DeliveryStatus.OutOfStock) {
       finalNote = "Out of Stock";
-    } else if (completionType === "other") {
-      finalNote = `Other: ${customNote}`;
+    } else if (deliveryStatus === DeliveryStatus.Other) {
+      finalNote = `Obs: ${customNote}`;
     } else {
       finalNote = "Delivery in progress";
     }
 
     // Append custom note if provided and not "Other" (since it's already included)
-    if (completionType !== "other" && customNote) {
+    if (deliveryStatus !== DeliveryStatus.Other && customNote) {
       finalNote += ` - ${customNote}`;
     }
 
@@ -128,25 +129,17 @@ export function useNotificationAction(
     }
   };
 
-  const handleNavigateToSample = () => {
-    if (notification?.linkedSample) {
-      navigate(`${ROUTES.SAMPLES}/${notification.linkedSample.ID}`);
-      onClose();
-    }
-  };
-
   return {
     notification,
     loading,
     quantityInput,
     setQuantityInput,
-    completionType,
-    setCompletionType,
+    deliveryStatus,
+    setDeliveryStatus,
     customNote,
     setCustomNote,
     status,
     errorMessage,
     handleFinish,
-    handleNavigateToSample,
   };
 }

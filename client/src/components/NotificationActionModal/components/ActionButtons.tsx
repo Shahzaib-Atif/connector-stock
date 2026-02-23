@@ -1,18 +1,17 @@
-import { NotificationCompletion_T } from "@/utils/types";
+import { DeliveryStatus } from "@/utils/types";
 import { Loader2 } from "lucide-react";
 
 interface Props {
-  completionType: NotificationCompletion_T;
+  deliveryStatus: DeliveryStatus;
   maxQuantity?: number;
   quantityInput: string;
   customNote: string;
-  setCompletionType: (val: NotificationCompletion_T) => void;
   onCancel: () => void;
   status: "idle" | "loading" | "success" | "error";
 }
 
 function ActionButtons({
-  completionType,
+  deliveryStatus,
   maxQuantity,
   quantityInput,
   customNote,
@@ -32,11 +31,11 @@ function ActionButtons({
         type="submit"
         disabled={
           status === "loading" ||
-          (completionType === "fulfilled" &&
+          (deliveryStatus === DeliveryStatus.Fulfilled &&
             maxQuantity === 0 &&
             quantityInput !== "0" &&
             quantityInput !== "") ||
-          (completionType === "other" && !customNote.trim())
+          (deliveryStatus === DeliveryStatus.Other && !customNote.trim())
         }
         className="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-semibold transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2"
       >

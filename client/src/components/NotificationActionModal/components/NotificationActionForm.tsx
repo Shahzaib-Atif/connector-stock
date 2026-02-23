@@ -8,6 +8,7 @@ import { LinkedSample } from "./LinkedSample";
 import NotificationStatus from "./NotificationStatus";
 import { ParsedInfo } from "./ParsedInfo";
 import QuantityInput from "./QuantityInput";
+import { Connector } from "@/utils/types";
 
 interface Props {
   notificationId: number;
@@ -23,14 +24,13 @@ export const NotificationActionForm: React.FC<Props> = ({
     loading,
     quantityInput,
     setQuantityInput,
-    completionType,
-    setCompletionType,
+    deliveryStatus,
+    setDeliveryStatus,
     customNote,
     setCustomNote,
     status,
     errorMessage,
     handleFinish,
-    handleNavigateToSample,
   } = useNotificationAction(notificationId, onClose);
 
   return (
@@ -53,25 +53,21 @@ export const NotificationActionForm: React.FC<Props> = ({
           />
 
           <LinkedConnector
-            connector={notification?.linkedConnector as any}
+            connector={notification?.linkedConnector as Connector}
             onClose={onClose}
           />
 
-          <LinkedSample
-            sample={notification?.linkedSample}
-            onNavigate={handleNavigateToSample}
-          />
+          <LinkedSample sample={notification?.linkedSample} />
 
           <NotificationStatus
-            completionType={completionType}
-            maxQuantity={notification?.linkedConnector?.Qty}
+            deliveryStatus={deliveryStatus}
             customNote={customNote}
-            setCompletionType={setCompletionType}
+            setDeliveryStatus={setDeliveryStatus}
             setCustomNote={setCustomNote}
           />
 
           <QuantityInput
-            completionType={completionType}
+            deliveryStatus={deliveryStatus}
             quantityInput={quantityInput}
             maxQuantity={notification?.linkedConnector?.Qty}
             setQuantityInput={setQuantityInput}
@@ -87,10 +83,9 @@ export const NotificationActionForm: React.FC<Props> = ({
           <ActionButtons
             quantityInput={quantityInput}
             maxQuantity={notification?.linkedConnector?.Qty}
-            completionType={completionType}
+            deliveryStatus={deliveryStatus}
             customNote={customNote}
             status={status}
-            setCompletionType={setCompletionType}
             onCancel={onClose}
           />
         </form>

@@ -54,8 +54,8 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
           <div className="grid sm:grid-cols-2 gap-2 text-sm break-all">
             <MetaItem label="CODIVMAC" value={CODIVMAC}></MetaItem>
             <MetaItem label="Current Stock" value={Qty + " units"}></MetaItem>
-            <MetaItem label="Description" value={Designa__o}></MetaItem>
-            <MetaItem label="Manufacturer" value={Fabricante}></MetaItem>
+            <MetaItem label="Description" value={Designa__o ?? ""}></MetaItem>
+            <MetaItem label="Manufacturer" value={Fabricante ?? ""}></MetaItem>
             <MetaItem label="Vias" value={Vias}></MetaItem>
           </div>
         </div>
