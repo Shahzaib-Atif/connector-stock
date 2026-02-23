@@ -156,6 +156,7 @@ model Transactions {
   itemType        String    @db.VarChar(11)
   subType         String?   @db.VarChar(20) // 'COM_FIO', 'SEM_FIO', etc.
   encomenda       String?   @db.VarChar(50)
+  sender          String?   @db.VarChar(30)
   notes           String?   @db.VarChar(255)
 }
 

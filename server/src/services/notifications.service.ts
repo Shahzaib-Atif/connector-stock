@@ -123,6 +123,7 @@ export class NotificationsService {
         amount: Number(quantityTakenOut) || 0,
         itemType: 'connector',
         department: notificationData.SenderSector,
+        sender: notificationData.SenderUser,
         notes: completionNote,
       };
     } else {

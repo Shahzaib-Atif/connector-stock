@@ -46,6 +46,7 @@ function TableRow({ tx, index }: Props) {
       <td className="table-data text-xs font-mono text-slate-400">
         {tx.encomenda || "-"}
       </td>
+      <td className="table-data">{tx.sender || ""}</td>
       <td className="table-data">{tx.department || ""}</td>
       <td className="table-data text-xs text-slate-400 italic">
         {tx.notes || "-"}

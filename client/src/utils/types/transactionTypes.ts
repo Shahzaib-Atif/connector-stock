@@ -8,6 +8,7 @@ export interface Transaction {
   encomenda?: string;
   department?: string;
   updatedAt?: number;
+  sender?: string;
   notes?: string;
 }
 

@@ -6,6 +6,7 @@ export type CreateTransactionsDto = {
   subType?: WireTypes;
   encomenda?: string;
   department?: string;
+  sender?: string;
   notes?: string;
 };
 
