@@ -76,17 +76,12 @@ const TableRow: React.FC<TableRowProps> = ({
       </td>
 
       {/* Other Fields */}
-      <td className="table-data">{connector.Cor || "-"}</td>
-      <td className="table-data">{connector.Vias || "-"}</td>
-      <td className="table-data">{connector.ConnType || "-"}</td>
-      <td className="table-data text-center">
-        {connector.details.Family || "-"}
-      </td>
-      <td className="table-data">{connector.details.Fabricante || "-"}</td>
-      <td className="table-data break-all">
-        {connector.details.Refabricante || "-"}
-      </td>
-      <td className="table-data break-all">{connector.details.OBS || "-"}</td>
+      <td className="table-data">{connector.Cor}</td>
+      <td className="table-data">{connector.Vias}</td>
+      <td className="table-data">{connector.ConnType}</td>
+      <td className="table-data">{connector.details.Family}</td>
+      <td className="table-data">{connector.details.Fabricante}</td>
+      <td className="table-data break-all">{connector.details.Refabricante}</td>
       <td className="table-data text-center">
         <span className="text-emerald-400 font-bold text-sm bg-emerald-500/10 px-2 py-0.5 rounded-md">
           {connector.Qty ?? 0}
@@ -112,6 +107,7 @@ const TableRow: React.FC<TableRowProps> = ({
           </div>
         </div>
       </td>
+      <td className="table-data break-all">{connector.details.OBS}</td>
     </tr>
   );
 };

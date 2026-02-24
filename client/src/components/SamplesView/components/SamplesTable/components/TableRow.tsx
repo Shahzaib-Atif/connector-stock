@@ -65,11 +65,11 @@ const TableRow: React.FC<TableRowProps> = ({
           <OpenFolderBtn N_Envio={N_Envio} showFolderBtn={showActions} />
         </td>
       }
-      <td className="table-data">{NumORC || "-"}</td>
       <td className="table-data break-all" title={Entregue_a}>
         {Entregue_a || "-"}
       </td>
       <td className="table-data font-mono">{Data_recepcao || "-"}</td>
+      <td className="table-data">{NumORC}</td>
       <td className="table-data font-mono break-all">
         {getObservation(Observacoes ?? "", qty_com_fio, qty_sem_fio)}
       </td>
