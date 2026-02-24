@@ -83,5 +83,5 @@ export const FORM_FIELDS: FORM_FIELDS_Type[] = [
     type: "select",
     options: ["vivianni.azevedo", "joana.conceicao", "anashia.nazim"],
   },
-  { name: "N_Envio", label: "N. Envio", placeholder: "Select or type folder name", type: "folder-picker" },
+  { name: "N_Envio", label: "N. Envio", placeholder: "Shipping number" },
 ];

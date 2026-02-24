@@ -20,7 +20,6 @@ import { useConnectorId } from "./components/useConnectorId";
 import useMissingConnectorWarning from "./components/useMissingConnectorWarning";
 import ErrorBanner from "./components/ErrorBanner";
 import ActionButtons from "./components/ActionButtons";
-import getErrorMsg from "@/utils/getErrorMsg";
 
 interface Props {
   sample: Sample | null;
@@ -39,24 +38,16 @@ export const SampleForm: React.FC<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
   const { loading, error: reduxError } = useAppSelector(
-    (state) => state.samples,
+    (state) => state.samples
   );
   const { user } = useAppSelector((state) => state.auth);
   const {
     formData,
     handleChange,
-    setFieldValue,
     selectedAccessoryIds,
     setSelectedAccessoryIds,
   } = useSampleForm(sample, initialData);
   const [formError, setFormError] = React.useState<string | null>(null);
-
-  const handleFolderPick = React.useCallback(
-    (name: string, folderName: string) => {
-      setFieldValue(name as keyof typeof formData, folderName);
-    },
-    [setFieldValue, formData],
-  );
 
   const connectorId = useConnectorId(formData.Amostra); // get connector ID from Amostra
   const { associatedAccessories } = useAssociatedAccessories(connectorId); // fetch associated accessories
@@ -96,7 +87,7 @@ export const SampleForm: React.FC<Props> = ({
               ActualUser: currentUser,
               associatedItemIds: selectedAccessoryIds,
             },
-          }),
+          })
         ).unwrap();
       } else {
         await dispatch(
@@ -106,19 +97,22 @@ export const SampleForm: React.FC<Props> = ({
             CreatedBy: currentUser,
             ActualUser: currentUser,
             associatedItemIds: selectedAccessoryIds,
-          }),
+          })
         ).unwrap();
       }
 
       onSuccess();
-    } catch (err: unknown) {
-      setFormError(getErrorMsg(err));
+    } catch (err) {
+      console.error(err);
+      setFormError(
+        typeof err === "string" ? err : err.message || "An error occurred."
+      );
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="p-6">
-      <ErrorBanner message={formError || reduxError || ""} />
+      <ErrorBanner message={formError || reduxError} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {FORM_FIELDS.map((field) => (
@@ -126,11 +120,8 @@ export const SampleForm: React.FC<Props> = ({
             key={field.name}
             name={field.name}
             label={field.label}
-            value={formData[field.name] ?? ""}
+            value={formData[field.name]}
             onChange={handleChange}
-            onFolderPick={
-              field.type === "folder-picker" ? handleFolderPick : undefined
-            }
             placeholder={field.placeholder}
             disabled={field.disabled || (field.disabledOnEdit && isEditing)}
             type={field.type}

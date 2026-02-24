@@ -92,13 +92,6 @@ export function useSampleForm(
     [],
   );
 
-  const setFieldValue = useCallback(
-    (name: keyof SampleFormData, value: string | number | boolean) => {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    },
-    [],
-  );
-
   const reset = useCallback(() => {
     setFormData(initialFormData);
     setSelectedAccessoryIds([]);
@@ -107,7 +100,6 @@ export function useSampleForm(
   return {
     formData,
     handleChange,
-    setFieldValue,
     reset,
     selectedAccessoryIds,
     setSelectedAccessoryIds,
