@@ -1,5 +1,5 @@
 import React from "react";
-import { Calendar } from "lucide-react";
+import { Calendar, FolderOpen } from "lucide-react";
 import AutocompleteField from "@/components/common/AutocompleteField";
 import { inputClass, labelClass } from "./SampleFormFields";
 
@@ -12,9 +12,10 @@ interface FormFieldProps {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => void;
+  onFolderPick?: (name: string, folderName: string) => void;
   placeholder?: string;
   disabled?: boolean;
-  type?: "text" | "number" | "date" | "autocomplete" | "select" | "checkbox";
+  type?: "text" | "number" | "date" | "autocomplete" | "select" | "checkbox" | "folder-picker";
   fullWidth?: boolean;
   required?: boolean;
   options?: string[];
@@ -25,6 +26,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   name,
   value,
   onChange,
+  onFolderPick,
   placeholder,
   disabled = false,
   type = "text",
@@ -98,6 +100,48 @@ export const FormField: React.FC<FormFieldProps> = ({
             </div>
           </div>
         );
+
+      // FOLDER PICKER FIELD
+      case "folder-picker": {
+        const handlePickFolder = async () => {
+          if (!onFolderPick) return;
+          try {
+            const dirHandle = await (window as Window & { showDirectoryPicker?: () => Promise<FileSystemDirectoryHandle> }).showDirectoryPicker?.();
+            if (dirHandle?.name) {
+              onFolderPick(name, dirHandle.name);
+            }
+          } catch (err) {
+            // User cancelled or API unsupported — no-op
+            if (err instanceof Error && err.name !== "AbortError") {
+              console.error("Folder picker error:", err);
+            }
+          }
+        };
+
+        return (
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              name={name}
+              value={value === undefined || value === null ? "" : String(value)}
+              onChange={onChange}
+              className={`${inputClass} ${disabledClass} flex-1`}
+              placeholder={placeholder}
+              disabled={disabled}
+              required={required}
+            />
+            <button
+              type="button"
+              onClick={handlePickFolder}
+              disabled={disabled}
+              title="Browse folder"
+              className="flex-shrink-0 p-2 rounded-lg bg-slate-700 border border-slate-600 text-slate-300 hover:text-blue-400 hover:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <FolderOpen className="w-4 h-4" />
+            </button>
+          </div>
+        );
+      }
 
       // DATE FIELD
       case "date":
