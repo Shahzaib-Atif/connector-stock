@@ -34,4 +34,6 @@ if ("serviceWorker" in navigator) {
         console.log("SW registration failed: ", registrationError);
       });
   });
+} else {
+  console.warn("Service Workers are not supported in this browser.");
 }
