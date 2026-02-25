@@ -5,6 +5,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { UpdateAccessoryDto } from 'src/dtos/accessory.dto';
 import { AccessoriesService } from 'src/services/accessories.service';
+import { UserRoles } from 'src/utils/types';
 
 @Controller('api/accessories')
 export class AccessoryController {
@@ -24,7 +25,7 @@ export class AccessoryController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Master')
+  @Roles(UserRoles.Admin)
   @Post('/:id/update')
   async updateAccessory(
     @Param('id') id: string,
