@@ -43,7 +43,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
       {/* Color, Vias, Type, Family */}
       <div
         id="connector-metadata-1"
-        className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4"
+        className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-4"
       >
         <CardInfoDiv label="Color" value={colorName ?? ""} />
         <CardInfoDiv label="Vias" value={getViasValue(connector)} />
@@ -63,7 +63,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
         {hasDimensions && (
           <>
             <CardInfoDiv
-              label="Internal Ø"
+              label="Internal Ø (mm)"
               value={
                 dimensions?.InternalDiameter != null
                   ? dimensions.InternalDiameter.toString()
@@ -72,7 +72,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
               classnames="col-start-1"
             />
             <CardInfoDiv
-              label="External Ø"
+              label="External Ø (mm)"
               value={
                 dimensions?.ExternalDiameter != null
                   ? dimensions.ExternalDiameter.toString()
@@ -80,7 +80,7 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
               }
             />
             <CardInfoDiv
-              label="Thickness"
+              label="Thickness (mm)"
               value={
                 dimensions?.Thickness != null
                   ? dimensions.Thickness.toString()

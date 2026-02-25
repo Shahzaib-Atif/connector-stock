@@ -37,7 +37,7 @@ export class ConnectorRepo {
 
   async getConnectorByCodivmac(codivmac: string) {
     try {
-      return await this.prisma.connectors_Main.findUnique({
+      const data = await this.prisma.connectors_Main.findUnique({
         where: { CODIVMAC: codivmac },
         include: {
           Connectors_Details: true,
@@ -48,6 +48,22 @@ export class ConnectorRepo {
           },
         },
       });
+
+      if (!data) return undefined;
+
+      return {
+        ...data,
+        Connectors_Dimensions: data.Connectors_Dimensions
+          ? {
+              ...data.Connectors_Dimensions,
+              InternalDiameter:
+                data.Connectors_Dimensions?.InternalDiameter?.toNumber(),
+              ExternalDiameter:
+                data.Connectors_Dimensions.ExternalDiameter?.toNumber(),
+              Thickness: data.Connectors_Dimensions.Thickness?.toNumber(),
+            }
+          : undefined,
+      };
     } catch (ex: any) {
       console.error('Error fetching connector by codivmac:', ex.message);
       return undefined;

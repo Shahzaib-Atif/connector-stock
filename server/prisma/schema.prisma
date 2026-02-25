@@ -192,9 +192,9 @@ model Connectors_Details {
 
 model Connectors_Dimensions {
   ConnId           String          @id(map: "Connectors_Dimensions_PK") @db.NVarChar(8)
-  InternalDiameter Int?
-  ExternalDiameter Int?
-  Thickness        Int?
+  InternalDiameter Decimal?        @db.Decimal(10, 2)
+  ExternalDiameter Decimal?        @db.Decimal(10, 2)
+  Thickness        Decimal?        @db.Decimal(10, 2)
   Connectors_Main  Connectors_Main @relation(fields: [ConnId], references: [CODIVMAC], onDelete: Cascade, onUpdate: NoAction, map: "FK_Connectors_Dimensions")
 }
 
@@ -255,9 +255,9 @@ model Refer_ncias_bk {
   VersaoConnector  String?   @db.NVarChar(1)
   SampleSection    String?   @db.VarChar(100)
   SampleType       String?   @db.VarChar(100)
-  InternalDiameter Int?
-  ExternalDiameter Int?
-  Thickness        Int?
+  InternalDiameter Decimal?  @db.Decimal(10, 2)
+  ExternalDiameter Decimal?  @db.Decimal(10, 2)
+  Thickness        Decimal?  @db.Decimal(10, 2)
   ConnType         String?   @db.VarChar(100)
   ClipColor        String?   @db.VarChar(100)
   CapotAngle       String?   @db.VarChar(100)

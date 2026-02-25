@@ -13,10 +13,10 @@ function CardInfoDiv({ label, value, classnames = "" }: Props) {
         classnames
       }
     >
-      <div className="text-xs sm:text-sm text-slate-500 uppercase font-bold mb-1">
+      <div className="text-xs sm:text-sm text-slate-500 font-bold mb-1">
         {label}
       </div>
-      <div className="text-sm sm:text-lg text-slate-200 gap-2 break-all">
+      <div className="text-sm sm:text-base text-slate-200 gap-2 break-all">
         {value}
       </div>
     </div>
