@@ -35,7 +35,8 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
   onTransaction,
   onOpenQR,
 }) => {
-  const { role } = useAppSelector((state) => state.auth);
+  const { role, user } = useAppSelector((state) => state.auth);
+  const isEditAllowed = role === UserRoles.Master || user === "admin1";
 
   // Shared hook lifts params and cache plumbing.
   const { entity: connector } = useEntityDetails<Connector>(connectorResolver);
@@ -81,7 +82,7 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
         ) : (
           <div className="relative">
             <ConnectorSummary connector={connector} />
-            {role === UserRoles.Master && (
+            {isEditAllowed && (
               <button
                 onClick={() => setIsEditing(true)}
                 className="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 bg-slate-800/80 backdrop-blur-md border border-slate-700 hover:border-blue-500/50 hover:bg-slate-700 text-slate-300 hover:text-blue-400 rounded-xl transition-all shadow-lg group"
