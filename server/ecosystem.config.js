@@ -9,6 +9,9 @@ module.exports = {
       env: {
         NODE_ENV: "prod",
       },
+      wait_ready: true,
+      listen_timeout: 10000,
+      kill_timeout: 5000,
     },
-  ]
-}
+  ],
+};
