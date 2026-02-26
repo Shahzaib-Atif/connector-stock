@@ -2,6 +2,8 @@ import React from "react";
 import { useAccessoryEditForm } from "../useAccessoryEditForm";
 import AccessoryFormActions from "./AccessoryFormActions";
 import { Accessory } from "@/utils/types";
+import DisabledDiv from "@/components/common/DisabledDiv";
+import NumberInputDiv from "@/components/common/NumberInputDiv";
 
 interface Props {
   accessory: Accessory;
@@ -33,59 +35,28 @@ export const AccessoryEditForm: React.FC<Props> = ({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Connector Name - Read Only */}
-        <div className="space-y-1.5">
-          <label className="label-style-4">Connector</label>
-          <input
-            value={accessory.ConnName}
-            disabled
-            className={disabledInputClass}
-          />
-        </div>
+        <DisabledDiv label="Connector" value={accessory.ConnName} />
 
         {/* Accessory Type - Read Only */}
-        <div className="space-y-1.5">
-          <label className="label-style-4">Type</label>
-          <input
-            value={accessory.AccessoryType}
-            disabled
-            className={disabledInputClass}
-          />
-        </div>
+        <DisabledDiv label="Type" value={accessory.AccessoryType} />
 
         {/* RefClient - Read Only */}
-        <div className="space-y-1.5">
-          <label className="label-style-4">Client Reference</label>
-          <input
-            value={accessory.RefClient}
-            className={disabledInputClass}
-            disabled
-          />
-        </div>
+        <DisabledDiv label="Client Reference" value={accessory.RefClient} />
 
         {/* RefDV - Read Only */}
-        <div className="space-y-1.5">
-          <label className="label-style-4">DV Reference</label>
-          <input
-            value={accessory.RefDV || ""}
-            className={disabledInputClass}
-            disabled
-          />
-        </div>
+        <DisabledDiv label="DV Reference" value={accessory.RefDV} />
 
         {/* CapotAngle */}
         {accessory.CapotAngle && (
-          <div className="space-y-1.5">
-            <label className="label-style-4">Capot Angle</label>
-            <input
-              type="number"
-              value={formData.CapotAngle}
-              onChange={(e) =>
-                setField("CapotAngle", parseInt(e.target.value) || 0)
-              }
-              className={inputClass}
-              placeholder="Capot angle"
-            />
-          </div>
+          <NumberInputDiv
+            label="Capot Angle"
+            value={formData.CapotAngle}
+            min={0}
+            step={45}
+            onChange={(e) =>
+              setField("CapotAngle", parseInt(e.target.value) || 0)
+            }
+          />
         )}
 
         {/* ClipColor */}
@@ -96,23 +67,20 @@ export const AccessoryEditForm: React.FC<Props> = ({
               type="text"
               value={formData.ClipColor}
               onChange={(e) => setField("ClipColor", e.target.value)}
-              className={inputClass}
+              className="input-style-main input-style-enabled"
               placeholder="Clip color"
             />
           </div>
         )}
 
         {/* Quantity */}
-        <div className="space-y-1.5">
-          <label className="label-style-4">Quantity</label>
-          <input
-            type="number"
-            min="0"
-            value={formData.Qty}
-            onChange={(e) => setField("Qty", parseInt(e.target.value) || 0)}
-            className={inputClass}
-          />
-        </div>
+        <NumberInputDiv
+          label="Quantity"
+          value={formData.Qty}
+          min={0}
+          step={1}
+          onChange={(e) => setField("Qty", parseInt(e.target.value) || 0)}
+        />
       </div>
 
       {error && (
@@ -126,9 +94,3 @@ export const AccessoryEditForm: React.FC<Props> = ({
     </form>
   );
 };
-
-const inputClass =
-  "w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-blue-500/50 outline-none transition-all";
-
-const disabledInputClass =
-  "w-full bg-slate-700 border border-slate-800 rounded-xl px-4 py-2.5 text-white outline-none transition-all appearance-none";
