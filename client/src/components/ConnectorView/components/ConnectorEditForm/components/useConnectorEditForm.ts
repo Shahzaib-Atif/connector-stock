@@ -3,19 +3,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { initMasterData } from "@/store/slices/masterDataSlice";
 import { Connector, Connector_Dimensions } from "@/utils/types";
 import { useState } from "react";
-
-interface ConnectorFormData {
-  Cor: string;
-  Vias: string;
-  ConnType: string;
-  Fabricante: string;
-  Family: number;
-  Qty: number;
-  Qty_com_fio: number;
-  Qty_sem_fio: number;
-  ActualViaCount?: number;
-  dimensions?: Connector_Dimensions;
-}
+import { ConnectorFormData } from "./ConnectorFormData";
 
 export function useConnectorEditForm(connector: Connector, onSave: () => void) {
   const dispatch = useAppDispatch();

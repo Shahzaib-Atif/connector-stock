@@ -63,6 +63,18 @@ export default {
         ".label-style-3": {
           "@apply text-sm font-bold text-slate-400 uppercase tracking-wide": {},
         },
+        ".label-style-4": {
+          "@apply text-sm font-semibold text-slate-400 ml-1": {},
+        },
+        ".input-style-main": {
+          "@apply w-full border border-slate-800 rounded-xl px-4 py-2.5 text-white outline-none transition-all": {},
+        },
+        ".input-style-enabled": {
+          "@apply bg-slate-950 focus:ring-2 focus:ring-blue-500/50": {},
+        },    
+        ".input-style-disabled": {
+          "@apply bg-slate-700 appearance-none": {},
+        },     
       });
     },
   ],

@@ -34,7 +34,7 @@ export const AccessoryEditForm: React.FC<Props> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Connector Name - Read Only */}
         <div className="space-y-1.5">
-          <label className={labelClass}>Connector</label>
+          <label className="label-style-4">Connector</label>
           <input
             value={accessory.ConnName}
             disabled
@@ -44,7 +44,7 @@ export const AccessoryEditForm: React.FC<Props> = ({
 
         {/* Accessory Type - Read Only */}
         <div className="space-y-1.5">
-          <label className={labelClass}>Type</label>
+          <label className="label-style-4">Type</label>
           <input
             value={accessory.AccessoryType}
             disabled
@@ -54,7 +54,7 @@ export const AccessoryEditForm: React.FC<Props> = ({
 
         {/* RefClient - Read Only */}
         <div className="space-y-1.5">
-          <label className={labelClass}>Client Reference</label>
+          <label className="label-style-4">Client Reference</label>
           <input
             value={accessory.RefClient}
             className={disabledInputClass}
@@ -64,7 +64,7 @@ export const AccessoryEditForm: React.FC<Props> = ({
 
         {/* RefDV - Read Only */}
         <div className="space-y-1.5">
-          <label className={labelClass}>DV Reference</label>
+          <label className="label-style-4">DV Reference</label>
           <input
             value={accessory.RefDV || ""}
             className={disabledInputClass}
@@ -75,7 +75,7 @@ export const AccessoryEditForm: React.FC<Props> = ({
         {/* CapotAngle */}
         {accessory.CapotAngle && (
           <div className="space-y-1.5">
-            <label className={labelClass}>Capot Angle</label>
+            <label className="label-style-4">Capot Angle</label>
             <input
               type="number"
               value={formData.CapotAngle}
@@ -91,7 +91,7 @@ export const AccessoryEditForm: React.FC<Props> = ({
         {/* ClipColor */}
         {accessory.ClipColor && (
           <div className="space-y-1.5">
-            <label className={labelClass}>Clip Color</label>
+            <label className="label-style-4">Clip Color</label>
             <input
               type="text"
               value={formData.ClipColor}
@@ -104,7 +104,7 @@ export const AccessoryEditForm: React.FC<Props> = ({
 
         {/* Quantity */}
         <div className="space-y-1.5">
-          <label className={labelClass}>Quantity</label>
+          <label className="label-style-4">Quantity</label>
           <input
             type="number"
             min="0"
@@ -126,8 +126,6 @@ export const AccessoryEditForm: React.FC<Props> = ({
     </form>
   );
 };
-
-const labelClass = "text-xs font-semibold text-slate-400 uppercase ml-1";
 
 const inputClass =
   "w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-blue-500/50 outline-none transition-all";
