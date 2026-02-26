@@ -8,6 +8,12 @@ export class UpdateConnectorDto {
   Qty_com_fio?: number;
   Qty_sem_fio?: number;
   ActualViaCount?: number;
+  // Optional physical dimensions payload (used e.g. for \"olhal\" type)
+  dimensions?: {
+    InternalDiameter?: number;
+    ExternalDiameter?: number;
+    Thickness?: number;
+  };
 }
 
 export class ConnectorDto {

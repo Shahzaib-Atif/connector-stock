@@ -21,7 +21,7 @@ export class ConnectorController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRoles.Admin)
+  @Roles(UserRoles.Master, UserRoles.Admin)
   @Post('/:id/update')
   async updateConnector(
     @Param('id') id: string,

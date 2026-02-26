@@ -1,7 +1,7 @@
 import { updateConnectorApi } from "@/services/connectorService";
 import { useAppDispatch } from "@/store/hooks";
 import { initMasterData } from "@/store/slices/masterDataSlice";
-import { Connector } from "@/utils/types";
+import { Connector, Connector_Dimensions } from "@/utils/types";
 import { useState } from "react";
 
 interface ConnectorFormData {
@@ -14,13 +14,14 @@ interface ConnectorFormData {
   Qty_com_fio: number;
   Qty_sem_fio: number;
   ActualViaCount?: number;
+  dimensions?: Connector_Dimensions;
 }
 
 export function useConnectorEditForm(connector: Connector, onSave: () => void) {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { details: connDetails } = connector;
+  const { details: connDetails, dimensions } = connector;
 
   const [formData, setFormData] = useState<ConnectorFormData>({
     Cor: connector.Cor,
@@ -33,6 +34,7 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
     Qty_sem_fio: connector.Qty_sem_fio || 0,
     ActualViaCount:
       connDetails.ActualViaCount || parseInt(connector.viasName || "0") || 0,
+    dimensions: dimensions || {},
   });
 
   const setQtyField = (field: "Qty_com_fio" | "Qty_sem_fio", value: number) => {
@@ -54,6 +56,19 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
     }));
   };
 
+  const setDimensionsField = (
+    field: keyof Connector_Dimensions,
+    value: number | undefined,
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      dimensions: {
+        ...(prev.dimensions || {}),
+        [field]: value,
+      },
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -71,5 +86,13 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
     }
   };
 
-  return { formData, loading, error, setQtyField, setField, handleSubmit };
+  return {
+    formData,
+    loading,
+    error,
+    setQtyField,
+    setField,
+    setDimensionsField,
+    handleSubmit,
+  };
 }

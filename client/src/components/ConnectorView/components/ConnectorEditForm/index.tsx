@@ -1,6 +1,6 @@
 import React from "react";
-import { useConnectorEditForm } from "./useConnectorEditForm";
-import ConnectorFormActions from "./ConnectorFormActions";
+import { useConnectorEditForm } from "./components/useConnectorEditForm";
+import ConnectorFormActions from "./components/ConnectorFormActions";
 import { Connector } from "@/utils/types";
 import { useAppSelector } from "@/store/hooks";
 
@@ -16,9 +16,18 @@ export const ConnectorEditForm: React.FC<Props> = ({
   onSave,
 }) => {
   const masterData = useAppSelector((state) => state.masterData.data);
-  const { formData, loading, error, setQtyField, setField, handleSubmit } =
-    useConnectorEditForm(connector, onSave);
+  const {
+    formData,
+    loading,
+    error,
+    setQtyField,
+    setField,
+    setDimensionsField,
+    handleSubmit,
+  } = useConnectorEditForm(connector, onSave);
   const isActualViasEnabled = connector?.details?.ActualViaCount;
+  const isOlhalType =
+    formData.ConnType && formData.ConnType.toLowerCase() === "olhal";
 
   return (
     <form
@@ -153,6 +162,65 @@ export const ConnectorEditForm: React.FC<Props> = ({
             className={disabledInputClass}
           />
         </div>
+
+        {/* Dimensions (only for \"olhal\" type) */}
+        {isOlhalType && (
+          <>
+            <div className="space-y-1.5">
+              <label className={labelClass}>Internal Ø</label>
+              <input
+                type="number"
+                value={formData.dimensions?.InternalDiameter ?? ""}
+                step={0.1}
+                onChange={(e) =>
+                  setDimensionsField(
+                    "InternalDiameter",
+                    e.target.value === ""
+                      ? undefined
+                      : parseFloat(e.target.value),
+                  )
+                }
+                className={inputClass}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className={labelClass}>External Ø</label>
+              <input
+                type="number"
+                value={formData.dimensions?.ExternalDiameter ?? ""}
+                step={0.1}
+                onChange={(e) =>
+                  setDimensionsField(
+                    "ExternalDiameter",
+                    e.target.value === ""
+                      ? undefined
+                      : parseFloat(e.target.value),
+                  )
+                }
+                className={inputClass}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className={labelClass}>Thickness</label>
+              <input
+                type="number"
+                value={formData.dimensions?.Thickness ?? ""}
+                step={0.1}
+                onChange={(e) =>
+                  setDimensionsField(
+                    "Thickness",
+                    e.target.value === ""
+                      ? undefined
+                      : parseFloat(e.target.value),
+                  )
+                }
+                className={inputClass}
+              />
+            </div>
+          </>
+        )}
       </div>
 
       {error && (

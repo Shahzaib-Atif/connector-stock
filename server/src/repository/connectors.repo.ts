@@ -179,6 +179,24 @@ export class ConnectorRepo {
           },
         });
 
+        // Update Dimensions table (upsert when dimensions are provided)
+        if (data.dimensions) {
+          await tx.connectors_Dimensions.upsert({
+            where: { ConnId: codivmac },
+            create: {
+              ConnId: codivmac,
+              InternalDiameter: data.dimensions.InternalDiameter,
+              ExternalDiameter: data.dimensions.ExternalDiameter,
+              Thickness: data.dimensions.Thickness,
+            },
+            update: {
+              InternalDiameter: data.dimensions.InternalDiameter,
+              ExternalDiameter: data.dimensions.ExternalDiameter,
+              Thickness: data.dimensions.Thickness,
+            },
+          });
+        }
+
         return true;
       });
     } catch (ex: any) {

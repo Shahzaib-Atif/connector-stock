@@ -25,7 +25,7 @@ export class AccessoryController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRoles.Admin)
+  @Roles(UserRoles.Master, UserRoles.Admin)
   @Post('/:id/update')
   async updateAccessory(
     @Param('id') id: string,
