@@ -135,9 +135,6 @@ export const ConnectorEditForm: React.FC<Props> = ({
           }
         />
 
-        {/* Total Quantity Input (Read-only as it sums others) */}
-        <DisabledDiv label="Total Quantity" value={formData.Qty} />
-
         {/* Dimensions (only for \"olhal\" type) */}
         {isOlhalType && (
           <OlhalDimensions

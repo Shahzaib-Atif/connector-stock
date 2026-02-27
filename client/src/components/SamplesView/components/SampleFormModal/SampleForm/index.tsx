@@ -38,7 +38,7 @@ export const SampleForm: React.FC<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
   const { loading, error: reduxError } = useAppSelector(
-    (state) => state.samples
+    (state) => state.samples,
   );
   const { user } = useAppSelector((state) => state.auth);
   const {
@@ -87,7 +87,7 @@ export const SampleForm: React.FC<Props> = ({
               ActualUser: currentUser,
               associatedItemIds: selectedAccessoryIds,
             },
-          })
+          }),
         ).unwrap();
       } else {
         await dispatch(
@@ -97,7 +97,7 @@ export const SampleForm: React.FC<Props> = ({
             CreatedBy: currentUser,
             ActualUser: currentUser,
             associatedItemIds: selectedAccessoryIds,
-          })
+          }),
         ).unwrap();
       }
 
@@ -105,14 +105,14 @@ export const SampleForm: React.FC<Props> = ({
     } catch (err) {
       console.error(err);
       setFormError(
-        typeof err === "string" ? err : err.message || "An error occurred."
+        typeof err === "string" ? err : err.message || "An error occurred.",
       );
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="p-6">
-      <ErrorBanner message={formError || reduxError} />
+      <ErrorBanner message={formError || reduxError || ""} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {FORM_FIELDS.map((field) => (
