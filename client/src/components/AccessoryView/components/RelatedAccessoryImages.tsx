@@ -79,7 +79,8 @@ export const RelatedAccessoryImages: React.FC<RelatedAccessoryImagesProps> = ({
       {/* Lightbox Overlay */}
       {selectedImage && (
         <LightBoxOverlay
-          src={API.accessoryExtrasImage(selectedImage)}
+          images={images}
+          getSrc={API.accessoryExtrasImage}
           selectedImage={selectedImage}
           setSelectedImage={setSelectedImage}
         />
