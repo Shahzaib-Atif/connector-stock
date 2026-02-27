@@ -8,7 +8,7 @@ export enum Department {
   Maquinacao = "Maquinacao",
   Montagem = "Montagem",
   Planamento = "Planamento",
-  RH = "RH",
+  STM = "STM",
 }
 
 export type suggestion = {
