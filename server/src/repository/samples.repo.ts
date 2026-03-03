@@ -4,7 +4,7 @@ import { CreateSampleDto, UpdateSampleDto } from 'src/dtos/samples.dto';
 
 @Injectable()
 export class SamplesRepo {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async getAllSamples() {
     try {
@@ -119,12 +119,15 @@ export class SamplesRepo {
 
   /** Get samples starting from ORC documents (using V_RegAmostrasFromORC) */
   async getSamplesFromORC(numorc: string) {
+    const byOrc = await this.prisma.v_RegAmostrasFromORC.findMany({
+      where: { orcDoc: numorc },
+    });
+
+    if (byOrc.length) return byOrc;
+
     return this.prisma.v_RegAmostrasFromORC.findMany({
       where: {
-        OR: [
-          { orcDoc: numorc },
-          { CDU_ModuloRefCliente: { contains: numorc } },
-        ],
+        CDU_ModuloRefCliente: { startsWith: numorc },
       },
     });
   }
