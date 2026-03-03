@@ -50,9 +50,11 @@ function WizardStep1({
       <div className="mb-6">
         <label className="block text-sm font-medium text-slate-300 mb-2">
           <Search className="inline-block w-4 h-4 mr-1" />
-          {flow === "ECL" ? "Enter RefCliente" : "Enter Budget Number (ORC)"}
+          {flow === "ECL"
+            ? "Search with client reference"
+            : "Search with ORC Number or client reference"}
         </label>
-        <form 
+        <form
           className="flex gap-5 sm:gap-3 flex-col sm:flex-row"
           onSubmit={(e) => {
             e.preventDefault();
@@ -67,7 +69,7 @@ function WizardStep1({
             placeholder={
               flow === "ECL"
                 ? "Enter client reference..."
-                : "Enter ORC number (e.g. 2024/123)..."
+                : "Enter ORC or RefClient ..."
             }
             className="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             autoFocus
