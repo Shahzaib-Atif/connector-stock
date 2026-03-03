@@ -12,8 +12,8 @@ export function performValidation(formData: SampleFormData) {
     return error; // return error message
   }
 
-  // validate connector has minimum length 6
-  if (formData.Amostra?.length < 6) {
+  // validate connector has minimum length 6 (except when it is "NEW")
+  if (formData.Amostra?.length < 6 && formData.Amostra !== "NEW") {
     return "Amostra is not valid!"; // return error message
   }
 
