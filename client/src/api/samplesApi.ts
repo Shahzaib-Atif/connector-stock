@@ -53,6 +53,11 @@ export const deleteSample = async (id: number): Promise<Sample> => {
   const response = await fetchWithAuth(`${API.samples}/${id}`, {
     method: "DELETE",
   });
-  if (!response.ok) throw new Error("Failed to delete sample");
+  return response.json();
+};
+
+export const getAllSamplesFromORC = async (): Promise<any[]> => {
+  const response = await fetchWithAuth(`${API.samples}/all-from-orc`);
+  if (!response.ok) throw new Error("Failed to fetch all ORC samples");
   return response.json();
 };

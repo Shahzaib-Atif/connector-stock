@@ -4,23 +4,29 @@ import {
   createSample,
   updateSample,
   deleteSample,
+  getAllSamplesFromORC,
 } from "@/api/samplesApi";
 import { Sample } from "@/utils/types";
+import { RegAmostrasOrcRow } from "@/types/sampleCreation";
 import { setLineStatus } from "@/utils/inventoryUtils";
 
 interface SamplesState {
   samples: Sample[];
+  orcSamples: RegAmostrasOrcRow[];
   projects: string[];
   clients: string[];
   loading: boolean;
+  orcLoading: boolean;
   error: string | null;
 }
 
 const initialState: SamplesState = {
   samples: [],
+  orcSamples: [],
   projects: [],
   clients: [],
   loading: false,
+  orcLoading: false,
   error: null,
 };
 
@@ -29,6 +35,15 @@ export const fetchSamplesThunk = createAsyncThunk(
   "samples/fetchAll",
   async () => {
     const samples = await getSamples();
+    return samples;
+  },
+);
+
+// Fetch all ORC samples for caching
+export const fetchOrcSamplesThunk = createAsyncThunk(
+  "samples/fetchOrcSamples",
+  async () => {
+    const samples = await getAllSamplesFromORC();
     return samples;
   },
 );
@@ -133,6 +148,17 @@ export const samplesSlice = createSlice({
       .addCase(deleteSampleThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to delete sample";
+      })
+      // Fetch ORC samples
+      .addCase(fetchOrcSamplesThunk.pending, (state) => {
+        state.orcLoading = true;
+      })
+      .addCase(fetchOrcSamplesThunk.fulfilled, (state, action) => {
+        state.orcSamples = action.payload;
+        state.orcLoading = false;
+      })
+      .addCase(fetchOrcSamplesThunk.rejected, (state) => {
+        state.orcLoading = false;
       });
   },
 });

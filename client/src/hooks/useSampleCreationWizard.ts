@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useAppSelector } from "@/store/hooks";
 import {
   AnaliseTabRow,
   RegAmostrasEncRow,
@@ -7,7 +8,6 @@ import {
 import {
   fetchAnaliseTabData,
   fetchRegAmostrasEncData,
-  fetchSamplesFromOrc,
 } from "@/api/sampleCreationApi";
 import { SampleFormData } from "./useSampleForm";
 
@@ -54,6 +54,8 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const { orcSamples } = useAppSelector((state) => state.samples);
+
   const searchAnaliseTab = useCallback(async () => {
     if ((flow === "ECL" || flow === "ORC") && !refCliente.trim()) {
       setError(
@@ -78,7 +80,14 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
           setCurrentStep(2);
         }
       } else if (flow === "ORC") {
-        const data = await fetchSamplesFromOrc(refCliente.trim());
+        const searchTerm = refCliente.trim().toLowerCase();
+        // Filter from Redux cache
+        const data = orcSamples.filter(
+          (s) =>
+            s.orcDoc.toLowerCase().includes(searchTerm) ||
+            s.CDU_ModuloRefCliente.toLowerCase().startsWith(searchTerm),
+        );
+
         setRegAmostrasData(data);
         if (data.length === 0) {
           setError(`No results found for ORC: ${refCliente}`);
@@ -91,7 +100,7 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
     } finally {
       setLoading(false);
     }
-  }, [refCliente, flow]);
+  }, [refCliente, flow, orcSamples]);
 
   const selectAnaliseRow = useCallback((row: AnaliseTabRow) => {
     setSelectedAnaliseRow(row);

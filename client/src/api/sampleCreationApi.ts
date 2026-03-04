@@ -37,6 +37,7 @@ export const fetchRegAmostrasEncData = async (
 
 
 /**
+ * @deprecated Use Redux-stored orcSamples instead.
  * Fetch data starting from ORC documents
  */
 export const fetchSamplesFromOrc = async (numorc: string): Promise<RegAmostrasOrcRow[]> => {

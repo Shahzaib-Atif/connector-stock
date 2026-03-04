@@ -131,4 +131,14 @@ export class SamplesRepo {
       },
     });
   }
+
+  /** Get all samples from ORC documents (using V_RegAmostrasFromORC) */
+  async getAllSamplesFromORC() {
+    try {
+      return await this.prisma.v_RegAmostrasFromORC.findMany();
+    } catch (ex: any) {
+      console.error('Failed to get all samples from ORC:', ex.message);
+      return [];
+    }
+  }
 }

@@ -45,6 +45,11 @@ export class SamplesController {
     return await this.service.getSamplesFromORC(numorc);
   }
 
+  @Get('all-from-orc')
+  async getAllSamplesFromORC() {
+    return await this.service.getAllSamplesFromORC();
+  }
+
   @Get(':id')
   async getSampleById(@Param('id', ParseIntPipe) id: number) {
     return await this.service.getSampleById(id);
