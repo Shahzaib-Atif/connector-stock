@@ -85,7 +85,7 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
         const data = orcSamples.filter(
           (s) =>
             s.orcDoc.toLowerCase().includes(searchTerm) ||
-            s.CDU_ModuloRefCliente.toLowerCase().startsWith(searchTerm),
+            s.CDU_ModuloRefCliente.toLowerCase().includes(searchTerm),
         );
 
         setRegAmostrasData(data);
