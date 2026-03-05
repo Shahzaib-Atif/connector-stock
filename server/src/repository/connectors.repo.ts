@@ -174,6 +174,7 @@ export class ConnectorRepo {
           },
           update: {
             Fabricante: data.Fabricante,
+            Refabricante: data.Refabricante,
             Family: data.Family,
             ActualViaCount: data.ActualViaCount,
           },

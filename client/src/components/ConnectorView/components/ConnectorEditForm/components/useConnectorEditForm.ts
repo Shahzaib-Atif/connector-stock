@@ -16,6 +16,7 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
     Vias: connector.Vias,
     ConnType: connector.ConnType || "",
     Fabricante: connDetails.Fabricante || "",
+    Refabricante: connDetails.Refabricante || "",
     Family: connDetails.Family || 1,
     Qty: connector.Qty || 0,
     Qty_com_fio: connector.Qty_com_fio || 0,

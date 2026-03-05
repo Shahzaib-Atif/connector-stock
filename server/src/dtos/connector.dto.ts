@@ -3,6 +3,7 @@ export class UpdateConnectorDto {
   Vias?: string;
   ConnType?: string;
   Fabricante?: string;
+  Refabricante?: string;
   Family?: number;
   Qty?: number;
   Qty_com_fio?: number;

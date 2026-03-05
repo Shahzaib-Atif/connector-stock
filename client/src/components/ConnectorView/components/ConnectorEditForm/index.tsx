@@ -114,6 +114,20 @@ export const ConnectorEditForm: React.FC<Props> = ({
           </select>
         </div>
 
+        {/* Refabricante */}
+        <div className="space-y-1.5">
+          <label htmlFor="Refabricante" className="label-style-4">
+            Refabricante
+          </label>
+          <input
+            id="Refabricante"
+            type="text"
+            value={formData.Refabricante}
+            onChange={(e) => setField("Refabricante", e.target.value)}
+            className="input-style-main input-style-enabled"
+          />
+        </div>
+
         {/* Breakdown Quantities */}
         <NumberInputDiv
           label="With Wires"
