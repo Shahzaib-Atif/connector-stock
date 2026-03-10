@@ -40,6 +40,9 @@ export const ConnectorsListView: React.FC = () => {
     setFamily,
     setVias,
     setColor,
+    setInternalDiameter,
+    setExternalDiameter,
+    setThickness,
     filteredConnectors,
     clearFilters,
     typeOptions,
@@ -98,6 +101,12 @@ export const ConnectorsListView: React.FC = () => {
             color={filters.color}
             onColorChange={setColor}
             colorOptions={colorOptions}
+            internalDiameter={filters.internalDiameter}
+            onInternalDiameterChange={setInternalDiameter}
+            externalDiameter={filters.externalDiameter}
+            onExternalDiameterChange={setExternalDiameter}
+            thickness={filters.thickness}
+            onThicknessChange={setThickness}
             onClearFilters={clearFilters}
           >
             {/* Toggle Buttons */}

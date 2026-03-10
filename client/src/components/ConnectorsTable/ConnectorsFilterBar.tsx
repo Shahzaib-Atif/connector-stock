@@ -24,6 +24,15 @@ interface ConnectorsFilterBarProps {
   onColorChange: (value: string) => void;
   colorOptions: string[];
 
+  internalDiameter: string;
+  onInternalDiameterChange: (value: string) => void;
+
+  externalDiameter: string;
+  onExternalDiameterChange: (value: string) => void;
+
+  thickness: string;
+  onThicknessChange: (value: string) => void;
+
   onClearFilters: () => void;
   children?: React.ReactNode;
 }
@@ -45,6 +54,12 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
   color,
   onColorChange,
   colorOptions,
+  internalDiameter,
+  onInternalDiameterChange,
+  externalDiameter,
+  onExternalDiameterChange,
+  thickness,
+  onThicknessChange,
   onClearFilters,
   children,
 }) => {
@@ -106,7 +121,44 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                 className={inputStyle}
               />
             </div>
-
+            {/* Vias */}
+            <div className={containerDiv}>
+              <label htmlFor="connector-vias-filter" className={labelClass}>
+                Vias
+              </label>
+              <select
+                id="connector-vias-filter"
+                value={vias}
+                onChange={(e) => onViasChange(e.target.value)}
+                className={selectStyle}
+              >
+                <option value="all">All</option>
+                {viasOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* Color */}
+            <div className={containerDiv}>
+              <label htmlFor="connector-color-filter" className={labelClass}>
+                Color
+              </label>
+              <select
+                id="connector-color-filter"
+                value={color}
+                onChange={(e) => onColorChange(e.target.value)}
+                className={selectStyle}
+              >
+                <option value="all">All</option>
+                {colorOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>{" "}
             {/* Type */}
             <div className={containerDiv}>
               <label htmlFor="connector-type-filter" className={labelClass}>
@@ -126,7 +178,6 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                 ))}
               </select>
             </div>
-
             {/* Fabricante */}
             <div className={containerDiv}>
               <label
@@ -149,7 +200,6 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                 ))}
               </select>
             </div>
-
             {/* Family (text input) */}
             <div className={containerDiv}>
               <label htmlFor="connector-family-filter" className={labelClass}>
@@ -167,47 +217,67 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 items-stretch">
-            {/* Vias */}
-            <div className={containerDiv}>
-              <label htmlFor="connector-vias-filter" className={labelClass}>
-                Vias
-              </label>
-              <select
-                id="connector-vias-filter"
-                value={vias}
-                onChange={(e) => onViasChange(e.target.value)}
-                className={selectStyle}
-              >
-                <option value="all">All</option>
-                {viasOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
+          {/* DIMENSIONS */}
+          {type?.trim()?.toLowerCase() === "olhal" && (
+            <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 items-stretch">
+              {/* Internal Ø (mm) */}
+              <div className={containerDiv}>
+                <label
+                  htmlFor="connector-intdiameter-filter"
+                  className={labelClass}
+                >
+                  Int Ø (mm)
+                </label>
+                <input
+                  id="connector-intdiameter-filter"
+                  type="text"
+                  value={internalDiameter}
+                  onChange={(e) => onInternalDiameterChange(e.target.value)}
+                  autoComplete="off"
+                  placeholder="e.g. 5.5"
+                  className={inputStyle}
+                />
+              </div>
 
-            {/* Color */}
-            <div className={containerDiv}>
-              <label htmlFor="connector-color-filter" className={labelClass}>
-                Color
-              </label>
-              <select
-                id="connector-color-filter"
-                value={color}
-                onChange={(e) => onColorChange(e.target.value)}
-                className={selectStyle}
-              >
-                <option value="all">All</option>
-                {colorOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+              {/* External Ø (mm) */}
+              <div className={containerDiv}>
+                <label
+                  htmlFor="connector-extdiameter-filter"
+                  className={labelClass}
+                >
+                  Ext Ø (mm)
+                </label>
+                <input
+                  id="connector-extdiameter-filter"
+                  type="text"
+                  value={externalDiameter}
+                  onChange={(e) => onExternalDiameterChange(e.target.value)}
+                  autoComplete="off"
+                  placeholder="e.g. 8"
+                  className={inputStyle}
+                />
+              </div>
+
+              {/* Thickness (mm) */}
+              <div className={containerDiv}>
+                <label
+                  htmlFor="connector-thickness-filter"
+                  className={labelClass}
+                >
+                  Thick (mm)
+                </label>
+                <input
+                  id="connector-thickness-filter"
+                  type="text"
+                  value={thickness}
+                  onChange={(e) => onThicknessChange(e.target.value)}
+                  autoComplete="off"
+                  placeholder="e.g. 1.2"
+                  className={inputStyle}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>
@@ -219,6 +289,6 @@ const btnClass =
   "inline-flex items-center rounded-lg border border-slate-600 px-3 py-2 text-slate-100 transition-colors text-xs sm:text-sm gap-1 hover:bg-slate-600";
 const selectStyle =
   "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-2 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
-const containerDiv = "w-full sm:w-48";
+const containerDiv = "w-full sm:w-40";
 const inputStyle =
   "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-2 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500";

@@ -105,7 +105,7 @@ const TableRow: React.FC<TableRowProps> = ({
               <span>Ext Ø: {connector.dimensions.ExternalDiameter}</span>
             )}
             {connector.dimensions?.Thickness != null && (
-              <span>Thickness: {connector.dimensions.Thickness}</span>
+              <span>Thick: {connector.dimensions.Thickness}</span>
             )}
           </div>
         ) : null}

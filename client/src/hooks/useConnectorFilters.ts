@@ -8,6 +8,9 @@ interface ConnectorFilters {
   family: string;
   vias: string;
   color: string;
+  internalDiameter: string;
+  externalDiameter: string;
+  thickness: string;
 }
 
 export function useConnectorFilters(connectors: Record<string, Connector>) {
@@ -18,6 +21,9 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
     family: "",
     vias: "all",
     color: "all",
+    internalDiameter: "",
+    externalDiameter: "",
+    thickness: "",
   });
 
   const setIdQuery = useCallback((query: string) => {
@@ -44,6 +50,18 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
     setFilters((prev) => ({ ...prev, color: value }));
   }, []);
 
+  const setInternalDiameter = useCallback((value: string) => {
+    setFilters((prev) => ({ ...prev, internalDiameter: value }));
+  }, []);
+
+  const setExternalDiameter = useCallback((value: string) => {
+    setFilters((prev) => ({ ...prev, externalDiameter: value }));
+  }, []);
+
+  const setThickness = useCallback((value: string) => {
+    setFilters((prev) => ({ ...prev, thickness: value }));
+  }, []);
+
   const clearFilters = useCallback(() => {
     setFilters({
       idQuery: "",
@@ -52,6 +70,9 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
       family: "",
       vias: "all",
       color: "all",
+      internalDiameter: "",
+      externalDiameter: "",
+      thickness: "",
     });
   }, []);
 
@@ -86,6 +107,10 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
   // Apply filters to connectors list
   const filteredConnectors = useMemo(() => {
     const normalizedIdQuery = filters.idQuery.trim().toLowerCase();
+    const normalizedFamilyQuery = filters.family.trim().toLowerCase();
+    const normalizedIntQuery = filters.internalDiameter.trim().toLowerCase();
+    const normalizedExtQuery = filters.externalDiameter.trim().toLowerCase();
+    const normalizedThickQuery = filters.thickness.trim().toLowerCase();
 
     return connectorsList.filter((connector) => {
       const matchesId =
@@ -105,7 +130,8 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
           ? String(connector.details.Family)
           : "";
       const matchesFamily =
-        filters.family === "all" || familyValue === filters.family;
+        !normalizedFamilyQuery ||
+        familyValue.toLowerCase().includes(normalizedFamilyQuery);
 
       const matchesVias =
         filters.vias === "all" || connector.Vias === filters.vias;
@@ -113,13 +139,41 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
       const matchesColor =
         filters.color === "all" || connector.Cor === filters.color;
 
+      const internalValue =
+        connector.dimensions?.InternalDiameter != null
+          ? String(connector.dimensions.InternalDiameter)
+          : "";
+      const externalValue =
+        connector.dimensions?.ExternalDiameter != null
+          ? String(connector.dimensions.ExternalDiameter)
+          : "";
+      const thicknessValue =
+        connector.dimensions?.Thickness != null
+          ? String(connector.dimensions.Thickness)
+          : "";
+
+      const matchesInternal =
+        !normalizedIntQuery ||
+        internalValue.toLowerCase().includes(normalizedIntQuery);
+
+      const matchesExternal =
+        !normalizedExtQuery ||
+        externalValue.toLowerCase().includes(normalizedExtQuery);
+
+      const matchesThickness =
+        !normalizedThickQuery ||
+        thicknessValue.toLowerCase().includes(normalizedThickQuery);
+
       return (
         matchesId &&
         matchesType &&
         matchesFabricante &&
         matchesFamily &&
         matchesVias &&
-        matchesColor
+        matchesColor &&
+        matchesInternal &&
+        matchesExternal &&
+        matchesThickness
       );
     });
   }, [connectorsList, filters]);
@@ -132,6 +186,9 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
     setFamily,
     setVias,
     setColor,
+    setInternalDiameter,
+    setExternalDiameter,
+    setThickness,
     filteredConnectors,
     clearFilters,
     typeOptions,
