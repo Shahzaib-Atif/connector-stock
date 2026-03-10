@@ -1,28 +1,58 @@
-import { FilterColumnTypes } from "@/components/common/FilterBar";
 import { Connector } from "@/utils/types";
 import { useState, useMemo, useCallback } from "react";
 
 interface ConnectorFilters {
-  filterColumn: FilterColumnTypes;
-  searchQuery: string;
+  idQuery: string;
+  type: string;
+  fabricante: string;
+  family: string;
+  vias: string;
+  color: string;
 }
 
 export function useConnectorFilters(connectors: Record<string, Connector>) {
   const [filters, setFilters] = useState<ConnectorFilters>({
-    filterColumn: "all",
-    searchQuery: "",
+    idQuery: "",
+    type: "all",
+    fabricante: "all",
+    family: "all",
+    vias: "all",
+    color: "all",
   });
 
-  const setFilterColumn = useCallback((column: FilterColumnTypes) => {
-    setFilters((prev) => ({ ...prev, filterColumn: column }));
+  const setIdQuery = useCallback((query: string) => {
+    setFilters((prev) => ({ ...prev, idQuery: query }));
   }, []);
 
-  const setSearchQuery = useCallback((query: string) => {
-    setFilters((prev) => ({ ...prev, searchQuery: query }));
+  const setType = useCallback((value: string) => {
+    setFilters((prev) => ({ ...prev, type: value }));
+  }, []);
+
+  const setFabricante = useCallback((value: string) => {
+    setFilters((prev) => ({ ...prev, fabricante: value }));
+  }, []);
+
+  const setFamily = useCallback((value: string) => {
+    setFilters((prev) => ({ ...prev, family: value }));
+  }, []);
+
+  const setVias = useCallback((value: string) => {
+    setFilters((prev) => ({ ...prev, vias: value }));
+  }, []);
+
+  const setColor = useCallback((value: string) => {
+    setFilters((prev) => ({ ...prev, color: value }));
   }, []);
 
   const clearFilters = useCallback(() => {
-    setFilters({ filterColumn: "all", searchQuery: "" });
+    setFilters({
+      idQuery: "",
+      type: "all",
+      fabricante: "all",
+      family: "all",
+      vias: "all",
+      color: "all",
+    });
   }, []);
 
   // Convert Record to array with id
@@ -33,60 +63,95 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
     }));
   }, [connectors]);
 
-  const filteredConnectors = useMemo(() => {
-    const normalizedQuery = filters.searchQuery.trim().toLowerCase();
+  const typeOptions = useMemo(
+    () => getUniqueOptions(connectorsList.map((c) => c.ConnType)),
+    [connectorsList],
+  );
 
-    if (!normalizedQuery) {
-      return connectorsList;
-    }
+  const fabricanteOptions = useMemo(
+    () => getUniqueOptions(connectorsList.map((c) => c.details.Fabricante)),
+    [connectorsList],
+  );
+
+  const viasOptions = useMemo(
+    () => getUniqueOptions(connectorsList.map((c) => c.Vias)),
+    [connectorsList],
+  );
+
+  const colorOptions = useMemo(
+    () => getUniqueOptions(connectorsList.map((c) => c.Cor)),
+    [connectorsList],
+  );
+
+  // Apply filters to connectors list
+  const filteredConnectors = useMemo(() => {
+    const normalizedIdQuery = filters.idQuery.trim().toLowerCase();
 
     return connectorsList.filter((connector) => {
-      if (filters.filterColumn === "all") {
-        return matchesAnyField(connector, normalizedQuery);
-      } else {
-        const columnValue = getColumnValue(connector, filters.filterColumn);
-        return columnValue.includes(normalizedQuery);
-      }
+      const matchesId =
+        !normalizedIdQuery ||
+        connector.CODIVMAC?.toLowerCase().includes(normalizedIdQuery);
+
+      const matchesType =
+        filters.type === "all" || connector.ConnType === filters.type;
+
+      const matchesFabricante =
+        filters.fabricante === "all" ||
+        connector.details.Fabricante === filters.fabricante;
+
+      const familyValue =
+        connector.details.Family !== undefined &&
+        connector.details.Family !== null
+          ? String(connector.details.Family)
+          : "";
+      const matchesFamily =
+        filters.family === "all" || familyValue === filters.family;
+
+      const matchesVias =
+        filters.vias === "all" || connector.Vias === filters.vias;
+
+      const matchesColor =
+        filters.color === "all" || connector.Cor === filters.color;
+
+      return (
+        matchesId &&
+        matchesType &&
+        matchesFabricante &&
+        matchesFamily &&
+        matchesVias &&
+        matchesColor
+      );
     });
   }, [connectorsList, filters]);
 
   return {
     filters,
-    setFilterColumn,
-    setSearchQuery,
+    setIdQuery,
+    setType,
+    setFabricante,
+    setFamily,
+    setVias,
+    setColor,
     filteredConnectors,
     clearFilters,
+    typeOptions,
+    fabricanteOptions,
+    viasOptions,
+    colorOptions,
   };
 }
 
-function matchesAnyField(connector: Connector, normalizedQuery: string) {
-  return (
-    connector.CODIVMAC.toLowerCase().includes(normalizedQuery) ||
-    connector.CODIVMAC?.toLowerCase().includes(normalizedQuery) ||
-    connector.ConnType?.toLowerCase().includes(normalizedQuery) ||
-    connector.details.Fabricante?.toLowerCase().includes(normalizedQuery) ||
-    connector.details.Refabricante?.toLowerCase().includes(normalizedQuery) ||
-    connector.Cor?.toLowerCase().includes(normalizedQuery) ||
-    connector.Vias?.toLowerCase().includes(normalizedQuery) ||
-    connector.details.OBS?.toLowerCase().includes(normalizedQuery)
+// Helper function to get unique, non-empty options from an array of values
+function getUniqueOptions(
+  values: Array<string | number | null | undefined>,
+): string[] {
+  const normalized = values
+    .filter((v) => v !== undefined && v !== null && v !== "")
+    .map((v) => String(v));
+
+  const unique = Array.from(new Set(normalized));
+
+  return unique.sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: "base", numeric: true }),
   );
 }
-
-const getColumnValue = (connector: Connector, column: FilterColumnTypes) => {
-  switch (column) {
-    case "id":
-      return connector.CODIVMAC?.toLowerCase() ?? "";
-    case "type":
-      return connector.ConnType?.toLowerCase() ?? "";
-    case "fabricante":
-      return connector.details.Fabricante?.toLowerCase() ?? "";
-    case "family":
-      return connector.details.Family?.toString() ?? "";
-    case "vias":
-      return connector.Vias?.toLowerCase() ?? "";
-    case "color":
-      return connector.Cor?.toLowerCase() ?? "";
-    default:
-      return "";
-  }
-};

@@ -5,7 +5,7 @@ import { usePagination } from "@/hooks/usePagination";
 import { useConnectorFilters } from "@/hooks/useConnectorFilters";
 import { DetailHeader } from "../common/DetailHeader";
 import { ConnectorsTable } from "./ConnectorsTable";
-import { FilterBar } from "../common/FilterBar";
+import { ConnectorsFilterBar } from "./ConnectorsFilterBar";
 import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
@@ -32,8 +32,21 @@ export const ConnectorsListView: React.FC = () => {
   const connectors = isLegacyMode ? legacyData : (masterData?.connectors ?? {});
 
   // Custom hook for filters
-  const { filters, setFilterColumn, setSearchQuery, filteredConnectors } =
-    useConnectorFilters(connectors);
+  const {
+    filters,
+    setIdQuery,
+    setType,
+    setFabricante,
+    setFamily,
+    setVias,
+    setColor,
+    filteredConnectors,
+    clearFilters,
+    typeOptions,
+    fabricanteOptions,
+    viasOptions,
+    colorOptions,
+  } = useConnectorFilters(connectors);
 
   const {
     paginatedItems: paginatedConnectors,
@@ -68,19 +81,24 @@ export const ConnectorsListView: React.FC = () => {
 
       <div id="connectors-content" className="table-view-content">
         <div className="table-view-inner-content">
-          <FilterBar
-            filterColumn={filters.filterColumn}
-            searchQuery={filters.searchQuery}
-            filterByOptions={[
-              "id",
-              "type",
-              "fabricante",
-              "family",
-              "vias",
-              "color",
-            ]}
-            onFilterColumnChange={setFilterColumn}
-            onSearchQueryChange={setSearchQuery}
+          <ConnectorsFilterBar
+            idQuery={filters.idQuery}
+            onIdQueryChange={setIdQuery}
+            type={filters.type}
+            onTypeChange={setType}
+            typeOptions={typeOptions}
+            fabricante={filters.fabricante}
+            onFabricanteChange={setFabricante}
+            fabricanteOptions={fabricanteOptions}
+            family={filters.family}
+            onFamilyChange={setFamily}
+            vias={filters.vias}
+            onViasChange={setVias}
+            viasOptions={viasOptions}
+            color={filters.color}
+            onColorChange={setColor}
+            colorOptions={colorOptions}
+            onClearFilters={clearFilters}
           >
             {/* Toggle Buttons */}
             <div className="flex items-center gap-2">
@@ -94,7 +112,7 @@ export const ConnectorsListView: React.FC = () => {
                 setIsLegacyMode={setIsLegacyMode}
               />
             </div>
-          </FilterBar>
+          </ConnectorsFilterBar>
 
           <div className="table-container-outer">
             <ConnectorsTable
