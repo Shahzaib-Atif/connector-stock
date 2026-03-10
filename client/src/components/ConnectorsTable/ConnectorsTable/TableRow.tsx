@@ -24,6 +24,17 @@ const TableRow: React.FC<TableRowProps> = ({
 
   const imageUrl = API.connectorImages(connector.CODIVMAC);
 
+  const isOlhal =
+    connector.ConnType?.toLowerCase().trim() === "olhal" ||
+    connector.ConnType?.toLowerCase().includes("olhal");
+
+  const hasDimensions =
+    isOlhal &&
+    !!connector.dimensions &&
+    (connector.dimensions.InternalDiameter != null ||
+      connector.dimensions.ExternalDiameter != null ||
+      connector.dimensions.Thickness != null);
+
   return (
     <tr className={"table-row table-row-bg"} key={connector.CODIVMAC}>
       {/* Photo */}
@@ -82,6 +93,23 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data">{connector.details.Family}</td>
       <td className="table-data">{connector.details.Fabricante}</td>
       <td className="table-data break-all">{connector.details.Refabricante}</td>
+
+      {/* Dimensions (only for OLHAL type) */}
+      <td className="table-data align-top">
+        {hasDimensions ? (
+          <div className="flex flex-col text-xs text-slate-300 leading-tight">
+            {connector.dimensions?.InternalDiameter != null && (
+              <span>Int Ø: {connector.dimensions.InternalDiameter}</span>
+            )}
+            {connector.dimensions?.ExternalDiameter != null && (
+              <span>Ext Ø: {connector.dimensions.ExternalDiameter}</span>
+            )}
+            {connector.dimensions?.Thickness != null && (
+              <span>Thickness: {connector.dimensions.Thickness}</span>
+            )}
+          </div>
+        ) : null}
+      </td>
       <td className="table-data text-center">
         <span className="text-emerald-400 font-bold text-sm bg-emerald-500/10 px-2 py-0.5 rounded-md">
           {connector.Qty ?? 0}

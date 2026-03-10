@@ -214,11 +214,11 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
   );
 };
 
-const labelClass = "label-style-1 text-sm mb-[2px]";
+const labelClass = "label-style-1 text-sm mb-[2px] px-2";
 const btnClass =
   "inline-flex items-center rounded-lg border border-slate-600 px-3 py-2 text-slate-100 transition-colors text-xs sm:text-sm gap-1 hover:bg-slate-600";
 const selectStyle =
-  "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
+  "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-2 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
 const containerDiv = "w-full sm:w-48";
 const inputStyle =
-  "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500";
+  "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-2 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500";
