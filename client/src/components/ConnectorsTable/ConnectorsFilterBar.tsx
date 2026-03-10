@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Filter } from "lucide-react";
+import { Eraser, Filter } from "lucide-react";
 
 interface ConnectorsFilterBarProps {
   idQuery: string;
@@ -48,9 +48,6 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
   onClearFilters,
   children,
 }) => {
-  const selectStyle =
-    "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
-  const containerDiv = "w-full sm:w-48";
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClear = () => {
@@ -68,7 +65,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
           <button
             type="button"
             onClick={() => setIsOpen((prev) => !prev)}
-            className="inline-flex items-center gap-1 rounded-lg border border-slate-600 bg-slate-900/50 px-3 py-2 text-slate-100 hover:bg-slate-700 transition-colors"
+            className={btnClass}
             aria-expanded={isOpen}
             aria-controls="connectors-filter-panel"
           >
@@ -78,11 +75,8 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
             </span>
           </button>
 
-          <button
-            type="button"
-            onClick={handleClear}
-            className="inline-flex items-center rounded-lg border border-slate-600 bg-slate-700 px-3 py-2 text-slate-100 hover:bg-slate-600 transition-colors text-xs sm:text-sm"
-          >
+          <button type="button" onClick={handleClear} className={btnClass}>
+            <Eraser className="h-4 w-4" />
             Clear filters
           </button>
         </div>
@@ -98,7 +92,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
         >
           <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
             {/* ID Search */}
-            <div className="w-full sm:w-64">
+            <div className={containerDiv}>
               <label htmlFor="connector-id-search" className={labelClass}>
                 Search ID
               </label>
@@ -108,8 +102,8 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                 value={idQuery}
                 onChange={(e) => onIdQueryChange(e.target.value)}
                 autoComplete="off"
-                placeholder="Enter connector ID..."
-                className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="connector Id..."
+                className={inputStyle}
               />
             </div>
 
@@ -168,7 +162,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                 onChange={(e) => onFamilyChange(e.target.value)}
                 autoComplete="off"
                 placeholder="Enter family..."
-                className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={inputStyle}
               />
             </div>
           </div>
@@ -221,3 +215,10 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
 };
 
 const labelClass = "label-style-1 text-sm mb-[2px]";
+const btnClass =
+  "inline-flex items-center rounded-lg border border-slate-600 px-3 py-2 text-slate-100 transition-colors text-xs sm:text-sm gap-1 hover:bg-slate-600";
+const selectStyle =
+  "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
+const containerDiv = "w-full sm:w-48";
+const inputStyle =
+  "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500";

@@ -15,7 +15,7 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
     idQuery: "",
     type: "all",
     fabricante: "all",
-    family: "all",
+    family: "",
     vias: "all",
     color: "all",
   });
@@ -49,7 +49,7 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
       idQuery: "",
       type: "all",
       fabricante: "all",
-      family: "all",
+      family: "",
       vias: "all",
       color: "all",
     });
