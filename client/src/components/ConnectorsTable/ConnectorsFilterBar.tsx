@@ -1,69 +1,46 @@
-import React, { useState } from "react";
+import React from "react";
 import { Eraser, Filter } from "lucide-react";
+import { useFiltersToggle } from "./ConnectorsTable/useFiltersToggle";
+import { ConnectorFilters } from "./constants";
 
 interface ConnectorsFilterBarProps {
   idQuery: string;
-  onIdQueryChange: (value: string) => void;
-
   type: string;
-  onTypeChange: (value: string) => void;
   typeOptions: string[];
-
   fabricante: string;
-  onFabricanteChange: (value: string) => void;
   fabricanteOptions: string[];
-
   family: string;
-  onFamilyChange: (value: string) => void;
-
   vias: string;
-  onViasChange: (value: string) => void;
   viasOptions: string[];
-
   color: string;
-  onColorChange: (value: string) => void;
   colorOptions: string[];
-
   internalDiameter: string;
-  onInternalDiameterChange: (value: string) => void;
-
   externalDiameter: string;
-  onExternalDiameterChange: (value: string) => void;
-
   thickness: string;
-  onThicknessChange: (value: string) => void;
-
   onClearFilters: () => void;
+  setFilterField: (key: keyof ConnectorFilters, value: string) => void;
   children?: React.ReactNode;
 }
 
 export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
   idQuery,
-  onIdQueryChange,
   type,
-  onTypeChange,
   typeOptions,
   fabricante,
-  onFabricanteChange,
   fabricanteOptions,
   family,
-  onFamilyChange,
   vias,
-  onViasChange,
   viasOptions,
   color,
-  onColorChange,
   colorOptions,
   internalDiameter,
-  onInternalDiameterChange,
   externalDiameter,
-  onExternalDiameterChange,
   thickness,
-  onThicknessChange,
+  setFilterField,
   onClearFilters,
   children,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { showFilters, setShowFilters } = useFiltersToggle();
 
   const handleClear = () => {
     onClearFilters();
@@ -79,14 +56,14 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setIsOpen((prev) => !prev)}
+            onClick={() => setShowFilters((prev) => !prev)}
             className={btnClass}
-            aria-expanded={isOpen}
+            aria-expanded={showFilters}
             aria-controls="connectors-filter-panel"
           >
             <Filter className="h-4 w-4" />
             <span className="hidden sm:inline">
-              {isOpen ? "Hide filters" : "Show filters"}
+              {showFilters ? "Hide filters" : "Show filters"}
             </span>
           </button>
 
@@ -100,7 +77,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
       </div>
 
       {/* Collapsible filter panel */}
-      {isOpen && (
+      {showFilters && (
         <div
           id="connectors-filter-panel"
           className="flex flex-col gap-3 sm:gap-4 mt-2"
@@ -115,7 +92,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                 id="connector-id-search"
                 type="text"
                 value={idQuery}
-                onChange={(e) => onIdQueryChange(e.target.value)}
+                onChange={(e) => setFilterField("idQuery", e.target.value)}
                 autoComplete="off"
                 placeholder="connector Id..."
                 className={inputStyle}
@@ -129,7 +106,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
               <select
                 id="connector-vias-filter"
                 value={vias}
-                onChange={(e) => onViasChange(e.target.value)}
+                onChange={(e) => setFilterField("vias", e.target.value)}
                 className={selectStyle}
               >
                 <option value="all">All</option>
@@ -148,7 +125,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
               <select
                 id="connector-color-filter"
                 value={color}
-                onChange={(e) => onColorChange(e.target.value)}
+                onChange={(e) => setFilterField("color", e.target.value)}
                 className={selectStyle}
               >
                 <option value="all">All</option>
@@ -167,7 +144,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
               <select
                 id="connector-type-filter"
                 value={type}
-                onChange={(e) => onTypeChange(e.target.value)}
+                onChange={(e) => setFilterField("type", e.target.value)}
                 className={selectStyle}
               >
                 <option value="all">All</option>
@@ -189,7 +166,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
               <select
                 id="connector-fabricante-filter"
                 value={fabricante}
-                onChange={(e) => onFabricanteChange(e.target.value)}
+                onChange={(e) => setFilterField("fabricante", e.target.value)}
                 className={selectStyle}
               >
                 <option value="all">All</option>
@@ -209,7 +186,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                 id="connector-family-filter"
                 type="text"
                 value={family}
-                onChange={(e) => onFamilyChange(e.target.value)}
+                onChange={(e) => setFilterField("family", e.target.value)}
                 autoComplete="off"
                 placeholder="Enter family..."
                 className={inputStyle}
@@ -232,7 +209,9 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                   id="connector-intdiameter-filter"
                   type="text"
                   value={internalDiameter}
-                  onChange={(e) => onInternalDiameterChange(e.target.value)}
+                  onChange={(e) =>
+                    setFilterField("internalDiameter", e.target.value)
+                  }
                   autoComplete="off"
                   placeholder="e.g. 5.5"
                   className={inputStyle}
@@ -251,7 +230,9 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                   id="connector-extdiameter-filter"
                   type="text"
                   value={externalDiameter}
-                  onChange={(e) => onExternalDiameterChange(e.target.value)}
+                  onChange={(e) =>
+                    setFilterField("externalDiameter", e.target.value)
+                  }
                   autoComplete="off"
                   placeholder="e.g. 8"
                   className={inputStyle}
@@ -270,7 +251,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                   id="connector-thickness-filter"
                   type="text"
                   value={thickness}
-                  onChange={(e) => onThicknessChange(e.target.value)}
+                  onChange={(e) => setFilterField("thickness", e.target.value)}
                   autoComplete="off"
                   placeholder="e.g. 1.2"
                   className={inputStyle}

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 
 export const useImageToggle = () => {
+  const storageKey = "connectors_show_images";
+
   const [showImages, setShowImages] = useState<boolean>(() => {
-    const saved = localStorage.getItem("connectors_show_images");
+    const saved = localStorage.getItem(storageKey);
     if (saved === null || saved === undefined) {
       return true; // Default to true
     }
@@ -10,7 +12,7 @@ export const useImageToggle = () => {
   });
 
   useEffect(() => {
-    localStorage.setItem("connectors_show_images", String(showImages));
+    localStorage.setItem(storageKey, String(showImages));
   }, [showImages]);
 
   return { showImages, setShowImages };

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/store/hooks";
 import { usePagination } from "@/hooks/usePagination";
-import { useConnectorFilters } from "@/hooks/useConnectorFilters";
+import { useConnectorFilters } from "@/components/ConnectorsTable/useConnectorFilters";
 import { DetailHeader } from "../common/DetailHeader";
 import { ConnectorsTable } from "./ConnectorsTable";
 import { ConnectorsFilterBar } from "./ConnectorsFilterBar";
@@ -10,7 +10,7 @@ import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
 import { Connector } from "@/utils/types";
-import { useImageToggle } from "./ConnectorsTable/useImageToggle ";
+import { useImageToggle } from "./ConnectorsTable/useImageToggle";
 import { useLegacyData } from "./ConnectorsTable/useLegacyData";
 import LegacyToggleBtn from "./ConnectorsTable/LegacyToggleBtn";
 import ImageToggleBtn from "./ConnectorsTable/ImageToggleBtn";
@@ -34,15 +34,7 @@ export const ConnectorsListView: React.FC = () => {
   // Custom hook for filters
   const {
     filters,
-    setIdQuery,
-    setType,
-    setFabricante,
-    setFamily,
-    setVias,
-    setColor,
-    setInternalDiameter,
-    setExternalDiameter,
-    setThickness,
+    setFilterField,
     filteredConnectors,
     clearFilters,
     typeOptions,
@@ -85,28 +77,20 @@ export const ConnectorsListView: React.FC = () => {
       <div id="connectors-content" className="table-view-content">
         <div className="table-view-inner-content">
           <ConnectorsFilterBar
+            setFilterField={setFilterField}
             idQuery={filters.idQuery}
-            onIdQueryChange={setIdQuery}
             type={filters.type}
-            onTypeChange={setType}
             typeOptions={typeOptions}
             fabricante={filters.fabricante}
-            onFabricanteChange={setFabricante}
             fabricanteOptions={fabricanteOptions}
             family={filters.family}
-            onFamilyChange={setFamily}
             vias={filters.vias}
-            onViasChange={setVias}
             viasOptions={viasOptions}
             color={filters.color}
-            onColorChange={setColor}
             colorOptions={colorOptions}
             internalDiameter={filters.internalDiameter}
-            onInternalDiameterChange={setInternalDiameter}
             externalDiameter={filters.externalDiameter}
-            onExternalDiameterChange={setExternalDiameter}
             thickness={filters.thickness}
-            onThicknessChange={setThickness}
             onClearFilters={clearFilters}
           >
             {/* Toggle Buttons */}

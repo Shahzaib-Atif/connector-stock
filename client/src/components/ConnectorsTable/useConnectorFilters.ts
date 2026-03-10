@@ -1,79 +1,42 @@
 import { Connector } from "@/utils/types";
-import { useState, useMemo, useCallback } from "react";
-
-interface ConnectorFilters {
-  idQuery: string;
-  type: string;
-  fabricante: string;
-  family: string;
-  vias: string;
-  color: string;
-  internalDiameter: string;
-  externalDiameter: string;
-  thickness: string;
-}
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { ConnectorFilters, defaultFilters, STORAGE_KEY } from "./constants";
 
 export function useConnectorFilters(connectors: Record<string, Connector>) {
-  const [filters, setFilters] = useState<ConnectorFilters>({
-    idQuery: "",
-    type: "all",
-    fabricante: "all",
-    family: "",
-    vias: "all",
-    color: "all",
-    internalDiameter: "",
-    externalDiameter: "",
-    thickness: "",
+  const [filters, setFilters] = useState<ConnectorFilters>(() => {
+    if (typeof window === "undefined") {
+      return defaultFilters;
+    }
+
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) {
+        return defaultFilters;
+      }
+      const parsed = JSON.parse(stored) as Partial<ConnectorFilters>;
+      return { ...defaultFilters, ...parsed };
+    } catch {
+      return defaultFilters;
+    }
   });
 
-  const setIdQuery = useCallback((query: string) => {
-    setFilters((prev) => ({ ...prev, idQuery: query }));
-  }, []);
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(filters));
+    } catch {
+      // ignore write errors (e.g., storage full or unavailable)
+    }
+  }, [filters]);
 
-  const setType = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, type: value }));
-  }, []);
-
-  const setFabricante = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, fabricante: value }));
-  }, []);
-
-  const setFamily = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, family: value }));
-  }, []);
-
-  const setVias = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, vias: value }));
-  }, []);
-
-  const setColor = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, color: value }));
-  }, []);
-
-  const setInternalDiameter = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, internalDiameter: value }));
-  }, []);
-
-  const setExternalDiameter = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, externalDiameter: value }));
-  }, []);
-
-  const setThickness = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, thickness: value }));
-  }, []);
+  const setFilterField = useCallback(
+    (key: keyof ConnectorFilters, value: string) => {
+      setFilters((prev) => ({ ...prev, [key]: value }));
+    },
+    [],
+  );
 
   const clearFilters = useCallback(() => {
-    setFilters({
-      idQuery: "",
-      type: "all",
-      fabricante: "all",
-      family: "",
-      vias: "all",
-      color: "all",
-      internalDiameter: "",
-      externalDiameter: "",
-      thickness: "",
-    });
+    setFilters(defaultFilters);
   }, []);
 
   // Convert Record to array with id
@@ -180,15 +143,7 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
 
   return {
     filters,
-    setIdQuery,
-    setType,
-    setFabricante,
-    setFamily,
-    setVias,
-    setColor,
-    setInternalDiameter,
-    setExternalDiameter,
-    setThickness,
+    setFilterField,
     filteredConnectors,
     clearFilters,
     typeOptions,
