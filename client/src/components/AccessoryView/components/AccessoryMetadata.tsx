@@ -13,6 +13,9 @@ function AccessoryMetadata({ accessory }: Props) {
       <CardInfoDiv label="Type" value={accessory.AccessoryType} />
       <CardInfoDiv label="Connector" value={accessory.ConnName} />
       <CardInfoDiv label="Ref Client" value={accessory.RefClient || ""} />
+      {accessory.RefDV && (
+        <CardInfoDiv label="DV Reference" value={accessory.RefDV} />
+      )}
       {accessory.CapotAngle && (
         <CardInfoDiv label="Capot Angle" value={accessory.CapotAngle} />
       )}
