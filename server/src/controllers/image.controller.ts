@@ -9,15 +9,17 @@ export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
   @ApiOperation({ summary: 'Get connector image' })
-  @Get('connector/:connectorId')
+  @Get('connector/:connectorId/:type')
   getConnectorImage(
     @Param('connectorId') connectorId: string,
+    @Param('type') type: string,
     @Res() res: Response,
   ) {
     try {
       const { contentType, stream } = this.imageService.getImageStream(
         connectorId,
         'connector',
+        type,
       );
 
       res.setHeader('Content-Type', contentType);
@@ -35,6 +37,7 @@ export class ImageController {
       const { contentType, stream } = this.imageService.getImageStream(
         accessoryId,
         'accessory',
+        '',
       );
 
       res.setHeader('Content-Type', contentType);

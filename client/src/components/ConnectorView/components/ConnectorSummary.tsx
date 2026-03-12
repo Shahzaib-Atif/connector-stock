@@ -16,7 +16,10 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
   connector,
 }) => {
   const [error, setError] = useState(false);
-  const imageUrl = API.connectorImages(connector.CODIVMAC);
+  const imageUrl = API.connectorImages(
+    connector.CODIVMAC,
+    connector.ConnType ?? "",
+  );
   const { PosId, colorName, Qty, ConnType, details, dimensions } = connector;
   const { Fabricante, Refabricante, Family, OBS } = details;
 

@@ -22,7 +22,10 @@ const TableRow: React.FC<TableRowProps> = ({
     return url;
   };
 
-  const imageUrl = API.connectorImages(connector.CODIVMAC);
+  const imageUrl = API.connectorImages(
+    connector.CODIVMAC,
+    connector.ConnType ?? "",
+  );
 
   const isOlhal =
     connector.ConnType?.toLowerCase().trim() === "olhal" ||

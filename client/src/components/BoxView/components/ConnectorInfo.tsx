@@ -9,7 +9,7 @@ interface Props {
 
 function ConnectorInfo({ liveStock, conn }: Props) {
   const [imageError, setImageError] = useState(false);
-  const imageUrl = API.connectorImages(conn.CODIVMAC);
+  const imageUrl = API.connectorImages(conn.CODIVMAC, conn.ConnType ?? "");
 
   return (
     <>

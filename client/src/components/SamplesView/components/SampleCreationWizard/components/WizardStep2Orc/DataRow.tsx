@@ -48,7 +48,7 @@ function DataRow({
         <div className="w-16 h-16 rounded-lg bg-slate-800 border border-slate-700 overflow-hidden flex items-center justify-center">
           {!hasError ? (
             <img
-              src={API.connectorImages(connectorId)}
+              src={API.connectorImages(connectorId, "TOBEIMPLEMENTED")}
               alt={connectorId}
               className="w-full h-full object-contain"
               onError={() => handleImgError(connectorId)}

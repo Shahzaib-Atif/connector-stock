@@ -70,7 +70,7 @@ function WizardStep3Enc({
           <tbody>
             {regAmostrasData.map((row, idx) => {
               const connectorId = getConnectorId(
-                row.CDU_ModuloRefConetorDV || row.Amostra || ""
+                row.CDU_ModuloRefConetorDV || row.Amostra || "",
               );
               const hasError = imgErrors[connectorId];
 
@@ -91,7 +91,10 @@ function WizardStep3Enc({
                   <td className="px-3 py-2">
                     <input
                       type="radio"
-                      checked={selectedRegRow?.ID === row.ID && selectedRegRow?.Amostra === row.Amostra}
+                      checked={
+                        selectedRegRow?.ID === row.ID &&
+                        selectedRegRow?.Amostra === row.Amostra
+                      }
                       onChange={() => selectRegRow(row)}
                       className="w-4 h-4"
                     />
@@ -100,7 +103,10 @@ function WizardStep3Enc({
                     <div className="w-16 h-16 rounded-lg bg-slate-800 border border-slate-700 overflow-hidden flex items-center justify-center">
                       {!hasError ? (
                         <img
-                          src={API.connectorImages(connectorId)}
+                          src={API.connectorImages(
+                            connectorId,
+                            "TOBEIMPLEMENTED",
+                          )}
                           alt={connectorId}
                           className="w-full h-full object-contain"
                           onError={() => handleImgError(connectorId)}

@@ -18,12 +18,16 @@ export class ImageService {
     this.accessoriesExtrasPath = this.accessoriesBasePath + '\\_Extras';
   }
 
-  getImageStream(id: string, _type: 'connector' | 'accessory') {
+  getImageStream(
+    id: string,
+    _type: 'connector' | 'accessory',
+    _subType: string,
+  ) {
     const possibleExtensions = ['.jpg', '.jpeg', '.png'];
     let fullPath: string | null = null;
     const _basePath =
       _type === 'connector'
-        ? this.connectorsBasePath
+        ? path.join(this.connectorsBasePath, _subType)
         : this.accessoriesBasePath;
 
     for (const ext of possibleExtensions) {
