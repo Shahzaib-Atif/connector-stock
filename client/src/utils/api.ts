@@ -6,7 +6,8 @@ const connectors = {
   connectors: `${API_BASE_URL}/connectors`,
   connectorImages: (id: string, type: string) =>
     `${API_BASE_URL}/images/connector/${id}/${type}`,
-  connectorRelatedImages: (id: string) => `${API_BASE_URL}/images/extras/${id}`,
+  connectorRelatedImages: (id: string, type: string) =>
+    `${API_BASE_URL}/images/extras/${id}/${type}`,
   extrasImage: (filename: string) =>
     `${API_BASE_URL}/images/extras/file/${filename}`,
 };

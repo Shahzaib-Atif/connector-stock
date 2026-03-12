@@ -7,10 +7,12 @@ import LightBoxOverlay from "@/components/common/LightBoxOverlay";
 
 interface RelatedImagesProps {
   connectorId: string;
+  connType: string;
 }
 
 export const RelatedImages: React.FC<RelatedImagesProps> = ({
   connectorId,
+  connType,
 }) => {
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +22,7 @@ export const RelatedImages: React.FC<RelatedImagesProps> = ({
     const loadImages = async () => {
       try {
         setLoading(true);
-        const data = await fetchRelatedImages(connectorId);
+        const data = await fetchRelatedImages(connectorId, connType);
         setImages(data);
       } catch (err) {
         console.error("Failed to fetch related images:", err);

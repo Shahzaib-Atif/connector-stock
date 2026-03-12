@@ -48,8 +48,11 @@ export class ImageService {
     return { contentType, stream };
   }
 
-  getRelatedImagesForConnectors(connectorId: string): string[] {
-    const extrasPath = this.connectorsExtrasPath;
+  getRelatedImagesForConnectors(
+    connectorId: string,
+    _subType: string,
+  ): string[] {
+    const extrasPath = path.join(this.connectorsExtrasPath, _subType);
     if (!fs.existsSync(extrasPath)) {
       console.error('Path for extra images not found!');
       return [];

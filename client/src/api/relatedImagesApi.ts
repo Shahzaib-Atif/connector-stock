@@ -1,8 +1,13 @@
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
 
-export const fetchRelatedImages = async (connectorId: string): Promise<string[]> => {
-  const response = await fetchWithAuth(API.connectorRelatedImages(connectorId));
+export const fetchRelatedImages = async (
+  connectorId: string,
+  type: string,
+): Promise<string[]> => {
+  const response = await fetchWithAuth(
+    API.connectorRelatedImages(connectorId, type),
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch related images");
   }

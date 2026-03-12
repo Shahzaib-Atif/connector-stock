@@ -49,9 +49,12 @@ export class ImageController {
   }
 
   @ApiOperation({ summary: 'Get related images filenames' })
-  @Get('extras/:connectorId')
-  getRelatedImages(@Param('connectorId') connectorId: string) {
-    return this.imageService.getRelatedImagesForConnectors(connectorId);
+  @Get('extras/:connectorId/:type')
+  getRelatedImages(
+    @Param('connectorId') @Param('type') type: string,
+    connectorId: string,
+  ) {
+    return this.imageService.getRelatedImagesForConnectors(connectorId, type);
   }
 
   @ApiOperation({ summary: 'Get individual extras image' })

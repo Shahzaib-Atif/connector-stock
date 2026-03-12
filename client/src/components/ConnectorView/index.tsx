@@ -106,7 +106,10 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
         )}
 
         {/* Related Images */}
-        <RelatedImages connectorId={connector.CODIVMAC} />
+        <RelatedImages
+          connectorId={connector.CODIVMAC}
+          connType={connector.ConnType ?? ""}
+        />
 
         <BoxShortcut
           posId={connector.PosId}
