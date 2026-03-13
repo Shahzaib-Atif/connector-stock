@@ -41,7 +41,7 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
     <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
       <div className="flex items-start justify-between">
         <div className="flex-1 space-y-3">
-          <div className="flex items-center gap-2 text-blue-400 font-semibold">
+          <div className="flex-row text-blue-400 font-semibold">
             <Package size={18} />
             <span>Related Connector</span>
             {!Qty && (

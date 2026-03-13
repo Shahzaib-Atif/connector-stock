@@ -85,7 +85,7 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
             {isEditAllowed && (
               <button
                 onClick={() => setIsEditing(true)}
-                className="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 bg-slate-800/80 backdrop-blur-md border border-slate-700 hover:border-blue-500/50 hover:bg-slate-700 text-slate-300 hover:text-blue-400 rounded-xl transition-all shadow-lg group"
+                className="absolute top-4 right-4 flex-row px-3 py-2 bg-slate-800/80 backdrop-blur-md border border-slate-700 hover:border-blue-500/50 hover:bg-slate-700 text-slate-300 hover:text-blue-400 rounded-xl transition-all shadow-lg group"
               >
                 <Edit2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
                 <span className="text-xs font-bold uppercase tracking-wider">

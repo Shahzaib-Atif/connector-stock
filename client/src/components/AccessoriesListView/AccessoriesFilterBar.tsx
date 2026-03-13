@@ -3,7 +3,12 @@ import { Eraser, Filter } from "lucide-react";
 import { AccessoryFilters, defaultFilters } from "./constants";
 import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersToggle";
 import { ActiveFiltersIndicator } from "../common/ActiveFiltersIndicator";
-import { filterStyles, getActiveFilterCount } from "@/utils/filterUtils";
+import {
+  FILTER_BAR_CONTAINER,
+  FILTER_BAR_TOP_ROW,
+  filterStyles,
+  getActiveFilterCount,
+} from "@/utils/filterUtils";
 
 interface AccessoriesFilterBarProps {
   filters: AccessoryFilters;
@@ -26,12 +31,10 @@ export const AccessoriesFilterBar: React.FC<AccessoriesFilterBarProps> = ({
   const activeFiltersCount = getActiveFilterCount(filters, defaultFilters);
 
   return (
-    <div
-      id="accessories-filter-bar"
-      className="text-sm sm:text-base flex flex-col gap-3 sm:gap-3 p-3 sm:p-4 bg-slate-800/50 rounded-xl border border-slate-700"
-    >
-      <div className="flex items-center gap-2 justify-between">
-        <div className="flex items-center gap-2">
+    <div id="accessories-filter-bar" className={FILTER_BAR_CONTAINER}>
+      {/* Filter Bar Top Row */}
+      <div className={FILTER_BAR_TOP_ROW}>
+        <div className="flex-row">
           <button
             type="button"
             onClick={() => setShowFilters((prev) => !prev)}
@@ -57,7 +60,7 @@ export const AccessoriesFilterBar: React.FC<AccessoriesFilterBarProps> = ({
           <ActiveFiltersIndicator count={activeFiltersCount} />
         </div>
 
-        {children && <div className="flex items-center gap-2">{children}</div>}
+        {children && <div className="flex-row">{children}</div>}
       </div>
 
       {showFilters && (

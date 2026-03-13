@@ -15,7 +15,7 @@ const LabelSizeSelector: React.FC<LabelSizeSelectorProps> = ({
       {/* Normal Label Button */}
       <button
         onClick={() => setUseSmallLabels(false)}
-        className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all flex items-center gap-2 ${
+        className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all flex-row ${
           !useSmallLabels
             ? "bg-blue-600 text-white shadow-lg"
             : "text-slate-400 hover:text-slate-200"
@@ -30,7 +30,7 @@ const LabelSizeSelector: React.FC<LabelSizeSelectorProps> = ({
       {/* Small Label Button */}
       <button
         onClick={() => setUseSmallLabels(true)}
-        className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all flex items-center gap-2 ${
+        className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all flex-row ${
           useSmallLabels
             ? "bg-blue-600 text-white shadow-lg"
             : "text-slate-400 hover:text-slate-200"

@@ -54,7 +54,7 @@ export const ChangePasswordModal: React.FC<Props> = ({ onClose }) => {
     >
       <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
-          <div className="flex items-center gap-2">
+          <div className="flex-row">
             <Lock className="w-5 h-5 text-blue-400" />
             <h3 className="text-lg font-semibold text-white">
               Update Password

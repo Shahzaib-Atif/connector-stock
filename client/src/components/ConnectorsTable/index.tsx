@@ -98,7 +98,7 @@ export const ConnectorsListView: React.FC = () => {
             activeFiltersCount={activeFiltersCount}
           >
             {/* Toggle Buttons */}
-            <div className="flex items-center gap-2">
+            <div className="flex-row">
               <ImageToggleBtn
                 showImages={showImages}
                 isLegacyMode={isLegacyMode}

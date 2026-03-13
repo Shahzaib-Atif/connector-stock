@@ -3,7 +3,11 @@ import { Eraser, Filter } from "lucide-react";
 import { useFiltersToggle } from "./ConnectorsTable/useFiltersToggle";
 import { ConnectorFilters } from "./constants";
 import { ActiveFiltersIndicator } from "../common/ActiveFiltersIndicator";
-import { filterStyles } from "@/utils/filterUtils";
+import {
+  FILTER_BAR_CONTAINER,
+  FILTER_BAR_TOP_ROW,
+  filterStyles,
+} from "@/utils/filterUtils";
 
 interface ConnectorsFilterBarProps {
   idQuery: string;
@@ -51,13 +55,10 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
   };
 
   return (
-    <div
-      id="connectors-filter-bar"
-      className="text-sm sm:text-base flex flex-col gap-3 sm:gap-3 p-3 sm:p-4 bg-slate-800/50 rounded-xl border border-slate-700"
-    >
+    <div id="connectors-filter-bar" className={FILTER_BAR_CONTAINER}>
       {/* Top row: filter toggle + clear button + optional actions */}
-      <div className="flex items-center gap-2 justify-between">
-        <div className="flex items-center gap-2">
+      <div className={FILTER_BAR_TOP_ROW}>
+        <div className="flex-row">
           {/* Filter Toggle Button */}
           <button
             type="button"
@@ -85,7 +86,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
           <ActiveFiltersIndicator count={activeFiltersCount} />
         </div>
 
-        {children && <div className="flex items-center gap-2">{children}</div>}
+        {children && <div className="flex-row">{children}</div>}
       </div>
 
       {/* Collapsible filter panel */}

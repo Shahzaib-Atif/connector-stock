@@ -7,7 +7,7 @@ function OpenFolderBtn({ N_Envio }: Props) {
   // const { openFolder, isOpeningFolder } = useOpenFolder();
 
   return (
-    <div className="flex items-center gap-2 justify-between">
+    <div className="flex-row justify-between">
       <span>{N_Envio || "-"}</span>
       {/* {N_Envio && showFolderBtn && (
         <button

@@ -74,7 +74,7 @@ function StockDiv({ currentStock, connector }: Props) {
 }
 
 const divStyle1 =
-  "flex items-center gap-2.5 px-3.5 py-2 rounded-xl border transition-all duration-300";
+  "flex-row px-3.5 py-2 rounded-xl border transition-all duration-300";
 
 const divStyle2 = "bg-slate-800/40 border-slate-700/50 opacity-50";
 

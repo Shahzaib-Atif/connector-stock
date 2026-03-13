@@ -74,7 +74,10 @@ export default {
         },    
         ".input-style-disabled": {
           "@apply bg-slate-700 appearance-none": {},
-        },     
+        },   
+        ".flex-row": {
+          "@apply flex items-center gap-2": {},
+        },       
       });
     },
   ],

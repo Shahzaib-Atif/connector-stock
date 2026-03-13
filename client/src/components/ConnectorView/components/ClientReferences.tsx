@@ -8,7 +8,7 @@ interface Props {
 function ClientReferences({ clientReferences }: Props) {
   return (
     <div className="mt-4 pt-4 border-t border-slate-700/50">
-      <div className="flex items-center gap-2 mb-3 text-slate-400">
+      <div className="flex-row mb-3 text-slate-400">
         <Users className="w-4 h-4" />
         <span className="text-xs font-bold uppercase tracking-wider">
           RefMARCA

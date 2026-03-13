@@ -42,7 +42,7 @@ function CreateUserForm({ onClose }: Props) {
           password,
           role,
           dept: dept || undefined,
-        })
+        }),
       ).unwrap();
       setStatus("success");
       setTimeout(() => {
@@ -122,7 +122,7 @@ function CreateUserForm({ onClose }: Props) {
           <div className="space-y-2">
             <label
               htmlFor="dept"
-              className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 flex items-center gap-2"
+              className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 flex-row"
             >
               <Building2 className="w-3 h-3" />
               Department

@@ -20,7 +20,7 @@ export const Pagination: React.FC<
       className="flex flex-col sm:flex-row items-center justify-between gap-4 p-3 md:p-4 bg-slate-800/50 rounded-xl border border-slate-700"
     >
       {/* Items per page selector */}
-      <div className="flex items-center gap-2 text-sm text-slate-300">
+      <div className="flex-row text-sm text-slate-300">
         <span>Show</span>
         <select
           id="itemsPerPage"
@@ -42,7 +42,7 @@ export const Pagination: React.FC<
       </div>
 
       {/* Page navigation */}
-      <div className="flex items-center gap-2">
+      <div className="flex-row">
         <button
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}

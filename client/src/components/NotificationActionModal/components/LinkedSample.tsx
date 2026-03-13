@@ -23,7 +23,7 @@ export const LinkedSample: React.FC<LinkedSampleProps> = ({ sample }) => {
     <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-green-400 mb-2 flex items-center gap-2">
+          <p className="text-green-400 mb-2 flex-row">
             <CheckCircle2 size={18} />
             Sample Registry Found
           </p>

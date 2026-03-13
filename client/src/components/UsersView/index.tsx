@@ -54,7 +54,7 @@ export const UsersView: React.FC = () => {
             <h2 className="text-xl font-bold text-white">System Users</h2>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-blue-600/30"
+              className="flex-row px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-blue-600/30"
             >
               <UserPlus className="w-4 h-4" />
               Create New User

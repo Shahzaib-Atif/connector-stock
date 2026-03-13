@@ -15,7 +15,7 @@ function SelectPrinterBtn({
   return (
     <button
       onClick={() => setSelectedPrinter(myPrinter)}
-      className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all flex items-center gap-2 ${
+      className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all flex-row ${
         selectedPrinter === myPrinter
           ? "bg-blue-600 text-white shadow-lg"
           : "text-slate-400 hover:text-slate-200"

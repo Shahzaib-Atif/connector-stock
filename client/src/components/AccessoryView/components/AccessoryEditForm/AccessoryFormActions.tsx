@@ -20,7 +20,7 @@ const AccessoryFormActions: React.FC<Props> = ({ loading, onCancel }) => {
       <button
         type="submit"
         disabled={loading}
-        className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/50 text-white rounded-xl transition-all font-semibold flex items-center gap-2"
+        className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/50 text-white rounded-xl transition-all font-semibold flex-row"
       >
         {loading && <Loader2 className="w-4 h-4 animate-spin" />}
         {loading ? "Saving..." : "Save Changes"}

@@ -38,7 +38,7 @@ export const ConnectorEditForm: React.FC<Props> = ({
       className="bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-5 animate-in fade-in slide-in-from-top-4 duration-300"
     >
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-lg font-bold text-white flex items-center gap-2">
+        <h3 className="text-lg font-bold text-white flex-row">
           Edit Properties
         </h3>
         <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">

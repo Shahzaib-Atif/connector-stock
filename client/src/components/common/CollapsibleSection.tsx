@@ -24,7 +24,7 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         className="w-full px-4 py-3 flex items-center justify-between bg-slate-800 hover:bg-slate-700/80 transition-colors"
       >
-        <div className="flex items-center gap-2 text-slate-300">
+        <div className="flex-row text-slate-300">
           {icon}
           <span className="font-bold uppercase text-sm tracking-wider">
             {title}

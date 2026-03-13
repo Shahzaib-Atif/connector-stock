@@ -14,16 +14,16 @@ function HeaderBar() {
     <>
       <a
         href={ROUTES.HOME}
-        className="absolute top-3 left-3 md:left-6 p-2 text-slate-400 hover:text-white flex items-center gap-2"
+        className="absolute top-3 left-3 md:left-6 p-2 text-slate-400 hover:text-white flex-row"
       >
         <LogoSvg />
         <span className="text-base md:text-xl font-bold">divmac</span>
       </a>
 
-      <div className="absolute top-3 right-3 md:right-6 flex items-center gap-2">
+      <div className="absolute top-3 right-3 md:right-6 flex-row">
         <button
           onClick={() => navigate(ROUTES.TRANSACTIONS)}
-          className="p-2 text-slate-400 hover:text-white flex items-center gap-2 transition-colors"
+          className="p-2 text-slate-400 hover:text-white flex-row transition-colors"
           title="View Transactions"
         >
           <Receipt className="w-5 h-5" />
@@ -31,7 +31,7 @@ function HeaderBar() {
 
         <button
           onClick={() => dispatch(logout())}
-          className="p-2 text-slate-400 hover:text-white flex items-center gap-2"
+          className="p-2 text-slate-400 hover:text-white flex-row"
         >
           <span className="text-sm font-mono">{user}</span>
           <LogOut className="w-5 h-5" />
