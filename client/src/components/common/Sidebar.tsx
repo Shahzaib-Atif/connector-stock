@@ -51,7 +51,7 @@ export function Sidebar({
 
   const getButtonClass = (path: string) => {
     const isActive = location.pathname === path;
-    return `sidebar-btn ${isActive ? "text-blue-400 hover:text-blue-300" : ""}`;
+    return `sidebar-btn ${isActive ? "link-btn" : ""}`;
   };
 
   // Close menu when clicking outside

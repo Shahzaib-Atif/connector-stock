@@ -38,7 +38,7 @@ function RefreshButton() {
       id="refresh-btn"
       title="Refresh data"
       onClick={handleRefresh}
-      className={`p-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg flex-shrink-0 ${
+      className={`p-2 link-icon rounded-lg flex-shrink-0 ${
         isRefreshing ? "text-blue-400" : ""
       }`}
       aria-label="Refresh data"

@@ -11,9 +11,7 @@ function LegacyToggleBtn({ isLegacyMode, setIsLegacyMode }: Props) {
     <button
       onClick={() => setIsLegacyMode(!isLegacyMode)}
       className={`flex-row px-4 py-2 rounded-lg border transition-all duration-200 text-sm font-medium h-[42px] sm:h-auto ${
-        isLegacyMode
-          ? "bg-amber-500/10 border-amber-500/50 text-amber-400 hover:bg-amber-500/20"
-          : "bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-300"
+        isLegacyMode ? "toggle-btn-on-amber" : "toggle-btn-off"
       }`}
       title={isLegacyMode ? "Switch to Live Data" : "Switch to Legacy Data"}
     >

@@ -51,7 +51,7 @@ const TableRow: React.FC<TableRowProps> = ({
         {Amostra ? (
           <Link
             to={`/connectors/${getConnectorId(Amostra)}`}
-            className="text-blue-400 hover:text-blue-300 hover:underline transition-colors"
+            className="link-btn"
           >
             {Amostra}
           </Link>

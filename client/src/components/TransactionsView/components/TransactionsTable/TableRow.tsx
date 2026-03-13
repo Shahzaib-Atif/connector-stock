@@ -23,7 +23,7 @@ function TableRow({ tx, index }: Props) {
           <span className="text-slate-300 font-mono">{tx.itemId}</span>
           <Link
             to={getLink()}
-            className="text-slate-400 hover:text-blue-400 transition-colors p-1"
+            className="link-icon p-1"
             title={`Open ${tx.itemId} in new tab`}
           >
             <LinkIcon className="w-4 h-4" />

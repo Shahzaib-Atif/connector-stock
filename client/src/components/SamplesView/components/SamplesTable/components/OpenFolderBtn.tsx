@@ -13,7 +13,7 @@ function OpenFolderBtn({ N_Envio }: Props) {
         <button
           onClick={() => openFolder(N_Envio)}
           disabled={isOpeningFolder}
-          className={`text-slate-400 hover:text-blue-400 transition-colors ${
+          className={`link-icon ${
             isOpeningFolder ? "opacity-50 cursor-wait" : ""
           }`}
           title="Open Folder"

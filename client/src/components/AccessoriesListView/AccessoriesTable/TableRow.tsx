@@ -26,17 +26,14 @@ const TableRow: React.FC<TableRowProps> = ({ accessory }) => {
   return (
     <tr className={"table-row table-row-bg"}>
       <td className="table-data font-mono break-all">
-        <Link
-          to={getLink("accessory", accessory.id)}
-          className="text-blue-400 hover:text-blue-300 hover:underline transition-colors"
-        >
+        <Link to={getLink("accessory", accessory.id)} className="link-btn">
           {accessory.id || "-"}
         </Link>
       </td>
       <td className="table-data">
         <Link
           to={getLink("connector", accessory.ConnName)}
-          className="text-blue-400 hover:text-blue-300 hover:underline transition-colors"
+          className="link-btn"
         >
           {accessory.ConnName || "-"}
         </Link>

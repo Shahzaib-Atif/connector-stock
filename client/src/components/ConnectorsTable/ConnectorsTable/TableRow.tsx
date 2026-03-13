@@ -65,7 +65,7 @@ const TableRow: React.FC<TableRowProps> = ({
           {!isLegacyMode && (
             <Link
               to={getLink(connector.CODIVMAC, "connector")}
-              className="text-slate-400 hover:text-blue-400 transition-colors p-1"
+              className="link-icon p-1"
             >
               <LinkIcon className="w-4 h-4" />
             </Link>
@@ -81,7 +81,7 @@ const TableRow: React.FC<TableRowProps> = ({
           {connector.PosId && (
             <Link
               to={getLink(connector.PosId, "box")}
-              className="text-slate-400 hover:text-blue-400 transition-colors p-1"
+              className="link-icon p-1"
             >
               <LinkIcon className="w-4 h-4" />
             </Link>

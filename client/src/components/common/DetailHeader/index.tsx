@@ -78,7 +78,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
                 id="qr-code-btn"
                 title="Show QR code"
                 onClick={handleQRClick}
-                className="p-2 text-slate-400 hover:text-blue-400 transition-colors rounded-lg flex-shrink-0"
+                className="p-2 link-icon rounded-lg flex-shrink-0"
                 aria-label="Show QR code"
               >
                 <QrCode className="w-6 h-6" />

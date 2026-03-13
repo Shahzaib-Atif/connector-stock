@@ -78,6 +78,21 @@ export default {
         ".flex-row": {
           "@apply flex items-center gap-2": {},
         },       
+        ".toggle-btn-on-blue": {
+          "@apply bg-blue-500/10 border-blue-500/50 text-blue-400 hover:bg-blue-500/20": {},
+        },  
+        ".toggle-btn-on-amber": {
+          "@apply bg-amber-500/10 border-amber-500/50 text-amber-400 hover:bg-amber-500/20": {},
+        }, 
+        ".toggle-btn-off": {
+          "@apply bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-300 hover:bg-slate-700": {},
+        },  
+        ".link-btn": {
+          "@apply text-blue-400 hover:text-blue-300 hover:underline transition-colors": {},
+        },
+        ".link-icon": {
+          "@apply text-slate-400 hover:text-blue-400 transition-colors": {},
+        },          
       });
     },
   ],
