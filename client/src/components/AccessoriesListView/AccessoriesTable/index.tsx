@@ -5,15 +5,17 @@ import { Accessory } from "@/utils/types";
 
 interface AccessoriesTableProps {
   accessories: Accessory[];
+  showImages?: boolean;
 }
 
 export const AccessoriesTable: React.FC<AccessoriesTableProps> = ({
   accessories,
+  showImages = false,
 }) => {
   return (
     <div id="accessories-table" className="table-container-inner">
       <table className="w-full table-fixed">
-        <TableHeader />
+        <TableHeader showImages={showImages} />
         <tbody>
           {accessories.length === 0 ? (
             <tr>
@@ -27,6 +29,7 @@ export const AccessoriesTable: React.FC<AccessoriesTableProps> = ({
                 key={accessory.id}
                 accessory={accessory}
                 index={index}
+                showImages={showImages}
               />
             ))
           )}

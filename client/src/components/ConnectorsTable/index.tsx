@@ -10,11 +10,11 @@ import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
 import { Connector } from "@/utils/types";
-import { useImageToggle } from "./ConnectorsTable/useImageToggle";
+import { useImageToggle } from "@/hooks/useImageToggle";
 import { useLegacyData } from "./ConnectorsTable/useLegacyData";
 import { getActiveFilterCount } from "./constants";
 import LegacyToggleBtn from "./ConnectorsTable/LegacyToggleBtn";
-import ImageToggleBtn from "./ConnectorsTable/ImageToggleBtn";
+import ImageToggleBtn from "../common/ImageToggleBtn";
 
 export const ConnectorsListView: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ export const ConnectorsListView: React.FC = () => {
   );
 
   // Photo visibility state with persistence
-  const { showImages, setShowImages } = useImageToggle();
+  const { showImages, setShowImages } = useImageToggle("connectors_show_images");
 
   // Legacy data handling
   const { isLegacyMode, setIsLegacyMode, legacyData, legacyLoading } =
