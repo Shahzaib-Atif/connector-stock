@@ -64,10 +64,7 @@ export const AccessoriesFilterBar: React.FC<AccessoriesFilterBarProps> = ({
       </div>
 
       {showFilters && (
-        <div
-          id="accessories-filter-panel"
-          className="flex flex-col gap-3 sm:gap-4 mt-2"
-        >
+        <div id="accessories-filter-panel" className="filter-panel">
           {" "}
           <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
             {/* ID Search */}

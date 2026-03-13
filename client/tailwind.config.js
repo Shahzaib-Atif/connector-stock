@@ -92,7 +92,10 @@ export default {
         },
         ".link-icon": {
           "@apply text-slate-400 hover:text-blue-400 transition-colors": {},
-        },          
+        },         
+        ".filter-panel": {
+          "@apply flex flex-col gap-3 sm:gap-4 mt-2": {},
+        },    
       });
     },
   ],

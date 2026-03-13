@@ -91,10 +91,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
 
       {/* Collapsible filter panel */}
       {showFilters && (
-        <div
-          id="connectors-filter-panel"
-          className="flex flex-col gap-3 sm:gap-4 mt-2"
-        >
+        <div id="connectors-filter-panel" className="filter-panel">
           <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
             {/* ID Search */}
             <div className={filterStyles.container}>
