@@ -4,14 +4,14 @@ interface Props {
   images: string[];
   selectedImage: string;
   setSelectedImage: (value: React.SetStateAction<string | null>) => void;
-  getSrc: (filename: string) => string;
+  src: string;
 }
 
 function LightBoxOverlay({
   images,
   selectedImage,
   setSelectedImage,
-  getSrc,
+  src,
 }: Props) {
   const currentIndex = images.findIndex((img) => img === selectedImage);
   const hasPrev = currentIndex > 0;
@@ -43,8 +43,6 @@ function LightBoxOverlay({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [hasPrev, hasNext, currentIndex, images, setSelectedImage]);
-
-  const src = getSrc(selectedImage);
 
   return (
     <div

@@ -52,7 +52,8 @@ export class ImageService {
     connectorId: string,
     _subType: string,
   ): string[] {
-    const extrasPath = path.join(this.connectorsExtrasPath, _subType);
+    const extrasPath = path.join(this.connectorsBasePath, _subType, '_Extras');
+
     if (!fs.existsSync(extrasPath)) {
       console.error('Path for extra images not found!');
       return [];
@@ -70,8 +71,13 @@ export class ImageService {
     }
   }
 
-  getExtrasImageStreamForConnectors(filename: string) {
-    const fullPath = path.join(this.connectorsExtrasPath, filename);
+  getExtrasImageStreamForConnectors(filename: string, _subType: string) {
+    const fullPath = path.join(
+      this.connectorsBasePath,
+      _subType,
+      '_Extras',
+      filename,
+    );
 
     if (!fs.existsSync(fullPath))
       throw new Error(`Image not found: ${filename}`);

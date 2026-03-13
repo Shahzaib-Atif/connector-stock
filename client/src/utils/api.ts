@@ -8,8 +8,8 @@ const connectors = {
     `${API_BASE_URL}/images/connector/${id}/${type}`,
   connectorRelatedImages: (id: string, type: string) =>
     `${API_BASE_URL}/images/extras/${id}/${type}`,
-  extrasImage: (filename: string) =>
-    `${API_BASE_URL}/images/extras/file/${filename}`,
+  extrasImage: (id: string, type: string) =>
+    `${API_BASE_URL}/images/extras/file/${id}/${type}`,
 };
 
 const accessories = {

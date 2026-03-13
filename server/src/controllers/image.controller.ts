@@ -51,18 +51,24 @@ export class ImageController {
   @ApiOperation({ summary: 'Get related images filenames' })
   @Get('extras/:connectorId/:type')
   getRelatedImages(
-    @Param('connectorId') @Param('type') type: string,
-    connectorId: string,
+    @Param('connectorId') connectorId: string,
+    @Param('type') type: string,
   ) {
+    console.log(connectorId, type);
+
     return this.imageService.getRelatedImagesForConnectors(connectorId, type);
   }
 
   @ApiOperation({ summary: 'Get individual extras image' })
-  @Get('extras/file/:filename')
-  getExtrasImage(@Param('filename') filename: string, @Res() res: Response) {
+  @Get('extras/file/:connectorId/:type')
+  getExtrasImage(
+    @Param('connectorId') connectorId: string,
+    @Param('type') type: string,
+    @Res() res: Response,
+  ) {
     try {
       const { contentType, stream } =
-        this.imageService.getExtrasImageStreamForConnectors(filename);
+        this.imageService.getExtrasImageStreamForConnectors(connectorId, type);
 
       res.setHeader('Content-Type', contentType);
       stream.pipe(res);

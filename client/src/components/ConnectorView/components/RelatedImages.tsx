@@ -59,7 +59,7 @@ export const RelatedImages: React.FC<RelatedImagesProps> = ({
             onClick={() => setSelectedImage(filename)}
           >
             <img
-              src={API.extrasImage(filename)}
+              src={API.extrasImage(filename, connType)}
               alt={filename}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               loading="lazy"
@@ -80,7 +80,7 @@ export const RelatedImages: React.FC<RelatedImagesProps> = ({
       {selectedImage && (
         <LightBoxOverlay
           images={images}
-          getSrc={API.extrasImage}
+          src={API.extrasImage(selectedImage, connType)}
           selectedImage={selectedImage}
           setSelectedImage={setSelectedImage}
         />
