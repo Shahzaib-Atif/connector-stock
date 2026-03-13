@@ -12,6 +12,7 @@ import { ROUTES } from "../AppRoutes";
 import { Connector } from "@/utils/types";
 import { useImageToggle } from "./ConnectorsTable/useImageToggle";
 import { useLegacyData } from "./ConnectorsTable/useLegacyData";
+import { getActiveFilterCount } from "./constants";
 import LegacyToggleBtn from "./ConnectorsTable/LegacyToggleBtn";
 import ImageToggleBtn from "./ConnectorsTable/ImageToggleBtn";
 
@@ -42,6 +43,8 @@ export const ConnectorsListView: React.FC = () => {
     viasOptions,
     colorOptions,
   } = useConnectorFilters(connectors);
+
+  const activeFiltersCount = getActiveFilterCount(filters);
 
   const {
     paginatedItems: paginatedConnectors,
@@ -92,6 +95,7 @@ export const ConnectorsListView: React.FC = () => {
             externalDiameter={filters.externalDiameter}
             thickness={filters.thickness}
             onClearFilters={clearFilters}
+            activeFiltersCount={activeFiltersCount}
           >
             {/* Toggle Buttons */}
             <div className="flex items-center gap-2">

@@ -19,6 +19,7 @@ interface ConnectorsFilterBarProps {
   thickness: string;
   onClearFilters: () => void;
   setFilterField: (key: keyof ConnectorFilters, value: string) => void;
+  activeFiltersCount: number;
   children?: React.ReactNode;
 }
 
@@ -38,6 +39,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
   thickness,
   setFilterField,
   onClearFilters,
+  activeFiltersCount,
   children,
 }) => {
   const { showFilters, setShowFilters } = useFiltersToggle();
@@ -54,6 +56,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
       {/* Top row: filter toggle + clear button + optional actions */}
       <div className="flex items-center gap-2 justify-between">
         <div className="flex items-center gap-2">
+          {/* Filter Toggle Button */}
           <button
             type="button"
             onClick={() => setShowFilters((prev) => !prev)}
@@ -67,10 +70,23 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
             </span>
           </button>
 
+          {/* Clear Filters Button */}
           <button type="button" onClick={handleClear} className={btnClass}>
             <Eraser className="h-4 w-4" />
             Clear filters
           </button>
+
+          {/* Active Filters Indicator */}
+          {activeFiltersCount > 0 && (
+            <div className="flex items-center gap-1.5 px-2 py-1 bg-blue-500/10 border border-blue-500/30 rounded-lg text-blue-400 animate-in fade-in zoom-in duration-300">
+              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-[10px] font-bold text-white">
+                {activeFiltersCount}
+              </span>
+              <span className="text-xs font-medium">
+                {activeFiltersCount === 1 ? "Filter active" : "Filters active"}
+              </span>
+            </div>
+          )}
         </div>
 
         {children && <div className="flex items-center gap-2">{children}</div>}
