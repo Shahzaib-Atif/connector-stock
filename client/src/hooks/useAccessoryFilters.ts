@@ -1,41 +1,44 @@
-import { FilterColumnTypes } from "@/components/common/FilterBar";
 import { Accessory } from "@/utils/types";
-import { useState, useMemo, useCallback } from "react";
-
-interface AccessoryFilters {
-  filterColumn: FilterColumnTypes;
-  searchQuery: string;
-}
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { AccessoryFilters, defaultFilters, STORAGE_KEY } from "@/components/AccessoriesListView/constants";
 
 interface UseAccessoryFiltersReturn {
   filters: AccessoryFilters;
-  setFilterColumn: (column: FilterColumnTypes) => void;
-  setSearchQuery: (query: string) => void;
+  setFilterField: (key: keyof AccessoryFilters, value: string) => void;
   filteredAccessories: Accessory[];
   clearFilters: () => void;
+  typeOptions: string[];
+  colorOptions: string[];
 }
 
 export function useAccessoryFilters(
   accessories: Record<string, Accessory>,
 ): UseAccessoryFiltersReturn {
-  const [filters, setFilters] = useState<AccessoryFilters>({
-    filterColumn: "all",
-    searchQuery: "",
+  const [filters, setFilters] = useState<AccessoryFilters>(() => {
+    if (typeof window === "undefined") return defaultFilters;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) return defaultFilters;
+      return { ...defaultFilters, ...JSON.parse(stored) };
+    } catch {
+      return defaultFilters;
+    }
   });
 
-  const setFilterColumn = useCallback((column: FilterColumnTypes) => {
-    setFilters((prev) => ({ ...prev, filterColumn: column }));
-  }, []);
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(filters));
+    } catch {}
+  }, [filters]);
 
-  const setSearchQuery = useCallback((query: string) => {
-    setFilters((prev) => ({ ...prev, searchQuery: query }));
+  const setFilterField = useCallback((key: keyof AccessoryFilters, value: string) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
   }, []);
 
   const clearFilters = useCallback(() => {
-    setFilters({ filterColumn: "all", searchQuery: "" });
+    setFilters(defaultFilters);
   }, []);
 
-  // Convert Record to array with id
   const accessoriesList = useMemo((): Accessory[] => {
     return Object.entries(accessories).map(([id, accessory]) => ({
       ...accessory,
@@ -43,60 +46,43 @@ export function useAccessoryFilters(
     }));
   }, [accessories]);
 
-  const filteredAccessories = useMemo(() => {
-    const normalizedQuery = filters.searchQuery.trim().toLowerCase();
+  const typeOptions = useMemo(() => 
+    getUniqueOptions(accessoriesList.map(a => a.AccessoryType)), 
+  [accessoriesList]);
 
-    if (!normalizedQuery) {
-      return accessoriesList;
-    }
+  const colorOptions = useMemo(() => 
+    getUniqueOptions(accessoriesList.map(a => a.ClipColor)), 
+  [accessoriesList]);
+
+  const filteredAccessories = useMemo(() => {
+    const idQuery = filters.idQuery.trim().toLowerCase();
+    const connNameQuery = filters.connName.trim().toLowerCase();
+    const refClientQuery = filters.refClient.trim().toLowerCase();
+    const refDVQuery = filters.refDV.trim().toLowerCase();
 
     return accessoriesList.filter((accessory) => {
-      if (filters.filterColumn === "all") {
-        return matchesAnyField(accessory, normalizedQuery);
-      } else {
-        const columnValue = getColumnValue(accessory, filters.filterColumn);
-        return columnValue.includes(normalizedQuery);
-      }
+      const matchesId = !idQuery || accessory.id.toLowerCase().includes(idQuery);
+      const matchesType = filters.type === "all" || accessory.AccessoryType === filters.type;
+      const matchesConn = !connNameQuery || accessory.ConnName?.toLowerCase().includes(connNameQuery);
+      const matchesRefClient = !refClientQuery || accessory.RefClient?.toLowerCase().includes(refClientQuery);
+      const matchesRefDV = !refDVQuery || accessory.RefDV?.toLowerCase().includes(refDVQuery);
+      const matchesColor = filters.clipColor === "all" || accessory.ClipColor === filters.clipColor;
+
+      return matchesId && matchesType && matchesConn && matchesRefClient && matchesRefDV && matchesColor;
     });
   }, [accessoriesList, filters]);
 
   return {
     filters,
-    setFilterColumn,
-    setSearchQuery,
+    setFilterField,
     filteredAccessories,
     clearFilters,
+    typeOptions,
+    colorOptions,
   };
 }
 
-function matchesAnyField(accessory: Accessory, normalizedQuery: string) {
-  return (
-    accessory.id.toLowerCase()?.includes(normalizedQuery) ||
-    accessory.ConnName?.toLowerCase()?.includes(normalizedQuery) ||
-    accessory.AccessoryType?.toLowerCase()?.includes(normalizedQuery) ||
-    accessory.RefClient?.toLowerCase()?.includes(normalizedQuery) ||
-    accessory.RefDV?.toLowerCase()?.includes(normalizedQuery) ||
-    accessory.CapotAngle?.toString()
-      ?.toLowerCase()
-      ?.includes(normalizedQuery) ||
-    accessory.ClipColor?.toLowerCase()?.includes(normalizedQuery)
-  );
+function getUniqueOptions(values: Array<string | undefined | null>): string[] {
+  const unique = Array.from(new Set(values.filter(v => !!v) as string[]));
+  return unique.sort((a, b) => a.localeCompare(b));
 }
-
-const getColumnValue = (
-  accessory: Accessory,
-  column: FilterColumnTypes,
-): string => {
-  switch (column) {
-    case "id":
-      return accessory.id?.toLowerCase() ?? "";
-    case "type":
-      return accessory.AccessoryType?.toLowerCase() ?? "";
-    case "refClient":
-      return accessory.RefClient?.toLowerCase() ?? "";
-    case "connName":
-      return accessory.ConnName?.toLowerCase() ?? "";
-    default:
-      return "";
-  }
-};

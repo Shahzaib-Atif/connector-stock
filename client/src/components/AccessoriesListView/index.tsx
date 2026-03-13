@@ -5,9 +5,9 @@ import { usePagination } from "@/hooks/usePagination";
 import { useAccessoryFilters } from "@/hooks/useAccessoryFilters";
 import { DetailHeader } from "../common/DetailHeader";
 import { AccessoriesTable } from "./AccessoriesTable";
+import { AccessoriesFilterBar } from "./AccessoriesFilterBar";
 import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
-import { FilterBar } from "../common/FilterBar";
 import { ROUTES } from "../AppRoutes";
 import { Accessory } from "@/utils/types";
 
@@ -21,8 +21,14 @@ export const AccessoriesListView: React.FC = () => {
   const accessories = masterData?.accessories ?? {};
 
   // Custom hook for filters
-  const { filters, setFilterColumn, setSearchQuery, filteredAccessories } =
-    useAccessoryFilters(accessories);
+  const { 
+    filters, 
+    setFilterField, 
+    clearFilters, 
+    filteredAccessories,
+    typeOptions,
+    colorOptions
+  } = useAccessoryFilters(accessories);
 
   const {
     paginatedItems: paginatedAccessories,
@@ -53,12 +59,12 @@ export const AccessoriesListView: React.FC = () => {
 
       <div id="accessories-content" className="table-view-content">
         <div className="table-view-inner-content">
-          <FilterBar
-            filterColumn={filters.filterColumn}
-            searchQuery={filters.searchQuery}
-            filterByOptions={["id", "type", "refClient", "connName"]}
-            onFilterColumnChange={setFilterColumn}
-            onSearchQueryChange={setSearchQuery}
+          <AccessoriesFilterBar
+            filters={filters}
+            setFilterField={setFilterField}
+            onClearFilters={clearFilters}
+            typeOptions={typeOptions}
+            colorOptions={colorOptions}
           />
 
           <div className="table-container-outer">

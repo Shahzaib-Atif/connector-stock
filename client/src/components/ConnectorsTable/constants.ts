@@ -24,26 +24,13 @@ const defaultFilters: ConnectorFilters = {
   thickness: "",
 };
 
+import { getActiveFilterCount as countFilters } from "@/utils/filterUtils";
+
 export { STORAGE_KEY, defaultFilters };
 
 /**
- * Calculates how many filters are currently active by comparing
- * current filter values with their default values.
+ * Calculates how many filters are currently active.
  */
 export function getActiveFilterCount(filters: ConnectorFilters): number {
-  let count = 0;
-
-  (Object.keys(defaultFilters) as Array<keyof ConnectorFilters>).forEach(
-    (key) => {
-      if (filters[key] !== defaultFilters[key]) {
-        // For string inputs, also check if they aren't just whitespace
-        if (typeof filters[key] === "string" && filters[key].trim() === "") {
-          return;
-        }
-        count++;
-      }
-    },
-  );
-
-  return count;
+  return countFilters(filters, defaultFilters);
 }

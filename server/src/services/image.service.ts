@@ -7,12 +7,10 @@ import getErrorMsg from 'src/utils/getErrorMsg';
 export class ImageService {
   private readonly connectorsBasePath: string;
   private readonly accessoriesBasePath: string;
-  private readonly connectorsExtrasPath: string;
   private readonly accessoriesExtrasPath: string;
 
   constructor() {
     this.connectorsBasePath = process.env.CONNECTORS_BASE_PATH ?? '';
-    this.connectorsExtrasPath = this.connectorsBasePath + '\\_Extras';
 
     this.accessoriesBasePath = process.env.ACCESSORIES_BASE_PATH ?? '';
     this.accessoriesExtrasPath = this.accessoriesBasePath + '\\_Extras';
