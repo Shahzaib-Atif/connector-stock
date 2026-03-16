@@ -69,26 +69,30 @@ export const AccessoryItem: React.FC<Props> = ({
         </div>
       }
       right={
-        <div className="flex items-center gap-1 sm:gap-2">
-          <button
-            onClick={() => onTransaction("OUT", accessory.id)}
-            disabled={stock <= 0}
-            className={`${stockBtnClass} ${
-              stock <= 0 ? "btn-secondary cursor-not-allowed" : "btn-secondary"
-            }`}
-          >
-            <Minus className="w-4 h-4" />
-          </button>
-          <span className="w-8 sm:w-12 text-center font-mono text-lg sm:text-xl font-bold text-slate-200">
-            {stock}
-          </span>
-          <button
-            onClick={() => onTransaction("IN", accessory.id)}
-            className={`${stockBtnClass} btn-primary`}
-          >
-            <Plus className="w-4 h-4" />
-          </button>
-        </div>
+        accessory?.AccessoryType?.toUpperCase() !== "MIOLO" && (
+          <div className="flex items-center gap-1 sm:gap-2">
+            <button
+              onClick={() => onTransaction("OUT", accessory.id)}
+              disabled={stock <= 0}
+              className={`${stockBtnClass} ${
+                stock <= 0
+                  ? "btn-secondary cursor-not-allowed"
+                  : "btn-secondary"
+              }`}
+            >
+              <Minus className="w-4 h-4" />
+            </button>
+            <span className="w-8 sm:w-12 text-center font-mono text-lg sm:text-xl font-bold text-slate-200">
+              {stock}
+            </span>
+            <button
+              onClick={() => onTransaction("IN", accessory.id)}
+              className={`${stockBtnClass} btn-primary`}
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+          </div>
+        )
       }
     />
   );

@@ -94,7 +94,9 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
               />
 
               {/* Stock Details */}
-              <StockDiv currentStock={accessory.Qty} />
+              {accessory?.AccessoryType?.toUpperCase() !== "MIOLO" && (
+                <StockDiv currentStock={accessory.Qty} />
+              )}
 
               {/* Accessory Details */}
               <AccessoryMetadata accessory={accessory} />
@@ -123,11 +125,13 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
         />
       </div>
 
-      <TransactionBar
-        onRemove={() => onTransaction("OUT", accessory.id)}
-        onAdd={() => onTransaction("IN", accessory.id)}
-        isRemoveDisabled={accessory.Qty <= 0}
-      />
+      {accessory?.AccessoryType?.toUpperCase() !== "MIOLO" && (
+        <TransactionBar
+          onRemove={() => onTransaction("OUT", accessory.id)}
+          onAdd={() => onTransaction("IN", accessory.id)}
+          isRemoveDisabled={accessory.Qty <= 0}
+        />
+      )}
     </div>
   );
 };
