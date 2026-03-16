@@ -48,12 +48,9 @@ export const parseConnector = (
   id: string,
   masterData?: MasterData,
 ): Connector | null => {
+  // get connector reference
   const reference = masterData?.connectors?.[id];
-  console.log(reference, id);
-
-  if (!reference || !masterData) {
-    return null;
-  }
+  if (!reference || !masterData) return null;
 
   const { PosId, details, Cor, Vias, dimensions } = reference;
   const fabricante = details.Fabricante || "--";
