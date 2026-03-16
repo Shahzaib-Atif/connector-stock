@@ -11,15 +11,19 @@ interface TableRowProps {
   showImages?: boolean;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ accessory, showImages = false }) => {
+const TableRow: React.FC<TableRowProps> = ({
+  accessory,
+  showImages = false,
+}) => {
   const getLink = (itemType: "connector" | "accessory", itemId: string) => {
     switch (itemType) {
       case "connector":
+        // take to connector or box
         itemId = getConnectorId(itemId);
-        return `${ROUTES.CONNECTORS}/${itemId}`;
+        if (itemId.length === 4) return `${ROUTES.BOXES}/${itemId}`;
+        else return `${ROUTES.CONNECTORS}/${itemId}`;
       case "accessory":
         return `${ROUTES.ACCESSORIES}/${itemId}`;
-        break;
       default:
         return "#";
     }
