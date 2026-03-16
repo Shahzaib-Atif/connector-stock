@@ -49,6 +49,8 @@ export const parseConnector = (
   masterData?: MasterData,
 ): Connector | null => {
   const reference = masterData?.connectors?.[id];
+  console.log(reference, id);
+
   if (!reference || !masterData) {
     return null;
   }

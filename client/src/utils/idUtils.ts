@@ -10,8 +10,8 @@ export function getConnectorId(amostra: string | undefined): string {
 
   if (cleanAmostra.includes("+")) {
     const partBeforePlus = cleanAmostra.split("+")[0].trim();
-    // Return first 6 characters as requested
-    return partBeforePlus.substring(0, 6);
+    // Return first 6 characters (or 8 in case there is a version suffix like W382P3-1)
+    return partBeforePlus.substring(0, 8);
   }
 
   return cleanAmostra;

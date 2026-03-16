@@ -27,7 +27,8 @@ const connectorResolver: EntityResolver<Connector> = (
   connectorId,
   { masterData },
 ) => {
-  if (connectorId.length !== 6 || !masterData) return null;
+  if ((connectorId.length !== 6 && connectorId.length !== 8) || !masterData)
+    return null;
   return parseConnector(connectorId, masterData);
 };
 
