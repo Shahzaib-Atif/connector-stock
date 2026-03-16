@@ -66,15 +66,15 @@ export const Breadcrumbs: React.FC = () => {
 
         // For paths like /boxes/A037, we override the first segment to be "CONNECTORS"
         if (isBoxesPath && index === 0) {
-           return (
-             <React.Fragment key={to}>
-                 <ChevronRight className={breadcrumbChevron} />
-                 {renderItem("CONNECTORS", ROUTES.CONNECTORS, false, false)}
-             </React.Fragment>
-           );
+          return (
+            <React.Fragment key={to}>
+              <ChevronRight className={breadcrumbChevron} />
+              {renderItem("CONNECTORS", ROUTES.CONNECTORS, false, false)}
+            </React.Fragment>
+          );
         }
 
-        const label = getLabel(segment);
+        const label = getLabel(decodeURIComponent(segment));
 
         // If this is a connector item, add an extra breadcrumb for the box it belongs to
         if (isConnectorItem) {
