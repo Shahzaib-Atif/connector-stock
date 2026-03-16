@@ -58,12 +58,23 @@ export const Breadcrumbs: React.FC = () => {
       {segments.map((segment, index) => {
         const last = index === segments.length - 1;
         const to = `/${segments.slice(0, index + 1).join("/")}`;
-        const label = getLabel(segment);
-
         const isConnectorItem =
           segments[0] === "connectors" && index === 1 && segment.length > 4;
+        const isBoxesPath = segments[0] === "boxes";
 
         const items = [];
+
+        // For paths like /boxes/A037, we override the first segment to be "CONNECTORS"
+        if (isBoxesPath && index === 0) {
+           return (
+             <React.Fragment key={to}>
+                 <ChevronRight className={breadcrumbChevron} />
+                 {renderItem("CONNECTORS", ROUTES.CONNECTORS, false, false)}
+             </React.Fragment>
+           );
+        }
+
+        const label = getLabel(segment);
 
         // If this is a connector item, add an extra breadcrumb for the box it belongs to
         if (isConnectorItem) {
@@ -89,7 +100,13 @@ export const Breadcrumbs: React.FC = () => {
         items.push(
           <React.Fragment key={to}>
             <ChevronRight className={breadcrumbChevron} />
-            {renderItem(label, to, last, !last && isBox)}
+            {isBoxesPath && index === 1 ? (
+              <span className="uppercase text-slate-300 truncate max-w-[120px] sm:max-w-none">
+                {label}
+              </span>
+            ) : (
+              renderItem(label, to, last, !last && isBox)
+            )}
           </React.Fragment>,
         );
 
