@@ -4,54 +4,99 @@ import { ChevronRight } from "lucide-react";
 import { ROUTES } from "../AppRoutes";
 
 export const Breadcrumbs: React.FC = () => {
-  const location = useLocation();
-  const pathnames = location.pathname.split("/").filter((x) => x);
+  const { pathname } = useLocation();
 
-  if (location.pathname === "/") return null;
+  if (pathname === "/") return null;
+
+  const segments = pathname.split("/").filter(Boolean);
+  const isBox = segments.includes("boxes");
+
+  const getLabel = (value: string) =>
+    (ROUTES as Record<string, string>)[value.toLowerCase()] ?? value;
+
+  const renderItem = (
+    label: string,
+    to: string,
+    isLast: boolean,
+    isDisabled?: boolean,
+  ) => {
+    if (isLast || isDisabled) {
+      return (
+        <span
+          className={`uppercase ${isLast ? "text-slate-300" : "text-slate-400"} truncate max-w-[120px] sm:max-w-none`}
+        >
+          {label}
+        </span>
+      );
+    }
+
+    return (
+      <Link
+        to={to}
+        title={label}
+        className="hover:text-blue-400 transition-colors flex-shrink-0 uppercase"
+      >
+        {label}
+      </Link>
+    );
+  };
 
   return (
     <nav
       id="Breadcrumbs"
-      className="flex items-center justify-center text-[0.8rem] sm:text-base text-slate-200 font-medium uppercase   
-      overflow-x-auto whitespace-nowrap p-1 no-scrollbar max-w-full flex-wrap max-w-[70%] sm:max-w-[60%]"
+      className="flex items-center justify-center text-[0.8rem] sm:text-base text-slate-200 font-medium uppercase
+      overflow-x-auto whitespace-nowrap p-1 no-scrollbar max-w-[70%] sm:max-w-[60%]"
     >
-      {/* Home */}
       <Link
         to={ROUTES.HOME}
         className="hover:text-blue-400 transition-colors flex-shrink-0"
-        title="home"
+        title="Home"
       >
         Home
       </Link>
 
-      {/* Other breadcrumbs */}
-      {pathnames.map((value, index) => {
-        const last = index === pathnames.length - 1;
-        const to = `/${pathnames.slice(0, index + 1).join("/")}`;
-        const label = ROUTES[value.toLowerCase()] || value;
-        const isBox = pathnames.includes("boxes");
+      {segments.map((segment, index) => {
+        const last = index === segments.length - 1;
+        const to = `/${segments.slice(0, index + 1).join("/")}`;
+        const label = getLabel(segment);
 
-        return (
-          <React.Fragment key={to}>
-            <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 mx-0.5 sm:mx-1 text-slate-400 flex-shrink-0" />
-            {last ? (
-              <span className="text-slate-300 truncate max-w-[120px] sm:max-w-none uppercase">
-                {label}
-              </span>
-            ) : isBox ? (
-              <span className="text-slate-400">{label}</span>
-            ) : (
+        const isConnectorItem =
+          segments[0] === "connectors" && index === 1 && segment.length > 4;
+
+        const items = [];
+
+        // If this is a connector item, add an extra breadcrumb for the box it belongs to
+        if (isConnectorItem) {
+          const prefix = segment.substring(0, 4);
+          const boxPath = `${ROUTES.BOXES}/${prefix}`;
+
+          // Add the box breadcrumb before the connector
+          items.push(
+            <React.Fragment key={`${to}-prefix`}>
+              <ChevronRight className={breadcrumbChevron} />
               <Link
-                to={to}
-                className="hover:text-blue-400 transition-colors flex-shrink-0"
-                title={label}
+                to={boxPath}
+                title={`View Box ${prefix}`}
+                className="hover:text-blue-400 transition-colors"
               >
-                {label}
+                {prefix}
               </Link>
-            )}
-          </React.Fragment>
+            </React.Fragment>,
+          );
+        }
+
+        // Add the actual breadcrumb item
+        items.push(
+          <React.Fragment key={to}>
+            <ChevronRight className={breadcrumbChevron} />
+            {renderItem(label, to, last, !last && isBox)}
+          </React.Fragment>,
         );
+
+        return items;
       })}
     </nav>
   );
 };
+
+const breadcrumbChevron = "w-3 h-3 sm:w-4 sm:h-4 mx-1 text-slate-400";
