@@ -28,9 +28,11 @@ export const ConnectorEditForm: React.FC<Props> = ({
     setDimensionsField,
     handleSubmit,
   } = useConnectorEditForm(connector, onSave);
-  const isActualViasEnabled = connector?.details?.ActualViaCount;
   const isOlhalType =
     formData.ConnType && formData.ConnType.toLowerCase() === "olhal";
+
+  // check if the vias is X
+  const isViasX = formData.Vias?.toUpperCase() === "X";
 
   return (
     <form
@@ -73,7 +75,7 @@ export const ConnectorEditForm: React.FC<Props> = ({
         </div>
 
         {/* Actual Via Count */}
-        {isActualViasEnabled ? (
+        {isViasX ? (
           <NumberInputDiv
             label="Actual Vias Count"
             value={formData.ActualViaCount}
