@@ -6,7 +6,7 @@ export enum Department {
   ID = "ID",
   MTS = "MTS",
   Maquinacao = "Maquinacao",
-  Montagem = "Montagem",
+  MTE = "MTE",
   Planamento = "Planamento",
   STM = "STM",
 }
