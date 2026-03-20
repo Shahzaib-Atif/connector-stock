@@ -23,7 +23,9 @@ export const ConnectorsListView: React.FC = () => {
   );
 
   // Photo visibility state with persistence
-  const { showImages, setShowImages } = useImageToggle("connectors_show_images");
+  const { showImages, setShowImages } = useImageToggle(
+    "connectors_show_images",
+  );
 
   // Legacy data handling
   const { isLegacyMode, setIsLegacyMode, legacyData, legacyLoading } =
@@ -40,9 +42,8 @@ export const ConnectorsListView: React.FC = () => {
     clearFilters,
     typeOptions,
     fabricanteOptions,
-    viasOptions,
     colorOptions,
-  } = useConnectorFilters(connectors);
+  } = useConnectorFilters(connectors, isLegacyMode ? null : masterData);
 
   const activeFiltersCount = getActiveFilterCount(filters);
 
@@ -88,7 +89,6 @@ export const ConnectorsListView: React.FC = () => {
             fabricanteOptions={fabricanteOptions}
             family={filters.family}
             vias={filters.vias}
-            viasOptions={viasOptions}
             color={filters.color}
             colorOptions={colorOptions}
             internalDiameter={filters.internalDiameter}

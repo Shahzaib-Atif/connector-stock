@@ -17,7 +17,7 @@ const defaultFilters: ConnectorFilters = {
   type: "all",
   fabricante: "all",
   family: "",
-  vias: "all",
+  vias: "",
   color: "all",
   internalDiameter: "",
   externalDiameter: "",

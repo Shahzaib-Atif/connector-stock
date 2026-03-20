@@ -17,7 +17,6 @@ interface ConnectorsFilterBarProps {
   fabricanteOptions: string[];
   family: string;
   vias: string;
-  viasOptions: string[];
   color: string;
   colorOptions: string[];
   internalDiameter: string;
@@ -37,7 +36,6 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
   fabricanteOptions,
   family,
   vias,
-  viasOptions,
   color,
   colorOptions,
   internalDiameter,
@@ -106,8 +104,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                 type="text"
                 value={idQuery}
                 onChange={(e) => setFilterField("idQuery", e.target.value)}
-                autoComplete="off"
-                placeholder="connector Id..."
+                placeholder="All"
                 className={filterStyles.input}
               />
             </div>
@@ -119,19 +116,14 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
               >
                 Vias
               </label>
-              <select
+              <input
                 id="connector-vias-filter"
+                type="text"
                 value={vias}
+                placeholder="All"
                 onChange={(e) => setFilterField("vias", e.target.value)}
-                className={filterStyles.select}
-              >
-                <option value="all">All</option>
-                {viasOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+                className={filterStyles.input}
+              ></input>
             </div>
             {/* Color */}
             <div className={filterStyles.container}>
@@ -212,8 +204,7 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                 type="text"
                 value={family}
                 onChange={(e) => setFilterField("family", e.target.value)}
-                autoComplete="off"
-                placeholder="Enter family..."
+                placeholder="All"
                 className={filterStyles.input}
               />
             </div>
@@ -237,7 +228,6 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                   onChange={(e) =>
                     setFilterField("internalDiameter", e.target.value)
                   }
-                  autoComplete="off"
                   placeholder="e.g. 5.5"
                   className={filterStyles.input}
                 />
@@ -258,7 +248,6 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                   onChange={(e) =>
                     setFilterField("externalDiameter", e.target.value)
                   }
-                  autoComplete="off"
                   placeholder="e.g. 8"
                   className={filterStyles.input}
                 />
@@ -277,7 +266,6 @@ export const ConnectorsFilterBar: React.FC<ConnectorsFilterBarProps> = ({
                   type="text"
                   value={thickness}
                   onChange={(e) => setFilterField("thickness", e.target.value)}
-                  autoComplete="off"
                   placeholder="e.g. 1.2"
                   className={filterStyles.input}
                 />

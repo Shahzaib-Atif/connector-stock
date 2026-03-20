@@ -1,8 +1,12 @@
-import { Connector } from "@/utils/types";
+import { Connector, MasterData } from "@/utils/types";
+import { parseConnector } from "@/services/connectorService";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { ConnectorFilters, defaultFilters, STORAGE_KEY } from "./constants";
 
-export function useConnectorFilters(connectors: Record<string, Connector>) {
+export function useConnectorFilters(
+  connectors: Record<string, Connector>,
+  masterData?: MasterData | null,
+) {
   const [filters, setFilters] = useState<ConnectorFilters>(() => {
     if (typeof window === "undefined") {
       return defaultFilters;
@@ -41,11 +45,17 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
 
   // Convert Record to array with id
   const connectorsList = useMemo((): Connector[] => {
-    return Object.entries(connectors).map(([id, connector]) => ({
-      id,
-      ...connector,
-    }));
-  }, [connectors]);
+    return Object.entries(connectors).map(([id, connector]) => {
+      if (masterData) {
+        const parsed = parseConnector(id, masterData);
+        if (parsed) return parsed;
+      }
+      return {
+        id,
+        ...connector,
+      };
+    });
+  }, [connectors, masterData]);
 
   const typeOptions = useMemo(
     () => getUniqueOptions(connectorsList.map((c) => c.ConnType)),
@@ -57,11 +67,6 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
     [connectorsList],
   );
 
-  const viasOptions = useMemo(
-    () => getUniqueOptions(connectorsList.map((c) => c.Vias)),
-    [connectorsList],
-  );
-
   const colorOptions = useMemo(
     () => getUniqueOptions(connectorsList.map((c) => c.Cor)),
     [connectorsList],
@@ -70,6 +75,7 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
   // Apply filters to connectors list
   const filteredConnectors = useMemo(() => {
     const normalizedIdQuery = filters.idQuery.trim().toLowerCase();
+    const normalizedViasQuery = filters.vias.trim().toLowerCase();
     const normalizedFamilyQuery = filters.family.trim().toLowerCase();
     const normalizedIntQuery = filters.internalDiameter.trim().toLowerCase();
     const normalizedExtQuery = filters.externalDiameter.trim().toLowerCase();
@@ -97,7 +103,12 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
         familyValue.toLowerCase().includes(normalizedFamilyQuery);
 
       const matchesVias =
-        filters.vias === "all" || connector.Vias === filters.vias;
+        !normalizedViasQuery ||
+        connector.Vias?.toLowerCase().includes(normalizedViasQuery) ||
+        connector.details.ActualViaCount?.toString().includes(
+          normalizedViasQuery,
+        ) ||
+        connector.viasName?.toLowerCase().includes(normalizedViasQuery);
 
       const matchesColor =
         filters.color === "all" || connector.Cor === filters.color;
@@ -148,7 +159,6 @@ export function useConnectorFilters(connectors: Record<string, Connector>) {
     clearFilters,
     typeOptions,
     fabricanteOptions,
-    viasOptions,
     colorOptions,
   };
 }

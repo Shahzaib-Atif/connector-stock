@@ -5,6 +5,7 @@ import StockDiv from "@/components/common/StockDiv";
 import CardInfoDiv from "@/components/common/CardInfoDiv";
 import { VIEW_SUMMARY_CLASS } from "@/utils/constants";
 import { Connector } from "@/utils/types";
+import { getViasValue } from "@/services/connectorService";
 import ClientReferences from "./ClientReferences";
 import Coordinates from "./Coordinates";
 
@@ -101,9 +102,3 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
     </div>
   );
 };
-
-function getViasValue(connector: Connector) {
-  if (connector.details.ActualViaCount)
-    return `${connector.Vias} (${connector.details.ActualViaCount})`;
-  return `${connector.Vias} (${connector.viasName})`;
-}

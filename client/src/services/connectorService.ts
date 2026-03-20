@@ -190,3 +190,21 @@ export const updateConnectorApi = async (
 
   return response.json();
 };
+
+export function getViasValue(connector: Connector): string {
+  const vias = connector.Vias;
+  const viasName = connector.viasName;
+
+  // If numeric (1–9), return as-is
+  if (!isNaN(Number(vias))) {
+    return vias;
+  }
+
+  if (connector.details?.ActualViaCount) {
+    return `${vias} (${connector.details.ActualViaCount})`;
+  }
+  if (viasName) {
+    return `${vias} (${viasName})`;
+  }
+  return vias;
+}

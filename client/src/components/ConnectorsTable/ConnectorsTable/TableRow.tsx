@@ -4,6 +4,7 @@ import { ROUTES } from "@/components/AppRoutes";
 import { Connector } from "@/utils/types";
 import { Link } from "react-router-dom";
 import { Link as LinkIcon } from "lucide-react";
+import { getViasValue } from "@/services/connectorService";
 
 interface TableRowProps {
   connector: Connector;
@@ -91,7 +92,7 @@ const TableRow: React.FC<TableRowProps> = ({
 
       {/* Other Fields */}
       <td className="table-data">{connector.Cor}</td>
-      <td className="table-data">{connector.Vias}</td>
+      <td className="table-data">{getViasValue(connector)}</td>
       <td className="table-data">{connector.ConnType}</td>
       <td className="table-data">{connector.details.Family}</td>
       <td className="table-data">{connector.details.Fabricante}</td>
