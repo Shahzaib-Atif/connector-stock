@@ -31,7 +31,7 @@ export const ParsedInfo: React.FC<ParsedInfoProps> = ({
         {encomenda && <InfoBadge title="Order" text={encomenda} />}
         {prodId && <InfoBadge title="Prod Id" text={prodId} />}
         {wireType && <InfoBadge title="" text={wireType ?? "Yes"} />}
-        {sample && <InfoBadge title="Samples" text={sample} />}
+        {sample && <InfoBadge title="Sample" text={sample} />}
       </div>
     </div>
   );
