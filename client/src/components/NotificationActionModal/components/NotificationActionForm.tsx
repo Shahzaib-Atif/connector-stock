@@ -50,6 +50,7 @@ export const NotificationActionForm: React.FC<Props> = ({
             senderUser={notification?.SenderUser || ""}
             senderSector={notification?.SenderSector || ""}
             wireType={notification?.parsedWireType}
+            sample={notification?.parsedSample}
           />
 
           <LinkedConnector

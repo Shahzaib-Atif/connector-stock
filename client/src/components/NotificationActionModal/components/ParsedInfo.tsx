@@ -1,4 +1,5 @@
 import React from "react";
+import InfoBadge from "./InfoBadge";
 
 interface ParsedInfoProps {
   conector: string;
@@ -7,6 +8,7 @@ interface ParsedInfoProps {
   senderUser: string;
   senderSector: string;
   wireType?: string;
+  sample?: string;
 }
 
 export const ParsedInfo: React.FC<ParsedInfoProps> = ({
@@ -16,40 +18,20 @@ export const ParsedInfo: React.FC<ParsedInfoProps> = ({
   senderUser,
   senderSector,
   wireType,
+  sample,
 }) => {
   if (!conector) return null;
-
   return (
     <div className="bg-slate-800/50 rounded-lg p-4 space-y-2">
       <p className="text-xs text-slate-500 uppercase tracking-wider">
         Requested Items - from {senderUser} ({senderSector})
       </p>
       <div className="flex flex-wrap gap-3">
-        <div className="flex-row bg-slate-700 px-3 py-2 rounded">
-          <span className="text-slate-400 text-sm">Connector:</span>
-          <span className="text-white font-mono font-semibold">{conector}</span>
-        </div>
-        {encomenda && (
-          <div className="flex-row bg-slate-700 px-3 py-2 rounded">
-            <span className="text-slate-400 text-sm">Order:</span>
-            <span className="text-white font-mono font-semibold">
-              {encomenda}
-            </span>
-          </div>
-        )}
-        {prodId && (
-          <div className="flex-row bg-slate-700 px-3 py-2 rounded">
-            <span className="text-slate-400 text-sm">Prod Id:</span>
-            <span className="text-white font-mono font-semibold">{prodId}</span>
-          </div>
-        )}
-        {wireType && (
-          <div className="flex-row bg-slate-700 px-3 py-2 rounded border border-purple-500/30">
-            <span className="text-white font-mono font-semibold uppercase">
-              {wireType ?? "Yes"}
-            </span>
-          </div>
-        )}
+        <InfoBadge title="Connector" text={conector} />
+        {encomenda && <InfoBadge title="Order" text={encomenda} />}
+        {prodId && <InfoBadge title="Prod Id" text={prodId} />}
+        {wireType && <InfoBadge title="" text={wireType ?? "Yes"} />}
+        {sample && <InfoBadge title="Samples" text={sample} />}
       </div>
     </div>
   );

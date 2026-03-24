@@ -31,6 +31,7 @@ export class NotificationsService {
         parsedEncomenda: parsed.encomenda,
         parsedProdId: parsed.prodId,
         parsedWireType: parsed?.wireType,
+        parsedSample: parsed?.sample,
       };
     });
   }
@@ -70,6 +71,7 @@ export class NotificationsService {
       parsedEncomenda: parsed.encomenda,
       parsedProdId: parsed.prodId,
       parsedWireType: parsed.wireType,
+      parsedSample: parsed.sample,
       linkedSample,
       linkedConnector,
     };
@@ -153,27 +155,26 @@ export class NotificationsService {
   parseNotificationMessage(message: string): ParsedMessage {
     const parsed: ParsedMessage = {};
 
-    // Support both Portuguese (Conector) and English (Connector)
     const conectorMatch = message.match(/(?:Conector|Connector):\s*(\S+)/i);
-    if (conectorMatch) {
-      parsed.conector = conectorMatch[1];
-    }
+    if (conectorMatch) parsed.conector = conectorMatch[1];
 
-    // Support both Portuguese (Encomenda) and English (Order)
     const encomendaMatch = message.match(/(?:Encomenda|Order):\s*(\d+)/i);
-    if (encomendaMatch) {
-      parsed.encomenda = encomendaMatch[1];
-    }
+    if (encomendaMatch) parsed.encomenda = encomendaMatch[1];
 
     const prodIdMatch = message.match(/ProdId=\s*(\d+)/i);
-    if (prodIdMatch) {
-      parsed.prodId = prodIdMatch[1];
+    if (prodIdMatch) parsed.prodId = prodIdMatch[1];
+
+    const wireMatch = message.match(/^Wire\s*:\s*(.+)$/im);
+    if (wireMatch && wireMatch[1]?.trim()?.toLowerCase()?.includes('wire')) {
+      parsed.wireType = wireMatch[1]?.trim();
     }
 
-    // Extract Wire information if present
-    const wireMatch = message.match(/Wire\s*:\s*(.*)/i);
-    if (wireMatch && wireMatch[1].trim()) {
-      parsed.wireType = wireMatch[1].trim();
+    // cleaner sample parsing
+    const sampleMatch = message.match(
+      /(?:Sample|Amostra)\s*:\s*:?\s*([^\r\n]*)/i,
+    );
+    if (sampleMatch && sampleMatch[1].trim()) {
+      parsed.sample = sampleMatch[1].trim();
     }
 
     return parsed;

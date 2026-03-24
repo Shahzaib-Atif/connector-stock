@@ -28,6 +28,7 @@ export interface NotificationWithParsedData extends AppNotification {
   parsedEncomenda?: string;
   parsedProdId?: string;
   parsedWireType?: string;
+  parsedSample?: string;
 }
 
 export interface NotificationWithSample extends NotificationWithParsedData {

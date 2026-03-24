@@ -28,9 +28,8 @@ export const ConnectorEditForm: React.FC<Props> = ({
     setDimensionsField,
     handleSubmit,
   } = useConnectorEditForm(connector, onSave);
-  const isOlhalType =
-    formData.ConnType && formData.ConnType.toLowerCase() === "olhal";
-
+  // check if it is Olhal type
+  const isOlhalType = formData.ConnType?.toLowerCase() === "olhal";
   // check if the vias is X
   const isViasX = formData.Vias?.toUpperCase() === "X";
 

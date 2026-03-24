@@ -6,11 +6,14 @@ import {
   ShoppingCart,
   Check,
   Zap,
+  LucideFileBox,
 } from "lucide-react";
 import { INotification } from "@/utils/types/notificationTypes";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { markAsReadThunk } from "@/store/slices/notificationsSlice";
 import { UserRoles } from "@/utils/types/userTypes";
+import InfoBadge from "./InfoBadge";
+import { formatDate2 } from "@/utils/formatDate";
 
 interface NotificationCardProps {
   notification: INotification;
@@ -29,16 +32,6 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
   const handleMarkAsRead = (e: React.MouseEvent) => {
     e.stopPropagation();
     dispatch(markAsReadThunk(notification.id));
-  };
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("pt-PT", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
   };
 
   return (
@@ -69,7 +62,7 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
               {notification.Title || "Sample Request"}
             </h3>
             <span className="text-xs text-gray-500">
-              {formatDate(notification.CreationDate)}
+              {formatDate2(notification.CreationDate)}
             </span>
           </div>
 
@@ -100,49 +93,42 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
 
           {notification.parsedConector && (
             <div className="flex flex-wrap gap-2 text-xs">
-              <div className="flex items-center gap-1 bg-gray-700 px-2 py-1 rounded">
-                <Package size={14} className="text-green-400" />
-                <span className="text-gray-300">
-                  Connector:{" "}
-                  <span className="text-white font-mono">
-                    {notification.parsedConector}
-                  </span>
-                </span>
-              </div>
+              <InfoBadge
+                title="Order"
+                text={notification.parsedConector}
+                icon={<Package size={14} className="text-green-400" />}
+              />
 
               {notification.parsedEncomenda && (
-                <div className="flex items-center gap-1 bg-gray-700 px-2 py-1 rounded">
-                  <Calendar size={14} className="text-yellow-400" />
-                  <span className="text-gray-300">
-                    Order:{" "}
-                    <span className="text-white font-mono">
-                      {notification.parsedEncomenda}
-                    </span>
-                  </span>
-                </div>
+                <InfoBadge
+                  title="Order"
+                  text={notification.parsedEncomenda}
+                  icon={<Calendar size={14} className="text-yellow-400" />}
+                />
               )}
 
               {notification.parsedProdId && (
-                <div className="flex items-center gap-1 bg-gray-700 px-2 py-1 rounded">
-                  <ShoppingCart size={14} className="text-blue-400" />
-                  <span className="text-gray-300">
-                    Prod Id:{" "}
-                    <span className="text-white font-mono">
-                      {notification.parsedProdId}
-                    </span>
-                  </span>
-                </div>
+                <InfoBadge
+                  title="Prod Id"
+                  text={notification.parsedProdId}
+                  icon={<ShoppingCart size={14} className="text-blue-400" />}
+                />
               )}
 
               {notification.parsedWireType && (
-                <div className="flex items-center gap-1 bg-gray-700 px-2 py-1 rounded">
-                  <Zap size={14} className="text-purple-400" />
-                  <span className="text-gray-300">
-                    <span className="text-white font-mono">
-                      {notification.parsedWireType}
-                    </span>
-                  </span>
-                </div>
+                <InfoBadge
+                  title="Wire"
+                  text={notification.parsedWireType}
+                  icon={<Zap size={14} className="text-orange-400" />}
+                />
+              )}
+
+              {notification.parsedSample && (
+                <InfoBadge
+                  title="Sample"
+                  text={notification.parsedSample}
+                  icon={<LucideFileBox size={14} className="text-orange-400" />}
+                />
               )}
             </div>
           )}
