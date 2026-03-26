@@ -6,9 +6,10 @@ import {
   NotificationWithSample,
   AppNotification,
 } from 'src/dtos/notifications.dto';
-import { CreateTransactionsDto, ParsedMessage } from 'src/utils/types';
+import { ParsedMessage } from 'src/utils/types';
 import { Connector } from '@domain/entities/Connector';
 import { SamplesDto } from '@shared/dto/SamplesDto';
+import { CreateTransactionsDto } from '@shared/types/Transaction';
 
 @Injectable()
 export class NotificationsService {

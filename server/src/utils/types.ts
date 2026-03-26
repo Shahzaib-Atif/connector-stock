@@ -1,5 +1,3 @@
-import { Transaction } from '@shared/types/Transaction';
-
 export interface ParsedMessage {
   conector?: string;
   encomenda?: string;
@@ -7,5 +5,3 @@ export interface ParsedMessage {
   wireType?: string;
   sample?: string;
 }
-
-export type CreateTransactionsDto = Omit<Transaction, 'ID'>;

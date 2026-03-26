@@ -1,5 +1,5 @@
 import { TransactionsCreateInput } from 'src/generated/prisma/models';
-import { CreateTransactionsDto } from 'src/utils/types';
+import { CreateTransactionsDto } from '@shared/types/Transaction';
 
 export class TransactionMapper {
   static toPrismaCreate(

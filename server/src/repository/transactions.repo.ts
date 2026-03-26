@@ -2,7 +2,7 @@ import { TransactionMapper } from '@infra/TransactionMapper';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
-import { CreateTransactionsDto } from 'src/utils/types';
+import { CreateTransactionsDto } from '@shared/types/Transaction';
 
 @Injectable()
 export class TransactionsRepo {

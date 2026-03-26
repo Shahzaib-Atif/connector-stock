@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { SamplesDto } from '@shared/dto/SamplesDto';
 import { PrismaService } from 'prisma/prisma.service';
 import { AppNotification } from 'src/dtos/notifications.dto';
-import { CreateTransactionsDto } from 'src/utils/types';
+import { CreateTransactionsDto } from '@shared/types/Transaction';
 
 @Injectable()
 export class NotificationsRepo {

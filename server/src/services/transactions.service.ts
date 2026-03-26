@@ -6,7 +6,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
 import { WireTypes } from '@shared/enums/WireTypes';
-import { Transaction } from '@shared/types/Transaction';
+import { CreateTransactionsDto } from '@shared/types/Transaction';
 
 @Injectable()
 export class TransactionsService {
@@ -18,10 +18,7 @@ export class TransactionsService {
     private readonly connRepo: ConnectorRepo,
   ) {}
 
-  async processTransaction(
-    dto: Omit<Transaction, 'ID'>,
-    tx?: TransactionClient,
-  ) {
+  async processTransaction(dto: CreateTransactionsDto, tx?: TransactionClient) {
     const { itemId, transactionType, itemType, subType } = dto;
 
     // make amount positive or negative
