@@ -58,35 +58,15 @@ function addLogger(app: INestApplication) {
 
 // Serve static files from the client/dist folder
 function serveStaticFiles(app: NestExpressApplication) {
-  app.useStaticAssets(join(__dirname, '..', '..', '..', 'client', 'dist'));
+  app.useStaticAssets(
+    join(__dirname, '..', '..', '..', '..', 'client', 'dist'),
+  );
 
   // spa fallback
   const server = app.getHttpAdapter().getInstance();
   server.get(/^(?!\/api).*/, (req, res) => {
     res.sendFile(
-      join(__dirname, '..', '..', '..', 'client', 'dist', 'index.html'),
+      join(__dirname, '..', '..', '..', '..', 'client', 'dist', 'index.html'),
     );
   });
 }
-
-/*
-// Load HTTPS options from certs folder
-function getHttpsOptions() {
-  const certsPath = join(process.cwd(), 'certs');
-  const keyPath = join(certsPath, 'key.pem');
-  const certPath = join(certsPath, 'cert.pem');
-
-  if (fs.existsSync(keyPath) === false || fs.existsSync(certPath) === false) {
-    Logger.warn('HTTPS certificates not found, running on HTTP');
-    return undefined;
-  } else {
-    Logger.log('HTTPS certificates found, running on HTTPS');
-  }
-
-  const httpsOptions = {
-    key: fs.readFileSync(keyPath),
-    cert: fs.readFileSync(certPath),
-  };
-  return httpsOptions;
-}
-*/
