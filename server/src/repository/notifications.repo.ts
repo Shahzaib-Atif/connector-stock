@@ -1,8 +1,9 @@
+import { TransactionMapper } from '@infra/TransactionMapper';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { AppNotification } from 'src/dtos/notifications.dto';
 import { UpdateSampleDto } from 'src/dtos/samples.dto';
-import { CreateTransactionsDto } from 'src/dtos/transaction.dto';
+import { CreateTransactionsDto } from 'src/utils/types';
 
 @Injectable()
 export class NotificationsRepo {
@@ -125,7 +126,7 @@ export class NotificationsRepo {
       if (transactionDto) {
         try {
           await tx.transactions.create({
-            data: transactionDto,
+            data: TransactionMapper.toPrismaCreate(transactionDto),
           });
         } catch (e: any) {
           console.error('Failed to create transaction record:', e.message);

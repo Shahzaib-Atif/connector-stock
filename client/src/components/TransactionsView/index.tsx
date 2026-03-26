@@ -10,7 +10,7 @@ import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
 import { Department } from "@/utils/types/shared";
 import { Pagination } from "../common/Pagination";
-import { Transaction } from "@/utils/types";
+import { Transaction } from "@shared/types/Transaction";
 
 export const TransactionsView: React.FC = () => {
   const navigate = useNavigate();

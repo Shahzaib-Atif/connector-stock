@@ -1,9 +1,9 @@
-import { Transaction } from "@/utils/types";
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
+import { Transaction } from "@shared/types/Transaction";
 
 export const createTransaction = async (
-  transaction: Omit<Transaction, "ID" | "updatedAt">
+  transaction: Omit<Transaction, "ID" | "updatedAt">,
 ): Promise<Transaction> => {
   const response = await fetchWithAuth(API.transactions, {
     method: "POST",

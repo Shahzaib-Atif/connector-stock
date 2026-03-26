@@ -1,4 +1,4 @@
-export class LegacyBackupDto {
+export interface LegacyBackupDto {
   Pos_ID: string | null;
   Cor: string;
   Vias: string | null;

@@ -1,10 +1,11 @@
 import { useAppSelector } from "@/store/hooks";
-import { User, UserRoles } from "@/utils/types/userTypes";
+import { UserDto } from "@shared/dto/UserDto";
+import { UserRoles } from "@shared/enums/UserRoles";
 import { Trash2 } from "lucide-react";
 import React from "react";
 
 interface Props {
-  setSelectedUser: React.Dispatch<React.SetStateAction<User>>;
+  setSelectedUser: React.Dispatch<React.SetStateAction<UserDto>>;
   setOpenDltDlg: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -37,7 +38,7 @@ function UsersTable({ setSelectedUser, setOpenDltDlg }: Props) {
 
         {/* Table Body */}
         <tbody className="divide-y divide-slate-700">
-          {users.map((u: User) => (
+          {users.map((u: UserDto) => (
             <tr
               key={u.userId}
               className="hover:bg-slate-700/50 transition-colors"

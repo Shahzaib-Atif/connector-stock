@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { RefreshCw } from "lucide-react";
-import { UserRoles } from "@/utils/types/userTypes";
+import { UserRoles } from "@shared/enums/UserRoles";
 import { initMasterData } from "@/store/slices/masterDataSlice";
 import { initTransactionsData } from "@/store/slices/transactionsSlice";
 import { fetchUnfinishedNotifications } from "@/store/slices/notificationsSlice";

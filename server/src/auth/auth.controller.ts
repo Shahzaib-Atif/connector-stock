@@ -11,8 +11,9 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
-import { UserRoles } from 'src/utils/types';
 import { LoginDto, CreateUserDto, ChangePasswordDto } from 'src/dtos/auth.dto';
+import { UserDto } from '@shared/dto/UserDto';
+import { UserRoles } from '@shared/enums/UserRoles';
 
 @Controller('api/auth')
 export class AuthController {
@@ -34,9 +35,12 @@ export class AuthController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('Master', 'Admin')
   @Post('users')
-  async createUser(@Body() body: CreateUserDto, @Request() req) {
+  async createUser(
+    @Body() body: CreateUserDto,
+    @Request() req: { user: UserDto },
+  ) {
     const { username, password, role, dept } = body;
-    const currentUserRole = req.user.role as UserRoles;
+    const currentUserRole = req.user.role;
 
     // Admin can only create 'User' role
     if (currentUserRole === UserRoles.Admin && role !== UserRoles.User) {
@@ -58,15 +62,18 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Post('change-password')
-  async changePassword(@Body() body: ChangePasswordDto, @Request() req) {
+  async changePassword(
+    @Body() body: ChangePasswordDto,
+    @Request() req: { user: { userId: number } },
+  ) {
     const { newPassword } = body;
-    const userId = req.user.userId as number;
+    const userId = req.user.userId;
     return this.authService.updatePassword(userId, newPassword);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
+  getProfile(@Request() req: { user: UserDto }) {
     return req.user;
   }
 }

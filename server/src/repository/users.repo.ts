@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { User } from 'src/utils/types';
+import { UserDto } from '@shared/dto/UserDto';
 
 @Injectable()
 export class UsersRepo {
@@ -36,12 +36,12 @@ export class UsersRepo {
     }
   }
 
-  async create({ username, password, role, dept }: User) {
+  async create({ username, password, role, dept }: UserDto) {
     try {
       return await this.prisma.users.create({
         data: {
           username,
-          password,
+          password: password ?? '',
           role,
           dept,
         },

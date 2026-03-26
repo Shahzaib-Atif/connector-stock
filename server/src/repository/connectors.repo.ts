@@ -1,7 +1,10 @@
+import { Connector } from '@domain/entities/Connector';
+import { ConnectorMapper } from '@infra/ConnectorMapper';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
+import { WireTypes } from '@shared/enums/WireTypes';
 import { PrismaService } from 'prisma/prisma.service';
 import { UpdateConnectorDto } from 'src/dtos/connector.dto';
-import { WireTypes } from 'src/dtos/transaction.dto';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
 
 @Injectable()
@@ -35,7 +38,7 @@ export class ConnectorRepo {
     }
   }
 
-  async getConnectorByCodivmac(codivmac: string) {
+  async getConnectorByCodivmac(codivmac: string): Promise<Connector | null> {
     try {
       const data = await this.prisma.connectors_Main.findUnique({
         where: { CODIVMAC: codivmac },
@@ -49,24 +52,12 @@ export class ConnectorRepo {
         },
       });
 
-      if (!data) return undefined;
+      if (!data) return null;
 
-      return {
-        ...data,
-        Connectors_Dimensions: data.Connectors_Dimensions
-          ? {
-              ...data.Connectors_Dimensions,
-              InternalDiameter:
-                data.Connectors_Dimensions?.InternalDiameter?.toNumber(),
-              ExternalDiameter:
-                data.Connectors_Dimensions.ExternalDiameter?.toNumber(),
-              Thickness: data.Connectors_Dimensions.Thickness?.toNumber(),
-            }
-          : undefined,
-      };
+      return ConnectorMapper.toDomain(data);
     } catch (ex: any) {
       console.error('Error fetching connector by codivmac:', ex.message);
-      return undefined;
+      return null;
     }
   }
 
@@ -78,21 +69,13 @@ export class ConnectorRepo {
   ) {
     try {
       const client = tx || this.prisma;
-      const data: any = {
-        Qty: { increment: amount },
-      };
-
-      if (subType === WireTypes.COM_FIO) {
-        data.Qty_com_fio = { increment: amount };
-      } else if (subType === WireTypes.SEM_FIO) {
-        data.Qty_sem_fio = { increment: amount };
-      }
+      const data = this.incrementQty(amount, subType);
 
       return await client.connectors_Main.update({
         where: {
           CODIVMAC: codivmacId,
         },
-        data: data,
+        data,
       });
     } catch (ex: any) {
       console.error(ex.message);
@@ -109,20 +92,17 @@ export class ConnectorRepo {
     if (!codivmac || !delta) return;
 
     try {
-      const data: any = { Qty: { increment: delta } };
-
-      if (subType === WireTypes.COM_FIO) {
-        data.Qty_com_fio = { increment: delta };
-      } else if (subType === WireTypes.SEM_FIO) {
-        data.Qty_sem_fio = { increment: delta };
-      }
+      const data = this.incrementQty(delta, subType);
 
       await tx.connectors_Main.update({
         where: { CODIVMAC: codivmac },
-        data: data,
+        data,
       });
-    } catch (err) {
-      if (err.code === 'P2025') {
+    } catch (err: unknown) {
+      if (
+        err instanceof PrismaClientKnownRequestError &&
+        err.code === 'P2025'
+      ) {
         // Record doesn't exist
         throw new NotFoundException(`Connector with ID ${codivmac} not found`);
       }
@@ -204,5 +184,17 @@ export class ConnectorRepo {
       console.error('Error updating connector properties:', ex.message);
       throw ex;
     }
+  }
+
+  private incrementQty(amount: number, subType?: WireTypes) {
+    return {
+      Qty: { increment: amount },
+      ...(subType === WireTypes.COM_FIO && {
+        Qty_com_fio: { increment: amount },
+      }),
+      ...(subType === WireTypes.SEM_FIO && {
+        Qty_sem_fio: { increment: amount },
+      }),
+    };
   }
 }

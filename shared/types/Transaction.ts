@@ -1,3 +1,5 @@
+import { WireTypes } from "../enums/WireTypes";
+
 export interface Transaction {
   ID: string;
   itemId: string; // accessory or connector id
@@ -5,14 +7,9 @@ export interface Transaction {
   amount: number;
   itemType: "connector" | "accessory";
   subType?: WireTypes;
+  sender?: string;
   encomenda?: string;
   department?: string;
   updatedAt?: number;
-  sender?: string;
   notes?: string;
-}
-
-export enum WireTypes {
-  COM_FIO = "COM_FIO",
-  SEM_FIO = "SEM_FIO",
 }

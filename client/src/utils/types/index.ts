@@ -6,8 +6,6 @@ export * from "./notificationTypes";
 export * from "./paginationTypes";
 export * from "./sampleTypes";
 export * from "./shared";
-export * from "./transactionTypes";
-export * from "./userTypes";
 export * from "./legacyTypes";
 
 // Master Data Types (Centralized here)
@@ -19,12 +17,15 @@ export interface MasterData {
   vias: Record<string, string>;
   connectorTypes: string[];
   accessoryTypes: string[];
-  positions: Record<string, { 
-    cv: string | null; 
-    ch: string | null; 
-    cv_ma: string | null; 
-    ch_ma: string | null; 
-  }>;
+  positions: Record<
+    string,
+    {
+      cv: string | null;
+      ch: string | null;
+      cv_ma: string | null;
+      ch_ma: string | null;
+    }
+  >;
   connectors: Record<string, Connector>;
   accessories: Record<string, Accessory>;
   fabricantes: string[];

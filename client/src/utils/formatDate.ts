@@ -1,4 +1,4 @@
-import getErrorMsg from "./getErrorMsg";
+import { getErrorMsg } from "@shared/utils/getErrorMsg";
 
 export const formatDate = (dateString: string | undefined | null): string => {
   if (!dateString) return "-";

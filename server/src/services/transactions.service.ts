@@ -1,11 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateTransactionsDto, WireTypes } from 'src/dtos/transaction.dto';
 import { AccessoryRepo } from 'src/repository/accessories.repo';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
 import { TransactionsRepo } from 'src/repository/transactions.repo';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
+import { WireTypes } from '@shared/enums/WireTypes';
+import { Transaction } from '@shared/types/Transaction';
 
 @Injectable()
 export class TransactionsService {
@@ -17,7 +18,10 @@ export class TransactionsService {
     private readonly connRepo: ConnectorRepo,
   ) {}
 
-  async processTransaction(dto: CreateTransactionsDto, tx?: TransactionClient) {
+  async processTransaction(
+    dto: Omit<Transaction, 'ID'>,
+    tx?: TransactionClient,
+  ) {
     const { itemId, transactionType, itemType, subType } = dto;
 
     // make amount positive or negative

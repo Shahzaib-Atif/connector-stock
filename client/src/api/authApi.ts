@@ -1,4 +1,4 @@
-import { User } from "@/utils/types";
+import { UserDto } from "@shared/dto/UserDto";
 import { API } from "../utils/api";
 import { fetchWithAuth } from "../utils/fetchClient";
 
@@ -18,7 +18,7 @@ export const loginApi = async (username: string, password: string) => {
   return response.json();
 };
 
-export const fetchUsersApi = async (): Promise<User[]> => {
+export const fetchUsersApi = async (): Promise<UserDto[]> => {
   const response = await fetchWithAuth(API.users);
 
   if (!response.ok) {
@@ -28,7 +28,7 @@ export const fetchUsersApi = async (): Promise<User[]> => {
   return response.json();
 };
 
-export const createUserApi = async (userData: User) => {
+export const createUserApi = async (userData: UserDto) => {
   const response = await fetchWithAuth(API.users, {
     method: "POST",
     body: JSON.stringify(userData),

@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication, Logger } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { Request, Response, NextFunction } from 'express';
 import * as dotenv from 'dotenv';
 const envPath = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
 dotenv.config({ path: envPath });
@@ -49,7 +50,7 @@ function addApiDocumentation(app: INestApplication) {
 
 // Simple request logger middleware
 function addLogger(app: INestApplication) {
-  app.use((req, res, next) => {
+  app.use((req: Request, res: Response, next: NextFunction) => {
     Logger.log(`${req.method} ${req.url}`);
     next();
   });

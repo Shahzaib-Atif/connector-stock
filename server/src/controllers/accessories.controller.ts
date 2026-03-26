@@ -5,7 +5,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { UpdateAccessoryDto } from 'src/dtos/accessory.dto';
 import { AccessoriesService } from 'src/services/accessories.service';
-import { UserRoles } from 'src/utils/types';
+import { UserRoles } from '@shared/enums/UserRoles';
 
 @Controller('api/accessories')
 export class AccessoryController {

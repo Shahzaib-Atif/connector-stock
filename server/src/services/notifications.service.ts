@@ -7,9 +7,8 @@ import {
   AppNotification,
 } from 'src/dtos/notifications.dto';
 import { UpdateSampleDto } from 'src/dtos/samples.dto';
-import { ConnectorDto } from 'src/dtos/connector.dto';
-import { CreateTransactionsDto } from 'src/dtos/transaction.dto';
-import { ParsedMessage } from 'src/utils/types';
+import { CreateTransactionsDto, ParsedMessage } from 'src/utils/types';
+import { Connector } from '@domain/entities/Connector';
 
 @Injectable()
 export class NotificationsService {
@@ -49,8 +48,8 @@ export class NotificationsService {
     const parsed = this.parseNotificationMessage(notification.Message);
 
     // Try to find matching sample and connector
-    let linkedSample: UpdateSampleDto | undefined;
-    let linkedConnector: ConnectorDto | undefined;
+    let linkedSample: UpdateSampleDto | null = null;
+    let linkedConnector: Connector | null = null;
 
     if (parsed.conector) {
       linkedConnector = await this.connectorRepo.getConnectorByCodivmac(
@@ -90,19 +89,21 @@ export class NotificationsService {
       throw new Error(`Notification with ID ${id} not found`);
     }
 
-    let connectorUpdate: {
-      codivmac: string;
-      newQty: number;
-      updatedBy: string;
-    };
+    let connectorUpdate:
+      | {
+          codivmac: string;
+          newQty: number;
+          updatedBy: string;
+        }
+      | undefined;
 
     // Calculate new quantity if linked connector exists
     if (notificationData.linkedConnector && quantityTakenOut > 0) {
-      const currentQty = notificationData.linkedConnector.Qty || 0;
+      const currentQty = notificationData.linkedConnector.quantity?.total;
       const newQty = Math.max(0, currentQty - quantityTakenOut);
 
       connectorUpdate = {
-        codivmac: notificationData.linkedConnector?.CODIVMAC,
+        codivmac: notificationData.linkedConnector.id,
         newQty: newQty,
         updatedBy: finishedBy || 'system',
       };
@@ -113,8 +114,7 @@ export class NotificationsService {
 
     // Use extracted connector from message if linked connector doesn't exist
     const connectorId =
-      notificationData.linkedConnector?.CODIVMAC ||
-      notificationData.parsedConector;
+      notificationData.linkedConnector?.id ?? notificationData.parsedConector;
 
     if (connectorId) {
       transactionDto = {

@@ -9,7 +9,7 @@ interface Props {
   itemIdQuery: string;
   onSearchItemIdChange: (value: string) => void;
   department: string;
-  onDepartmentChange: (value: string) => void;
+  onDepartmentChange: (value: Department | "all") => void;
 }
 
 export const FilterBar: React.FC<Props> = ({
@@ -95,7 +95,9 @@ export const FilterBar: React.FC<Props> = ({
         <select
           id="Department"
           value={department}
-          onChange={(e) => onDepartmentChange(e.target.value)}
+          onChange={(e) =>
+            onDepartmentChange(e.target.value as "all" | Department)
+          }
           className={selectStyle}
         >
           <option value="all">All</option>

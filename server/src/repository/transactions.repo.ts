@@ -1,7 +1,8 @@
+import { TransactionMapper } from '@infra/TransactionMapper';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { CreateTransactionsDto } from 'src/dtos/transaction.dto';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
+import { CreateTransactionsDto } from 'src/utils/types';
 
 @Injectable()
 export class TransactionsRepo {
@@ -23,8 +24,10 @@ export class TransactionsRepo {
   async addTransaction(dto: CreateTransactionsDto, tx?: TransactionClient) {
     try {
       const client = tx || this.prisma;
-      return await client.transactions.create({ data: dto });
-    } catch (ex) {
+      return await client.transactions.create({
+        data: TransactionMapper.toPrismaCreate(dto),
+      });
+    } catch (ex: any) {
       console.error('Failed to add transaction:', ex);
       return null; // at least signals failure
     }

@@ -2,7 +2,7 @@ import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { FolderService } from 'src/services/folder.service';
-import getErrorMsg from 'src/utils/getErrorMsg';
+import { getErrorMsg } from '@shared/utils/getErrorMsg';
 
 @ApiTags('Folder')
 @Controller('api/folder')

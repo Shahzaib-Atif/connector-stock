@@ -6,7 +6,7 @@ import { BoxShortcut } from "../common/BoxShortcut";
 import { Edit2 } from "lucide-react";
 import { ConnectorEditForm } from "./components/ConnectorEditForm";
 import { RelatedImages } from "./components/RelatedImages";
-import { UserRoles } from "@/utils/types/userTypes";
+import { UserRoles } from "@shared/enums/UserRoles";
 import { QRData } from "@/utils/types/shared";
 import { EntityResolver, useEntityDetails } from "@/hooks/useEntityDetails";
 import { Connector } from "@/utils/types";

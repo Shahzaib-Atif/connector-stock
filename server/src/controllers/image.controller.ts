@@ -2,7 +2,7 @@ import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { Response } from 'express';
 import { ImageService } from 'src/services/image.service';
-import getErrorMsg from 'src/utils/getErrorMsg';
+import { getErrorMsg } from '@shared/utils/getErrorMsg';
 
 @Controller('api/images')
 export class ImageController {

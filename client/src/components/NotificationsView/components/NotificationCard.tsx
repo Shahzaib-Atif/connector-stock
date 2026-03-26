@@ -11,7 +11,7 @@ import {
 import { INotification } from "@/utils/types/notificationTypes";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { markAsReadThunk } from "@/store/slices/notificationsSlice";
-import { UserRoles } from "@/utils/types/userTypes";
+import { UserRoles } from "@shared/enums/UserRoles";
 import InfoBadge from "./InfoBadge";
 import { formatDate2 } from "@/utils/formatDate";
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sample, UserRoles } from "@/utils/types";
+import { Sample } from "@/utils/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   fetchSamplesThunk,
@@ -19,6 +19,7 @@ import DeleteDialog from "../common/DeleteDialog";
 import { FilterBar } from "../common/FilterBar";
 import { ROUTES } from "../AppRoutes";
 import { QRData } from "@/utils/types/shared";
+import { UserRoles } from "@shared/enums/UserRoles";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;

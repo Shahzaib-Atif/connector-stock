@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as path from 'path';
 import { PrintLabelDto } from 'src/dtos/print.dto';
-import getErrorMsg from 'src/utils/getErrorMsg';
+import { getErrorMsg } from '@shared/utils/getErrorMsg';
 import { TsplBuilder } from 'src/utils/TsplBuilder';
 import { PrinterClient } from 'src/utils/PrinterClient';
 

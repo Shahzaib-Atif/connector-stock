@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
-import getErrorMsg from 'src/utils/getErrorMsg';
+import { getErrorMsg } from '@shared/utils/getErrorMsg';
 
 @Injectable()
 export class ImageService {

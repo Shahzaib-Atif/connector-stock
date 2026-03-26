@@ -44,25 +44,23 @@ export const createUserThunk = createAsyncThunk(
     const result = await createUserApi(userData);
     dispatch(initUsersList());
     return result;
-  }
+  },
 );
 
 export const deleteUserThunk = createAsyncThunk(
   "usersList/delete",
   async (userId: number, { dispatch }) => {
-    if (!userId) throw new Error("UserId cannot be empty!");
-
     const result = await deleteUserApi(userId);
     dispatch(initUsersList());
     return result;
-  }
+  },
 );
 
 export const changePasswordThunk = createAsyncThunk(
   "auth/changePassword",
   async (newPassword: string) => {
     return await changePasswordApi(newPassword);
-  }
+  },
 );
 
 export const authSlice = createSlice({
@@ -75,7 +73,7 @@ export const authSlice = createSlice({
         user: string;
         role: UserRoles;
         token: string;
-      }>
+      }>,
     ) => {
       state.isAuthenticated = true;
       state.user = action.payload.user;
@@ -89,7 +87,7 @@ export const authSlice = createSlice({
           user: state.user,
           role: state.role,
           token: state.token,
-        })
+        }),
       );
     },
     logout: (state) => {

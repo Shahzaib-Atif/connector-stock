@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/store/hooks";
-import { WireTypes } from "@/utils/types";
+import { WireTypes } from "@shared/enums/WireTypes";
 import { useEffect, useMemo, useState } from "react";
 
 export default function useStockCalculations(

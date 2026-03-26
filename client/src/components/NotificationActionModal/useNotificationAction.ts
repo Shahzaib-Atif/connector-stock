@@ -10,7 +10,7 @@ import {
   DeliveryStatus,
   INotification,
 } from "@/utils/types/notificationTypes";
-import getErrorMsg from "@/utils/getErrorMsg";
+import { getErrorMsg } from "@shared/utils/getErrorMsg";
 
 export function useNotificationAction(
   notificationId: number,

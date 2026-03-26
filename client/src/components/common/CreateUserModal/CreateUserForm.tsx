@@ -1,9 +1,11 @@
-import { UserRoles, Department } from "@/utils/types";
+import { Department } from "@/utils/types";
 import { Building2, Loader2 } from "lucide-react";
 import React, { useState } from "react";
 import ShowSuccess from "../ShowSuccess";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { createUserThunk } from "@/store/slices/authSlice";
+import { UserRoles } from "@shared/enums/UserRoles";
+import { getErrorMsg } from "@shared/utils/getErrorMsg";
 
 interface Props {
   onClose: () => void;
@@ -49,7 +51,7 @@ function CreateUserForm({ onClose }: Props) {
         onClose();
       }, 2000);
     } catch (err) {
-      setErrorMessage(err.message || "Failed to create user");
+      setErrorMessage(getErrorMsg(err, "Failed to create user"));
       setStatus("error");
     }
   };

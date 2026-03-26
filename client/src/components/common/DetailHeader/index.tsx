@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { QrCode, Menu, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
-import { UserRoles } from "@/utils/types/userTypes";
+import { UserRoles } from "@shared/enums/UserRoles";
 import RefreshButton from "./RefreshButton";
 import { useAppSelector } from "@/store/hooks";
 import { Breadcrumbs } from "../Breadcrumbs";

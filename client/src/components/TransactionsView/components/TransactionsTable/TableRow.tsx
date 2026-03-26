@@ -1,5 +1,6 @@
 import { ROUTES } from "@/components/AppRoutes";
-import { Transaction, WireTypes } from "@/utils/types";
+import { WireTypes } from "@shared/enums/WireTypes";
+import { Transaction } from "@shared/types/Transaction";
 import { Link as LinkIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 

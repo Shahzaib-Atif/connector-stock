@@ -7,9 +7,9 @@ import { AccessoryRepo } from 'src/repository/accessories.repo';
 import { CreateSampleDto, UpdateSampleDto } from 'src/dtos/samples.dto';
 import { TransactionsService } from './transactions.service';
 import { getConnectorId } from 'src/utils/getConnectorId';
-import { WireTypes } from 'src/dtos/transaction.dto';
-import getErrorMsg from 'src/utils/getErrorMsg';
-import { Transaction } from 'src/utils/types';
+import { getErrorMsg } from '@shared/utils/getErrorMsg';
+import { Transaction } from '@shared/types/Transaction';
+import { WireTypes } from '@shared/enums/WireTypes';
 
 @Injectable()
 export class SamplesService {

@@ -1,17 +1,17 @@
-import { UserRoles } from 'src/utils/types';
+import { UserRoles } from '@shared/enums/UserRoles';
 
-export class LoginDto {
+export interface LoginDto {
   username: string;
   password: string;
 }
 
-export class CreateUserDto {
+export interface CreateUserDto {
   username: string;
   password: string;
   role: UserRoles;
   dept?: string;
 }
 
-export class ChangePasswordDto {
+export interface ChangePasswordDto {
   newPassword: string;
 }

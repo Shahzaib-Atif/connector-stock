@@ -1,4 +1,4 @@
-import { WireTypes } from "@/utils/types";
+import { WireTypes } from "@shared/enums/WireTypes";
 
 interface Props {
   subType: string;

@@ -1,13 +1,13 @@
 import { Department } from "@/utils/types/shared";
-import { Transaction } from "@/utils/types";
+import { Transaction } from "@shared/types/Transaction";
 import { useState, useMemo } from "react";
 
 export function useTransactionsFilter(transactions: Transaction[]) {
   const [transactionType, setTransactionType] = useState<"all" | "IN" | "OUT">(
-    "all"
+    "all",
   );
   const [itemType, setItemType] = useState<"all" | "connector" | "accessory">(
-    "all"
+    "all",
   );
   const [itemIdQuery, setItemIdQuery] = useState("");
   const [department, setDepartment] = useState<Department | "all">("all");

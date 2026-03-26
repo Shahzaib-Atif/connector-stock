@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { Transaction } from "../utils/types";
+import { Transaction } from "@shared/types/Transaction";
 import { getTransactions } from "@/api/transactionsApi";
 
 interface StockState {
@@ -27,7 +27,7 @@ export const stockSlice = createSlice({
         connectorId: string;
         amount: number;
         transaction: Transaction;
-      }>
+      }>,
     ) => {
       const { transaction } = action.payload;
       state.transactions.unshift(transaction);

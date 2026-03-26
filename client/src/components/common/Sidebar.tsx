@@ -20,7 +20,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "../AppRoutes";
 import { fetchUnfinishedNotifications } from "@/store/slices/notificationsSlice";
 import { useEffect } from "react";
-import { UserRoles } from "@/utils/types/userTypes";
+import { UserRoles } from "@shared/enums/UserRoles";
 
 interface Props {
   isMenuOpen: boolean;

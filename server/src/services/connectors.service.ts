@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
-import getErrorMsg from 'src/utils/getErrorMsg';
+import { getErrorMsg } from '@shared/utils/getErrorMsg';
 
 @Injectable()
 export class ConnectorsService {

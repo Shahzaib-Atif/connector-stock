@@ -9,7 +9,8 @@ import { useAppDispatch } from "@/store/hooks";
 import { deleteUserThunk } from "@/store/slices/authSlice";
 import DeleteDialog from "../common/DeleteDialog";
 import UsersTable from "./UsersTable";
-import { User, UserRoles } from "@/utils/types/userTypes";
+import { UserRoles } from "@shared/enums/UserRoles";
+import { UserDto } from "@shared/dto/UserDto";
 
 export const UsersView: React.FC = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export const UsersView: React.FC = () => {
   const { role, user: currentUsername } = useAppSelector((state) => state.auth);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [openDltDlg, setOpenDltDlg] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserDto | null>(null);
 
   if (role !== UserRoles.Master && role !== UserRoles.Admin) {
     return (
@@ -35,8 +36,10 @@ export const UsersView: React.FC = () => {
   }
 
   const handleDelete = () => {
-    if (selectedUser.username !== currentUsername)
-      dispatch(deleteUserThunk(selectedUser?.userId));
+    if (selectedUser?.username !== currentUsername) {
+      if (!selectedUser?.userId) throw new Error("UserId cannot be empty!");
+      dispatch(deleteUserThunk(selectedUser.userId));
+    }
   };
 
   return (

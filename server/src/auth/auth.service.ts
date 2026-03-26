@@ -2,7 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersRepo } from '../repository/users.repo';
-import { User, UserRoles } from 'src/utils/types';
+import { UserDto } from '@shared/dto/UserDto';
+import { UserRoles } from '@shared/enums/UserRoles';
 
 @Injectable()
 export class AuthService {
@@ -12,16 +13,16 @@ export class AuthService {
   ) {}
 
   // Validate user credentials
-  async validateUser(username: string, pass: string): Promise<User> {
-    const user = (await this.usersRepo.findByUsername(username)) as User;
+  async validateUser(username: string, pass: string): Promise<UserDto> {
+    const user = await this.usersRepo.findByUsername(username);
     if (user) {
-      const isMatch = await bcrypt.compare(pass, user.password);
+      const isMatch = await bcrypt.compare(pass, user.password ?? '');
       if (isMatch) {
         const { userId, username, role } = user;
         return {
           userId,
           username,
-          role,
+          role: role as UserRoles,
         };
       }
       throw new UnauthorizedException('Invalid credentials!');
@@ -30,7 +31,7 @@ export class AuthService {
   }
 
   // Generate JWT token for authenticated user
-  login(user: User) {
+  login(user: UserDto) {
     const payload = {
       username: user?.username || '',
       sub: user.userId,

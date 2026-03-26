@@ -4,7 +4,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { UpdateConnectorDto } from 'src/dtos/connector.dto';
-import { UserRoles } from 'src/utils/types';
+import { UserRoles } from '@shared/enums/UserRoles';
 
 @Controller('api/connectors')
 export class ConnectorController {

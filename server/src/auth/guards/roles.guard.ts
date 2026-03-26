@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/roles.decorator';
-import { User } from 'src/utils/types';
+import { UserDto } from '@shared/dto/UserDto';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -23,11 +23,13 @@ export class RolesGuard implements CanActivate {
     if (!requiredRoles) return true;
 
     // if role is required, then first check user is present with request
-    const { user } = context.switchToHttp().getRequest<{ user: User }>();
+    const { user } = context.switchToHttp().getRequest<{ user: UserDto }>();
     if (!user) throw new UnauthorizedException(); // 401
 
     // make sure this role is allowed to get access
-    const hasRole = requiredRoles.some((role) => user?.role === role);
+    const hasRole = requiredRoles.some(
+      (role) => user?.role?.toString() === role,
+    );
     if (!hasRole) throw new ForbiddenException(); // 403
 
     return true;

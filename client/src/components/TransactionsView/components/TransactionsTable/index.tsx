@@ -1,5 +1,5 @@
 import React from "react";
-import { Transaction } from "@/utils/types";
+import { Transaction } from "@shared/types/Transaction";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 
