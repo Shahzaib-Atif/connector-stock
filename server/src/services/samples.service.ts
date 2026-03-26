@@ -4,12 +4,12 @@ import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace
 import { SamplesRepo } from 'src/repository/samples.repo';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
 import { AccessoryRepo } from 'src/repository/accessories.repo';
-import { CreateSampleDto, UpdateSampleDto } from 'src/dtos/samples.dto';
 import { TransactionsService } from './transactions.service';
 import { getConnectorId } from 'src/utils/getConnectorId';
 import { getErrorMsg } from '@shared/utils/getErrorMsg';
 import { Transaction } from '@shared/types/Transaction';
 import { WireTypes } from '@shared/enums/WireTypes';
+import { CreateSamplesDto, SamplesDto } from '@shared/dto/SamplesDto';
 
 @Injectable()
 export class SamplesService {
@@ -60,7 +60,7 @@ export class SamplesService {
   }
 
   // Create sample and process transactions atomically
-  async createSample(dto: CreateSampleDto) {
+  async createSample(dto: CreateSamplesDto) {
     return await this.prisma.$transaction(async (tx) => {
       // 1. Create sample metadata
       // Remove associatedItemIds from dto before creating prisma record
@@ -92,7 +92,7 @@ export class SamplesService {
                   amount: qtyComFio,
                   itemType: 'connector',
                   subType: WireTypes.COM_FIO,
-                  department: dto.Entregue_a,
+                  department: dto.Entregue_a ?? '',
                 },
                 tx,
               );
@@ -113,7 +113,7 @@ export class SamplesService {
                   amount: qtySemFio,
                   itemType: 'connector',
                   subType: WireTypes.SEM_FIO,
-                  department: dto.Entregue_a,
+                  department: dto.Entregue_a ?? '',
                 },
                 tx,
               );
@@ -133,7 +133,7 @@ export class SamplesService {
                   transactionType: 'IN',
                   amount: totalQuantity,
                   itemType: 'connector',
-                  department: dto.Entregue_a,
+                  department: dto.Entregue_a ?? '',
                 },
                 tx,
               );
@@ -156,7 +156,7 @@ export class SamplesService {
                 transactionType: 'IN',
                 amount: accAmount,
                 itemType: 'accessory',
-                department: dto.Entregue_a,
+                department: dto.Entregue_a ?? '',
               },
               tx,
             );
@@ -180,7 +180,7 @@ export class SamplesService {
   }
 
   // Update sample and adjust quantities atomically
-  async updateSample(id: number, dto: UpdateSampleDto) {
+  async updateSample(id: number, dto: SamplesDto) {
     // Remove associatedItemIds from dto before creating prisma record
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { associatedItemIds, ...sampleData } = dto;
@@ -214,7 +214,7 @@ export class SamplesService {
       const delta = newQty - previousQty;
 
       const targetAmostra = dto.Amostra ?? existing.Amostra;
-      const targetConnId = getConnectorId(targetAmostra);
+      const targetConnId = getConnectorId(targetAmostra ?? undefined);
       const existingConnId = getConnectorId(existing.Amostra ?? '');
 
       // Adjust connector quantity
@@ -391,7 +391,7 @@ export class SamplesService {
   }
 
   // Soft delete sample and revert all stock atomically
-  async deleteSample(id: number, deletedBy?: string) {
+  async deleteSample(id: number, deletedBy?: string): Promise<SamplesDto> {
     return await this.prisma.$transaction(async (tx) => {
       const existing = await tx.rEG_Amostras.findUnique({
         where: { ID: id },

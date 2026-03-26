@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { SamplesService } from 'src/services/samples.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { CreateSampleDto, UpdateSampleDto } from 'src/dtos/samples.dto';
+import { CreateSamplesDto, SamplesDto } from '@shared/dto/SamplesDto';
 
 @Controller('api/samples')
 export class SamplesController {
@@ -57,7 +57,7 @@ export class SamplesController {
 
   @UseGuards(JwtAuthGuard)
   @Post('')
-  async createSample(@Body() dto: CreateSampleDto) {
+  async createSample(@Body() dto: CreateSamplesDto) {
     return await this.service.createSample(dto);
   }
 
@@ -65,7 +65,7 @@ export class SamplesController {
   @Put(':id')
   async updateSample(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdateSampleDto,
+    @Body() dto: SamplesDto,
   ) {
     return await this.service.updateSample(id, dto);
   }

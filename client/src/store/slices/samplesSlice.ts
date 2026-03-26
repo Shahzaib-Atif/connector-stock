@@ -6,12 +6,12 @@ import {
   deleteSample,
   getAllSamplesFromORC,
 } from "@/api/samplesApi";
-import { Sample } from "@/utils/types";
 import { RegAmostrasOrcRow } from "@/types/sampleCreation";
 import { setLineStatus } from "@/utils/inventoryUtils";
+import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 
 interface SamplesState {
-  samples: Sample[];
+  samples: SamplesDto[];
   orcSamples: RegAmostrasOrcRow[];
   projects: string[];
   clients: string[];
@@ -51,12 +51,7 @@ export const fetchOrcSamplesThunk = createAsyncThunk(
 // Create a new sample
 export const createSampleThunk = createAsyncThunk(
   "samples/create",
-  async (
-    sampleData: Omit<
-      Sample,
-      "ID" | "IsActive" | "DateOfCreation" | "DateOfLastUpdate"
-    >,
-  ) => {
+  async (sampleData: CreateSamplesDto) => {
     const sample = await createSample(sampleData); // create sample
     setLineStatus(sample.EncDivmac, sample.Ref_Descricao);
     return sample;
@@ -66,7 +61,7 @@ export const createSampleThunk = createAsyncThunk(
 // Update an existing sample
 export const updateSampleThunk = createAsyncThunk(
   "samples/update",
-  async ({ id, data }: { id: number; data: Partial<Sample> }) => {
+  async ({ id, data }: { id: number; data: SamplesDto }) => {
     const sample = await updateSample(id, data);
     return sample;
   },

@@ -48,9 +48,7 @@ export const fetchVias = async (): Promise<Record<string, string>> => {
   }
 };
 
-export const fetchPositions = async (): Promise<
-  Record<string, { cv: string; ch: string }>
-> => {
+export const fetchPositions = async () => {
   const response = await fetchWithAuth(API.positions);
   if (!response.ok) {
     throw new Error("Failed to fetch positions");
@@ -70,10 +68,10 @@ export const fetchPositions = async (): Promise<
     if (item.CON) {
       const key = item.CON.trim();
       positions[key] = {
-        cv: normalizeString(item.CV),
-        ch: normalizeString(item.CH),
-        cv_ma: normalizeString(item.CV_Ma),
-        ch_ma: normalizeString(item.CH_Ma),
+        cv: normalizeString(item.CV ?? ""),
+        ch: normalizeString(item.CH ?? ""),
+        cv_ma: normalizeString(item.CV_Ma ?? ""),
+        ch_ma: normalizeString(item.CH_Ma ?? ""),
       };
     }
   });

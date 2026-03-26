@@ -4,7 +4,6 @@ import { Accessory, Connector } from "./inventoryTypes";
 export * from "./inventoryTypes";
 export * from "./notificationTypes";
 export * from "./paginationTypes";
-export * from "./sampleTypes";
 export * from "./shared";
 export * from "./legacyTypes";
 

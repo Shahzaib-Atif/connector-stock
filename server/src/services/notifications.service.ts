@@ -6,9 +6,9 @@ import {
   NotificationWithSample,
   AppNotification,
 } from 'src/dtos/notifications.dto';
-import { UpdateSampleDto } from 'src/dtos/samples.dto';
 import { CreateTransactionsDto, ParsedMessage } from 'src/utils/types';
 import { Connector } from '@domain/entities/Connector';
+import { SamplesDto } from '@shared/dto/SamplesDto';
 
 @Injectable()
 export class NotificationsService {
@@ -48,7 +48,7 @@ export class NotificationsService {
     const parsed = this.parseNotificationMessage(notification.Message);
 
     // Try to find matching sample and connector
-    let linkedSample: UpdateSampleDto | null = null;
+    let linkedSample: SamplesDto | null = null;
     let linkedConnector: Connector | null = null;
 
     if (parsed.conector) {

@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { CreateSampleDto, UpdateSampleDto } from 'src/dtos/samples.dto';
+import { SamplesDto, CreateSamplesDto } from '@shared/dto/SamplesDto';
+import { RegAmostrasOrcDto } from '@shared/dto/RegAmostrasOrcDto';
+import { RegAmostrasEncDto } from '@shared/dto/RegAmostrasEncDto';
+import { AnaliseTabDto } from '@shared/dto/AnaliseTabDto';
 
 @Injectable()
 export class SamplesRepo {
   constructor(private prisma: PrismaService) {}
 
-  async getAllSamples() {
+  async getAllSamples(): Promise<SamplesDto[]> {
     try {
       return await this.prisma.rEG_Amostras.findMany({
         where: { IsActive: true },
@@ -18,7 +21,7 @@ export class SamplesRepo {
     }
   }
 
-  async getSampleById(id: number) {
+  async getSampleById(id: number): Promise<SamplesDto | null> {
     try {
       return await this.prisma.rEG_Amostras.findUnique({
         where: { ID: id },
@@ -29,7 +32,7 @@ export class SamplesRepo {
     }
   }
 
-  async createSample(dto: CreateSampleDto) {
+  async createSample(dto: CreateSamplesDto): Promise<SamplesDto | null> {
     // Remove associatedItemIds from dto before creating prisma record
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { associatedItemIds, ...sampleData } = dto;
@@ -48,7 +51,7 @@ export class SamplesRepo {
     }
   }
 
-  async updateSample(id: number, dto: UpdateSampleDto) {
+  async updateSample(id: number, dto: SamplesDto): Promise<SamplesDto | null> {
     try {
       // Remove associatedItemIds from dto before creating prisma record
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -67,7 +70,10 @@ export class SamplesRepo {
   }
 
   /** Soft delete sample by setting IsActive to false   */
-  async deleteSample(id: number, deletedBy?: string) {
+  async deleteSample(
+    id: number,
+    deletedBy?: string,
+  ): Promise<SamplesDto | null> {
     try {
       return await this.prisma.rEG_Amostras.update({
         where: { ID: id },
@@ -84,7 +90,9 @@ export class SamplesRepo {
   }
 
   /** Get AnaliseTab data by RefCliente for sample creation wizard */
-  async getAnaliseTabByRefCliente(refCliente: string) {
+  async getAnaliseTabByRefCliente(
+    refCliente: string,
+  ): Promise<AnaliseTabDto[]> {
     try {
       return await this.prisma.v_AnaliseTab.findMany({
         where: { RefCliente: { contains: refCliente } },
@@ -102,7 +110,7 @@ export class SamplesRepo {
     refCliente: string,
     projeto: string,
     conectorDV: string,
-  ) {
+  ): Promise<RegAmostrasEncDto[]> {
     try {
       return await this.prisma.v_RegAmostrasEnc.findMany({
         where: {
@@ -118,7 +126,7 @@ export class SamplesRepo {
   }
 
   /** Get samples starting from ORC documents (using V_RegAmostrasFromORC) */
-  async getSamplesFromORC(numorc: string) {
+  async getSamplesFromORC(numorc: string): Promise<RegAmostrasOrcDto[]> {
     const byOrc = await this.prisma.v_RegAmostrasFromORC.findMany({
       where: { orcDoc: numorc },
     });
@@ -133,7 +141,7 @@ export class SamplesRepo {
   }
 
   /** Get all samples from ORC documents (using V_RegAmostrasFromORC) */
-  async getAllSamplesFromORC() {
+  async getAllSamplesFromORC(): Promise<RegAmostrasOrcDto[]> {
     try {
       return await this.prisma.v_RegAmostrasFromORC.findMany();
     } catch (ex: any) {

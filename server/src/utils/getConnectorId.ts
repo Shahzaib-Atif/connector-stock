@@ -1,4 +1,4 @@
-export function getConnectorId(amostra: string): string {
+export function getConnectorId(amostra?: string | null): string {
   if (!amostra) return '';
 
   const cleanAmostra = amostra.trim();

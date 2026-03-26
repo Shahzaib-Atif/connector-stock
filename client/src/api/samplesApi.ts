@@ -1,9 +1,10 @@
-import { Sample } from "@/utils/types";
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
+import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
+import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
 
 export const getSamples = async (): Promise<{
-  samples: Sample[];
+  samples: SamplesDto[];
   projects: string[];
   clients: string[];
 }> => {
@@ -12,18 +13,15 @@ export const getSamples = async (): Promise<{
   return response.json();
 };
 
-export const getSample = async (id: number): Promise<Sample> => {
+export const getSample = async (id: number): Promise<SamplesDto> => {
   const response = await fetchWithAuth(`${API.samples}/${id}`);
   if (!response.ok) throw new Error("Failed to fetch sample");
   return response.json();
 };
 
 export const createSample = async (
-  sample: Omit<
-    Sample,
-    "ID" | "IsActive" | "DateOfCreation" | "DateOfLastUpdate"
-  >
-): Promise<Sample> => {
+  sample: CreateSamplesDto,
+): Promise<SamplesDto> => {
   const response = await fetchWithAuth(API.samples, {
     method: "POST",
     body: JSON.stringify(sample),
@@ -34,8 +32,8 @@ export const createSample = async (
 
 export const updateSample = async (
   id: number,
-  sample: Partial<Sample>
-): Promise<Sample> => {
+  sample: SamplesDto,
+): Promise<SamplesDto> => {
   const response = await fetchWithAuth(`${API.samples}/${id}`, {
     method: "PUT",
     body: JSON.stringify(sample),
@@ -49,14 +47,14 @@ export const updateSample = async (
   return response.json();
 };
 
-export const deleteSample = async (id: number): Promise<Sample> => {
+export const deleteSample = async (id: number): Promise<SamplesDto> => {
   const response = await fetchWithAuth(`${API.samples}/${id}`, {
     method: "DELETE",
   });
   return response.json();
 };
 
-export const getAllSamplesFromORC = async (): Promise<any[]> => {
+export const getAllSamplesFromORC = async (): Promise<RegAmostrasOrcDto[]> => {
   const response = await fetchWithAuth(`${API.samples}/all-from-orc`);
   if (!response.ok) throw new Error("Failed to fetch all ORC samples");
   return response.json();

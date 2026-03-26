@@ -1,5 +1,5 @@
-import { UpdateSampleDto } from './samples.dto';
 import { Connector } from '@domain/entities/Connector';
+import { SamplesDto } from '@shared/dto/SamplesDto';
 
 export interface AppNotification {
   id: number;
@@ -32,6 +32,6 @@ export interface NotificationWithParsedData extends AppNotification {
 }
 
 export interface NotificationWithSample extends NotificationWithParsedData {
-  linkedSample?: UpdateSampleDto | null;
+  linkedSample?: SamplesDto | null;
   linkedConnector?: Connector | null;
 }

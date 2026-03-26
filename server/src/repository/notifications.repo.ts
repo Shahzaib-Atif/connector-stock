@@ -1,8 +1,8 @@
 import { TransactionMapper } from '@infra/TransactionMapper';
 import { Injectable } from '@nestjs/common';
+import { SamplesDto } from '@shared/dto/SamplesDto';
 import { PrismaService } from 'prisma/prisma.service';
 import { AppNotification } from 'src/dtos/notifications.dto';
-import { UpdateSampleDto } from 'src/dtos/samples.dto';
 import { CreateTransactionsDto } from 'src/utils/types';
 
 @Injectable()
@@ -54,7 +54,7 @@ export class NotificationsRepo {
   async findMatchingSample(
     conector: string,
     encomenda: string,
-  ): Promise<UpdateSampleDto | null> {
+  ): Promise<SamplesDto | null> {
     try {
       const samples = await this.prisma.rEG_Amostras.findMany({
         where: {
@@ -75,7 +75,7 @@ export class NotificationsRepo {
         orderBy: { ID: 'desc' },
       });
 
-      return samples.length > 0 ? (samples[0] as UpdateSampleDto) : null;
+      return samples.length > 0 ? (samples[0] as SamplesDto) : null;
     } catch (ex: any) {
       console.error('Failed to find matching sample:', ex.message);
       return null;
