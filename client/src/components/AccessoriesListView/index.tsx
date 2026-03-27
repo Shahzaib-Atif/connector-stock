@@ -3,11 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/store/hooks";
 import { usePagination } from "@/hooks/usePagination";
 import { useAccessoryFilters } from "@/hooks/useAccessoryFilters";
-import { useImageToggle } from "@/hooks/useImageToggle";
 import { DetailHeader } from "../common/DetailHeader";
 import { AccessoriesTable } from "./AccessoriesTable";
 import { AccessoriesFilterBar } from "./AccessoriesFilterBar";
-import ImageToggleBtn from "../common/ImageToggleBtn";
 import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
@@ -21,8 +19,6 @@ export const AccessoriesListView: React.FC = () => {
 
   // Get accessories from masterData (default to empty object if not loaded)
   const accessories = masterData?.accessories ?? {};
-
-  const { showImages, setShowImages } = useImageToggle("accessories_show_images");
 
   // Custom hook for filters
   const { 
@@ -70,13 +66,11 @@ export const AccessoriesListView: React.FC = () => {
             typeOptions={typeOptions}
             colorOptions={colorOptions}
           >
-            <ImageToggleBtn showImages={showImages} setShowImages={setShowImages} />
           </AccessoriesFilterBar>
 
           <div className="table-container-outer">
             <AccessoriesTable
               accessories={paginatedAccessories as Accessory[]}
-              showImages={showImages}
             />
           </div>
 
