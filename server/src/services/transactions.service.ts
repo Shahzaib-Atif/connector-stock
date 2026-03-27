@@ -58,7 +58,7 @@ export class TransactionsService {
         await this.handleAccessoryTx(itemId, amount, tx);
         break;
       case 'connector':
-        await this.connRepo.update(itemId, amount, subType, tx);
+        await this.connRepo.updateQty(itemId, amount, subType, tx);
         break;
       default:
         throw new Error('unknown itemType!');

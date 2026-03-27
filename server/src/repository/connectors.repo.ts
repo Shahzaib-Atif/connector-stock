@@ -1,7 +1,6 @@
 import { Connector } from '@domain/entities/Connector';
 import { ConnectorMapper } from '@infra/ConnectorMapper';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
+import { Injectable } from '@nestjs/common';
 import { WireTypes } from '@shared/enums/WireTypes';
 import { getErrorMsg } from '@shared/utils/getErrorMsg';
 import { PrismaService } from 'prisma/prisma.service';
@@ -83,7 +82,7 @@ export class ConnectorRepo {
     }
   }
 
-  async update(
+  async updateQty(
     codivmacId: string,
     amount: number,
     subType?: WireTypes,
@@ -93,7 +92,7 @@ export class ConnectorRepo {
       const client = tx || this.prisma;
       const data = this.incrementQty(amount, subType);
 
-      return await client.connectors_Main.update({
+      await client.connectors_Main.update({
         where: {
           CODIVMAC: codivmacId,
         },
@@ -101,34 +100,6 @@ export class ConnectorRepo {
       });
     } catch (ex: any) {
       console.error(ex.message);
-      return null;
-    }
-  }
-
-  async adjustQuantity(
-    tx: TransactionClient,
-    codivmac: string,
-    delta: number,
-    subType?: WireTypes,
-  ) {
-    if (!codivmac || !delta) return;
-
-    try {
-      const data = this.incrementQty(delta, subType);
-
-      await tx.connectors_Main.update({
-        where: { CODIVMAC: codivmac },
-        data,
-      });
-    } catch (err: unknown) {
-      if (
-        err instanceof PrismaClientKnownRequestError &&
-        err.code === 'P2025'
-      ) {
-        // Record doesn't exist
-        throw new NotFoundException(`Connector with ID ${codivmac} not found`);
-      }
-      throw err; // re-throw other errors
     }
   }
 
@@ -149,61 +120,109 @@ export class ConnectorRepo {
     `;
   }
 
-  async updateConnectorProperties(codivmac: string, data: UpdateConnectorDto) {
+  async updateConnectorProperties(
+    codivmac: string,
+    data: UpdateConnectorDto,
+  ): Promise<boolean> {
     try {
       return await this.prisma.$transaction(async (tx) => {
         // Update Main table
-        await tx.connectors_Main.update({
-          where: { CODIVMAC: codivmac },
-          data: {
-            Cor: data.Cor,
-            Vias: data.Vias,
-            ConnType: data.ConnType,
-            Qty: data.Qty,
-            Qty_com_fio: data.Qty_com_fio,
-            Qty_sem_fio: data.Qty_sem_fio,
-          },
-        });
+        await this.updateMain(codivmac, data, tx);
 
         // Update Details table (upsert just in case it's missing)
-        await tx.connectors_Details.upsert({
-          where: { ConnId: codivmac },
-          create: {
-            ConnId: codivmac,
-            Fabricante: data.Fabricante,
-            Family: data.Family,
-            ActualViaCount: data.ActualViaCount,
-          },
-          update: {
-            Fabricante: data.Fabricante,
-            Refabricante: data.Refabricante,
-            Family: data.Family,
-            ActualViaCount: data.ActualViaCount,
-          },
-        });
+        await this.updateDetails(codivmac, data, tx);
 
         // Update Dimensions table (upsert when dimensions are provided)
-        if (data.dimensions) {
-          await tx.connectors_Dimensions.upsert({
-            where: { ConnId: codivmac },
-            create: {
-              ConnId: codivmac,
-              InternalDiameter: data.dimensions.InternalDiameter,
-              ExternalDiameter: data.dimensions.ExternalDiameter,
-              Thickness: data.dimensions.Thickness,
-            },
-            update: {
-              InternalDiameter: data.dimensions.InternalDiameter,
-              ExternalDiameter: data.dimensions.ExternalDiameter,
-              Thickness: data.dimensions.Thickness,
-            },
-          });
-        }
+        await this.updateDimensions(codivmac, data, tx);
 
         return true;
       });
     } catch (ex: any) {
       console.error('Error updating connector properties:', ex.message);
+      throw ex;
+    }
+  }
+
+  // update connectors_Main
+  private async updateMain(
+    codivmac: string,
+    data: UpdateConnectorDto,
+    tx?: TransactionClient,
+  ): Promise<void> {
+    try {
+      const client = tx || this.prisma;
+      await client.connectors_Main.update({
+        where: { CODIVMAC: codivmac },
+        data: {
+          Cor: data.Cor,
+          Vias: data.Vias,
+          ConnType: data.ConnType,
+          Qty: data.Qty,
+          Qty_com_fio: data.Qty_com_fio,
+          Qty_sem_fio: data.Qty_sem_fio,
+        },
+      });
+    } catch (ex: unknown) {
+      console.error(getErrorMsg(ex));
+      throw ex;
+    }
+  }
+
+  // update connectors_Details
+  private async updateDetails(
+    codivmac: string,
+    data: UpdateConnectorDto,
+    tx?: TransactionClient,
+  ): Promise<void> {
+    try {
+      const client = tx || this.prisma;
+      await client.connectors_Details.upsert({
+        where: { ConnId: codivmac },
+        create: {
+          ConnId: codivmac,
+          Fabricante: data.Fabricante,
+          Family: data.Family,
+          ActualViaCount: data.ActualViaCount,
+        },
+        update: {
+          Fabricante: data.Fabricante,
+          Refabricante: data.Refabricante,
+          Family: data.Family,
+          ActualViaCount: data.ActualViaCount,
+        },
+      });
+    } catch (ex: unknown) {
+      console.error(getErrorMsg(ex));
+      throw ex;
+    }
+  }
+
+  // update connectors_Dimensions
+  private async updateDimensions(
+    codivmac: string,
+    data: UpdateConnectorDto,
+    tx?: TransactionClient,
+  ): Promise<void> {
+    try {
+      const client = tx || this.prisma;
+      if (data.dimensions) {
+        await client.connectors_Dimensions.upsert({
+          where: { ConnId: codivmac },
+          create: {
+            ConnId: codivmac,
+            InternalDiameter: data.dimensions.InternalDiameter,
+            ExternalDiameter: data.dimensions.ExternalDiameter,
+            Thickness: data.dimensions.Thickness,
+          },
+          update: {
+            InternalDiameter: data.dimensions.InternalDiameter,
+            ExternalDiameter: data.dimensions.ExternalDiameter,
+            Thickness: data.dimensions.Thickness,
+          },
+        });
+      }
+    } catch (ex: unknown) {
+      console.error(getErrorMsg(ex));
       throw ex;
     }
   }
