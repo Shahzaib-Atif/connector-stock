@@ -1,23 +1,15 @@
-import { Connector, ConnectorType, MasterData } from "@/utils/types";
+import { ConnectorType } from "@/utils/types";
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
+import { ConnectorDto } from "@shared/dto/ConnectorDto";
 
-export const fetchConnectors = async (): Promise<MasterData["connectors"]> => {
+export const fetchConnectors = async (): Promise<ConnectorDto[]> => {
   const response = await fetchWithAuth(API.connectors);
   if (!response.ok) {
     throw new Error("Failed to fetch references");
   }
-  const data: Connector[] = await response.json();
-
-  const references = {};
-  data.forEach((item) => {
-    if (item.CODIVMAC) {
-      delete item["Connectors_Details"];
-      references[item.CODIVMAC.trim()] = item;
-    }
-  });
-
-  return references;
+  const data: ConnectorDto[] = await response.json();
+  return data;
 };
 
 export const fetchConnectorTypes = async (): Promise<string[]> => {

@@ -1,20 +1,24 @@
 import {
-  Connector,
+  ConnectorExtended,
   Box,
   Accessory,
   MasterData,
   LegacyBackup,
+  AccessoryMap,
+  ConnPositionsMap,
 } from "../utils/types";
 import { getCoordinates } from "../utils/inventoryUtils";
 import { parseAccessory } from "./accessoryService";
 import { API } from "../utils/api";
+import { fetchWithAuth } from "../utils/fetchClient";
+import { ConnectorDto } from "@shared/dto/ConnectorDto";
 
 export const mapLegacyToConnector = (
   legacy: LegacyBackup,
   masterData: MasterData,
-): Connector => {
+): ConnectorExtended => {
   const posId = legacy.Pos_ID || "----";
-  const coords = getCoordinates(posId, masterData);
+  const coords = getCoordinates(posId, masterData.positions);
 
   return {
     CODIVMAC: legacy.CODIVMAC,
@@ -24,16 +28,16 @@ export const mapLegacyToConnector = (
     colorName: masterData.colors?.colorsUK[legacy.Cor] || "-",
     colorNamePT: masterData.colors?.colorsPT?.[legacy.Cor] || "-",
     viasName: legacy.Vias ? masterData.vias[legacy.Vias] : "-",
-    cv: coords?.cv ?? null,
-    ch: coords?.ch ?? null,
-    cv_ma: coords?.cv_ma ?? null,
-    ch_ma: coords?.ch_ma ?? null,
+    cv: coords?.CV ?? null,
+    ch: coords?.CH ?? null,
+    cv_ma: coords?.CV_Ma ?? null,
+    ch_ma: coords?.CH_Ma ?? null,
     details: {
       Family: 1, // Default for legacy
       Fabricante: legacy.Fabricante || "--",
       Refabricante: legacy.Refabricante || "",
       OBS: legacy.OBS ?? "",
-      Designa__o: legacy.Designa__o ?? "",
+      Designacao: legacy.Designa__o ?? "",
     },
     ConnType: legacy.ConnType ?? "",
     Qty: 0, // Default for legacy
@@ -46,16 +50,16 @@ export const mapLegacyToConnector = (
 
 export const parseConnector = (
   id: string,
-  masterData?: MasterData,
-): Connector | null => {
+  masterData: MasterData,
+): ConnectorExtended | null => {
+  if (!id) return null;
+
   // get connector reference
   const reference = masterData?.connectors?.[id];
   if (!reference || !masterData) return null;
 
-  const { PosId, details, Cor, Vias, dimensions } = reference;
-  const fabricante = details.Fabricante || "--";
-  const refabricante = details.Refabricante || "";
-  const coords = getCoordinates(PosId, masterData);
+  const { PosId, Cor, Vias } = reference;
+  const coords = getCoordinates(PosId, masterData.positions);
 
   // Find associated accessories
   const accessories: Accessory[] = [];
@@ -68,44 +72,68 @@ export const parseConnector = (
   }
 
   return {
+    ...reference,
     CODIVMAC: id,
-    PosId,
-    Cor,
-    Vias,
     colorName: masterData.colors?.colorsUK[Cor] || "Unknown",
     colorNamePT: masterData.colors?.colorsPT?.[Cor] || "Unknown",
     viasName: masterData.vias[Vias] || "Standard",
-    cv: coords?.cv ?? null,
-    ch: coords?.ch ?? null,
-    cv_ma: coords?.cv_ma ?? null,
-    ch_ma: coords?.ch_ma ?? null,
-    details: {
-      Family: details.Family,
-      Fabricante: fabricante,
-      Refabricante: refabricante,
-      OBS: details.OBS,
-      ActualViaCount: details.ActualViaCount,
-    },
-    ConnType: reference.ConnType,
-    Qty: masterData.connectors[id].Qty,
-    Qty_com_fio: masterData.connectors[id].Qty_com_fio,
-    Qty_sem_fio: masterData.connectors[id].Qty_sem_fio,
-    accessories,
-    clientReferences: reference.clientReferences || [],
-    dimensions,
+    cv: coords?.CV ?? null,
+    ch: coords?.CH ?? null,
+    cv_ma: coords?.CV_Ma ?? null,
+    ch_ma: coords?.CH_Ma ?? null,
+    accessories: accessories ?? [],
+  };
+};
+
+// map ConnectorDto -> ConnectorExtended
+export const mapToConnectorExtended = (
+  id: string,
+  dto: ConnectorDto,
+  positions: ConnPositionsMap,
+  accessories: AccessoryMap,
+  colors: {
+    colorsUK: Record<string, string>;
+    colorsPT: Record<string, string>;
+  },
+  vias: Record<string, string>,
+): ConnectorExtended => {
+  const { PosId, Cor, Vias } = dto;
+  const coords = getCoordinates(PosId, positions);
+
+  // Find associated accessories
+  const _accessories: Accessory[] = [];
+  if (accessories) {
+    Object.values(accessories).forEach((acc) => {
+      if (id.includes(acc.ConnName)) {
+        _accessories.push(parseAccessory(acc));
+      }
+    });
+  }
+
+  return {
+    ...dto,
+    CODIVMAC: id,
+    colorName: colors?.colorsUK[Cor] || "Unknown",
+    colorNamePT: colors?.colorsPT?.[Cor] || "Unknown",
+    viasName: vias[Vias] || "Standard",
+    cv: coords?.CV ?? null,
+    ch: coords?.CH ?? null,
+    cv_ma: coords?.CV_Ma ?? null,
+    ch_ma: coords?.CH_Ma ?? null,
+    accessories: _accessories ?? [],
   };
 };
 
 export const getBoxDetails = (
   boxId: string,
-  masterData?: MasterData,
+  masterData: MasterData,
 ): Box | null => {
   if (!masterData || boxId.length !== 4) return null;
 
-  const coords = getCoordinates(boxId, masterData);
+  const coords = getCoordinates(boxId, masterData.positions);
   if (!coords) return null;
 
-  const connectors: Connector[] = [];
+  const connectors: ConnectorExtended[] = [];
 
   // find all connectors that belong to this box (Pos_ID matches boxId)
   if (masterData.connectors) {
@@ -128,10 +156,10 @@ export const getBoxDetails = (
 
   return {
     id: boxId,
-    cv: coords?.cv ?? null,
-    ch: coords?.ch ?? null,
-    cv_ma: coords?.cv_ma ?? null,
-    ch_ma: coords?.ch_ma ?? null,
+    cv: coords?.CV ?? null,
+    ch: coords?.CH ?? null,
+    cv_ma: coords?.CV_Ma ?? null,
+    ch_ma: coords?.CH_Ma ?? null,
     connectors,
     accessories,
   };
@@ -140,8 +168,8 @@ export const getBoxDetails = (
 export const searchConnectors = (
   query: string,
   masterData: MasterData,
-): Connector[] => {
-  const results: Connector[] = [];
+): ConnectorExtended[] => {
+  const results: ConnectorExtended[] = [];
   const normalizedQuery = query.trim().toUpperCase();
 
   // 1. Direct Connector ID Match (using references key)
@@ -169,11 +197,9 @@ export const searchConnectors = (
   return results;
 };
 
-import { fetchWithAuth } from "../utils/fetchClient";
-
 export const updateConnectorApi = async (
   connectorId: string,
-  data: Partial<Connector>,
+  data: Partial<ConnectorExtended>,
 ) => {
   const response = await fetchWithAuth(
     `${API.connectors}/${connectorId}/update`,
@@ -191,7 +217,7 @@ export const updateConnectorApi = async (
   return response.json();
 };
 
-export function getViasValue(connector: Connector): string {
+export function getViasValue(connector: ConnectorExtended): string {
   const vias = connector.Vias;
   const viasName = connector.viasName;
 

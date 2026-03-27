@@ -1,4 +1,4 @@
-import { Connector_Dimensions } from "@/utils/types";
+import { ConnectorsDimensions } from "@shared/dto/ConnectorDto";
 
 export interface ConnectorFormData {
   Cor: string;
@@ -11,5 +11,5 @@ export interface ConnectorFormData {
   Qty_com_fio: number;
   Qty_sem_fio: number;
   ActualViaCount?: number;
-  dimensions?: Connector_Dimensions;
+  dimensions?: ConnectorsDimensions;
 }

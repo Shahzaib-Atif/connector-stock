@@ -3,6 +3,7 @@ import { ConnectorMapper } from '@infra/ConnectorMapper';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { WireTypes } from '@shared/enums/WireTypes';
+import { getErrorMsg } from '@shared/utils/getErrorMsg';
 import { PrismaService } from 'prisma/prisma.service';
 import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
@@ -20,9 +21,9 @@ export class ConnectorRepo {
     }
   }
 
-  async getConnectors() {
+  async getConnectors(): Promise<Connector[]> {
     try {
-      return await this.prisma.connectors_Main.findMany({
+      const data = await this.prisma.connectors_Main.findMany({
         include: {
           Connectors_Details: true,
           Connectors_Dimensions: {
@@ -32,8 +33,28 @@ export class ConnectorRepo {
           },
         },
       });
+      if (!data) return [];
+
+      // return data after converting to domain entity
+      return data.map((c) => ConnectorMapper.toDomain(c));
     } catch (ex: any) {
       console.error(ex.message);
+      return [];
+    }
+  }
+
+  async getRefClientes_Marca(): Promise<
+    { RefDIVMAC: string; RefMARCA: string }[]
+  > {
+    try {
+      // Fetch client references from legacy table
+      return await (this.prisma as any).$queryRawUnsafe(`
+        SELECT RefDIVMAC, RefMARCA 
+        FROM ImageFeaturesDB.dbo.RefClientes_Marca 
+        WHERE ESTADO = 1
+      `);
+    } catch (e) {
+      console.error('Error fetching client mappings:', getErrorMsg(e));
       return [];
     }
   }
@@ -54,6 +75,7 @@ export class ConnectorRepo {
 
       if (!data) return null;
 
+      // return data after converting to domain entity
       return ConnectorMapper.toDomain(data);
     } catch (ex: any) {
       console.error('Error fetching connector by codivmac:', ex.message);

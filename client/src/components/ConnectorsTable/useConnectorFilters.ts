@@ -1,10 +1,10 @@
-import { Connector, MasterData } from "@/utils/types";
+import { ConnectorExtended, ConnectorMap, MasterData } from "@/utils/types";
 import { parseConnector } from "@/services/connectorService";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { ConnectorFilters, defaultFilters, STORAGE_KEY } from "./constants";
 
 export function useConnectorFilters(
-  connectors: Record<string, Connector>,
+  connectors: ConnectorMap,
   masterData?: MasterData | null,
 ) {
   const [filters, setFilters] = useState<ConnectorFilters>(() => {
@@ -44,7 +44,7 @@ export function useConnectorFilters(
   }, []);
 
   // Convert Record to array with id
-  const connectorsList = useMemo((): Connector[] => {
+  const connectorsList = useMemo((): ConnectorExtended[] => {
     return Object.entries(connectors).map(([id, connector]) => {
       if (masterData) {
         const parsed = parseConnector(id, masterData);
@@ -63,7 +63,7 @@ export function useConnectorFilters(
   );
 
   const fabricanteOptions = useMemo(
-    () => getUniqueOptions(connectorsList.map((c) => c.details.Fabricante)),
+    () => getUniqueOptions(connectorsList.map((c) => c.details?.Fabricante)),
     [connectorsList],
   );
 
@@ -91,12 +91,12 @@ export function useConnectorFilters(
 
       const matchesFabricante =
         filters.fabricante === "all" ||
-        connector.details.Fabricante === filters.fabricante;
+        connector.details?.Fabricante === filters.fabricante;
 
       const familyValue =
-        connector.details.Family !== undefined &&
-        connector.details.Family !== null
-          ? String(connector.details.Family)
+        connector.details?.Family !== undefined &&
+        connector.details?.Family !== null
+          ? String(connector.details?.Family)
           : "";
       const matchesFamily =
         !normalizedFamilyQuery ||
@@ -105,7 +105,7 @@ export function useConnectorFilters(
       const matchesVias =
         !normalizedViasQuery ||
         connector.Vias?.toLowerCase().includes(normalizedViasQuery) ||
-        connector.details.ActualViaCount?.toString().includes(
+        connector.details?.ActualViaCount?.toString().includes(
           normalizedViasQuery,
         ) ||
         connector.viasName?.toLowerCase().includes(normalizedViasQuery);

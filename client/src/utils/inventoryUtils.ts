@@ -1,26 +1,15 @@
+import { ConnPositionsMap } from "./types";
+
 export const getHash = (str: string) =>
   str.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
 
-export const getCoordinates = (
-  posId: string,
-  masterData?: {
-    positions: Record<
-      string,
-      {
-        cv: string | null;
-        ch: string | null;
-        cv_ma: string | null;
-        ch_ma: string | null;
-      }
-    >;
-  }
-) => {
-  if (masterData?.positions?.[posId]) {
-    return masterData.positions[posId];
+export function getCoordinates(posId: string, positions: ConnPositionsMap) {
+  if (positions?.[posId]) {
+    return positions[posId];
   }
 
   return null;
-};
+}
 
 // const BASE_URL = "http://192.168.3.164:59876";
 const BASE_URL = import.meta.env.VITE_PRI_API_BASE_URL;
@@ -44,7 +33,7 @@ export async function setLineStatus(CDU_Projeto: string, clientRef: string) {
 
   if (!response.ok) {
     console.error(
-      `Setting Line Status Failed. CDU_Projeto: ${CDU_Projeto} .. clientRef: ${clientRef}`
+      `Setting Line Status Failed. CDU_Projeto: ${CDU_Projeto} .. clientRef: ${clientRef}`,
     );
   }
 }

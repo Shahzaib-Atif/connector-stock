@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
-import { getErrorMsg } from '@shared/utils/getErrorMsg';
+import { ConnectorDto } from '@shared/dto/ConnectorDto';
+import { ConnectorMapper } from '@infra/ConnectorMapper';
 
 @Injectable()
 export class ConnectorsService {
@@ -15,21 +16,9 @@ export class ConnectorsService {
     return this.repo.getConnectorTypes();
   }
 
-  async getConnectors() {
+  async getConnectors(): Promise<ConnectorDto[]> {
     const connectors = await this.repo.getConnectors();
-
-    // Fetch client references from legacy table
-    let clientMappings: { RefDIVMAC: string; RefMARCA: string }[] = [];
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      clientMappings = await (this.prisma as any).$queryRawUnsafe(`
-        SELECT RefDIVMAC, RefMARCA 
-        FROM ImageFeaturesDB.dbo.RefClientes_Marca 
-        WHERE ESTADO = 1
-      `);
-    } catch (e) {
-      console.error('Error fetching client mappings:', getErrorMsg(e));
-    }
+    const clientMappings = await this.repo.getRefClientes_Marca();
 
     // Group mappings by RefDIVMAC
     const mappingStore: Record<string, string[]> = {};
@@ -40,12 +29,10 @@ export class ConnectorsService {
       }
     });
 
-    // Flatten the Connectors_Details into the main object and attach client references
+    // change the connector entity to its corresponding dto
     return connectors.map((conn) => ({
-      ...conn,
-      details: conn.Connectors_Details || {},
-      dimensions: conn.Connectors_Dimensions || {},
-      clientReferences: mappingStore[conn.CODIVMAC] || [],
+      ...ConnectorMapper.toDto(conn),
+      clientReferences: mappingStore[conn.id] || [],
     }));
   }
 

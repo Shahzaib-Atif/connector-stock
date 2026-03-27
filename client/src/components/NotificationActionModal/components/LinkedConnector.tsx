@@ -2,10 +2,10 @@ import React from "react";
 import { Package, ExternalLink, AlertCircle } from "lucide-react";
 import { ROUTES } from "../../AppRoutes";
 import MetaItem from "./MetaItem";
-import { Connector } from "@/utils/types";
+import { ConnectorExtended } from "@/utils/types";
 
 interface LinkedConnectorProps {
-  connector: Connector;
+  connector: ConnectorExtended;
   onClose: () => void;
 }
 
@@ -35,7 +35,7 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
 
   const details = connector.details;
   const { CODIVMAC, Vias, Qty } = connector;
-  const { Designa__o, Fabricante } = details || {};
+  const { Designacao, Fabricante } = details || {};
 
   return (
     <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
@@ -54,7 +54,7 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
           <div className="grid sm:grid-cols-2 gap-2 text-sm break-all">
             <MetaItem label="CODIVMAC" value={CODIVMAC}></MetaItem>
             <MetaItem label="Current Stock" value={Qty + " units"}></MetaItem>
-            <MetaItem label="Description" value={Designa__o ?? ""}></MetaItem>
+            <MetaItem label="Description" value={Designacao ?? ""}></MetaItem>
             <MetaItem label="Manufacturer" value={Fabricante ?? ""}></MetaItem>
             <MetaItem label="Vias" value={Vias}></MetaItem>
           </div>

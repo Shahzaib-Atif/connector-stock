@@ -1,28 +1,32 @@
 import { updateConnectorApi } from "@/services/connectorService";
 import { useAppDispatch } from "@/store/hooks";
 import { initMasterData } from "@/store/slices/masterDataSlice";
-import { Connector, Connector_Dimensions } from "@/utils/types";
+import { ConnectorExtended } from "@/utils/types";
 import { useState } from "react";
 import { ConnectorFormData } from "./ConnectorFormData";
+import { ConnectorsDimensions } from "@shared/dto/ConnectorDto";
 
-export function useConnectorEditForm(connector: Connector, onSave: () => void) {
+export function useConnectorEditForm(
+  connector: ConnectorExtended,
+  onSave: () => void,
+) {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { details: connDetails, dimensions } = connector;
+  const { details, dimensions } = connector;
 
   const [formData, setFormData] = useState<ConnectorFormData>({
     Cor: connector.Cor,
     Vias: connector.Vias,
     ConnType: connector.ConnType || "",
-    Fabricante: connDetails.Fabricante || "",
-    Refabricante: connDetails.Refabricante || "",
-    Family: connDetails.Family || 1,
+    Fabricante: details?.Fabricante || "",
+    Refabricante: details?.Refabricante || "",
+    Family: details?.Family || 1,
     Qty: connector.Qty || 0,
     Qty_com_fio: connector.Qty_com_fio || 0,
     Qty_sem_fio: connector.Qty_sem_fio || 0,
     ActualViaCount:
-      connDetails.ActualViaCount || parseInt(connector.viasName || "0") || 0,
+      details?.ActualViaCount || parseInt(connector.viasName || "0") || 0,
     dimensions: dimensions || {},
   });
 
@@ -46,7 +50,7 @@ export function useConnectorEditForm(connector: Connector, onSave: () => void) {
   };
 
   const setDimensionsField = (
-    field: keyof Connector_Dimensions,
+    field: keyof ConnectorsDimensions,
     value: number | undefined,
   ) => {
     setFormData((prev) => ({

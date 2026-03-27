@@ -4,25 +4,22 @@ import ImageBox from "@/components/common/ImageBox";
 import StockDiv from "@/components/common/StockDiv";
 import CardInfoDiv from "@/components/common/CardInfoDiv";
 import { VIEW_SUMMARY_CLASS } from "@/utils/constants";
-import { Connector } from "@/utils/types";
+import { ConnectorExtended } from "@/utils/types";
 import { getViasValue } from "@/services/connectorService";
 import ClientReferences from "./ClientReferences";
 import Coordinates from "./Coordinates";
 
-interface ConnectorSummaryProps {
-  connector: Connector;
+interface Props {
+  connector: ConnectorExtended;
 }
 
-export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
-  connector,
-}) => {
+export const ConnectorSummary: React.FC<Props> = ({ connector }) => {
   const [error, setError] = useState(false);
   const imageUrl = API.connectorImages(
     connector.CODIVMAC,
     connector.ConnType ?? "",
   );
   const { PosId, colorName, Qty, ConnType, details, dimensions } = connector;
-  const { Fabricante, Refabricante, Family, OBS } = details;
 
   const hasDimensions =
     !!dimensions &&
@@ -52,16 +49,24 @@ export const ConnectorSummary: React.FC<ConnectorSummaryProps> = ({
         <CardInfoDiv label="Color" value={colorName ?? ""} />
         <CardInfoDiv label="Vias" value={getViasValue(connector)} />
         <CardInfoDiv label="Type" value={ConnType ?? ""} />
-        <CardInfoDiv label="Family" value={Family?.toString() || "-"} />
+        <CardInfoDiv
+          label="Family"
+          value={details?.Family?.toString() || "-"}
+        />
 
         {/* Fabricante, Refabricante, Obs */}
         <CardInfoDiv
           label="Fabricante"
-          value={Fabricante || "--"}
+          value={details?.Fabricante || "--"}
           classnames="col-start-1"
         />
-        <CardInfoDiv label="Refabricante" value={Refabricante || "--"} />
-        {OBS && <CardInfoDiv label="Obs." value={OBS || "-"} />}
+        <CardInfoDiv
+          label="Refabricante"
+          value={details?.Refabricante || "--"}
+        />
+        {details?.OBS && (
+          <CardInfoDiv label="Obs." value={details?.OBS || "-"} />
+        )}
 
         {/* Dimensions */}
         {hasDimensions && (

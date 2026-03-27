@@ -1,4 +1,4 @@
-import { Accessory, Connector } from "./inventoryTypes";
+import { AccessoryMap, ConnectorMap } from "./inventoryTypes";
 
 // Re-exports
 export * from "./inventoryTypes";
@@ -16,17 +16,9 @@ export interface MasterData {
   vias: Record<string, string>;
   connectorTypes: string[];
   accessoryTypes: string[];
-  positions: Record<
-    string,
-    {
-      cv: string | null;
-      ch: string | null;
-      cv_ma: string | null;
-      ch_ma: string | null;
-    }
-  >;
-  connectors: Record<string, Connector>;
-  accessories: Record<string, Accessory>;
+  positions: ConnPositionsMap;
+  connectors: ConnectorMap;
+  accessories: AccessoryMap;
   fabricantes: string[];
 }
 
@@ -54,8 +46,10 @@ export interface ConnectorType {
 
 export interface ConnPosition {
   CON: string;
-  CV: string | null;
-  CH: string | null;
-  CV_Ma: string | null;
-  CH_Ma: string | null;
+  CV?: string;
+  CH?: string;
+  CV_Ma?: string;
+  CH_Ma?: string;
 }
+
+export type ConnPositionsMap = Record<string, ConnPosition>;

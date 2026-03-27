@@ -1,4 +1,4 @@
-import { IColor, IVias, ConnPosition } from "@/utils/types";
+import { IColor, IVias, ConnPosition, ConnPositionsMap } from "@/utils/types";
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
 
@@ -48,39 +48,29 @@ export const fetchVias = async (): Promise<Record<string, string>> => {
   }
 };
 
-export const fetchPositions = async () => {
+export const fetchPositions = async (): Promise<ConnPositionsMap> => {
   const response = await fetchWithAuth(API.positions);
   if (!response.ok) {
     throw new Error("Failed to fetch positions");
   }
   const data: ConnPosition[] = await response.json();
 
-  const positions: Record<
-    string,
-    {
-      cv: string | null;
-      ch: string | null;
-      cv_ma: string | null;
-      ch_ma: string | null;
-    }
-  > = {};
-  data.forEach((item) => {
-    if (item.CON) {
-      const key = item.CON.trim();
-      positions[key] = {
-        cv: normalizeString(item.CV ?? ""),
-        ch: normalizeString(item.CH ?? ""),
-        cv_ma: normalizeString(item.CV_Ma ?? ""),
-        ch_ma: normalizeString(item.CH_Ma ?? ""),
+  // convert positions to positionsMap
+  return data.reduce<ConnPositionsMap>((acc, item) => {
+    if (item)
+      acc[item.CON?.trim()] = {
+        CON: item.CON,
+        CV: normalizeString(item.CV),
+        CH: normalizeString(item.CH),
+        CV_Ma: normalizeString(item.CV_Ma),
+        CH_Ma: normalizeString(item.CH_Ma),
       };
-    }
-  });
-
-  return positions;
+    return acc;
+  }, {});
 };
 
-function normalizeString(str: string) {
-  return str ? String(str).trim() : null;
+function normalizeString(str?: string) {
+  return str ? String(str).trim() : "";
 }
 
 export const fetchFabricantes = async (): Promise<string[]> => {

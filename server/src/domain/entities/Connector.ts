@@ -1,6 +1,8 @@
-import { ConnectorDetails } from '@domain/value-objects/ConnectorDetails';
-import { ConnectorDimensions } from '@domain/value-objects/ConnectorDimensions';
 import { Quantity } from '@domain/value-objects/Quantity';
+import {
+  ConnectorsDetails,
+  ConnectorsDimensions,
+} from '@shared/dto/ConnectorDto';
 
 export class Connector {
   constructor(
@@ -10,8 +12,8 @@ export class Connector {
     public vias: string,
     public type: string,
     public quantity: Quantity,
-    public details?: ConnectorDetails,
-    public dimensions?: ConnectorDimensions,
+    public details?: ConnectorsDetails,
+    public dimensions?: ConnectorsDimensions,
   ) {}
 
   hasWires(): boolean {

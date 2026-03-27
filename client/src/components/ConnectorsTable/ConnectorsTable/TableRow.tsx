@@ -1,13 +1,13 @@
 import React from "react";
 import { API } from "@/utils/api";
 import { ROUTES } from "@/components/AppRoutes";
-import { Connector } from "@/utils/types";
+import { ConnectorExtended } from "@/utils/types";
 import { Link } from "react-router-dom";
 import { Link as LinkIcon } from "lucide-react";
 import { getViasValue } from "@/services/connectorService";
 
 interface TableRowProps {
-  connector: Connector;
+  connector: ConnectorExtended;
   showImages?: boolean;
   isLegacyMode?: boolean;
 }
@@ -94,9 +94,11 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data">{connector.Cor}</td>
       <td className="table-data">{getViasValue(connector)}</td>
       <td className="table-data">{connector.ConnType}</td>
-      <td className="table-data">{connector.details.Family}</td>
-      <td className="table-data">{connector.details.Fabricante}</td>
-      <td className="table-data break-all">{connector.details.Refabricante}</td>
+      <td className="table-data">{connector.details?.Family}</td>
+      <td className="table-data">{connector.details?.Fabricante}</td>
+      <td className="table-data break-all">
+        {connector.details?.Refabricante}
+      </td>
 
       {/* Dimensions (only for OLHAL type) */}
       <td className="table-data align-top">
@@ -139,7 +141,7 @@ const TableRow: React.FC<TableRowProps> = ({
           </div>
         </div>
       </td>
-      <td className="table-data break-all">{connector.details.OBS}</td>
+      <td className="table-data break-all">{connector.details?.OBS}</td>
     </tr>
   );
 };

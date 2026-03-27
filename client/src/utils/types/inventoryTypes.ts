@@ -1,3 +1,5 @@
+import { ConnectorDto } from "@shared/dto/ConnectorDto";
+
 export interface Accessory {
   id: string; // e.g., A255PR_1024
   AccessoryType: string;
@@ -11,43 +13,20 @@ export interface Accessory {
   connectorId?: string; // Reference to parent connector
 }
 
-export interface Connector_Dimensions {
-  InternalDiameter?: number;
-  ExternalDiameter?: number;
-  Thickness?: number;
-}
-
-export interface Connector_Details {
-  Family: number;
-  Fabricante?: string;
-  Refabricante?: string;
-  OBS?: string;
-  Designa__o?: string;
-  ActualViaCount?: number;
-}
-
-export interface Connector {
-  id?: string; // Unique ID (often same as PosId or composite)
-  PosId: string;
-  Cor: string;
-  Vias: string;
-  CODIVMAC: string;
-  Qty: number;
-  Qty_com_fio: number;
-  Qty_sem_fio: number;
-  details: Connector_Details;
-  ConnType?: string;
+// has extra properties
+export type ConnectorExtended = ConnectorDto & {
   colorName?: string;
   colorNamePT?: string;
   viasName?: string;
-  cv?: string | null; // Vertical Coordinate
-  ch?: string | null; // Horizontal Coordinate
-  cv_ma?: string | null; // Morocco Vertical Coordinate
-  ch_ma?: string | null; // Morocco Horizontal Coordinate
+  cv?: string | null;
+  ch?: string | null;
+  cv_ma?: string | null;
+  ch_ma?: string | null;
   accessories: Accessory[]; // Linked accessories
-  clientReferences?: string[]; // Legacy mappings (RefMARCA)
-  dimensions?: Connector_Dimensions;
-}
+};
+
+export type ConnectorMap = Record<string, ConnectorExtended>;
+export type AccessoryMap = Record<string, Accessory>;
 
 export interface Box {
   id: string; // e.g., A255 (4 chars)
@@ -55,6 +34,6 @@ export interface Box {
   ch: string | null;
   cv_ma: string | null;
   ch_ma: string | null;
-  connectors: Connector[]; // List of connectors known in this box
-  accessories: Accessory[]; // List of accessories in this box
+  connectors: ConnectorExtended[]; // connectors in this box
+  accessories: Accessory[]; // accessories in this box
 }

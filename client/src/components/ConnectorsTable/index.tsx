@@ -9,7 +9,7 @@ import { ConnectorsFilterBar } from "./ConnectorsFilterBar";
 import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
-import { Connector } from "@/utils/types";
+import { ConnectorExtended } from "@/utils/types";
 import { useImageToggle } from "@/hooks/useImageToggle";
 import { useLegacyData } from "./ConnectorsTable/useLegacyData";
 import { getActiveFilterCount } from "./constants";
@@ -113,7 +113,7 @@ export const ConnectorsListView: React.FC = () => {
 
           <div className="table-container-outer">
             <ConnectorsTable
-              connectors={paginatedConnectors as Connector[]}
+              connectors={paginatedConnectors as ConnectorExtended[]}
               showImages={showImages && !isLegacyMode}
               isLegacyMode={isLegacyMode}
             />

@@ -6,7 +6,8 @@ import {
   fetchPositions,
   fetchFabricantes,
 } from "./metadataApi";
-import { MasterData } from "@/utils/types";
+import { ConnectorMap, MasterData } from "@/utils/types";
+import { mapToConnectorExtended } from "@/services/connectorService";
 
 export const fetchMasterData = async (): Promise<MasterData> => {
   try {
@@ -16,8 +17,8 @@ export const fetchMasterData = async (): Promise<MasterData> => {
       accessoryTypes,
       connectorTypes,
       positions,
-      connectors,
       accessories,
+      connectors,
       fabricantes,
     ] = await Promise.all([
       fetchColors(),
@@ -25,10 +26,26 @@ export const fetchMasterData = async (): Promise<MasterData> => {
       fetchAccessoryTypes(),
       fetchConnectorTypes(),
       fetchPositions(),
-      fetchConnectors(),
       fetchAccessories(),
+      fetchConnectors(),
       fetchFabricantes(),
     ]);
+
+    // parse each connector (ConnectorDto -> ConnectorExtended)
+    const connectorsMapped = connectors.reduce<ConnectorMap>((acc, item) => {
+      if (item) {
+        const id = item.CODIVMAC?.trim();
+        acc[id] = mapToConnectorExtended(
+          id,
+          item,
+          positions,
+          accessories,
+          colors,
+          vias,
+        );
+      }
+      return acc;
+    }, {});
 
     return {
       colors,
@@ -36,7 +53,7 @@ export const fetchMasterData = async (): Promise<MasterData> => {
       accessoryTypes,
       connectorTypes,
       positions,
-      connectors,
+      connectors: connectorsMapped,
       accessories,
       fabricantes,
     };

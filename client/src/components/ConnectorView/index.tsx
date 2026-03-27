@@ -9,7 +9,7 @@ import { RelatedImages } from "./components/RelatedImages";
 import { UserRoles } from "@shared/enums/UserRoles";
 import { QRData } from "@/utils/types/shared";
 import { EntityResolver, useEntityDetails } from "@/hooks/useEntityDetails";
-import { Connector } from "@/utils/types";
+import { ConnectorExtended } from "@/utils/types";
 import { parseConnector } from "@/services/connectorService";
 import { useAppSelector } from "@/store/hooks";
 import { useInventoryNavigation } from "@/hooks/useInventoryNavigation";
@@ -23,7 +23,7 @@ interface ConnectorViewProps {
   onOpenQR: (qrData: QRData) => void;
 }
 
-const connectorResolver: EntityResolver<Connector> = (
+const connectorResolver: EntityResolver<ConnectorExtended> = (
   connectorId,
   { masterData },
 ) => {
@@ -40,7 +40,8 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
   const isEditAllowed = role === UserRoles.Master || user === "admin1";
 
   // Shared hook lifts params and cache plumbing.
-  const { entity: connector } = useEntityDetails<Connector>(connectorResolver);
+  const { entity: connector } =
+    useEntityDetails<ConnectorExtended>(connectorResolver);
   const { goBack, goToAccessory, goToBox } = useInventoryNavigation();
   const [isEditing, setIsEditing] = React.useState(false);
 

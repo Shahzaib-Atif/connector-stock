@@ -1,14 +1,14 @@
 import React from "react";
 import { useConnectorEditForm } from "./components/useConnectorEditForm";
 import ConnectorFormActions from "./components/ConnectorFormActions";
-import { Connector } from "@/utils/types";
+import { ConnectorExtended } from "@/utils/types";
 import { useAppSelector } from "@/store/hooks";
 import NumberInputDiv from "@/components/common/NumberInputDiv";
 import OlhalDimensions from "./components/OlhalDimensions";
 import DisabledDiv from "@/components/common/DisabledDiv";
 
 interface Props {
-  connector: Connector;
+  connector: ConnectorExtended;
   onCancel: () => void;
   onSave: () => void;
 }
@@ -43,7 +43,7 @@ export const ConnectorEditForm: React.FC<Props> = ({
           Edit Properties
         </h3>
         <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
-          {connector.id}
+          {connector.CODIVMAC}
         </span>
       </div>
 

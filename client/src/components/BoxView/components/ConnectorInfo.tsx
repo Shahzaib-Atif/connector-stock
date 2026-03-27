@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Connector } from "@/utils/types";
+import { ConnectorExtended } from "@/utils/types";
 import { API } from "@/utils/api";
 
 interface Props {
   liveStock: number;
-  conn: Connector;
+  conn: ConnectorExtended;
 }
 
 function ConnectorInfo({ liveStock, conn }: Props) {

@@ -1,9 +1,9 @@
-import { Connector } from "@/utils/types";
+import { ConnectorExtended } from "@/utils/types";
 import React from "react";
 
 interface Props {
   currentStock: number;
-  connector?: Connector;
+  connector?: ConnectorExtended;
 }
 
 function StockDiv({ currentStock, connector }: Props) {

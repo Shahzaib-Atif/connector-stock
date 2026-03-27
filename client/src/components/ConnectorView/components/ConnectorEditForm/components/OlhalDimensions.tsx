@@ -1,18 +1,18 @@
 import NumberInputDiv from "@/components/common/NumberInputDiv";
 import { ConnectorFormData } from "./ConnectorFormData";
-import { Connector_Dimensions } from "@/utils/types";
+import { ConnectorsDimensions } from "@shared/dto/ConnectorDto";
 
 interface Props {
   formData: ConnectorFormData;
   setDimensionsField: (
-    field: keyof Connector_Dimensions,
+    field: keyof ConnectorsDimensions,
     value: number | undefined,
   ) => void;
 }
 
 function OlhalDimensions({ formData, setDimensionsField }: Props) {
   const handleChange =
-    (field: keyof Connector_Dimensions) =>
+    (field: keyof ConnectorsDimensions) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setDimensionsField(
         field,

@@ -1,12 +1,12 @@
 import { fetchLegacyBackups } from "@/api/legacyApi";
 import { mapLegacyToConnector } from "@/services/connectorService";
 import { useAppSelector } from "@/store/hooks";
-import { Connector } from "@/utils/types";
+import { ConnectorMap } from "@/utils/types";
 import { useEffect, useState } from "react";
 
 export const useLegacyData = () => {
   const [isLegacyMode, setIsLegacyMode] = useState(false);
-  const [legacyData, setLegacyData] = useState<Record<string, Connector>>({});
+  const [legacyData, setLegacyData] = useState<ConnectorMap>({});
   const [legacyLoading, setLegacyLoading] = useState(false);
 
   const { data: masterData } = useAppSelector((state) => state.masterData);
@@ -17,7 +17,7 @@ export const useLegacyData = () => {
         setLegacyLoading(true);
         try {
           const backups = await fetchLegacyBackups();
-          const mapped: Record<string, Connector> = {};
+          const mapped: ConnectorMap = {};
           backups.forEach((b) => {
             const connector = mapLegacyToConnector(b, masterData);
             mapped[connector.CODIVMAC] = connector;

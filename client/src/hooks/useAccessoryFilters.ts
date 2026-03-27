@@ -1,6 +1,10 @@
-import { Accessory } from "@/utils/types";
+import { Accessory, AccessoryMap } from "@/utils/types";
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { AccessoryFilters, defaultFilters, STORAGE_KEY } from "@/components/AccessoriesListView/constants";
+import {
+  AccessoryFilters,
+  defaultFilters,
+  STORAGE_KEY,
+} from "@/components/AccessoriesListView/constants";
 
 interface UseAccessoryFiltersReturn {
   filters: AccessoryFilters;
@@ -12,7 +16,7 @@ interface UseAccessoryFiltersReturn {
 }
 
 export function useAccessoryFilters(
-  accessories: Record<string, Accessory>,
+  accessories: AccessoryMap,
 ): UseAccessoryFiltersReturn {
   const [filters, setFilters] = useState<AccessoryFilters>(() => {
     if (typeof window === "undefined") return defaultFilters;
@@ -28,12 +32,17 @@ export function useAccessoryFilters(
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(filters));
-    } catch {}
+    } catch {
+      /* empty */
+    }
   }, [filters]);
 
-  const setFilterField = useCallback((key: keyof AccessoryFilters, value: string) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  }, []);
+  const setFilterField = useCallback(
+    (key: keyof AccessoryFilters, value: string) => {
+      setFilters((prev) => ({ ...prev, [key]: value }));
+    },
+    [],
+  );
 
   const clearFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -46,13 +55,15 @@ export function useAccessoryFilters(
     }));
   }, [accessories]);
 
-  const typeOptions = useMemo(() => 
-    getUniqueOptions(accessoriesList.map(a => a.AccessoryType)), 
-  [accessoriesList]);
+  const typeOptions = useMemo(
+    () => getUniqueOptions(accessoriesList.map((a) => a.AccessoryType)),
+    [accessoriesList],
+  );
 
-  const colorOptions = useMemo(() => 
-    getUniqueOptions(accessoriesList.map(a => a.ClipColor)), 
-  [accessoriesList]);
+  const colorOptions = useMemo(
+    () => getUniqueOptions(accessoriesList.map((a) => a.ClipColor)),
+    [accessoriesList],
+  );
 
   const filteredAccessories = useMemo(() => {
     const idQuery = filters.idQuery.trim().toLowerCase();
@@ -61,14 +72,30 @@ export function useAccessoryFilters(
     const refDVQuery = filters.refDV.trim().toLowerCase();
 
     return accessoriesList.filter((accessory) => {
-      const matchesId = !idQuery || accessory.id.toLowerCase().includes(idQuery);
-      const matchesType = filters.type === "all" || accessory.AccessoryType === filters.type;
-      const matchesConn = !connNameQuery || accessory.ConnName?.toLowerCase().includes(connNameQuery);
-      const matchesRefClient = !refClientQuery || accessory.RefClient?.toLowerCase().includes(refClientQuery);
-      const matchesRefDV = !refDVQuery || accessory.RefDV?.toLowerCase().includes(refDVQuery);
-      const matchesColor = filters.clipColor === "all" || accessory.ClipColor === filters.clipColor;
+      const matchesId =
+        !idQuery || accessory.id.toLowerCase().includes(idQuery);
+      const matchesType =
+        filters.type === "all" || accessory.AccessoryType === filters.type;
+      const matchesConn =
+        !connNameQuery ||
+        accessory.ConnName?.toLowerCase().includes(connNameQuery);
+      const matchesRefClient =
+        !refClientQuery ||
+        accessory.RefClient?.toLowerCase().includes(refClientQuery);
+      const matchesRefDV =
+        !refDVQuery || accessory.RefDV?.toLowerCase().includes(refDVQuery);
+      const matchesColor =
+        filters.clipColor === "all" ||
+        accessory.ClipColor === filters.clipColor;
 
-      return matchesId && matchesType && matchesConn && matchesRefClient && matchesRefDV && matchesColor;
+      return (
+        matchesId &&
+        matchesType &&
+        matchesConn &&
+        matchesRefClient &&
+        matchesRefDV &&
+        matchesColor
+      );
     });
   }, [accessoriesList, filters]);
 
@@ -83,6 +110,6 @@ export function useAccessoryFilters(
 }
 
 function getUniqueOptions(values: Array<string | undefined | null>): string[] {
-  const unique = Array.from(new Set(values.filter(v => !!v) as string[]));
+  const unique = Array.from(new Set(values.filter((v) => !!v) as string[]));
   return unique.sort((a, b) => a.localeCompare(b));
 }

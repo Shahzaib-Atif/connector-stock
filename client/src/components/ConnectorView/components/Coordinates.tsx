@@ -1,9 +1,9 @@
 import React from "react";
 import CoordinateRow from "./CoordinateRow";
-import { Connector } from "@/utils/types";
+import { ConnectorExtended } from "@/utils/types";
 
 interface Props {
-  connector: Connector;
+  connector: ConnectorExtended;
   PosId: string;
 }
 
