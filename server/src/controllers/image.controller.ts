@@ -25,8 +25,9 @@ export class ImageController {
       res.setHeader('Content-Type', contentType);
       stream.pipe(res);
     } catch (e) {
-      console.error(getErrorMsg(e));
-      res.sendStatus(404);
+      const errMsg = getErrorMsg(e);
+      console.error(errMsg);
+      res.status(404).send(errMsg);
     }
   }
 
