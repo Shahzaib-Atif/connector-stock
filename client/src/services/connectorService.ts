@@ -33,11 +33,14 @@ export const mapLegacyToConnector = (
     cv_ma: coords?.CV_Ma ?? null,
     ch_ma: coords?.CH_Ma ?? null,
     details: {
-      Family: 1, // Default for legacy
       Fabricante: legacy.Fabricante || "--",
       Refabricante: legacy.Refabricante || "",
       OBS: legacy.OBS ?? "",
       Designacao: legacy.Designa__o ?? "",
+      Family: 1, // Default for legacy
+      ActualViaCount: 0, // Default for legacy
+      CapotAngle: "0", // Default for legacy
+      ClipColor: "X", // Default for legacy
     },
     ConnType: legacy.ConnType ?? "",
     Qty: 0, // Default for legacy
