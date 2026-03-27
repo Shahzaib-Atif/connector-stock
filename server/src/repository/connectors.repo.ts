@@ -1,10 +1,10 @@
 import { Connector } from '@domain/entities/Connector';
 import { ConnectorMapper } from '@infra/ConnectorMapper';
 import { Injectable } from '@nestjs/common';
+import { ConnectorDto } from '@shared/dto/ConnectorDto';
 import { WireTypes } from '@shared/enums/WireTypes';
 import { getErrorMsg } from '@shared/utils/getErrorMsg';
 import { PrismaService } from 'prisma/prisma.service';
-import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
 
 @Injectable()
@@ -122,7 +122,7 @@ export class ConnectorRepo {
 
   async updateConnectorProperties(
     codivmac: string,
-    data: UpdateConnectorDto,
+    data: ConnectorDto,
   ): Promise<boolean> {
     try {
       return await this.prisma.$transaction(async (tx) => {
@@ -146,7 +146,7 @@ export class ConnectorRepo {
   // update connectors_Main
   private async updateMain(
     codivmac: string,
-    data: UpdateConnectorDto,
+    data: ConnectorDto,
     tx?: TransactionClient,
   ): Promise<void> {
     try {
@@ -171,7 +171,7 @@ export class ConnectorRepo {
   // update connectors_Details
   private async updateDetails(
     codivmac: string,
-    data: UpdateConnectorDto,
+    data: ConnectorDto,
     tx?: TransactionClient,
   ): Promise<void> {
     try {
@@ -180,15 +180,15 @@ export class ConnectorRepo {
         where: { ConnId: codivmac },
         create: {
           ConnId: codivmac,
-          Fabricante: data.Fabricante,
-          Family: data.Family,
-          ActualViaCount: data.ActualViaCount,
+          Fabricante: data.details?.Fabricante,
+          Family: data.details?.Family,
+          ActualViaCount: data.details?.ActualViaCount,
         },
         update: {
-          Fabricante: data.Fabricante,
-          Refabricante: data.Refabricante,
-          Family: data.Family,
-          ActualViaCount: data.ActualViaCount,
+          Fabricante: data.details?.Fabricante,
+          Refabricante: data.details?.Refabricante,
+          Family: data.details?.Family,
+          ActualViaCount: data.details?.ActualViaCount,
         },
       });
     } catch (ex: unknown) {
@@ -200,7 +200,7 @@ export class ConnectorRepo {
   // update connectors_Dimensions
   private async updateDimensions(
     codivmac: string,
-    data: UpdateConnectorDto,
+    data: ConnectorDto,
     tx?: TransactionClient,
   ): Promise<void> {
     try {

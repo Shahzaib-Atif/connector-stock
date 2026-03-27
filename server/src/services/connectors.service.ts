@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
 import { ConnectorDto } from '@shared/dto/ConnectorDto';
 import { ConnectorMapper } from '@infra/ConnectorMapper';
@@ -36,7 +35,7 @@ export class ConnectorsService {
     }));
   }
 
-  async updateConnector(codivmac: string, data: UpdateConnectorDto) {
+  async updateConnector(codivmac: string, data: ConnectorDto) {
     return this.repo.updateConnectorProperties(codivmac, data);
   }
 }
