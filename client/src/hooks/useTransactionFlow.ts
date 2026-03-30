@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { performTransactionThunk } from "@/store/slices/transactionsSlice";
-import { Department } from "@/utils/types/shared";
+import {
+  TransactionConfirmPayload,
+  TransactionOpenOptions,
+} from "@/utils/types/transactionTypes";
 
 export const useTransactionFlow = () => {
   const dispatch = useAppDispatch();
@@ -10,11 +13,21 @@ export const useTransactionFlow = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [txType, setTxType] = useState<"IN" | "OUT">("IN");
-  const [targetId, setTargetId] = useState<string | undefined>(undefined);
+  const [targetId, setTargetId] = useState<string | number | undefined>(
+    undefined,
+  );
+  const [itemType, setItemType] = useState<"connector" | "accessory">(
+    "connector",
+  );
 
-  const openTransaction = (type: "IN" | "OUT", specificTargetId?: string) => {
+  const openTransaction = ({
+    transactionType: type,
+    itemType,
+    targetId: specificTargetId,
+  }: TransactionOpenOptions) => {
     setTxType(type);
     setTargetId(specificTargetId);
+    setItemType(itemType);
     setIsOpen(true);
   };
 
@@ -23,13 +36,15 @@ export const useTransactionFlow = () => {
     setTargetId(undefined);
   };
 
-  const handleSubmit = async (
-    amount: number,
-    department?: Department,
-    associatedItemIds: string[] = [],
-    subType?: string,
-    encomenda?: string
-  ) => {
+  const handleSubmit = async (data: TransactionConfirmPayload) => {
+    const {
+      amount,
+      isConnector,
+      associatedItemIds,
+      department,
+      subType,
+      encomenda,
+    } = data;
     if (!targetId || !masterData) return;
 
     const delta = txType === "IN" ? amount : -amount;
@@ -39,10 +54,11 @@ export const useTransactionFlow = () => {
         performTransactionThunk({
           itemId: targetId,
           delta,
+          isConnector,
           department,
           subType,
           encomenda,
-        })
+        }),
       );
 
       // Associated accessories transactions
@@ -53,10 +69,11 @@ export const useTransactionFlow = () => {
               performTransactionThunk({
                 itemId: accId,
                 delta,
+                isConnector,
                 department,
-              })
-            )
-          )
+              }),
+            ),
+          ),
         );
       }
 
@@ -71,6 +88,7 @@ export const useTransactionFlow = () => {
     isOpen,
     txType,
     targetId,
+    itemType,
     openTransaction,
     closeTransaction,
     handleSubmit,

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Wrench, Edit2 } from "lucide-react";
-import { Accessory } from "@/utils/types";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
 import { NotFoundPage } from "../common/NotFoundPage";
@@ -13,45 +12,32 @@ import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 import StockDiv from "../common/StockDiv";
 import AccessoryMetadata from "./components/AccessoryMetadata";
 import { VIEW_SUMMARY_CLASS } from "@/utils/constants";
-import { parseAccessory } from "@/services/accessoryService";
 import { QRData } from "@/utils/types/shared";
 import { AccessoryEditForm } from "./components/AccessoryEditForm";
 import { useAppSelector } from "@/store/hooks";
 import { RelatedAccessoryImages } from "./components/RelatedAccessoryImages";
 import { UserRoles } from "@shared/enums/UserRoles";
+import { AccessoryExtended } from "@/utils/types";
+import { TransactionOpenOptions } from "@/utils/types/transactionTypes";
 
 interface AccessoryViewProps {
-  onTransaction: (type: "IN" | "OUT", id?: string) => void;
+  onTransaction: (txOptions: TransactionOpenOptions) => void;
   onOpenQR?: (qrData: QRData) => void;
 }
 
-/**
- * Converts accessory ID from URL into full Accessory object.
- * Searches masterData.accessories, then parses matching raw API data.
- */
-const accessoryResolver: EntityResolver<Accessory> = (
+const accessoryResolver: EntityResolver<AccessoryExtended> = (
   accessoryId,
   { masterData }, // Data from Redux store
 ) => {
-  // Basic validation: ID must have underscores and we need master data
-  if (!accessoryId.includes("_") || !masterData || !masterData.accessories)
-    return null;
-
-  // Find accessory by matching id
-  const apiAccessory = masterData.accessories[accessoryId];
-
-  // If we didn't find it in the API data, return null (will show "not found")
-  if (!apiAccessory) return null;
-
-  // Convert the raw API data into a clean Accessory object with proper formatting
-  return parseAccessory(apiAccessory);
+  return masterData?.accessories[parseInt(accessoryId)] ?? null;
 };
 
 export const AccessoryView: React.FC<AccessoryViewProps> = ({
   onTransaction,
 }) => {
   // Gets ID from URL, calls resolver to convert ID to Accessory object
-  const { entity: accessory } = useEntityDetails<Accessory>(accessoryResolver);
+  const { entity: accessory } =
+    useEntityDetails<AccessoryExtended>(accessoryResolver);
   const { goBack, goToBox } = useInventoryNavigation();
   const [error, setError] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -66,7 +52,8 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
     return <NotFoundPage label="Accessory" icon={Wrench} onBack={goBack} />;
   }
 
-  const imageUrl = API.accessoryImages(accessory.id);
+  const imageUrl = API.accessoryImages(accessory.Id);
+  const isMiolo = accessory?.AccessoryType?.toUpperCase() === "MIOLO"; // Miolo type accessory doesn't show transaction bar
 
   const handleBoxOpen = (boxId: string) => {
     if (boxId) goToBox(boxId);
@@ -74,7 +61,11 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 pb-32 text-slate-200">
-      <DetailHeader label="Accessory" title={accessory.id} onBack={goBack} />
+      <DetailHeader
+        label="Accessory"
+        title={accessory.customId}
+        onBack={goBack}
+      />
 
       <div className="max-w-3xl mx-auto p-4 space-y-4">
         {isEditing ? (
@@ -116,7 +107,7 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
         )}
 
         {/* Related Images */}
-        <RelatedAccessoryImages accessoryId={accessory.id} />
+        <RelatedAccessoryImages accessoryId={accessory.customId} />
 
         {/* View Box option */}
         <BoxShortcut
@@ -125,10 +116,22 @@ export const AccessoryView: React.FC<AccessoryViewProps> = ({
         />
       </div>
 
-      {accessory?.AccessoryType?.toUpperCase() !== "MIOLO" && (
+      {!isMiolo && (
         <TransactionBar
-          onRemove={() => onTransaction("OUT", accessory.id)}
-          onAdd={() => onTransaction("IN", accessory.id)}
+          onRemove={() =>
+            onTransaction({
+              transactionType: "OUT",
+              itemType: "accessory",
+              targetId: accessory.Id,
+            })
+          }
+          onAdd={() =>
+            onTransaction({
+              transactionType: "IN",
+              itemType: "accessory",
+              targetId: accessory.Id,
+            })
+          }
           isRemoveDisabled={accessory.Qty <= 0}
         />
       )}

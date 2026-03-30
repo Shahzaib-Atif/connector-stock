@@ -3,8 +3,8 @@ interface Props {
   type: "IN" | "OUT";
   isAuthenticated: boolean;
   amount: number;
-  targetId: string;
   subType: string;
+  isConnector: boolean;
 }
 
 function ActionButton({
@@ -12,8 +12,8 @@ function ActionButton({
   type,
   isAuthenticated,
   amount,
-  targetId,
   subType,
+  isConnector,
 }: Props) {
   return (
     <button
@@ -21,17 +21,11 @@ function ActionButton({
       className={`w-full py-4 rounded-xl font-bold text-base sm:text-lg shadow-lg transition-transform active:scale-[0.98] ${
         type === "IN" ? "btn-primary" : "btn-secondary"
       } ${
-        !isAuthenticated ||
-        amount === 0 ||
-        (!targetId.includes("_") && !subType)
+        !isAuthenticated || amount === 0 || (isConnector && !subType)
           ? "opacity-50 cursor-not-allowed"
           : ""
       }`}
-      disabled={
-        !isAuthenticated ||
-        amount === 0 ||
-        (!targetId.includes("_") && !subType)
-      }
+      disabled={!isAuthenticated || amount === 0 || (isConnector && !subType)}
     >
       CONFIRM {type === "IN" ? "ENTRY" : "WITHDRAWAL"}
     </button>

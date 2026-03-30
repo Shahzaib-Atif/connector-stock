@@ -1,7 +1,7 @@
 import { updateAccessoryApi } from "@/services/accessoryService";
 import { useAppDispatch } from "@/store/hooks";
 import { initMasterData } from "@/store/slices/masterDataSlice";
-import { Accessory } from "@/utils/types";
+import { AccessoryExtended } from "@/utils/types";
 import { useState } from "react";
 
 interface AccessoryFormData {
@@ -10,16 +10,15 @@ interface AccessoryFormData {
   Qty: number;
 }
 
-export function useAccessoryEditForm(accessory: Accessory, onSave: () => void) {
+export function useAccessoryEditForm(
+  accessory: AccessoryExtended,
+  onSave: () => void,
+) {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState<Partial<Accessory>>({
-    CapotAngle: accessory.CapotAngle || "",
-    ClipColor: accessory.ClipColor || "",
-    Qty: accessory.Qty || 0,
-  });
+  const [formData, setFormData] = useState<AccessoryExtended>(accessory);
 
   const setField = <K extends keyof AccessoryFormData>(
     field: K,
@@ -37,7 +36,7 @@ export function useAccessoryEditForm(accessory: Accessory, onSave: () => void) {
     setError(null);
 
     try {
-      await updateAccessoryApi(accessory.id, formData);
+      await updateAccessoryApi(accessory.Id, formData);
       await dispatch(initMasterData());
       onSave();
     } catch (err: unknown) {

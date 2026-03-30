@@ -1,10 +1,10 @@
 import React from "react";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
-import { Accessory } from "@/utils/types";
+import { AccessoryExtended } from "@/utils/types";
 
 interface AccessoriesTableProps {
-  accessories: Accessory[];
+  accessories: AccessoryExtended[];
 }
 
 export const AccessoriesTable: React.FC<AccessoriesTableProps> = ({
@@ -24,7 +24,7 @@ export const AccessoriesTable: React.FC<AccessoriesTableProps> = ({
           ) : (
             accessories.map((accessory, index) => (
               <TableRow
-                key={accessory.id}
+                key={accessory.Id}
                 accessory={accessory}
                 index={index}
               />

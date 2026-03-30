@@ -1,7 +1,6 @@
 import {
   ConnectorExtended,
   Box,
-  Accessory,
   MasterData,
   LegacyBackup,
   AccessoryMap,
@@ -12,6 +11,7 @@ import { parseAccessory } from "./accessoryService";
 import { API } from "../utils/api";
 import { fetchWithAuth } from "../utils/fetchClient";
 import { ConnectorDto } from "@shared/dto/ConnectorDto";
+import { AccessoryDto } from "@shared/dto/AccessoryDto";
 
 export const mapLegacyToConnector = (
   legacy: LegacyBackup,
@@ -149,10 +149,10 @@ export const getBoxDetails = (
   }
 
   // Aggregate unique accessories from all connectors in the box
-  const accessoryMap = new Map<string, Accessory>();
+  const accessoryMap = new Map<string, AccessoryDto>();
   connectors.forEach((conn) => {
     conn.accessories.forEach((acc) => {
-      accessoryMap.set(acc.id, acc);
+      accessoryMap.set(acc.customId, acc);
     });
   });
   const accessories = Array.from(accessoryMap.values());

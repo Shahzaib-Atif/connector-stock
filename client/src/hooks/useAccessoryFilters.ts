@@ -1,4 +1,4 @@
-import { Accessory, AccessoryMap } from "@/utils/types";
+import { AccessoryExtended, AccessoryMap } from "@/utils/types";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import {
   AccessoryFilters,
@@ -9,7 +9,7 @@ import {
 interface UseAccessoryFiltersReturn {
   filters: AccessoryFilters;
   setFilterField: (key: keyof AccessoryFilters, value: string) => void;
-  filteredAccessories: Accessory[];
+  filteredAccessories: AccessoryExtended[];
   clearFilters: () => void;
   typeOptions: string[];
   colorOptions: string[];
@@ -48,7 +48,7 @@ export function useAccessoryFilters(
     setFilters(defaultFilters);
   }, []);
 
-  const accessoriesList = useMemo((): Accessory[] => {
+  const accessoriesList = useMemo((): AccessoryExtended[] => {
     return Object.entries(accessories).map(([id, accessory]) => ({
       ...accessory,
       id,
@@ -73,7 +73,7 @@ export function useAccessoryFilters(
 
     return accessoriesList.filter((accessory) => {
       const matchesId =
-        !idQuery || accessory.id.toLowerCase().includes(idQuery);
+        !idQuery || accessory.customId.toLowerCase().includes(idQuery);
       const matchesType =
         filters.type === "all" || accessory.AccessoryType === filters.type;
       const matchesConn =

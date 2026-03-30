@@ -1,12 +1,12 @@
 import React from "react";
 import { useAccessoryEditForm } from "../useAccessoryEditForm";
 import AccessoryFormActions from "./AccessoryFormActions";
-import { Accessory } from "@/utils/types";
 import DisabledDiv from "@/components/common/DisabledDiv";
 import NumberInputDiv from "@/components/common/NumberInputDiv";
+import { AccessoryExtended } from "@/utils/types";
 
 interface Props {
-  accessory: Accessory;
+  accessory: AccessoryExtended;
   onCancel: () => void;
   onSave: () => void;
 }
@@ -29,7 +29,7 @@ export const AccessoryEditForm: React.FC<Props> = ({
           Edit Properties
         </h3>
         <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
-          {accessory.id}
+          {accessory.customId}
         </span>
       </div>
 
@@ -41,16 +41,19 @@ export const AccessoryEditForm: React.FC<Props> = ({
         <DisabledDiv label="Type" value={accessory.AccessoryType} />
 
         {/* RefClient - Read Only */}
-        <DisabledDiv label="Client Reference" value={accessory.RefClient} />
+        <DisabledDiv
+          label="Client Reference"
+          value={accessory.RefClient ?? ""}
+        />
 
         {/* RefDV - Read Only */}
-        <DisabledDiv label="DV Reference" value={accessory.RefDV} />
+        <DisabledDiv label="DV Reference" value={accessory.RefDV ?? ""} />
 
         {/* CapotAngle */}
         {accessory.CapotAngle && (
           <NumberInputDiv
             label="Capot Angle"
-            value={formData.CapotAngle}
+            value={formData.CapotAngle ?? ""}
             min={0}
             step={45}
             onChange={(e) =>
@@ -65,7 +68,7 @@ export const AccessoryEditForm: React.FC<Props> = ({
             <label className="label-style-4">Clip Color</label>
             <input
               type="text"
-              value={formData.ClipColor}
+              value={formData.ClipColor ?? ""}
               onChange={(e) => setField("ClipColor", e.target.value)}
               className="input-style-main input-style-enabled"
               placeholder="Clip color"

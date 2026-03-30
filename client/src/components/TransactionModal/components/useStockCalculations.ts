@@ -3,8 +3,9 @@ import { WireTypes } from "@shared/enums/WireTypes";
 import { useEffect, useMemo, useState } from "react";
 
 export default function useStockCalculations(
-  targetId: string,
+  targetId: string | number,
   type: "OUT" | "IN",
+  itemType: "connector" | "accessory",
 ) {
   const masterData = useAppSelector((state) => state.masterData.data);
   const [amount, setAmount] = useState(1);
@@ -13,10 +14,12 @@ export default function useStockCalculations(
   // Calculate current stock based on targetId and subType
   const currentStock = useMemo(() => {
     if (!masterData) return 0;
-    // Check if targetId is an accessory (has underscore)
-    if (targetId.includes("_")) {
+
+    // Check if targetId is an accessory
+    if (itemType === "accessory" && typeof targetId === "number") {
       return masterData.accessories?.[targetId]?.Qty || 0;
     }
+
     // Otherwise it's a connector
     const connector = masterData.connectors?.[targetId];
     if (!connector) return 0;

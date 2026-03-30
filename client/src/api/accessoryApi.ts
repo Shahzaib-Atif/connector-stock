@@ -1,27 +1,20 @@
-import { constructAccessoryId } from "@/services/accessoryService";
-import { Accessory, AccessoryType, MasterData } from "@/utils/types";
+import { AccessoryMap, AccessoryType } from "@/utils/types";
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
+import { AccessoryDto } from "@shared/dto/AccessoryDto";
+import { parseAccessory } from "@/services/accessoryService";
 
-export const fetchAccessories = async (): Promise<
-  MasterData["accessories"]
-> => {
+export const fetchAccessories = async (): Promise<AccessoryMap> => {
   const response = await fetchWithAuth(API.accessories);
   if (!response.ok) {
     throw new Error("Failed to fetch accessories");
   }
 
-  const data: Accessory[] = await response.json();
-
-  const accessories = {};
-  data.forEach((item) => {
-    if (item.RefClient) {
-      const id = constructAccessoryId(item);
-      accessories[id] = item;
-    }
-  });
-
-  return accessories;
+  const data: AccessoryDto[] = await response.json();
+  return data.reduce<AccessoryMap>((acc, item) => {
+    acc[item.Id] = parseAccessory(item);
+    return acc;
+  }, {});
 };
 
 export const fetchAccessoryTypes = async (): Promise<string[]> => {

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { createTransaction, getTransactions } from "@/api/transactionsApi";
 import { RootState } from "@/store";
-import { Accessory, ConnectorExtended } from "@/utils/types";
+import { AccessoryExtended, ConnectorExtended } from "@/utils/types";
 import { updateAccessory, updateConnector } from "./masterDataSlice";
 import { Transaction } from "@shared/types/Transaction";
 import { WireTypes } from "@shared/enums/WireTypes";
@@ -9,7 +9,7 @@ import { WireTypes } from "@shared/enums/WireTypes";
 interface TransactionState {
   transactions: Transaction[];
   lastConnector: ConnectorExtended | null;
-  lastAccessory: Accessory | null;
+  lastAccessory: AccessoryExtended | null;
   loading: boolean;
   error: string | null;
 }
@@ -22,33 +22,36 @@ const initialState: TransactionState = {
   error: null,
 };
 
+interface TxThunkProps {
+  itemId: string | number;
+  delta: number;
+  isConnector: boolean;
+  department?: string;
+  subType?: string;
+  encomenda?: string;
+}
+
 export const performTransactionThunk = createAsyncThunk(
   "transactions/perform",
   async (
     {
       itemId,
       delta,
+      isConnector,
       department,
       subType,
       encomenda,
-    }: {
-      itemId: string;
-      delta: number;
-      department?: string;
-      subType?: string;
-      encomenda?: string;
-    },
+    }: TxThunkProps,
     { getState, dispatch },
   ) => {
     const state = getState() as RootState;
     const masterData = state.masterData.data!;
-    const isAccessory = itemId.includes("_");
 
     const txData: Omit<Transaction, "ID" | "updatedAt"> = {
-      itemId,
+      itemId: itemId.toString(),
       transactionType: delta > 0 ? "IN" : "OUT",
       amount: Math.abs(delta),
-      itemType: isAccessory ? "accessory" : "connector",
+      itemType: isConnector ? "connector" : "accessory",
       subType: subType as WireTypes,
       encomenda,
       department,
@@ -57,10 +60,11 @@ export const performTransactionThunk = createAsyncThunk(
     const transaction = await createTransaction(txData);
 
     // Compute updated accessory if this is an accessory transaction
-    let accessory: Accessory | null = null;
+    let accessory: AccessoryExtended | null = null;
     let connector: ConnectorExtended | null = null;
 
-    if (isAccessory) {
+    // update masterData accessory
+    if (!isConnector && typeof itemId === "number") {
       // update masterData accessory
       accessory = masterData.accessories[itemId];
       dispatch(
@@ -85,7 +89,7 @@ export const performTransactionThunk = createAsyncThunk(
 
       dispatch(
         updateConnector({
-          itemId,
+          itemId: itemId?.toString(),
           connector: updatedConnector,
         }),
       );

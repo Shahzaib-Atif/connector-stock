@@ -1,5 +1,9 @@
 import { fetchMasterData } from "@/api";
-import { Accessory, ConnectorExtended, MasterData } from "@/utils/types";
+import {
+  AccessoryExtended,
+  ConnectorExtended,
+  MasterData,
+} from "@/utils/types";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 interface MasterDataState {
@@ -36,7 +40,7 @@ export const masterDataSlice = createSlice({
     },
     updateAccessory: (
       state,
-      action: PayloadAction<{ itemId: string; accessory: Accessory }>,
+      action: PayloadAction<{ itemId: number; accessory: AccessoryExtended }>,
     ) => {
       const { itemId, accessory } = action.payload;
       if (!state.data) return;

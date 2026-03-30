@@ -11,22 +11,19 @@ import WireStatusCard from "./components/WireStatusCard";
 import useStockCalculations from "./components/useStockCalculations";
 import ActionButton from "./components/ActionButton";
 import WithdrawalDetails from "./components/WithdrawalDetails";
+import { TransactionConfirmPayload } from "@/utils/types/transactionTypes";
 
 interface TransactionModalProps {
-  type: "IN" | "OUT";
-  targetId: string;
+  transactionType: "IN" | "OUT";
+  itemType: "connector" | "accessory";
+  targetId: string | number;
   onClose: () => void;
-  onConfirm: (
-    amount: number,
-    department?: Department,
-    associatedItemIds?: string[],
-    subType?: string,
-    encomenda?: string,
-  ) => void;
+  onConfirm: (data: TransactionConfirmPayload) => void;
 }
 
 export const TransactionModal: React.FC<TransactionModalProps> = ({
-  type,
+  transactionType,
+  itemType,
   targetId,
   onClose,
   onConfirm,
@@ -36,34 +33,36 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   const [dept, setDept] = useState<Department>(Department.GT);
 
   const { currentStock, amount, subType, setSubType, setAmount } =
-    useStockCalculations(targetId, type);
+    useStockCalculations(targetId, transactionType, itemType);
 
   const {
     selectedAccessoryIds,
     associatedAccessories,
     setSelectedAccessoryIds,
-  } = useAssociatedAccessories(targetId);
+  } = useAssociatedAccessories(targetId.toString());
 
   const ref = useRef(null);
   useClickOutside(ref, onClose);
   useEscKeyDown(ref, onClose);
 
-  const handleSubmit = () => {
-    const isConnector = !targetId.includes("_");
-    const isWireStatusSelected = subType !== undefined;
+  const isConnector = itemType === "connector";
+  const isWireStatusSelected = subType !== undefined;
+  const isOutgoingTransaction = transactionType === "OUT";
 
+  const handleSubmit = () => {
     if (
       amount > 0 &&
       isAuthenticated &&
       (!isConnector || isWireStatusSelected)
     ) {
-      onConfirm(
+      onConfirm({
         amount,
-        type === "OUT" ? dept : undefined,
-        selectedAccessoryIds,
+        isConnector,
+        associatedItemIds: selectedAccessoryIds,
+        department: isOutgoingTransaction ? dept : undefined,
         subType,
-        type === "OUT" ? encomenda : undefined,
-      );
+        encomenda: isOutgoingTransaction ? encomenda : undefined,
+      });
     }
   };
 
@@ -76,18 +75,22 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         ref={ref}
         className="flex flex-col gap-8 sm:gap-12 bg-slate-800 w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl border border-slate-700 animate-in slide-in-from-bottom-10 duration-300"
       >
-        <TransactionHeader type={type} onClose={onClose} targetId={targetId} />
+        <TransactionHeader
+          type={transactionType}
+          onClose={onClose}
+          targetId={targetId?.toString()}
+        />
 
         <div className="space-y-6 sm:space-y-10">
           {/* Wire Status Selection for Connectors */}
-          {!targetId.includes("_") && (
-            <WireStatusCard subType={subType} setSubType={setSubType} />
+          {isConnector && (
+            <WireStatusCard subType={subType ?? ""} setSubType={setSubType} />
           )}
 
           <QuantitySelector
             amount={amount}
             onChange={setAmount}
-            max={type === "OUT" ? currentStock : undefined}
+            max={isOutgoingTransaction ? currentStock : undefined}
           />
 
           {/* Associated Accessories Checklist */}
@@ -95,11 +98,11 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             associatedAccessories={associatedAccessories}
             selectedAccessoryIds={selectedAccessoryIds}
             setSelectedAccessoryIds={setSelectedAccessoryIds}
-            transactionType={type}
+            transactionType={transactionType}
           />
 
           {/*  */}
-          {type === "OUT" && (
+          {isOutgoingTransaction && (
             <WithdrawalDetails
               dept={dept}
               setDept={setDept}
@@ -118,9 +121,9 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             amount={amount}
             handleSubmit={handleSubmit}
             isAuthenticated={isAuthenticated}
-            subType={subType}
-            targetId={targetId}
-            type={type}
+            subType={subType ?? ""}
+            type={transactionType}
+            isConnector={isConnector}
           />
         </div>
       </div>

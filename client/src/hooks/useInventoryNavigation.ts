@@ -9,19 +9,19 @@ export const useInventoryNavigation = () => {
   const goBack = useCallback(() => navigate(-1), [navigate]);
   const goToConnector = useCallback(
     (connectorId: string) => navigate(`${ROUTES.CONNECTORS}/${connectorId}`),
-    [navigate]
+    [navigate],
   );
   const goToAccessory = useCallback(
-    (accessoryId: string) => navigate(`${ROUTES.ACCESSORIES}/${accessoryId}`),
-    [navigate]
+    (accessoryId: number) => navigate(`${ROUTES.ACCESSORIES}/${accessoryId}`),
+    [navigate],
   );
   const goToBox = useCallback(
     (boxId: string) => navigate(`${ROUTES.BOXES}/${boxId}`),
-    [navigate]
+    [navigate],
   );
   const goToClientRef = useCallback(
     (clientRef: number | string) => navigate(`/search?q=${clientRef}`),
-    [navigate]
+    [navigate],
   );
 
   return { goBack, goToConnector, goToAccessory, goToBox, goToClientRef };

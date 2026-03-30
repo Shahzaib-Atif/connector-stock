@@ -13,7 +13,7 @@ const connectors = {
 };
 
 const accessories = {
-  accessoryImages: (id: string) => `${API_BASE_URL}/images/accessory/${id}`,
+  accessoryImages: (id: number) => `${API_BASE_URL}/images/accessory/${id}`,
   accessoryTypes: `${API_BASE_URL}/accessories/types`,
   accessories: `${API_BASE_URL}/accessories`,
   accessoryRelatedImages: (id: string) =>

@@ -1,13 +1,14 @@
 import React from "react";
-import { Accessory } from "../../../utils/types";
 import { AccessoryItem } from "./AccessoryItem";
 import { CollapsibleSection } from "@/components/common/CollapsibleSection";
 import { Wrench } from "lucide-react";
+import { TransactionOpenOptions } from "@/utils/types/transactionTypes";
+import { AccessoryDto } from "@shared/dto/AccessoryDto";
 
 interface Props {
-  accessories: Accessory[];
-  onTransaction: (type: "IN" | "OUT", id: string) => void;
-  onInspect: (id: string) => void;
+  accessories: AccessoryDto[];
+  onTransaction: (txOptions: TransactionOpenOptions) => void;
+  onInspect: (id: number) => void;
 }
 
 export const AccessoryList: React.FC<Props> = ({
@@ -23,7 +24,7 @@ export const AccessoryList: React.FC<Props> = ({
     >
       {accessories.map((acc) => (
         <AccessoryItem
-          key={acc.id}
+          key={acc.Id}
           accessory={acc}
           stock={acc.Qty}
           onInspect={onInspect}

@@ -80,9 +80,9 @@ export const RelatedAccessoryImages: React.FC<RelatedAccessoryImagesProps> = ({
       {selectedImage && (
         <LightBoxOverlay
           images={images}
-          getSrc={API.accessoryExtrasImage}
           selectedImage={selectedImage}
           setSelectedImage={setSelectedImage}
+          src={API.accessoryExtrasImage(selectedImage)}
         />
       )}
     </CollapsibleSection>

@@ -17,9 +17,10 @@ import { useGlobalBackNavigation } from "@/hooks/useGlobalBackNavigation";
 import { NotFoundPage } from "../common/NotFoundPage";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
+import { TransactionOpenOptions } from "@/utils/types/transactionTypes";
 
 interface ConnectorViewProps {
-  onTransaction: (type: "IN" | "OUT", id?: string) => void;
+  onTransaction: (txOptions: TransactionOpenOptions) => void;
   onOpenQR: (qrData: QRData) => void;
 }
 
@@ -52,7 +53,7 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
     return <NotFoundPage label="Connector" icon={Wrench} onBack={goBack} />;
   }
 
-  const handleAccessoryInspect = (accessoryId: string) => {
+  const handleAccessoryInspect = (accessoryId: number) => {
     goToAccessory(accessoryId);
   };
 
@@ -120,8 +121,21 @@ export const ConnectorView: React.FC<ConnectorViewProps> = ({
       </div>
 
       <TransactionBar
-        onRemove={() => onTransaction("OUT", connector.CODIVMAC)}
-        onAdd={() => onTransaction("IN", connector.CODIVMAC)}
+        // onRemove={() => onTransaction("OUT", connector.id)}
+        onRemove={() =>
+          onTransaction({
+            transactionType: "OUT",
+            itemType: "connector",
+            targetId: connector.CODIVMAC,
+          })
+        }
+        onAdd={() =>
+          onTransaction({
+            transactionType: "IN",
+            itemType: "connector",
+            targetId: connector.CODIVMAC,
+          })
+        }
         isRemoveDisabled={connector.Qty <= 0}
       />
     </div>

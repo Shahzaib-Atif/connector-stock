@@ -9,13 +9,14 @@ import { SamplesView } from "./SamplesView";
 import { ConnectorsListView } from "./ConnectorsTable";
 import { AccessoriesListView } from "./AccessoriesListView";
 import { NotificationsView } from "./NotificationsView";
+import { TransactionOpenOptions } from "@/utils/types/transactionTypes";
 
 interface AppRoutesProps {
   onScan: (code: string) => void;
   scanError: string | null;
   onClearScanError: () => void;
   onOpenQR: (qrData: QRData) => void;
-  onTransaction: (type: "IN" | "OUT", id?: string) => void;
+  onTransaction: (txOptions: TransactionOpenOptions) => void;
 }
 
 import { Login } from "./Login";

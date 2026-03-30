@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import { getErrorMsg } from '@shared/utils/getErrorMsg';
+import { AccessoryRepo } from 'src/repository/accessories.repo';
 
 @Injectable()
 export class ImageService {
@@ -9,24 +10,27 @@ export class ImageService {
   private readonly accessoriesBasePath: string;
   private readonly accessoriesExtrasPath: string;
 
-  constructor() {
+  constructor(private readonly AccRepo: AccessoryRepo) {
     this.connectorsBasePath = process.env.CONNECTORS_BASE_PATH ?? '';
 
     this.accessoriesBasePath = process.env.ACCESSORIES_BASE_PATH ?? '';
     this.accessoriesExtrasPath = this.accessoriesBasePath + '\\_Extras';
   }
 
-  getImageStream(
-    id: string,
-    _type: 'connector' | 'accessory',
-    _subType: string,
-  ) {
+  getConnectorImage(id: string, _subType: string) {
+    const _basePath = path.join(this.connectorsBasePath, _subType);
+    return this.getImageStream(id, _basePath);
+  }
+
+  async getAccessoryImage(id: number) {
+    const acc = await this.AccRepo.getAccessoryById(id);
+    const _basePath = this.accessoriesBasePath;
+    return this.getImageStream(acc?.customId ?? '', _basePath);
+  }
+
+  private getImageStream(id: string, _basePath: string) {
     const possibleExtensions = ['.jpg', '.jpeg', '.png'];
     let fullPath: string | null = null;
-    const _basePath =
-      _type === 'connector'
-        ? path.join(this.connectorsBasePath, _subType)
-        : this.accessoriesBasePath;
 
     for (const ext of possibleExtensions) {
       const fp = path.join(_basePath, `${id}${ext}`);

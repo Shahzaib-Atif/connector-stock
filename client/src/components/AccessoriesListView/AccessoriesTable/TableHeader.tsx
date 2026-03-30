@@ -5,7 +5,7 @@ const TableHeader: React.FC = () => {
     <thead className="table-header">
       <tr>
         <th className="table-header-cell w-20">Photo</th>
-        <th className="table-header-cell w-28">ID</th>
+        <th className="table-header-cell w-28">Name</th>
         <th className="table-header-cell w-28 text-left">Connector</th>
         <th className="table-header-cell w-28">Type</th>
         <th className="table-header-cell w-32">Ref. Client</th>

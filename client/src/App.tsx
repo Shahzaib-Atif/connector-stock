@@ -23,7 +23,15 @@ const App: React.FC = () => {
   const [qrData, setQrData] = useState<QRData | null>(null);
   const { handleScan, error, clearError } = useScan();
 
-  const tx = useTransactionFlow();
+  const {
+    isOpen,
+    txType,
+    targetId,
+    openTransaction,
+    closeTransaction,
+    handleSubmit,
+    itemType,
+  } = useTransactionFlow();
 
   useEffect(() => {
     dispatch(initMasterData());
@@ -61,19 +69,20 @@ const App: React.FC = () => {
         scanError={error}
         onClearScanError={clearError}
         onOpenQR={handleOpenQR}
-        onTransaction={tx.openTransaction}
+        onTransaction={openTransaction}
       />
 
       <NotificationPopup />
 
       {qrData && <QRModal qrData={qrData} onClose={() => setQrData(null)} />}
 
-      {tx.isOpen && (
+      {isOpen && (
         <TransactionModal
-          type={tx.txType}
-          targetId={tx.targetId || ""}
-          onClose={tx.closeTransaction}
-          onConfirm={tx.handleSubmit}
+          transactionType={txType}
+          targetId={targetId || ""}
+          onClose={closeTransaction}
+          onConfirm={handleSubmit}
+          itemType={itemType}
         />
       )}
     </>

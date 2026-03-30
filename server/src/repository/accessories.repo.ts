@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
-import { UpdateAccessoryDto } from 'src/dtos/accessory.dto';
+import { AccessoryDto } from '@shared/dto/AccessoryDto';
+import { AccessoryMapper } from '@infra/AccessoryMapper';
 
 @Injectable()
 export class AccessoryRepo {
@@ -16,26 +17,17 @@ export class AccessoryRepo {
     }
   }
 
-  async getAccessories() {
+  async getAccessories(): Promise<AccessoryDto[]> {
     try {
-      return await this.prisma.rEG_AccessoriesSamples.findMany({
-        select: {
-          ConnName: true,
-          AccessoryType: true,
-          RefClient: true,
-          Qty: true,
-          CapotAngle: true,
-          ClipColor: true,
-          RefDV: true,
-        },
-      });
+      const data = await this.prisma.rEG_AccessoriesSamples.findMany({});
+      return data.map((a) => AccessoryMapper.toAccessoryDto(a));
     } catch (ex: any) {
       console.error(ex.message);
       return [];
     }
   }
 
-  async findAccessories(searchItem: string) {
+  async getAccessoriesCount(searchItem: string): Promise<number> {
     try {
       return await this.prisma.rEG_AccessoriesSamples.count({
         where: {
@@ -50,16 +42,27 @@ export class AccessoryRepo {
     }
   }
 
+  async getAccessoryById(Id: number): Promise<AccessoryDto | null> {
+    try {
+      const data = await this.prisma.rEG_AccessoriesSamples.findFirst({
+        where: {
+          id: parseInt(Id.toString()),
+        },
+      });
+      if (!data) return null;
+      return AccessoryMapper.toAccessoryDto(data);
+    } catch (ex: any) {
+      console.error(ex.message);
+      return null;
+    }
+  }
+
   // update stock
-  async update(searchItem: string, amount: number, tx?: TransactionClient) {
+  async update(Id: number, amount: number, tx?: TransactionClient) {
     try {
       const client = tx || this.prisma;
       return await client.rEG_AccessoriesSamples.updateMany({
-        where: {
-          AccImagePath: {
-            contains: searchItem,
-          },
-        },
+        where: { id: Id },
         data: {
           Qty: { increment: amount },
         },
@@ -72,25 +75,18 @@ export class AccessoryRepo {
 
   async adjustQuantity(
     tx: TransactionClient,
-    searchItem: string,
+    Id: number,
     delta: number,
-  ) {
-    if (!searchItem || !delta) return;
+  ): Promise<void> {
+    if (!Id || !delta) return;
 
     await tx.rEG_AccessoriesSamples.updateMany({
-      where: {
-        AccImagePath: {
-          contains: searchItem,
-        },
-      },
+      where: { id: Id },
       data: { Qty: { increment: delta } },
     });
   }
 
-  async updateAccessoryProperties(
-    searchItem: string,
-    data: UpdateAccessoryDto,
-  ) {
+  async updateAccessoryProperties(Id: number, data: AccessoryDto) {
     try {
       const normalizedData = {
         CapotAngle: data.CapotAngle === '' ? undefined : data.CapotAngle,
@@ -105,11 +101,7 @@ export class AccessoryRepo {
 
       // Update the accessory
       return await this.prisma.rEG_AccessoriesSamples.updateMany({
-        where: {
-          AccImagePath: {
-            contains: searchItem,
-          },
-        },
+        where: { id: Id },
         data: updateData,
       });
     } catch (ex: any) {

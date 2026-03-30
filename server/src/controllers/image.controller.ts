@@ -16,9 +16,8 @@ export class ImageController {
     @Res() res: Response,
   ) {
     try {
-      const { contentType, stream } = this.imageService.getImageStream(
+      const { contentType, stream } = this.imageService.getConnectorImage(
         connectorId,
-        'connector',
         type,
       );
 
@@ -33,13 +32,13 @@ export class ImageController {
 
   @ApiOperation({ summary: 'Get connector image' })
   @Get('accessory/:accessoryId')
-  getImages(@Param('accessoryId') accessoryId: string, @Res() res: Response) {
+  async getImages(
+    @Param('accessoryId') accessoryId: number,
+    @Res() res: Response,
+  ) {
     try {
-      const { contentType, stream } = this.imageService.getImageStream(
-        accessoryId,
-        'accessory',
-        '',
-      );
+      const { contentType, stream } =
+        await this.imageService.getAccessoryImage(accessoryId);
 
       res.setHeader('Content-Type', contentType);
       stream.pipe(res);
