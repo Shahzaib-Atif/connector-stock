@@ -7,9 +7,9 @@ import {
   AppNotification,
 } from 'src/dtos/notifications.dto';
 import { ParsedMessage } from 'src/utils/types';
-import { Connector } from '@domain/entities/Connector';
 import { SamplesDto } from '@shared/dto/SamplesDto';
 import { CreateTransactionsDto } from '@shared/types/Transaction';
+import { ConnectorDto } from '@shared/dto/ConnectorDto';
 
 @Injectable()
 export class NotificationsService {
@@ -50,7 +50,7 @@ export class NotificationsService {
 
     // Try to find matching sample and connector
     let linkedSample: SamplesDto | null = null;
-    let linkedConnector: Connector | null = null;
+    let linkedConnector: ConnectorDto | null = null;
 
     if (parsed.conector) {
       linkedConnector = await this.connectorRepo.getConnectorByCodivmac(
@@ -100,11 +100,11 @@ export class NotificationsService {
 
     // Calculate new quantity if linked connector exists
     if (notificationData.linkedConnector && quantityTakenOut > 0) {
-      const currentQty = notificationData.linkedConnector.quantity?.total;
+      const currentQty = notificationData.linkedConnector.Qty;
       const newQty = Math.max(0, currentQty - quantityTakenOut);
 
       connectorUpdate = {
-        codivmac: notificationData.linkedConnector.id,
+        codivmac: notificationData.linkedConnector.CODIVMAC,
         newQty: newQty,
         updatedBy: finishedBy || 'system',
       };
@@ -115,7 +115,8 @@ export class NotificationsService {
 
     // Use extracted connector from message if linked connector doesn't exist
     const connectorId =
-      notificationData.linkedConnector?.id ?? notificationData.parsedConector;
+      notificationData.linkedConnector?.CODIVMAC ??
+      notificationData.parsedConector;
 
     if (connectorId) {
       transactionDto = {
@@ -156,10 +157,18 @@ export class NotificationsService {
   parseNotificationMessage(message: string): ParsedMessage {
     const parsed: ParsedMessage = {};
 
-    const conectorMatch = message.match(/(?:Conector|Connector):\s*(\S+)/i);
-    if (conectorMatch) parsed.conector = conectorMatch[1];
+    const conectorMatch = message
+      .split('Order')[0]
+      .match(/(?:Conector|Connector):\s*(\S+)/i);
+    if (conectorMatch && conectorMatch?.length > 1) {
+      parsed.conector = conectorMatch[1];
+    } else {
+      parsed.conector = '?';
+    }
+    // const conectorMatch = message.match(/(?:Conector|Connector):\s*(\S+)/i);
+    // if (conectorMatch) parsed.conector = conectorMatch[1];
 
-    const encomendaMatch = message.match(/(?:Encomenda|Order):\s*(\d+)/i);
+    const encomendaMatch = message.match(/(?:Order):\s*(\d+)/i);
     if (encomendaMatch) parsed.encomenda = encomendaMatch[1];
 
     const prodIdMatch = message.match(/ProdId=\s*(\d+)/i);

@@ -94,7 +94,7 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
           {notification.parsedConector && (
             <div className="flex flex-wrap gap-2 text-xs">
               <InfoBadge
-                title="Order"
+                title="Connector"
                 text={notification.parsedConector}
                 icon={<Package size={14} className="text-green-400" />}
               />

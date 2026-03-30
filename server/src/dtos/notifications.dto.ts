@@ -1,4 +1,4 @@
-import { Connector } from '@domain/entities/Connector';
+import { ConnectorDto } from '@shared/dto/ConnectorDto';
 import { SamplesDto } from '@shared/dto/SamplesDto';
 
 export interface AppNotification {
@@ -32,6 +32,6 @@ export interface NotificationWithParsedData extends AppNotification {
 }
 
 export interface NotificationWithSample extends NotificationWithParsedData {
-  linkedSample?: SamplesDto | null;
-  linkedConnector?: Connector | null;
+  linkedSample: SamplesDto | null;
+  linkedConnector: ConnectorDto | null;
 }

@@ -1,5 +1,5 @@
-import type { ConnectorExtended } from "./inventoryTypes";
-import type { Sample } from "./sampleTypes";
+import { SamplesDto } from "@shared/dto/SamplesDto";
+import { ConnectorDto } from "@shared/dto/ConnectorDto";
 
 export type NotificationStatus = "idle" | "loading" | "success" | "error";
 
@@ -27,6 +27,6 @@ export interface INotification {
   parsedProdId?: string;
   parsedWireType?: string;
   parsedSample?: string;
-  linkedSample?: Sample;
-  linkedConnector?: ConnectorExtended;
+  linkedSample?: SamplesDto;
+  linkedConnector?: ConnectorDto;
 }

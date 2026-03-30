@@ -7,9 +7,9 @@ export interface ConnectorDto {
   Qty_com_fio: number;
   Qty_sem_fio: number;
   ConnType: string | null;
-  details?: ConnectorsDetails;
-  dimensions?: ConnectorsDimensions;
-  clientReferences?: string[];
+  details: ConnectorsDetails | null;
+  dimensions: ConnectorsDimensions | null;
+  clientReferences: string[];
 }
 
 export interface ConnectorsDetails {

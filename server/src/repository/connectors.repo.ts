@@ -58,7 +58,7 @@ export class ConnectorRepo {
     }
   }
 
-  async getConnectorByCodivmac(codivmac: string): Promise<Connector | null> {
+  async getConnectorByCodivmac(codivmac: string): Promise<ConnectorDto | null> {
     try {
       const data = await this.prisma.connectors_Main.findUnique({
         where: { CODIVMAC: codivmac },
@@ -75,7 +75,7 @@ export class ConnectorRepo {
       if (!data) return null;
 
       // return data after converting to domain entity
-      return ConnectorMapper.toDomain(data);
+      return ConnectorMapper.prismaToDto(data);
     } catch (ex: any) {
       console.error('Error fetching connector by codivmac:', ex.message);
       return null;

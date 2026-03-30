@@ -42,8 +42,26 @@ export class ConnectorMapper {
       Qty: domain.quantity.total,
       Qty_com_fio: domain.quantity.withWire,
       Qty_sem_fio: domain.quantity.withoutWire,
-      details: domain.details,
-      dimensions: domain.dimensions,
+      details: domain.details ?? null,
+      dimensions: domain.dimensions ?? null,
+      clientReferences: [],
+    };
+  }
+
+  static prismaToDto(data: PrismaConnector): ConnectorDto {
+    return {
+      ...data,
+      details: data.Connectors_Details,
+      dimensions: data.Connectors_Dimensions
+        ? {
+            InternalDiameter:
+              data.Connectors_Dimensions.InternalDiameter?.toNumber() ?? null,
+            ExternalDiameter:
+              data.Connectors_Dimensions.ExternalDiameter?.toNumber() ?? null,
+            Thickness: data.Connectors_Dimensions.Thickness?.toNumber() ?? null,
+          }
+        : null,
+      clientReferences: [],
     };
   }
 }

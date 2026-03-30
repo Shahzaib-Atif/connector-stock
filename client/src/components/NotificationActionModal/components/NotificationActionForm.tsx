@@ -8,7 +8,6 @@ import { LinkedSample } from "./LinkedSample";
 import NotificationStatus from "./NotificationStatus";
 import { ParsedInfo } from "./ParsedInfo";
 import QuantityInput from "./QuantityInput";
-import { ConnectorExtended } from "@/utils/types";
 
 interface Props {
   notificationId: number;
@@ -53,10 +52,7 @@ export const NotificationActionForm: React.FC<Props> = ({
             sample={notification?.parsedSample}
           />
 
-          <LinkedConnector
-            connector={notification?.linkedConnector as ConnectorExtended}
-            onClose={onClose}
-          />
+          <LinkedConnector connector={notification?.linkedConnector} />
 
           <LinkedSample sample={notification?.linkedSample} />
 
