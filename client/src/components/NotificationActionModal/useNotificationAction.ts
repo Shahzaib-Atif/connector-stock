@@ -8,9 +8,9 @@ import {
 import {
   NotificationStatus,
   DeliveryStatus,
-  INotification,
 } from "@/utils/types/notificationTypes";
 import { getErrorMsg } from "@shared/utils/getErrorMsg";
+import { AppNotification } from "@shared/types/Notification";
 
 export function useNotificationAction(
   notificationId: number,
@@ -18,7 +18,9 @@ export function useNotificationAction(
 ) {
   const dispatch = useAppDispatch();
 
-  const [notification, setNotification] = useState<INotification | null>(null);
+  const [notification, setNotification] = useState<AppNotification | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [quantityInput, setQuantityInput] = useState("");
   const [status, setStatus] = useState<NotificationStatus>("idle");

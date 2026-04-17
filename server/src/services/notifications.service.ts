@@ -1,15 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { NotificationsRepo } from 'src/repository/notifications.repo';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
-import {
-  NotificationWithParsedData,
-  NotificationWithSample,
-  AppNotification,
-} from 'src/dtos/notifications.dto';
 import { ParsedMessage } from 'src/utils/types';
 import { SamplesDto } from '@shared/dto/SamplesDto';
 import { CreateTransactionsDto } from '@shared/types/Transaction';
 import { ConnectorDto } from '@shared/dto/ConnectorDto';
+import { AppNotification } from '@shared/types/Notification';
 
 @Injectable()
 export class NotificationsService {
@@ -19,7 +15,7 @@ export class NotificationsService {
   ) {}
 
   /** Get all unfinished notifications with parsed data */
-  async getUnfinishedNotifications(): Promise<NotificationWithParsedData[]> {
+  async getUnfinishedNotifications(): Promise<AppNotification[]> {
     const notifications =
       await this.notificationsRepo.getUnfinishedNotifications();
 
@@ -37,9 +33,7 @@ export class NotificationsService {
   }
 
   /** Get notification with linked sample if exists */
-  async getNotificationWithSample(
-    id: number,
-  ): Promise<NotificationWithSample | null> {
+  async getNotificationWithSample(id: number): Promise<AppNotification | null> {
     const notification = await this.notificationsRepo.getNotificationById(id);
     if (!notification) {
       return null;
@@ -72,8 +66,8 @@ export class NotificationsService {
       parsedProdId: parsed.prodId,
       parsedWireType: parsed.wireType,
       parsedSample: parsed.sample,
-      linkedSample,
-      linkedConnector,
+      linkedSample: linkedSample || undefined,
+      linkedConnector: linkedConnector || undefined,
     };
   }
 
@@ -124,7 +118,7 @@ export class NotificationsService {
         transactionType: 'OUT',
         amount: Number(quantityTakenOut) || 0,
         itemType: 'connector',
-        department: notificationData.SenderSector,
+        department: notificationData?.SenderSector ?? '',
         sender: notificationData.SenderUser,
         notes: completionNote,
       };

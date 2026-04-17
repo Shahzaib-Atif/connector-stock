@@ -1,9 +1,9 @@
 import React from "react";
 import { NotificationCard } from "./NotificationCard";
-import { INotification } from "@/utils/types/notificationTypes";
+import { AppNotification } from "@shared/types/Notification";
 
 interface NotificationsListProps {
-  notifications: INotification[];
+  notifications: AppNotification[];
   onNotificationClick: (id: number) => void;
 }
 

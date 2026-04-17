@@ -2,8 +2,9 @@ import { TransactionMapper } from '@infra/TransactionMapper';
 import { Injectable } from '@nestjs/common';
 import { SamplesDto } from '@shared/dto/SamplesDto';
 import { PrismaService } from 'prisma/prisma.service';
-import { AppNotification } from 'src/dtos/notifications.dto';
 import { CreateTransactionsDto } from '@shared/types/Transaction';
+import { AppNotification } from '@shared/types/Notification';
+import { NotificationMapper } from '@infra/NotificationMapper';
 
 @Injectable()
 export class NotificationsRepo {
@@ -12,10 +13,14 @@ export class NotificationsRepo {
   /** Get all unfinished notifications ordered by creation date */
   async getUnfinishedNotifications(): Promise<AppNotification[]> {
     try {
-      return await this.prisma.notification_Users.findMany({
+      const data = await this.prisma.notification_Users.findMany({
         where: { Finished: false },
         orderBy: [{ Read: 'asc' }, { id: 'desc' }],
       });
+
+      if (!data) return [];
+
+      return data.map((n) => NotificationMapper.prismaToDto(n));
     } catch (ex: any) {
       console.error('Failed to get unfinished notifications:', ex.message);
       return [];
@@ -25,9 +30,10 @@ export class NotificationsRepo {
   /** Get notification by ID */
   async getNotificationById(id: number): Promise<AppNotification | null> {
     try {
-      return await this.prisma.notification_Users.findUnique({
+      const data = await this.prisma.notification_Users.findUnique({
         where: { id },
       });
+      return data ? NotificationMapper.prismaToDto(data) : null;
     } catch (ex: any) {
       console.error('Failed to get notification:', ex.message);
       return null;
@@ -37,13 +43,15 @@ export class NotificationsRepo {
   /** Mark notification as read */
   async markAsRead(id: number): Promise<AppNotification | null> {
     try {
-      return await this.prisma.notification_Users.update({
+      const data = await this.prisma.notification_Users.update({
         where: { id },
         data: {
           Read: true,
           ReadDate: new Date(),
         },
       });
+
+      return data ? NotificationMapper.prismaToDto(data) : null;
     } catch (ex: any) {
       console.error('Failed to mark notification as read:', ex.message);
       return null;
@@ -133,7 +141,7 @@ export class NotificationsRepo {
         }
       }
 
-      return updatedNotification;
+      return NotificationMapper.prismaToDto(updatedNotification);
     });
   }
 }

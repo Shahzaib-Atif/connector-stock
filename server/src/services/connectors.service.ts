@@ -36,6 +36,11 @@ export class ConnectorsService {
   }
 
   async updateConnector(codivmac: string, data: ConnectorDto) {
+    // Ensure Qty is consistent with Qty_com_fio and Qty_sem_fio
+    if (data.Qty !== data.Qty_com_fio + data.Qty_sem_fio) {
+      data.Qty = data.Qty_com_fio + data.Qty_sem_fio;
+    }
+
     return this.repo.updateConnectorProperties(codivmac, data);
   }
 }

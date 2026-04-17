@@ -33,7 +33,6 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
   const details = connector.details;
   const { CODIVMAC, Vias, Qty } = connector;
   const { OBS, Fabricante } = details || {};
-  console.log(connector);
 
   return (
     <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">

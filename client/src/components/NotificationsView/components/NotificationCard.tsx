@@ -8,15 +8,15 @@ import {
   Zap,
   LucideFileBox,
 } from "lucide-react";
-import { INotification } from "@/utils/types/notificationTypes";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { markAsReadThunk } from "@/store/slices/notificationsSlice";
 import { UserRoles } from "@shared/enums/UserRoles";
 import InfoBadge from "./InfoBadge";
 import { formatDate2 } from "@/utils/formatDate";
+import { AppNotification } from "@shared/types/Notification";
 
 interface NotificationCardProps {
-  notification: INotification;
+  notification: AppNotification;
   onClick: () => void;
 }
 
@@ -62,7 +62,7 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({
               {notification.Title || "Sample Request"}
             </h3>
             <span className="text-xs text-gray-500">
-              {formatDate2(notification.CreationDate)}
+              {formatDate2(notification.CreationDate ?? "")}
             </span>
           </div>
 

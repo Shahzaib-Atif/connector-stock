@@ -5,11 +5,11 @@ import {
   finishNotification,
   markNotificationAsRead,
 } from "@/api/notificationsApi";
-import { INotification } from "@/utils/types/notificationTypes";
+import { AppNotification } from "@shared/types/Notification";
 
 interface NotificationsState {
-  notifications: INotification[];
-  selectedNotification: INotification | null;
+  notifications: AppNotification[];
+  selectedNotification: AppNotification | null;
   loading: boolean;
   error: string | null;
   unfinishedCount: number;
@@ -83,7 +83,7 @@ const notificationsSlice = createSlice({
       })
       .addCase(
         fetchUnfinishedNotifications.fulfilled,
-        (state, action: PayloadAction<INotification[]>) => {
+        (state, action: PayloadAction<AppNotification[]>) => {
           state.loading = false;
           state.notifications = action.payload;
           state.unfinishedCount = action.payload.length;
@@ -103,7 +103,7 @@ const notificationsSlice = createSlice({
       })
       .addCase(
         fetchNotificationWithSample.fulfilled,
-        (state, action: PayloadAction<INotification>) => {
+        (state, action: PayloadAction<AppNotification>) => {
           state.loading = false;
           state.selectedNotification = action.payload;
         },

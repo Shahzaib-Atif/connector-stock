@@ -1,9 +1,9 @@
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
-import { INotification } from "@/utils/types/notificationTypes";
+import { AppNotification } from "@shared/types/Notification";
 
 export const getUnfinishedNotifications = async (): Promise<
-  INotification[]
+  AppNotification[]
 > => {
   const response = await fetchWithAuth(API.notifications);
   if (!response.ok) throw new Error("Failed to fetch notifications");
@@ -11,8 +11,8 @@ export const getUnfinishedNotifications = async (): Promise<
 };
 
 export const getNotificationWithSample = async (
-  id: number
-): Promise<INotification> => {
+  id: number,
+): Promise<AppNotification> => {
   const response = await fetchWithAuth(`${API.notifications}/${id}`);
   if (!response.ok) throw new Error("Failed to fetch notification");
   return response.json();
@@ -22,7 +22,7 @@ export const finishNotification = async (
   id: number,
   quantityTakenOut: number,
   finishedBy?: string,
-  completionNote?: string
+  completionNote?: string,
 ): Promise<void> => {
   const response = await fetchWithAuth(`${API.notifications}/${id}/finish`, {
     method: "PATCH",
