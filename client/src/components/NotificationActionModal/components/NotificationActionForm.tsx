@@ -8,6 +8,9 @@ import { LinkedSample } from "./LinkedSample";
 import NotificationStatus from "./NotificationStatus";
 import { ParsedInfo } from "./ParsedInfo";
 import QuantityInput from "./QuantityInput";
+import WireStatusCard from "@/components/TransactionModal/components/WireStatusCard";
+import { DeliveryStatus } from "@/utils/types/notificationTypes";
+import { WireTypes } from "@shared/enums/WireTypes";
 
 interface Props {
   notificationId: number;
@@ -27,6 +30,8 @@ export const NotificationActionForm: React.FC<Props> = ({
     setDeliveryStatus,
     customNote,
     setCustomNote,
+    subType,
+    setSubType,
     status,
     errorMessage,
     handleFinish,
@@ -63,10 +68,24 @@ export const NotificationActionForm: React.FC<Props> = ({
             setCustomNote={setCustomNote}
           />
 
+          {!!notification?.linkedConnector &&
+            deliveryStatus !== DeliveryStatus.OutOfStock && (
+              <WireStatusCard
+                subType={subType ?? ""}
+                setSubType={setSubType}
+              />
+            )}
+
           <QuantityInput
             deliveryStatus={deliveryStatus}
             quantityInput={quantityInput}
-            maxQuantity={notification?.linkedConnector?.Qty}
+            maxQuantity={
+              subType === WireTypes.COM_FIO
+                ? notification?.linkedConnector?.Qty_com_fio
+                : subType === WireTypes.SEM_FIO
+                  ? notification?.linkedConnector?.Qty_sem_fio
+                  : notification?.linkedConnector?.Qty
+            }
             setQuantityInput={setQuantityInput}
           />
 
@@ -79,7 +98,13 @@ export const NotificationActionForm: React.FC<Props> = ({
 
           <ActionButtons
             quantityInput={quantityInput}
-            maxQuantity={notification?.linkedConnector?.Qty}
+            maxQuantity={
+              subType === WireTypes.COM_FIO
+                ? notification?.linkedConnector?.Qty_com_fio
+                : subType === WireTypes.SEM_FIO
+                  ? notification?.linkedConnector?.Qty_sem_fio
+                  : notification?.linkedConnector?.Qty
+            }
             deliveryStatus={deliveryStatus}
             customNote={customNote}
             status={status}

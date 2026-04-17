@@ -37,6 +37,7 @@ export class NotificationsController {
     return this.notificationsService.finishNotification(
       id,
       dto.quantityTakenOut,
+      dto.subType,
       dto.finishedBy,
       dto.completionNote,
     );

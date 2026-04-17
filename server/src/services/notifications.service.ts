@@ -6,6 +6,7 @@ import { SamplesDto } from '@shared/dto/SamplesDto';
 import { CreateTransactionsDto } from '@shared/types/Transaction';
 import { ConnectorDto } from '@shared/dto/ConnectorDto';
 import { AppNotification } from '@shared/types/Notification';
+import { WireTypes } from '@shared/enums/WireTypes';
 
 @Injectable()
 export class NotificationsService {
@@ -75,6 +76,7 @@ export class NotificationsService {
   async finishNotification(
     id: number,
     quantityTakenOut: number,
+    subType?: WireTypes,
     finishedBy?: string,
     completionNote?: string,
   ): Promise<AppNotification> {
@@ -87,19 +89,24 @@ export class NotificationsService {
     let connectorUpdate:
       | {
           codivmac: string;
-          newQty: number;
+          quantityTakenOut: number;
+          subType: WireTypes;
           updatedBy: string;
         }
       | undefined;
 
-    // Calculate new quantity if linked connector exists
+    // If linked connector exists and we are taking stock out, require wire subtype
     if (notificationData.linkedConnector && quantityTakenOut > 0) {
-      const currentQty = notificationData.linkedConnector.Qty;
-      const newQty = Math.max(0, currentQty - quantityTakenOut);
+      if (!subType) {
+        throw new Error(
+          'Wire type is required when taking stock out (COM_FIO or SEM_FIO)',
+        );
+      }
 
       connectorUpdate = {
         codivmac: notificationData.linkedConnector.CODIVMAC,
-        newQty: newQty,
+        quantityTakenOut,
+        subType,
         updatedBy: finishedBy || 'system',
       };
     }
@@ -118,6 +125,7 @@ export class NotificationsService {
         transactionType: 'OUT',
         amount: Number(quantityTakenOut) || 0,
         itemType: 'connector',
+        subType,
         department: notificationData?.SenderSector ?? '',
         sender: notificationData.SenderUser,
         notes: completionNote,

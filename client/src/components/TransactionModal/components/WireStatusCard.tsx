@@ -35,6 +35,7 @@ function WireStatusCard({ subType, setSubType }: Props) {
         {labels.map((opt) => (
           <button
             key={opt.label}
+            type="button"
             onClick={() => setSubType(opt.value)}
             className={`flex-1 py-2 text-[12px] font-bold rounded-lg border transition-all ${
               subType === opt.value

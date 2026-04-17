@@ -5,6 +5,7 @@ import { PrismaService } from 'prisma/prisma.service';
 import { CreateTransactionsDto } from '@shared/types/Transaction';
 import { AppNotification } from '@shared/types/Notification';
 import { NotificationMapper } from '@infra/NotificationMapper';
+import { WireTypes } from '@shared/enums/WireTypes';
 
 @Injectable()
 export class NotificationsRepo {
@@ -97,7 +98,8 @@ export class NotificationsRepo {
     notificationId: number,
     connectorUpdate?: {
       codivmac: string;
-      newQty: number;
+      quantityTakenOut: number;
+      subType: WireTypes;
       updatedBy: string;
     },
     transactionDto?: CreateTransactionsDto,
@@ -117,10 +119,43 @@ export class NotificationsRepo {
       try {
         // 2. Update connector quantity if provided
         if (connectorUpdate) {
+          const current = await tx.connectors_Main.findUnique({
+            where: { CODIVMAC: connectorUpdate.codivmac },
+            select: {
+              Qty: true,
+              Qty_com_fio: true,
+              Qty_sem_fio: true,
+            },
+          });
+
+          if (!current) {
+            throw new Error(
+              `Connector not found: ${connectorUpdate.codivmac}`,
+            );
+          }
+
+          const currentWith = current.Qty_com_fio ?? 0;
+          const currentWithout = current.Qty_sem_fio ?? 0;
+
+          const take = Math.max(0, Number(connectorUpdate.quantityTakenOut) || 0);
+
+          let newWith = currentWith;
+          let newWithout = currentWithout;
+
+          if (connectorUpdate.subType === WireTypes.COM_FIO) {
+            newWith = Math.max(0, currentWith - take);
+          } else if (connectorUpdate.subType === WireTypes.SEM_FIO) {
+            newWithout = Math.max(0, currentWithout - take);
+          }
+
+          const newTotal = newWith + newWithout;
+
           await tx.connectors_Main.update({
             where: { CODIVMAC: connectorUpdate.codivmac },
             data: {
-              Qty: connectorUpdate.newQty,
+              Qty: newTotal,
+              Qty_com_fio: newWith,
+              Qty_sem_fio: newWithout,
               LastChangeBy: connectorUpdate.updatedBy,
               LastUpdateDate: new Date(),
             },

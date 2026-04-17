@@ -11,6 +11,7 @@ import {
 } from "@/utils/types/notificationTypes";
 import { getErrorMsg } from "@shared/utils/getErrorMsg";
 import { AppNotification } from "@shared/types/Notification";
+import { WireTypes } from "@shared/enums/WireTypes";
 
 export function useNotificationAction(
   notificationId: number,
@@ -29,6 +30,7 @@ export function useNotificationAction(
     DeliveryStatus.Fulfilled,
   );
   const [customNote, setCustomNote] = useState("");
+  const [subType, setSubType] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const loadNotification = async () => {
@@ -79,7 +81,20 @@ export function useNotificationAction(
         return;
       }
 
-      const availableStock = notification?.linkedConnector?.Qty ?? Infinity;
+      const connector = notification?.linkedConnector;
+      const availableStock =
+        subType === WireTypes.COM_FIO
+          ? connector?.Qty_com_fio ?? 0
+          : subType === WireTypes.SEM_FIO
+            ? connector?.Qty_sem_fio ?? 0
+            : connector?.Qty ?? Infinity;
+
+      if (qty > 0 && connector && !subType) {
+        setErrorMessage("Please select wire status (c/fio or sem/fio)");
+        setStatus("error");
+        return;
+      }
+
       if (qty > availableStock) {
         setErrorMessage(
           `Cannot take out more than available stock (${availableStock})`,
@@ -118,6 +133,7 @@ export function useNotificationAction(
         finishNotificationThunk({
           id: notificationId,
           quantityTakenOut: qty,
+          subType: subType as WireTypes,
           completionNote: finalNote,
         }),
       ).unwrap();
@@ -140,6 +156,8 @@ export function useNotificationAction(
     setDeliveryStatus,
     customNote,
     setCustomNote,
+    subType,
+    setSubType,
     status,
     errorMessage,
     handleFinish,

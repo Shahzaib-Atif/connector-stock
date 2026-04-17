@@ -1,6 +1,7 @@
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/fetchClient";
 import { AppNotification } from "@shared/types/Notification";
+import { WireTypes } from "@shared/enums/WireTypes";
 
 export const getUnfinishedNotifications = async (): Promise<
   AppNotification[]
@@ -21,12 +22,18 @@ export const getNotificationWithSample = async (
 export const finishNotification = async (
   id: number,
   quantityTakenOut: number,
+  subType?: WireTypes,
   finishedBy?: string,
   completionNote?: string,
 ): Promise<void> => {
   const response = await fetchWithAuth(`${API.notifications}/${id}/finish`, {
     method: "PATCH",
-    body: JSON.stringify({ quantityTakenOut, finishedBy, completionNote }),
+    body: JSON.stringify({
+      quantityTakenOut,
+      subType,
+      finishedBy,
+      completionNote,
+    }),
   });
   if (!response.ok) throw new Error("Failed to finish notification");
   return response.json();
