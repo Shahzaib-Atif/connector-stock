@@ -23,6 +23,7 @@ export const finishNotification = async (
   id: number,
   quantityTakenOut: number,
   subType?: WireTypes,
+  connectorId?: string,
   finishedBy?: string,
   completionNote?: string,
 ): Promise<void> => {
@@ -31,6 +32,7 @@ export const finishNotification = async (
     body: JSON.stringify({
       quantityTakenOut,
       subType,
+      connectorId,
       finishedBy,
       completionNote,
     }),

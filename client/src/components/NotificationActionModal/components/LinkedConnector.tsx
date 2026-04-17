@@ -31,7 +31,7 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
   };
 
   const details = connector.details;
-  const { CODIVMAC, Vias, Qty } = connector;
+  const { CODIVMAC, Qty } = connector;
   const { OBS, Fabricante } = details || {};
 
   return (
@@ -53,7 +53,6 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
             <MetaItem label="Current Stock" value={Qty + " units"}></MetaItem>
             <MetaItem label="Description" value={OBS ?? ""}></MetaItem>
             <MetaItem label="Manufacturer" value={Fabricante ?? ""}></MetaItem>
-            <MetaItem label="Vias" value={Vias}></MetaItem>
           </div>
         </div>
 

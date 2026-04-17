@@ -1,10 +1,10 @@
 import React from "react";
 import { CheckCircle2, AlertCircle } from "lucide-react";
-import { Sample } from "@/utils/types";
 import MetaItem from "./MetaItem";
+import { SamplesDto } from "@shared/dto/SamplesDto";
 
 interface LinkedSampleProps {
-  sample?: Sample;
+  sample?: SamplesDto;
 }
 
 export const LinkedSample: React.FC<LinkedSampleProps> = ({ sample }) => {
@@ -28,9 +28,9 @@ export const LinkedSample: React.FC<LinkedSampleProps> = ({ sample }) => {
             Sample Registry Found
           </p>
           <div className="grid gap-2 text-sm break-all">
-            <MetaItem label="Ref_Descricao" value={Ref_Descricao} />
+            <MetaItem label="Ref_Descricao" value={Ref_Descricao ?? ""} />
             <MetaItem label="Project" value={Projeto ?? ""} />
-            <MetaItem label="Client" value={Cliente} />
+            <MetaItem label="Client" value={Cliente ?? ""} />
             <MetaItem label="Quantity" value={Quantidade || "0"} />
           </div>
         </div>

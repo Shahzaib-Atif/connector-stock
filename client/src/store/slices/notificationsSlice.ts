@@ -47,12 +47,14 @@ export const finishNotificationThunk = createAsyncThunk(
     id,
     quantityTakenOut,
     subType,
+    connectorId,
     finishedBy,
     completionNote,
   }: {
     id: number;
     quantityTakenOut: number;
     subType?: WireTypes;
+    connectorId?: string;
     finishedBy?: string;
     completionNote?: string;
   }) => {
@@ -60,6 +62,7 @@ export const finishNotificationThunk = createAsyncThunk(
       id,
       quantityTakenOut,
       subType,
+      connectorId,
       finishedBy,
       completionNote,
     );

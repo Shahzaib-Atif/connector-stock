@@ -77,6 +77,7 @@ export class NotificationsService {
     id: number,
     quantityTakenOut: number,
     subType?: WireTypes,
+    connectorIdOverride?: string,
     finishedBy?: string,
     completionNote?: string,
   ): Promise<AppNotification> {
@@ -95,8 +96,20 @@ export class NotificationsService {
         }
       | undefined;
 
-    // If linked connector exists and we are taking stock out, require wire subtype
-    if (notificationData.linkedConnector && quantityTakenOut > 0) {
+    const effectiveConnector =
+      notificationData.linkedConnector ||
+      (connectorIdOverride
+        ? await this.connectorRepo.getConnectorByCodivmac(connectorIdOverride)
+        : null);
+
+    // If we are taking stock out, require a connector + wire subtype
+    if (quantityTakenOut > 0) {
+      if (!effectiveConnector) {
+        throw new Error(
+          'Cannot take stock out: no connector linked and no connectorId provided',
+        );
+      }
+
       if (!subType) {
         throw new Error(
           'Wire type is required when taking stock out (COM_FIO or SEM_FIO)',
@@ -104,7 +117,7 @@ export class NotificationsService {
       }
 
       connectorUpdate = {
-        codivmac: notificationData.linkedConnector.CODIVMAC,
+        codivmac: effectiveConnector.CODIVMAC,
         quantityTakenOut,
         subType,
         updatedBy: finishedBy || 'system',
@@ -114,9 +127,9 @@ export class NotificationsService {
     // Prepare transaction if applicable
     let transactionDto: CreateTransactionsDto | undefined;
 
-    // Use extracted connector from message if linked connector doesn't exist
     const connectorId =
-      notificationData.linkedConnector?.CODIVMAC ??
+      effectiveConnector?.CODIVMAC ??
+      connectorIdOverride ??
       notificationData.parsedConector;
 
     if (connectorId) {

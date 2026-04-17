@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useAppDispatch } from "@/store/hooks";
+import { useMemo, useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   fetchNotificationWithSample,
   finishNotificationThunk,
@@ -12,12 +12,14 @@ import {
 import { getErrorMsg } from "@shared/utils/getErrorMsg";
 import { AppNotification } from "@shared/types/Notification";
 import { WireTypes } from "@shared/enums/WireTypes";
+import { ConnectorExtended } from "@/utils/types";
 
 export function useNotificationAction(
   notificationId: number,
   onClose: () => void,
 ) {
   const dispatch = useAppDispatch();
+  const masterData = useAppSelector((s) => s.masterData.data);
 
   const [notification, setNotification] = useState<AppNotification | null>(
     null,
@@ -31,6 +33,38 @@ export function useNotificationAction(
   );
   const [customNote, setCustomNote] = useState("");
   const [subType, setSubType] = useState<string | undefined>(undefined);
+  const [selectedConnectorId, setSelectedConnectorId] = useState<
+    string | undefined
+  >(undefined);
+
+  const connectorOptions = useMemo(() => {
+    const base = notification?.parsedConector;
+    const connectors = masterData?.connectors;
+    if (!connectors || !base || base === "?" || notification?.linkedConnector) {
+      return [];
+    }
+
+    const keys = Object.keys(connectors);
+    const matches = keys.filter((k) => k === base || k.startsWith(`${base}-`));
+    matches.sort();
+    return matches;
+  }, [
+    masterData?.connectors,
+    notification?.parsedConector,
+    notification?.linkedConnector,
+  ]);
+
+  const effectiveConnector = useMemo(() => {
+    if (notification?.linkedConnector) return notification.linkedConnector;
+    if (selectedConnectorId && masterData?.connectors?.[selectedConnectorId]) {
+      return masterData.connectors[selectedConnectorId] as ConnectorExtended;
+    }
+    return undefined;
+  }, [
+    masterData?.connectors,
+    notification?.linkedConnector,
+    selectedConnectorId,
+  ]);
 
   useEffect(() => {
     const loadNotification = async () => {
@@ -40,6 +74,22 @@ export function useNotificationAction(
           fetchNotificationWithSample(notificationId),
         ).unwrap();
         setNotification(result);
+
+        // If backend couldn't match (e.g. versioned connectors), preselect first local match
+        if (
+          !result?.linkedConnector &&
+          result?.parsedConector &&
+          masterData?.connectors
+        ) {
+          const base = result.parsedConector;
+          const keys = Object.keys(masterData.connectors);
+          const matches = keys
+            .filter((k) => k === base || k.startsWith(`${base}-`))
+            .sort();
+          if (matches.length === 1) {
+            setSelectedConnectorId(matches[0]);
+          }
+        }
 
         if (result?.linkedConnector?.Qty == 0)
           setDeliveryStatus(DeliveryStatus.OutOfStock);
@@ -81,16 +131,22 @@ export function useNotificationAction(
         return;
       }
 
-      const connector = notification?.linkedConnector;
+      const connector = effectiveConnector;
       const availableStock =
         subType === WireTypes.COM_FIO
-          ? connector?.Qty_com_fio ?? 0
+          ? (connector?.Qty_com_fio ?? 0)
           : subType === WireTypes.SEM_FIO
-            ? connector?.Qty_sem_fio ?? 0
-            : connector?.Qty ?? Infinity;
+            ? (connector?.Qty_sem_fio ?? 0)
+            : (connector?.Qty ?? Infinity);
 
       if (qty > 0 && connector && !subType) {
         setErrorMessage("Please select wire status (c/fio or sem/fio)");
+        setStatus("error");
+        return;
+      }
+
+      if (qty > 0 && !connector) {
+        setErrorMessage("Please select the connector version to take out from");
         setStatus("error");
         return;
       }
@@ -134,6 +190,7 @@ export function useNotificationAction(
           id: notificationId,
           quantityTakenOut: qty,
           subType: subType as WireTypes,
+          connectorId: selectedConnectorId,
           completionNote: finalNote,
         }),
       ).unwrap();
@@ -158,6 +215,10 @@ export function useNotificationAction(
     setCustomNote,
     subType,
     setSubType,
+    connectorOptions,
+    selectedConnectorId,
+    setSelectedConnectorId,
+    effectiveConnector,
     status,
     errorMessage,
     handleFinish,
