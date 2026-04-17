@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ConnectorExtended } from "@/utils/types";
 import { API } from "@/utils/api";
+import { getColorFromColorMap } from "@/utils/colorMap";
 
 interface Props {
   liveStock: number;
@@ -31,12 +32,25 @@ function ConnectorInfo({ liveStock, conn }: Props) {
           }`}
         />
       )}
-      <div>
-        <div className="font-mono font-bold text-white text-lg">
+      <div className="flex flex-col gap-1">
+        <div className="font-semibold text-white text-base tracking-tight">
           {conn.CODIVMAC}
         </div>
-        <div className="text-sm text-slate-400">
-          {conn.colorNamePT} • {conn.viasName}
+
+        <div className="flex items-center gap-2 text-xs text-slate-300">
+          <span className="px-2 py-0.5 rounded bg-slate-700/50">
+            {conn.ConnType}
+          </span>
+
+          <div className="flex items-center gap-1">
+            <span
+              className="w-2.5 h-2.5 rounded-full border border-white/20"
+              style={{
+                background: getColorFromColorMap(conn.Cor),
+              }}
+            />
+            {conn.colorNamePT}
+          </div>
         </div>
       </div>
     </>
