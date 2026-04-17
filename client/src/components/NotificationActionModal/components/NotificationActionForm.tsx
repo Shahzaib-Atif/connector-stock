@@ -11,6 +11,7 @@ import QuantityInput from "./QuantityInput";
 import WireStatusCard from "@/components/TransactionModal/components/WireStatusCard";
 import { DeliveryStatus } from "@/utils/types/notificationTypes";
 import { WireTypes } from "@shared/enums/WireTypes";
+import ConnectorVersionSelect from "./ConnectorVersionSelect";
 
 interface Props {
   notificationId: number;
@@ -62,32 +63,12 @@ export const NotificationActionForm: React.FC<Props> = ({
           />
 
           {!notification?.linkedConnector && connectorOptions.length > 0 && (
-            <div className="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 space-y-2">
-              <p className="text-slate-300 text-sm font-medium">
-                Select connector version
-              </p>
-              <select
-                value={selectedConnectorId ?? ""}
-                onChange={(e) => setSelectedConnectorId(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all"
-              >
-                <option value="" disabled>
-                  Choose version…
-                </option>
-                {connectorOptions.map((id) => (
-                  <option key={id} value={id}>
-                    {id}
-                  </option>
-                ))}
-              </select>
-              <p className="text-xs text-slate-500">
-                No exact match found for{" "}
-                <span className="font-semibold text-slate-400">
-                  {notification?.parsedConector}
-                </span>
-                , but versions exist.
-              </p>
-            </div>
+            <ConnectorVersionSelect
+              connectorOptions={connectorOptions}
+              notification={notification}
+              selectedConnectorId={selectedConnectorId}
+              setSelectedConnectorId={setSelectedConnectorId}
+            />
           )}
 
           <LinkedConnector
@@ -105,10 +86,7 @@ export const NotificationActionForm: React.FC<Props> = ({
 
           {!!effectiveConnector &&
             deliveryStatus !== DeliveryStatus.OutOfStock && (
-              <WireStatusCard
-                subType={subType ?? ""}
-                setSubType={setSubType}
-              />
+              <WireStatusCard subType={subType ?? ""} setSubType={setSubType} />
             )}
 
           <QuantityInput
