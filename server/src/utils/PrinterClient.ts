@@ -10,20 +10,10 @@ const execAsync = promisify(exec);
 // OS + printer communication
 export class PrinterClient {
   private readonly logger = new Logger(PrinterClient.name);
-  private readonly rawPrinterExe = path.join(
-    __dirname,
-    '../../../scripts/RawPrinter.exe',
-  );
+  private readonly rawPrinterExe = this.getPrinterExePath();
 
   async printRaw(tsplCommands: string, printer: string) {
     if (!printer) throw new Error('Printer not configured');
-
-    // Check if RawPrinter.exe exists
-    if (!fs.existsSync(this.rawPrinterExe)) {
-      throw new Error(
-        `RawPrinter.exe not found at ${this.rawPrinterExe}. Run build.bat in scripts folder.`,
-      );
-    }
 
     // Write to temp file
     const tempFile = path.join(os.tmpdir(), `label_${Date.now()}.prn`);
@@ -34,6 +24,17 @@ export class PrinterClient {
 
     // Cleanup
     this.cleanupFile(tempFile);
+  }
+
+  private getPrinterExePath() {
+    const rawPrinterPath = process.env.RAW_PRINTER_EXE as string;
+    const resolvedPath = path.resolve(process.cwd(), rawPrinterPath);
+
+    if (!fs.existsSync(resolvedPath)) {
+      throw new Error(`RawPrinter.exe not found at ${resolvedPath}`);
+    }
+
+    return resolvedPath;
   }
 
   private async sendToPrinter(
