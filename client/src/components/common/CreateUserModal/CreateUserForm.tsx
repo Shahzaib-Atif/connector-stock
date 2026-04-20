@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { createUserThunk } from "@/store/slices/authSlice";
 import { UserRoles } from "@shared/enums/UserRoles";
 import { getErrorMsg } from "@shared/utils/getErrorMsg";
+import { RequestState } from "@/utils/types/RequestState";
 
 interface Props {
   onClose: () => void;
@@ -19,9 +20,7 @@ function CreateUserForm({ onClose }: Props) {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<UserRoles>(UserRoles.User);
   const [dept, setDept] = useState("");
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+  const [status, setStatus] = useState<RequestState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {

@@ -4,8 +4,8 @@ import { finishNotificationThunk } from "@/store/slices/notificationsSlice";
 import { DeliveryStatus } from "@/utils/types/notificationTypes";
 import { WireTypes } from "@shared/enums/WireTypes";
 import { getErrorMsg } from "@shared/utils/getErrorMsg";
-import type { NotificationStatus } from "@/utils/types/notificationTypes";
 import { ConnectorDto } from "@shared/dto/ConnectorDto";
+import { RequestState } from "@/utils/types/RequestState";
 
 interface Params {
   notificationId: number;
@@ -19,8 +19,9 @@ interface Params {
   subType: string | undefined;
   connectorId: string | undefined;
   effectiveConnector: ConnectorDto | undefined;
+  connectorOptions: string[];
 
-  setStatus: (s: NotificationStatus) => void;
+  setStatus: (s: RequestState) => void;
   setErrorMessage: (m: string) => void;
 }
 
@@ -34,6 +35,7 @@ export function useFinishNotification({
   subType,
   connectorId,
   effectiveConnector,
+  connectorOptions,
   setStatus,
   setErrorMessage,
 }: Params) {
@@ -72,7 +74,7 @@ export function useFinishNotification({
         return;
       }
 
-      if (qty > 0 && !connector) {
+      if (qty > 0 && !connector && connectorOptions.length > 0) {
         setErrorMessage("Please select the connector version to take out from");
         setStatus("error");
         return;
@@ -112,10 +114,10 @@ export function useFinishNotification({
     try {
       await dispatch(
         finishNotificationThunk({
-          id: notificationId,
+          notificationId,
           quantityTakenOut: qty,
           subType: subType as WireTypes,
-          connectorId,
+          connectorVersionId: connectorId,
           completionNote: finalNote,
         }),
       ).unwrap();

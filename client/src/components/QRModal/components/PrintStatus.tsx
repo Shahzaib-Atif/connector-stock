@@ -1,6 +1,8 @@
+import { RequestState } from "@/utils/types/RequestState";
+
 interface Props {
   printStatus: {
-    type: "error" | "success";
+    type: RequestState;
     message: string;
   };
 }

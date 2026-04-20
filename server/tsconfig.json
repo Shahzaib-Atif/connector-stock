@@ -9,6 +9,7 @@
       "../shared"
     ],
     "outDir": "./dist",
+    "ignoreDeprecations": "6.0",
     "baseUrl": "./",
     "sourceMap": true,
     "inlineSources": true,

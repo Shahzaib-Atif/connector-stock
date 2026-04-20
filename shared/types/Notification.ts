@@ -1,5 +1,6 @@
-import { SamplesDto } from "../dto/SamplesDto";
-import { ConnectorDto } from "../dto/ConnectorDto";
+import { ConnectorDto } from "@shared/dto/ConnectorDto";
+import { SamplesDto } from "@shared/dto/SamplesDto";
+import { WireTypes } from "@shared/enums/WireTypes";
 
 export interface AppNotification {
   id: number;
@@ -21,4 +22,13 @@ export interface AppNotification {
   parsedSample?: string;
   linkedSample?: SamplesDto;
   linkedConnector?: ConnectorDto;
+}
+
+export interface FinishNotificationDto {
+  notificationId: number;
+  quantityTakenOut: number;
+  subType?: WireTypes;
+  connectorVersionId?: string; // if the connector has versions
+  finishedBy?: string;
+  completionNote?: string;
 }

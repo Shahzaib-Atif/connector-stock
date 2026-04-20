@@ -5,8 +5,12 @@ import { ParsedMessage } from 'src/utils/types';
 import { SamplesDto } from '@shared/dto/SamplesDto';
 import { CreateTransactionsDto } from '@shared/types/Transaction';
 import { ConnectorDto } from '@shared/dto/ConnectorDto';
-import { AppNotification } from '@shared/types/Notification';
+import {
+  AppNotification,
+  FinishNotificationDto,
+} from '@shared/types/Notification';
 import { WireTypes } from '@shared/enums/WireTypes';
+import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 
 @Injectable()
 export class NotificationsService {
@@ -33,8 +37,8 @@ export class NotificationsService {
     });
   }
 
-  /** Get notification with linked sample if exists */
-  async getNotificationWithSample(id: number): Promise<AppNotification | null> {
+  /** Get notification with linked sample and connector */
+  async getNotificationExtended(id: number): Promise<AppNotification | null> {
     const notification = await this.notificationsRepo.getNotificationById(id);
     if (!notification) {
       return null;
@@ -72,54 +76,56 @@ export class NotificationsService {
     };
   }
 
-  /** Mark notification as finished and optionally update sample quantity */
+  /** Mark notification as finished and optionally update connector quantity */
   async finishNotification(
-    id: number,
-    quantityTakenOut: number,
-    subType?: WireTypes,
-    connectorIdOverride?: string,
-    finishedBy?: string,
-    completionNote?: string,
+    dto: FinishNotificationDto,
   ): Promise<AppNotification> {
+    const {
+      notificationId,
+      connectorVersionId,
+      quantityTakenOut,
+      subType,
+      completionNote,
+      finishedBy,
+    } = dto;
+
     // Get notification with sample
-    const notificationData = await this.getNotificationWithSample(id);
+    const notificationData = await this.getNotificationExtended(notificationId);
     if (!notificationData) {
-      throw new Error(`Notification with ID ${id} not found`);
+      throw new Error(`Notification with ID ${notificationId} not found`);
     }
 
-    let connectorUpdate:
-      | {
-          codivmac: string;
-          quantityTakenOut: number;
-          subType: WireTypes;
-          updatedBy: string;
-        }
-      | undefined;
+    let connectorUpdate: UpdateConnectorDto | undefined;
 
     const effectiveConnector =
       notificationData.linkedConnector ||
-      (connectorIdOverride
-        ? await this.connectorRepo.getConnectorByCodivmac(connectorIdOverride)
+      (connectorVersionId
+        ? await this.connectorRepo.getConnectorByCodivmac(connectorVersionId)
         : null);
 
     // If we are taking stock out, require a connector + wire subtype
     if (quantityTakenOut > 0) {
       if (!effectiveConnector) {
-        throw new Error(
-          'Cannot take stock out: no connector linked and no connectorId provided',
-        );
+        // Only require version selection if the name implies versions (e.g. contains a hyphen)
+        // Simple ones like Q082P1 can proceed without a linked record if not found
+        if (notificationData.parsedConector?.includes('-')) {
+          throw new Error(
+            'Cannot take stock out: please select a specific connector version',
+          );
+        }
       }
 
-      if (!subType) {
+      // If we have a connector, we require the subtype to know which quantity to update
+      if (notificationData.linkedConnector && !subType) {
         throw new Error(
           'Wire type is required when taking stock out (COM_FIO or SEM_FIO)',
         );
       }
 
       connectorUpdate = {
-        codivmac: effectiveConnector.CODIVMAC,
+        codivmac: effectiveConnector?.CODIVMAC ?? '',
         quantityTakenOut,
-        subType,
+        subType: subType as WireTypes,
         updatedBy: finishedBy || 'system',
       };
     }
@@ -129,7 +135,7 @@ export class NotificationsService {
 
     const connectorId =
       effectiveConnector?.CODIVMAC ??
-      connectorIdOverride ??
+      connectorVersionId ??
       notificationData.parsedConector;
 
     if (connectorId) {
@@ -149,7 +155,7 @@ export class NotificationsService {
 
     // Delegate transaction to repository
     return await this.notificationsRepo.finishNotificationTransaction(
-      id,
+      notificationId,
       connectorUpdate,
       transactionDto,
       completionNote,

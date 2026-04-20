@@ -6,6 +6,7 @@ import { CreateTransactionsDto } from '@shared/types/Transaction';
 import { AppNotification } from '@shared/types/Notification';
 import { NotificationMapper } from '@infra/NotificationMapper';
 import { WireTypes } from '@shared/enums/WireTypes';
+import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 
 @Injectable()
 export class NotificationsRepo {
@@ -96,12 +97,7 @@ export class NotificationsRepo {
    */
   async finishNotificationTransaction(
     notificationId: number,
-    connectorUpdate?: {
-      codivmac: string;
-      quantityTakenOut: number;
-      subType: WireTypes;
-      updatedBy: string;
-    },
+    connectorUpdate?: UpdateConnectorDto,
     transactionDto?: CreateTransactionsDto,
     completionNote?: string,
   ): Promise<AppNotification> {
@@ -129,15 +125,16 @@ export class NotificationsRepo {
           });
 
           if (!current) {
-            throw new Error(
-              `Connector not found: ${connectorUpdate.codivmac}`,
-            );
+            throw new Error(`Connector not found: ${connectorUpdate.codivmac}`);
           }
 
           const currentWith = current.Qty_com_fio ?? 0;
           const currentWithout = current.Qty_sem_fio ?? 0;
 
-          const take = Math.max(0, Number(connectorUpdate.quantityTakenOut) || 0);
+          const take = Math.max(
+            0,
+            Number(connectorUpdate.quantityTakenOut) || 0,
+          );
 
           let newWith = currentWith;
           let newWithout = currentWithout;

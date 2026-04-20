@@ -1,3 +1,4 @@
+import { RequestState } from "@/utils/types/RequestState";
 import { DeliveryStatus } from "@/utils/types";
 import { Loader2 } from "lucide-react";
 
@@ -7,7 +8,7 @@ interface Props {
   quantityInput: string;
   customNote: string;
   onCancel: () => void;
-  status: "idle" | "loading" | "success" | "error";
+  status: RequestState;
 }
 
 function ActionButtons({

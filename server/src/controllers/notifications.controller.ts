@@ -8,8 +8,8 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { NotificationsService } from 'src/services/notifications.service';
-import { FinishNotificationDto } from 'src/dtos/notifications.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { FinishNotificationDto } from '@shared/types/Notification';
 
 @Controller('api/notifications')
 @UseGuards(JwtAuthGuard)
@@ -25,7 +25,7 @@ export class NotificationsController {
   /** Get notification by ID with linked sample */
   @Get(':id')
   async getNotificationWithSample(@Param('id', ParseIntPipe) id: number) {
-    return this.notificationsService.getNotificationWithSample(id);
+    return this.notificationsService.getNotificationExtended(id);
   }
 
   /** Mark notification as finished with quantity update */
@@ -34,14 +34,7 @@ export class NotificationsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: FinishNotificationDto,
   ) {
-    return this.notificationsService.finishNotification(
-      id,
-      dto.quantityTakenOut,
-      dto.subType,
-      dto.connectorId,
-      dto.finishedBy,
-      dto.completionNote,
-    );
+    return this.notificationsService.finishNotification(dto);
   }
 
   /** Mark notification as read */

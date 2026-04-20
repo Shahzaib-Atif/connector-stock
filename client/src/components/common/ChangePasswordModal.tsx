@@ -3,6 +3,8 @@ import { X, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useAppDispatch } from "@/store/hooks";
 import { changePasswordThunk } from "@/store/slices/authSlice";
 import ShowSuccess from "./ShowSuccess";
+import { getErrorMsg } from "@shared/utils/getErrorMsg";
+import { RequestState } from "@/utils/types/RequestState";
 
 interface Props {
   onClose: () => void;
@@ -13,9 +15,7 @@ export const ChangePasswordModal: React.FC<Props> = ({ onClose }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+  const [status, setStatus] = useState<RequestState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,7 +42,7 @@ export const ChangePasswordModal: React.FC<Props> = ({ onClose }) => {
         onClose();
       }, 2000);
     } catch (err) {
-      setErrorMessage(err.message || "Failed to update password");
+      setErrorMessage(getErrorMsg(err, "Failed to update password"));
       setStatus("error");
     }
   };

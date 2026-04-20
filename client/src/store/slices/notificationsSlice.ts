@@ -5,8 +5,10 @@ import {
   finishNotification,
   markNotificationAsRead,
 } from "@/api/notificationsApi";
-import { AppNotification } from "@shared/types/Notification";
-import { WireTypes } from "@shared/enums/WireTypes";
+import {
+  AppNotification,
+  FinishNotificationDto,
+} from "@shared/types/Notification";
 
 interface NotificationsState {
   notifications: AppNotification[];
@@ -43,30 +45,9 @@ export const fetchNotificationWithSample = createAsyncThunk(
 
 export const finishNotificationThunk = createAsyncThunk(
   "notifications/finish",
-  async ({
-    id,
-    quantityTakenOut,
-    subType,
-    connectorId,
-    finishedBy,
-    completionNote,
-  }: {
-    id: number;
-    quantityTakenOut: number;
-    subType?: WireTypes;
-    connectorId?: string;
-    finishedBy?: string;
-    completionNote?: string;
-  }) => {
-    await finishNotification(
-      id,
-      quantityTakenOut,
-      subType,
-      connectorId,
-      finishedBy,
-      completionNote,
-    );
-    return id;
+  async (dto: FinishNotificationDto) => {
+    await finishNotification(dto);
+    return dto.notificationId;
   },
 );
 

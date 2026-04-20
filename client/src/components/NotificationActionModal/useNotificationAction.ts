@@ -39,6 +39,7 @@ export function useNotificationAction(
     subType,
     connectorId: selectedConnectorId,
     effectiveConnector,
+    connectorOptions,
     setStatus,
     setErrorMessage,
   });
