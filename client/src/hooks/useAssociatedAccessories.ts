@@ -2,7 +2,7 @@ import { useAppSelector } from "@/store/hooks";
 import { useEffect, useMemo, useState } from "react";
 
 export function useAssociatedAccessories(targetId: string) {
-  const [selectedAccessoryIds, setSelectedAccessoryIds] = useState<string[]>(
+  const [selectedAccessoryIds, setSelectedAccessoryIds] = useState<number[]>(
     [],
   );
   const { data: masterData } = useAppSelector((state) => state.masterData);

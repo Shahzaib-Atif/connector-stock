@@ -29,7 +29,13 @@ const accessoryResolver: EntityResolver<AccessoryExtended> = (
   accessoryId,
   { masterData }, // Data from Redux store
 ) => {
-  return masterData?.accessories[parseInt(accessoryId)] ?? null;
+  const numericAccessoryId = Number(accessoryId);
+
+  if (!Number.isInteger(numericAccessoryId)) {
+    return null;
+  }
+
+  return masterData?.accessories[numericAccessoryId] ?? null;
 };
 
 export const AccessoryView: React.FC<AccessoryViewProps> = ({

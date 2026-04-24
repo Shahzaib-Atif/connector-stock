@@ -41,7 +41,7 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
     goToConnector(connectorId);
   };
 
-  const handleAccessoryScan = (accessoryId: string) => {
+  const handleAccessoryScan = (accessoryId: number) => {
     goToAccessory(accessoryId);
   };
 
@@ -91,8 +91,8 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
           {box.accessories.map((acc) => {
             return (
               <InventoryListItem
-                key={acc.id}
-                onClick={() => handleAccessoryScan(acc.id)}
+                key={acc.Id}
+                onClick={() => handleAccessoryScan(acc.Id)}
                 left={<AccessoryInfo acc={acc} liveStock={acc.Qty} />}
                 right={
                   acc?.AccessoryType?.toUpperCase() !== "MIOLO" && (

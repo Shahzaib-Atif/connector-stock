@@ -28,7 +28,7 @@ export function useSampleForm(
   initialData?: Partial<SampleFormData>,
 ) {
   const [formData, setFormData] = useState<SampleFormData>(initialFormData);
-  const [selectedAccessoryIds, setSelectedAccessoryIds] = useState<string[]>(
+  const [selectedAccessoryIds, setSelectedAccessoryIds] = useState<number[]>(
     [],
   );
 

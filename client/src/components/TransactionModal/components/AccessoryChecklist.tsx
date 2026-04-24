@@ -1,10 +1,10 @@
+import { AccessoryDto } from "@shared/dto/AccessoryDto";
 import React from "react";
-import { Accessory } from "@/utils/types";
 
 interface Props {
-  selectedAccessoryIds: string[];
-  associatedAccessories: Accessory[];
-  setSelectedAccessoryIds: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedAccessoryIds: number[];
+  associatedAccessories: AccessoryDto[];
+  setSelectedAccessoryIds: React.Dispatch<React.SetStateAction<number[]>>;
   transactionType?: "IN" | "OUT";
 }
 
@@ -16,7 +16,7 @@ function AccessoryChecklist({
 }: Props) {
   if (associatedAccessories.length === 0) return null;
 
-  const toggle = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+  const toggle = (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
     if (e.target.checked) {
       setSelectedAccessoryIds((prev) => [...prev, id]);
     } else {
@@ -34,7 +34,7 @@ function AccessoryChecklist({
           const isOutOfStock = transactionType === "OUT" && acc.Qty <= 0;
           return (
             <label
-              key={acc.id}
+              key={acc.Id}
               className={`flex items-center space-x-3 p-2 rounded-lg transition-colors ${
                 isOutOfStock
                   ? "opacity-50 cursor-not-allowed bg-slate-800/50"
@@ -43,15 +43,15 @@ function AccessoryChecklist({
             >
               <input
                 type="checkbox"
-                checked={selectedAccessoryIds.includes(acc.id)}
-                onChange={(e) => toggle(e, acc.id)}
+                checked={selectedAccessoryIds.includes(acc.Id)}
+                onChange={(e) => toggle(e, acc.Id)}
                 disabled={isOutOfStock}
                 className="w-5 h-5 rounded border-slate-500 text-blue-600 focus:ring-blue-500 bg-slate-800 disabled:opacity-50"
               />
               <div className="flex-1">
                 <div className="flex justify-between items-center">
                   <span className="font-medium text-slate-200">
-                    {acc.RefClient || acc.id}
+                    {acc.RefClient || acc.Id}
                   </span>
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full ${

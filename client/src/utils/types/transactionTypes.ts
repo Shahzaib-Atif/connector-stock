@@ -3,7 +3,7 @@ import { Department } from "./shared";
 export interface TransactionConfirmPayload {
   amount: number;
   isConnector: boolean;
-  associatedItemIds: string[];
+  associatedItemIds: number[];
   department?: Department;
   subType?: string;
   encomenda?: string;

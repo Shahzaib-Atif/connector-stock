@@ -1,23 +1,23 @@
 import React from "react";
 import { useState } from "react";
-import { Accessory } from "@/utils/types";
 import { API } from "@/utils/api";
+import { AccessoryDto } from "@shared/dto/AccessoryDto";
 
 interface Props {
-  acc: Accessory;
+  acc: AccessoryDto;
   liveStock: number;
 }
 
 function AccessoryInfo({ acc, liveStock }: Props) {
   const [imageError, setImageError] = useState(false);
-  const imageUrl = API.accessoryImages(acc.id);
+  const imageUrl = API.accessoryImages(acc.Id);
 
   return (
     <>
       {!imageError ? (
         <img
           src={imageUrl}
-          alt={acc.id}
+          alt={acc.Id.toString()}
           className={`w-12 h-12 rounded-lg object-cover border ${
             liveStock > 0 ? "border-blue-500/20" : "border-red-500/20"
           }`}

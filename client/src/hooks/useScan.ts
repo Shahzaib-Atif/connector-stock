@@ -53,15 +53,21 @@ export const useScan = () => {
   };
 
   const handleAccessoryNav = (id: string) => {
-    // Search for accessory by RefClient (clientRef field)
+    const accessoryId = Number(id);
+
+    if (!Number.isInteger(accessoryId)) {
+      setError("Invalid code. Unable to find this item!");
+      return;
+    }
+
     if (!masterData?.data?.accessories) {
       setError("Accessory not found!");
       return;
     }
 
-    const accessory = masterData.data.accessories[id];
+    const accessory = masterData.data.accessories[accessoryId];
 
-    if (accessory) navigate(`${ROUTES.ACCESSORIES}/${id}`);
+    if (accessory) navigate(`${ROUTES.ACCESSORIES}/${accessoryId}`);
     else setError("Invalid code. Unable to find this item!");
   };
   //#endregion
