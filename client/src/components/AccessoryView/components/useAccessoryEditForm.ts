@@ -1,4 +1,4 @@
-import { updateAccessoryApi } from "@/services/accessoryService";
+import { updateAccessoryApi } from "@/utils/functions/accessory";
 import { useAppDispatch } from "@/store/hooks";
 import { initMasterData } from "@/store/slices/masterDataSlice";
 import { AccessoryExtended } from "@/utils/types";

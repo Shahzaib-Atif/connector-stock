@@ -2,7 +2,7 @@ import { AccessoryMap, AccessoryType } from "@/utils/types";
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
 import { AccessoryDto } from "@shared/dto/AccessoryDto";
-import { parseAccessory } from "@/services/accessoryService";
+import { parseAccessory } from "@/utils/functions/accessory";
 
 export const fetchAccessories = async (): Promise<AccessoryMap> => {
   const response = await fetchWithAuth(API.accessories);

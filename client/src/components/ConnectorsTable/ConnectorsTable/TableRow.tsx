@@ -4,7 +4,7 @@ import { ROUTES } from "@/components/AppRoutes";
 import { ConnectorExtended } from "@/utils/types";
 import { Link } from "react-router-dom";
 import { Link as LinkIcon } from "lucide-react";
-import { getViasValue } from "@/services/connectorService";
+import { getViasValue } from "@/utils/functions/connector";
 
 interface TableRowProps {
   connector: ConnectorExtended;

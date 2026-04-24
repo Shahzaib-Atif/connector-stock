@@ -1,5 +1,5 @@
 import { ConnectorExtended, ConnectorMap, MasterData } from "@/utils/types";
-import { parseConnector } from "@/services/connectorService";
+import { parseConnector } from "@/utils/functions/connector";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { ConnectorFilters, defaultFilters, STORAGE_KEY } from "./constants";
 

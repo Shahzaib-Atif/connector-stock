@@ -1,4 +1,4 @@
-import { updateConnectorApi } from "@/services/connectorService";
+import { updateConnectorApi } from "@/utils/functions/connector";
 import { useAppDispatch } from "@/store/hooks";
 import { initMasterData } from "@/store/slices/masterDataSlice";
 import { ConnectorExtended } from "@/utils/types";

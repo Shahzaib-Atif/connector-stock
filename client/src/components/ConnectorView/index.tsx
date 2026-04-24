@@ -10,7 +10,7 @@ import { UserRoles } from "@shared/enums/UserRoles";
 import { QRData } from "@/utils/types/shared";
 import { EntityResolver, useEntityDetails } from "@/hooks/useEntityDetails";
 import { ConnectorExtended } from "@/utils/types";
-import { parseConnector } from "@/services/connectorService";
+import { parseConnector } from "@/utils/functions/connector";
 import { useAppSelector } from "@/store/hooks";
 import { useInventoryNavigation } from "@/hooks/useInventoryNavigation";
 import { useGlobalBackNavigation } from "@/hooks/useGlobalBackNavigation";

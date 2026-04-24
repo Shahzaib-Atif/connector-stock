@@ -5,13 +5,12 @@ import {
   LegacyBackup,
   AccessoryMap,
   ConnPositionsMap,
-} from "../utils/types";
-import { parseAccessory } from "./accessoryService";
-import { API } from "../utils/api";
-import { fetchWithAuth } from "../utils/functions/fetchWithAuth";
+} from "../types";
+import { parseAccessory } from "./accessory";
+import { API } from "../api";
+import { fetchWithAuth } from "./fetchWithAuth";
 import { ConnectorDto } from "@shared/dto/ConnectorDto";
 import { AccessoryDto } from "@shared/dto/AccessoryDto";
-import { getCoordinates } from "@/utils/functions/getCoordinates";
 
 export const mapLegacyToConnector = (
   legacy: LegacyBackup,
@@ -46,7 +45,7 @@ export const mapLegacyToConnector = (
 
 export const parseConnector = (
   id: string,
-  masterData: MasterData,
+  masterData: MasterData | null,
 ): ConnectorExtended | null => {
   if (!id) return null;
 
@@ -122,7 +121,7 @@ export const mapToConnectorExtended = (
 
 export const getBoxDetails = (
   boxId: string,
-  masterData: MasterData,
+  masterData: MasterData | null,
 ): Box | null => {
   if (!masterData || boxId.length !== 4) return null;
 
@@ -229,4 +228,12 @@ export function getViasValue(connector: ConnectorExtended): string {
     return `${vias} (${viasName})`;
   }
   return vias;
+}
+
+function getCoordinates(posId: string, positions: ConnPositionsMap) {
+  if (positions?.[posId]) {
+    return positions[posId];
+  }
+
+  return null;
 }

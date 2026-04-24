@@ -3,7 +3,6 @@ import { PrismaService } from 'prisma/prisma.service';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
 import { SamplesRepo } from 'src/repository/samples.repo';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
-import { AccessoryRepo } from 'src/repository/accessories.repo';
 import { TransactionsService } from './transactions.service';
 import { getConnectorId } from '@shared/utils/getConnectorId';
 import { getErrorMsg } from '@shared/utils/getErrorMsg';
@@ -17,7 +16,6 @@ export class SamplesService {
     private readonly prisma: PrismaService,
     private readonly samplesRepo: SamplesRepo,
     private readonly connectorRepo: ConnectorRepo,
-    private readonly accessoryRepo: AccessoryRepo,
     private readonly transactionsService: TransactionsService,
   ) {}
 

@@ -7,7 +7,7 @@ import {
   fetchFabricantes,
 } from "./metadataApi";
 import { ConnectorMap, MasterData } from "@/utils/types";
-import { mapToConnectorExtended } from "@/services/connectorService";
+import { mapToConnectorExtended } from "@/utils/functions/connector";
 
 export const fetchMasterData = async (): Promise<MasterData> => {
   try {

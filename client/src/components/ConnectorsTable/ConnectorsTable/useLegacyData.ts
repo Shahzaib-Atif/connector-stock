@@ -1,5 +1,5 @@
 import { fetchLegacyBackups } from "@/api/legacyApi";
-import { mapLegacyToConnector } from "@/services/connectorService";
+import { mapLegacyToConnector } from "@/utils/functions/connector";
 import { useAppSelector } from "@/store/hooks";
 import { ConnectorMap } from "@/utils/types";
 import { useEffect, useState } from "react";

@@ -5,7 +5,7 @@ import StockDiv from "@/components/common/StockDiv";
 import CardInfoDiv from "@/components/common/CardInfoDiv";
 import { VIEW_SUMMARY_CLASS } from "@/utils/constants";
 import { ConnectorExtended } from "@/utils/types";
-import { getViasValue } from "@/services/connectorService";
+import { getViasValue } from "@/utils/functions/connector";
 import ClientReferences from "./ClientReferences";
 import Coordinates from "./Coordinates";
 
