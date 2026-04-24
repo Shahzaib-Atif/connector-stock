@@ -6,6 +6,7 @@ import { getConnectorId } from "@shared/utils/getConnectorId";
 import SamplesActionButtons from "./SamplesActionButtons";
 import OpenFolderBtn from "./OpenFolderBtn";
 import { SamplesDto } from "@shared/dto/SamplesDto";
+import { useAppSelector } from "@/store/hooks";
 
 interface TableRowProps {
   sample: SamplesDto;
@@ -25,6 +26,9 @@ const TableRow: React.FC<TableRowProps> = ({
   onClone,
   showActions = true,
 }) => {
+  const connectors = useAppSelector(
+    (state) => state.masterData.data?.connectors,
+  );
   const {
     Cliente,
     Projeto,
@@ -40,6 +44,8 @@ const TableRow: React.FC<TableRowProps> = ({
     Observacoes,
     Entregue_a,
   } = sample;
+  const connectorId = Amostra ? getConnectorId(Amostra) : "";
+  const hasConnector = Boolean(connectorId && connectors?.[connectorId]);
 
   return (
     <tr className={"table-row table-row-bg"} key={sample.ID}>
@@ -50,12 +56,13 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data break-all">{Ref_Descricao || "-"}</td>
       <td className="table-data break-all">
         {Amostra ? (
-          <Link
-            to={`/connectors/${getConnectorId(Amostra)}`}
-            className="link-btn"
-          >
-            {Amostra}
-          </Link>
+          hasConnector ? (
+            <Link to={`/connectors/${connectorId}`} className="link-btn">
+              {Amostra}
+            </Link>
+          ) : (
+            <span className="text-slate-200">{Amostra}</span>
+          )
         ) : (
           "-"
         )}
