@@ -1,6 +1,5 @@
-import React from "react";
+import { Printer_t } from "@/utils/constants";
 import SelectPrinterBtn from "./SelectPrinterBtn";
-import { Printer_t } from "@/utils/types/printers";
 
 interface Props {
   selectedPrinter: Printer_t;

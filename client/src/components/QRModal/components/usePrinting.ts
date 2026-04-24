@@ -1,8 +1,8 @@
-import { Printer_t } from "@/utils/types/printers";
 import { RequestState } from "@/utils/types/RequestState";
 import { API } from "@/utils/api";
 import { QRData } from "@/utils/types";
 import { useState } from "react";
+import { Printer_t } from "@/utils/constants";
 
 export default function usePrinting(qrData: QRData, itemIdLink: string) {
   const { id: itemId, source, refCliente, encomenda, qty } = qrData;

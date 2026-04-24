@@ -5,7 +5,7 @@ export * from "./inventoryTypes";
 export * from "./notificationTypes";
 export * from "./pagination";
 export * from "./shared";
-export * from "./legacyTypes";
+export * from "./legacyBackup";
 
 // Master Data Types (Centralized here)
 export interface MasterData {

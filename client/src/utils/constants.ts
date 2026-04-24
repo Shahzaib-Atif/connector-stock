@@ -4,3 +4,8 @@ export const VIEW_SUMMARY_CLASS =
 export const SESSION_KEY = "connector_stock_session_v1";
 
 export const AUTH_EXPIRED_EVENT = "auth:expired";
+
+export enum Printer_t {
+  PRINTER_1 = "PRINTER_1",
+  PRINTER_2 = "PRINTER_2",
+}

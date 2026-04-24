@@ -1,4 +1,4 @@
-import { Printer_t } from "@/utils/types/printers";
+import { Printer_t } from "@/utils/constants";
 import { Printer } from "lucide-react";
 
 interface Props {
