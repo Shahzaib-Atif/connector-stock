@@ -1,4 +1,3 @@
-import type { PaginatedItems_T } from "./paginationTypes";
 
 export enum Department {
   Comercial = "Comercial",
@@ -15,16 +14,6 @@ export type suggestion = {
   id: string;
   type?: "box" | "connector" | "accessory";
 };
-
-export interface PaginatedData {
-  paginatedItems: PaginatedItems_T;
-  currentPage: number;
-  totalPages: number;
-  itemsPerPage: number;
-  totalItems: number;
-  setCurrentPage: (page: number) => void;
-  setItemsPerPage: (count: number) => void;
-}
 
 export interface QRData {
   id: string;

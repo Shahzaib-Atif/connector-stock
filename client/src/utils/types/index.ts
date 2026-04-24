@@ -3,7 +3,7 @@ import { AccessoryMap, ConnectorMap } from "./inventoryTypes";
 // Re-exports
 export * from "./inventoryTypes";
 export * from "./notificationTypes";
-export * from "./paginationTypes";
+export * from "./pagination";
 export * from "./shared";
 export * from "./legacyTypes";
 
