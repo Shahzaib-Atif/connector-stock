@@ -9,7 +9,6 @@
       "../shared"
     ],
     "outDir": "./dist",
-    "baseUrl": "./",
     "sourceMap": true,
     "inlineSources": true,
     "emitDecoratorMetadata": true,
@@ -23,7 +22,8 @@
       ],
       "@infra/*": [
         "./src/infrastructure/*"
-      ]
+      ],
+      "*": ["./*"]
     }
   }
 }
