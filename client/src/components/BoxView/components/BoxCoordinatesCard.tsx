@@ -24,10 +24,14 @@ function BoxCoordinatesCard({ box }: Props) {
           {/* Coordinates */}
           <div className="flex flex-col gap-1 mt-1">
             {(box.cv || box.ch) && (
-              <CoordinateRow label="PT" cv={box.cv} ch={box.ch} />
+              <CoordinateRow label="PT" cv={box.cv ?? ""} ch={box.ch ?? ""} />
             )}
             {(box.cv_ma || box.ch_ma) && (
-              <CoordinateRow label="MA" cv={box.cv_ma} ch={box.ch_ma} />
+              <CoordinateRow
+                label="MA"
+                cv={box.cv_ma ?? ""}
+                ch={box.ch_ma ?? ""}
+              />
             )}
           </div>
         </div>
