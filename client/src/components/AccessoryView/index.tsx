@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Wrench, Edit2 } from "lucide-react";
+import { useParams } from "react-router-dom";
 import { DetailHeader } from "../common/DetailHeader";
 import { TransactionBar } from "../common/TransactionBar";
 import { NotFoundPage } from "../common/NotFoundPage";
 import { useInventoryNavigation } from "../../hooks/useInventoryNavigation";
-import { EntityResolver, useEntityDetails } from "../../hooks/useEntityDetails";
 import { API } from "@/utils/api";
 import { BoxShortcut } from "../common/BoxShortcut";
 import ImageBox from "../common/ImageBox";
@@ -25,30 +25,25 @@ interface AccessoryViewProps {
   onOpenQR?: (qrData: QRData) => void;
 }
 
-const accessoryResolver: EntityResolver<AccessoryExtended> = (
-  accessoryId,
-  { masterData }, // Data from Redux store
-) => {
-  const numericAccessoryId = Number(accessoryId);
-
-  if (!Number.isInteger(numericAccessoryId)) {
-    return null;
-  }
-
-  return masterData?.accessories[numericAccessoryId] ?? null;
-};
-
 export const AccessoryView: React.FC<AccessoryViewProps> = ({
   onTransaction,
 }) => {
-  // Gets ID from URL, calls resolver to convert ID to Accessory object
-  const { entity: accessory } =
-    useEntityDetails<AccessoryExtended>(accessoryResolver);
+  const { id } = useParams<{ id: string }>();
   const { goBack, goToBox } = useInventoryNavigation();
   const [error, setError] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const masterData = useAppSelector((state) => state.masterData.data);
   const { role, user } = useAppSelector((state) => state.auth);
   const isEditAllowed = role === UserRoles.Master || user === "admin1";
+  const accessory = useMemo<AccessoryExtended | null>(() => {
+    const accessoryId = Number(id);
+
+    if (!Number.isInteger(accessoryId) || !masterData) {
+      return null;
+    }
+
+    return masterData.accessories[accessoryId] ?? null;
+  }, [id, masterData]);
 
   // Enable Escape key to go back
   useGlobalBackNavigation(goBack);

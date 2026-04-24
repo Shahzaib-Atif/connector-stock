@@ -4,13 +4,13 @@ import { X } from "lucide-react";
 interface TransactionHeaderProps {
   type: "IN" | "OUT";
   onClose: () => void;
-  targetId: string;
+  targetLabel: string;
 }
 
 export const TransactionHeader: React.FC<TransactionHeaderProps> = ({
   type,
   onClose,
-  targetId,
+  targetLabel,
 }) => {
   return (
     <div className="flex justify-between items-center ">
@@ -18,7 +18,7 @@ export const TransactionHeader: React.FC<TransactionHeaderProps> = ({
         <h3 className="text-lg sm:text-xl font-bold text-white">
           {type === "IN" ? "Add Stock" : "Remove Stock"}
         </h3>
-        <span className="text-sm font-normal">({targetId})</span>
+        <span className="text-sm font-normal">({targetLabel})</span>
       </div>
       <button
         onClick={onClose}

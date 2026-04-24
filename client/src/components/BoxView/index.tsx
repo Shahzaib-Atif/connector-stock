@@ -1,5 +1,7 @@
 import React from "react";
 import { MapPin, CircuitBoard, Wrench } from "lucide-react";
+import { useMemo } from "react";
+import { useParams } from "react-router-dom";
 import { Box } from "../../utils/types";
 import { getBoxDetails } from "../../utils/functions/connector";
 import { CollapsibleSection } from "../common/CollapsibleSection";
@@ -7,26 +9,28 @@ import { DetailHeader } from "../common/DetailHeader";
 import { InventoryListItem } from "../common/InventoryListItem";
 import { NotFoundPage } from "../common/NotFoundPage";
 import { useInventoryNavigation } from "../../hooks/useInventoryNavigation";
-import { EntityResolver, useEntityDetails } from "../../hooks/useEntityDetails";
 import BoxCoordinatesCard from "./components/BoxCoordinatesCard";
 import ConnectorInfo from "./components/ConnectorInfo";
 import StockBadge from "./components/StockBadge";
 import AccessoryInfo from "./components/AccessoryInfo";
 import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 import { QRData } from "@/utils/types/shared";
+import { useAppSelector } from "@/store/hooks";
 
 interface BoxViewProps {
   onOpenQR: (qrData: QRData) => void;
 }
 
-const boxResolver: EntityResolver<Box> = (boxId, { masterData }) => {
-  if (boxId.length !== 4 || !masterData) return null;
-  return getBoxDetails(boxId, masterData);
-};
-
 export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
-  // resolve box plus cache.
-  const { entity: box } = useEntityDetails<Box>(boxResolver);
+  const { id } = useParams<{ id: string }>();
+  const masterData = useAppSelector((state) => state.masterData.data);
+  const box = useMemo<Box | null>(() => {
+    if (!id || id.length !== 4 || !masterData) {
+      return null;
+    }
+
+    return getBoxDetails(id, masterData);
+  }, [id, masterData]);
   const { goBack, goToConnector, goToAccessory } = useInventoryNavigation();
 
   // Enable Back key to go back

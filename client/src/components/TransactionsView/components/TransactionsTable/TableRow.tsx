@@ -1,4 +1,5 @@
 import { ROUTES } from "@/components/AppRoutes";
+import { useAppSelector } from "@/store/hooks";
 import { WireTypes } from "@shared/enums/WireTypes";
 import { Transaction } from "@shared/types/Transaction";
 import { Link as LinkIcon } from "lucide-react";
@@ -9,23 +10,28 @@ interface Props {
   index: number;
 }
 function TableRow({ tx, index }: Props) {
+  const masterData = useAppSelector((state) => state.masterData.data);
   const getLink = () => {
     const route =
       tx.itemType === "connector" ? ROUTES.CONNECTORS : ROUTES.ACCESSORIES;
     const url = `${route}/${tx.itemId}`;
     return url;
   };
+  const displayId =
+    tx.itemType === "accessory"
+      ? masterData?.accessories[Number(tx.itemId)]?.customId || tx.itemId
+      : tx.itemId;
 
   return (
     <tr key={tx.ID} className="table-row table-row-bg">
       <td className="table-data text-slate-300 font-mono text-xs">{index}</td>
       <td className="table-data">
         <div className="flex items-center gap-1">
-          <span className="text-slate-300 font-mono">{tx.itemId}</span>
+          <span className="text-slate-300 font-mono">{displayId}</span>
           <Link
             to={getLink()}
             className="link-icon p-1"
-            title={`Open ${tx.itemId} in new tab`}
+            title={`Open ${displayId} in new tab`}
           >
             <LinkIcon className="w-4 h-4" />
           </Link>

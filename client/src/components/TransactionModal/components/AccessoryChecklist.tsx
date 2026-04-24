@@ -51,7 +51,7 @@ function AccessoryChecklist({
               <div className="flex-1">
                 <div className="flex justify-between items-center">
                   <span className="font-medium text-slate-200">
-                    {acc.RefClient || acc.Id}
+                    {acc.RefClient || acc.customId || acc.Id}
                   </span>
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full ${

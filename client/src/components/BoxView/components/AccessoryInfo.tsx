@@ -17,7 +17,7 @@ function AccessoryInfo({ acc, liveStock }: Props) {
       {!imageError ? (
         <img
           src={imageUrl}
-          alt={acc.Id.toString()}
+          alt={acc.customId || acc.RefClient || acc.Id.toString()}
           className={`w-12 h-12 rounded-lg object-cover border ${
             liveStock > 0 ? "border-blue-500/20" : "border-red-500/20"
           }`}

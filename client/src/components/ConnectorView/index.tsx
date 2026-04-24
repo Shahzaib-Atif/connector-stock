@@ -1,5 +1,6 @@
 import React from "react";
 import { Wrench } from "lucide-react";
+import { useParams } from "react-router-dom";
 import { ConnectorSummary } from "./components/ConnectorSummary";
 import { AccessoryList } from "./components/AccessoryList";
 import { BoxShortcut } from "../common/BoxShortcut";
@@ -8,7 +9,6 @@ import { ConnectorEditForm } from "./components/ConnectorEditForm";
 import { RelatedImages } from "./components/RelatedImages";
 import { UserRoles } from "@shared/enums/UserRoles";
 import { QRData } from "@/utils/types/shared";
-import { EntityResolver, useEntityDetails } from "@/hooks/useEntityDetails";
 import { ConnectorExtended } from "@/utils/types";
 import { parseConnector } from "@/utils/functions/connector";
 import { useAppSelector } from "@/store/hooks";
@@ -24,25 +24,21 @@ interface ConnectorViewProps {
   onOpenQR: (qrData: QRData) => void;
 }
 
-const connectorResolver: EntityResolver<ConnectorExtended> = (
-  connectorId,
-  { masterData },
-) => {
-  if ((connectorId.length !== 6 && connectorId.length !== 8) || !masterData)
-    return null;
-  return parseConnector(connectorId, masterData);
-};
-
 export const ConnectorView: React.FC<ConnectorViewProps> = ({
   onTransaction,
   onOpenQR,
 }) => {
+  const { id } = useParams<{ id: string }>();
+  const masterData = useAppSelector((state) => state.masterData.data);
   const { role, user } = useAppSelector((state) => state.auth);
   const isEditAllowed = role === UserRoles.Master || user === "admin1";
+  const connector = React.useMemo<ConnectorExtended | null>(() => {
+    if (!id || (id.length !== 6 && id.length !== 8) || !masterData) {
+      return null;
+    }
 
-  // Shared hook lifts params and cache plumbing.
-  const { entity: connector } =
-    useEntityDetails<ConnectorExtended>(connectorResolver);
+    return parseConnector(id, masterData);
+  }, [id, masterData]);
   const { goBack, goToAccessory, goToBox } = useInventoryNavigation();
   const [isEditing, setIsEditing] = React.useState(false);
 

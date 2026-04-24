@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useEscKeyDown } from "@/hooks/useEscKeyDown";
@@ -29,6 +29,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   onConfirm,
 }) => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const masterData = useAppSelector((state) => state.masterData.data);
   const [encomenda, setEncomenda] = useState("");
   const [dept, setDept] = useState<Department>(Department.GT);
 
@@ -48,6 +49,13 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   const isConnector = itemType === "connector";
   const isWireStatusSelected = subType !== undefined;
   const isOutgoingTransaction = transactionType === "OUT";
+  const targetLabel = useMemo(() => {
+    if (itemType === "accessory" && typeof targetId === "number") {
+      return masterData?.accessories[targetId]?.customId || targetId.toString();
+    }
+
+    return targetId?.toString() || "";
+  }, [itemType, masterData, targetId]);
 
   const handleSubmit = () => {
     if (
@@ -78,7 +86,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         <TransactionHeader
           type={transactionType}
           onClose={onClose}
-          targetId={targetId?.toString()}
+          targetLabel={targetLabel}
         />
 
         <div className="space-y-6 sm:space-y-10">
