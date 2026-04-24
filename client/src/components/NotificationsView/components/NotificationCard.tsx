@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { markAsReadThunk } from "@/store/slices/notificationsSlice";
 import { UserRoles } from "@shared/enums/UserRoles";
 import InfoBadge from "./InfoBadge";
-import { formatDate2 } from "@/utils/formatDate";
+import { formatDate2 } from "@/utils/functions/formatDate";
 import { AppNotification } from "@shared/types/Notification";
 
 interface NotificationCardProps {

@@ -1,5 +1,5 @@
 import { API } from "@/utils/api";
-import { fetchWithAuth } from "@/utils/fetchClient";
+import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
 import { AnaliseTabRow, RegAmostrasEncRow, RegAmostrasOrcRow } from "@/types/sampleCreation";
 
 /**

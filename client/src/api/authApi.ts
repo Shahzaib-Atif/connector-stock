@@ -1,6 +1,6 @@
 import { UserDto } from "@shared/dto/UserDto";
 import { API } from "../utils/api";
-import { fetchWithAuth } from "../utils/fetchClient";
+import { fetchWithAuth } from "../utils/functions/fetchWithAuth";
 
 export const loginApi = async (username: string, password: string) => {
   const response = await fetch(API.login, {

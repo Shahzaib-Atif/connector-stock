@@ -12,4 +12,9 @@ export interface LegacyBackup {
   LastChangeBy: string | null;
   LastUpdateDate: string | null;
   ESTADO: number;
+  ClipColor: string | null;
+  CapotAngle: string | null;
+  InternalDiameter: number | null;
+  ExternalDiameter: number | null;
+  Thickness: number | null;
 }

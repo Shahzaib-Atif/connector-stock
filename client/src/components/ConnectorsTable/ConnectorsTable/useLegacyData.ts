@@ -19,7 +19,7 @@ export const useLegacyData = () => {
           const backups = await fetchLegacyBackups();
           const mapped: ConnectorMap = {};
           backups.forEach((b) => {
-            const connector = mapLegacyToConnector(b, masterData);
+            const connector = mapLegacyToConnector(b);
             mapped[connector.CODIVMAC] = connector;
           });
           setLegacyData(mapped);
@@ -29,6 +29,7 @@ export const useLegacyData = () => {
           setLegacyLoading(false);
         }
       };
+
       loadLegacy();
     }
   }, [isLegacyMode, masterData]);

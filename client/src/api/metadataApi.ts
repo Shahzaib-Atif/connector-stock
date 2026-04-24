@@ -1,6 +1,6 @@
 import { IColor, IVias, ConnPosition, ConnPositionsMap } from "@/utils/types";
 import { API } from "@/utils/api";
-import { fetchWithAuth } from "@/utils/fetchClient";
+import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
 
 export const fetchColors = async (): Promise<{
   colorsUK: Record<string, string>;

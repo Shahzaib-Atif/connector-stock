@@ -1,4 +1,4 @@
-import { fetchWithAuth } from "@/utils/fetchClient";
+import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
 import { API } from "@/utils/api";
 import { AccessoryDto } from "@shared/dto/AccessoryDto";
 import { AccessoryExtended } from "@/utils/types";

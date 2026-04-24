@@ -7,7 +7,7 @@ import {
   getAllSamplesFromORC,
 } from "@/api/samplesApi";
 import { RegAmostrasOrcRow } from "@/types/sampleCreation";
-import { setLineStatus } from "@/utils/inventoryUtils";
+import { setLineStatus } from "@/utils/functions/setLineStatus";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 
 interface SamplesState {

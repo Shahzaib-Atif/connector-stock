@@ -1,5 +1,5 @@
 import { API } from "@/utils/api";
-import { fetchWithAuth } from "@/utils/fetchClient";
+import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
 import { Transaction } from "@shared/types/Transaction";
 
 export const createTransaction = async (

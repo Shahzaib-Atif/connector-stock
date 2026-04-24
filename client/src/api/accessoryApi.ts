@@ -1,6 +1,6 @@
 import { AccessoryMap, AccessoryType } from "@/utils/types";
 import { API } from "@/utils/api";
-import { fetchWithAuth } from "@/utils/fetchClient";
+import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
 import { AccessoryDto } from "@shared/dto/AccessoryDto";
 import { parseAccessory } from "@/services/accessoryService";
 

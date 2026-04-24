@@ -6,48 +6,41 @@ import {
   AccessoryMap,
   ConnPositionsMap,
 } from "../utils/types";
-import { getCoordinates } from "../utils/inventoryUtils";
 import { parseAccessory } from "./accessoryService";
 import { API } from "../utils/api";
-import { fetchWithAuth } from "../utils/fetchClient";
+import { fetchWithAuth } from "../utils/functions/fetchWithAuth";
 import { ConnectorDto } from "@shared/dto/ConnectorDto";
 import { AccessoryDto } from "@shared/dto/AccessoryDto";
+import { getCoordinates } from "@/utils/functions/getCoordinates";
 
 export const mapLegacyToConnector = (
   legacy: LegacyBackup,
-  masterData: MasterData,
 ): ConnectorExtended => {
-  const posId = legacy.Pos_ID || "----";
-  const coords = getCoordinates(posId, masterData.positions);
-
   return {
-    CODIVMAC: legacy.CODIVMAC,
-    PosId: posId,
-    Cor: legacy.Cor,
+    ...legacy,
     Vias: legacy.Vias || "0",
-    colorName: masterData.colors?.colorsUK[legacy.Cor] || "-",
-    colorNamePT: masterData.colors?.colorsPT?.[legacy.Cor] || "-",
-    viasName: legacy.Vias ? masterData.vias[legacy.Vias] : "-",
-    cv: coords?.CV ?? null,
-    ch: coords?.CH ?? null,
-    cv_ma: coords?.CV_Ma ?? null,
-    ch_ma: coords?.CH_Ma ?? null,
+    PosId: legacy.Pos_ID || "--",
     details: {
       Fabricante: legacy.Fabricante || "--",
       Refabricante: legacy.Refabricante || "",
       OBS: legacy.OBS ?? "",
       Designacao: legacy.Designa__o ?? "",
-      Family: 1, // Default for legacy
-      ActualViaCount: 0, // Default for legacy
-      CapotAngle: "0", // Default for legacy
-      ClipColor: "X", // Default for legacy
+      CapotAngle: legacy.CapotAngle,
+      ClipColor: legacy.ClipColor,
+      Family: 1, // default value
+      ActualViaCount: 0, // default value
     },
-    ConnType: legacy.ConnType ?? "",
-    Qty: 0, // Default for legacy
-    Qty_com_fio: 0, // Default for legacy
-    Qty_sem_fio: 0, // Default for legacy
-    accessories: [],
+    dimensions: {
+      ExternalDiameter: legacy.ExternalDiameter,
+      InternalDiameter: legacy.InternalDiameter,
+      Thickness: legacy.Thickness,
+    },
+    // below are all default values for legacy as they don't exist in the old format
+    Qty: 0,
+    Qty_com_fio: 0,
+    Qty_sem_fio: 0,
     clientReferences: [],
+    accessories: [],
   };
 };
 
@@ -65,7 +58,7 @@ export const parseConnector = (
   const coords = getCoordinates(PosId, masterData.positions);
 
   // Find associated accessories
-  const accessories: Accessory[] = [];
+  const accessories: AccessoryDto[] = [];
   if (masterData.accessories) {
     Object.values(masterData.accessories).forEach((acc) => {
       if (id.includes(acc.ConnName)) {
@@ -104,7 +97,7 @@ export const mapToConnectorExtended = (
   const coords = getCoordinates(PosId, positions);
 
   // Find associated accessories
-  const _accessories: Accessory[] = [];
+  const _accessories: AccessoryDto[] = [];
   if (accessories) {
     Object.values(accessories).forEach((acc) => {
       if (id.includes(acc.ConnName)) {

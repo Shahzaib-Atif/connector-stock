@@ -1,6 +1,6 @@
 import { ConnectorType } from "@/utils/types";
 import { API } from "@/utils/api";
-import { fetchWithAuth } from "@/utils/fetchClient";
+import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
 import { ConnectorDto } from "@shared/dto/ConnectorDto";
 
 export const fetchConnectors = async (): Promise<ConnectorDto[]> => {

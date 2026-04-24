@@ -1,6 +1,6 @@
 import { LegacyBackup } from "@/utils/types";
 import { API } from "@/utils/api";
-import { fetchWithAuth } from "@/utils/fetchClient";
+import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
 
 export const fetchLegacyBackups = async (): Promise<LegacyBackup[]> => {
   const response = await fetchWithAuth(API.legacy.backups);

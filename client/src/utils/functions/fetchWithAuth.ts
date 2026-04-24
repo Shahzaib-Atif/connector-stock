@@ -1,4 +1,4 @@
-import { AUTH_EXPIRED_EVENT, SESSION_KEY } from "./constants";
+import { AUTH_EXPIRED_EVENT, SESSION_KEY } from "../constants";
 
 const getAuthToken = () => {
   try {
