@@ -1,15 +1,13 @@
 import { useState, useCallback } from "react";
 import { useAppSelector } from "@/store/hooks";
 import {
-  AnaliseTabRow,
-  RegAmostrasEncRow,
-  RegAmostrasOrcRow,
-} from "@/types/sampleCreation";
-import {
   fetchAnaliseTabData,
   fetchRegAmostrasEncData,
 } from "@/api/sampleCreationApi";
 import { SampleFormData } from "./useSampleForm";
+import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
+import { RegAmostrasEncDto } from "@shared/dto/RegAmostrasEncDto";
+import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
 
 type WizardStep = 1 | 2 | 3;
 export type WizardFlow = "ECL" | "ORC";
@@ -18,10 +16,10 @@ interface UseSampleCreationWizardReturn {
   // State
   currentStep: WizardStep;
   refCliente: string;
-  analiseTabData: AnaliseTabRow[];
-  regAmostrasData: (RegAmostrasEncRow | RegAmostrasOrcRow)[];
-  selectedAnaliseRow: AnaliseTabRow | null;
-  selectedRegRow: (RegAmostrasEncRow | RegAmostrasOrcRow) | null;
+  analiseTabData: AnaliseTabDto[];
+  regAmostrasData: (RegAmostrasEncDto | RegAmostrasOrcDto)[];
+  selectedAnaliseRow: AnaliseTabDto | null;
+  selectedRegRow: (RegAmostrasEncDto | RegAmostrasOrcDto) | null;
   flow: WizardFlow;
   loading: boolean;
   error: string | null;
@@ -30,9 +28,9 @@ interface UseSampleCreationWizardReturn {
   setFlow: (flow: WizardFlow) => void;
   setRefCliente: (value: string) => void;
   searchAnaliseTab: () => Promise<void>;
-  selectAnaliseRow: (row: AnaliseTabRow) => void;
+  selectAnaliseRow: (row: AnaliseTabDto) => void;
   proceedToRegAmostras: () => Promise<void>;
-  selectRegRow: (row: RegAmostrasEncRow | RegAmostrasOrcRow) => void;
+  selectRegRow: (row: RegAmostrasEncDto | RegAmostrasOrcDto) => void;
   getPrefillData: () => Partial<SampleFormData>;
   reset: () => void;
   goBack: () => void;
@@ -41,14 +39,14 @@ interface UseSampleCreationWizardReturn {
 export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
   const [currentStep, setCurrentStep] = useState<WizardStep>(1);
   const [refCliente, setRefCliente] = useState("");
-  const [analiseTabData, setAnaliseTabData] = useState<AnaliseTabRow[]>([]);
+  const [analiseTabData, setAnaliseTabData] = useState<AnaliseTabDto[]>([]);
   const [regAmostrasData, setRegAmostrasData] = useState<
-    (RegAmostrasEncRow | RegAmostrasOrcRow)[]
+    (RegAmostrasEncDto | RegAmostrasOrcDto)[]
   >([]);
   const [selectedAnaliseRow, setSelectedAnaliseRow] =
-    useState<AnaliseTabRow | null>(null);
+    useState<AnaliseTabDto | null>(null);
   const [selectedRegRow, setSelectedRegRow] = useState<
-    (RegAmostrasEncRow | RegAmostrasOrcRow) | null
+    (RegAmostrasEncDto | RegAmostrasOrcDto) | null
   >(null);
   const [flow, setFlow] = useState<WizardFlow>("ECL");
   const [loading, setLoading] = useState(false);
@@ -102,7 +100,7 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
     }
   }, [refCliente, flow, orcSamples]);
 
-  const selectAnaliseRow = useCallback((row: AnaliseTabRow) => {
+  const selectAnaliseRow = useCallback((row: AnaliseTabDto) => {
     setSelectedAnaliseRow(row);
   }, []);
 
@@ -140,7 +138,7 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
   }, [selectedAnaliseRow]);
 
   const selectRegRow = useCallback(
-    (row: RegAmostrasEncRow | RegAmostrasOrcRow) => {
+    (row: RegAmostrasEncDto | RegAmostrasOrcDto) => {
       setSelectedRegRow(row);
 
       // Validate that ID is 0 (meaning no register exists yet)
@@ -186,8 +184,8 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
       EncDivmac: enc,
       Cliente: client,
       Ref_Fornecedor: selectedRegRow.Ref_Fornecedor,
-      Data_do_pedido: formatDate(selectedRegRow.Data_do_pedido),
-      Data_recepcao: formatDate(selectedRegRow.Data_recepcao),
+      Data_do_pedido: formatDate(selectedRegRow.Data_do_pedido ?? ""),
+      Data_recepcao: formatDate(selectedRegRow.Data_recepcao ?? ""),
       Entregue_a: selectedRegRow.Entregue_a,
       N_Envio: selectedRegRow.N_Envio,
       Quantidade: selectedRegRow.Quantidade,
@@ -240,7 +238,7 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
 }
 
 function isEncRow(
-  row: RegAmostrasEncRow | RegAmostrasOrcRow,
-): row is RegAmostrasEncRow {
+  row: RegAmostrasEncDto | RegAmostrasOrcDto,
+): row is RegAmostrasEncDto {
   return "cdu_projeto" in row;
 }

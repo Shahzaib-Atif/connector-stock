@@ -1,9 +1,9 @@
 import React from "react";
-import { getConnectorId } from "@/utils/idUtils";
 import { Link } from "react-router-dom";
 import { API } from "@/utils/api";
 import { ROUTES } from "@/components/AppRoutes";
 import { AccessoryExtended } from "@/utils/types";
+import { getConnectorId } from "@shared/utils/getConnectorId";
 
 interface TableRowProps {
   accessory: AccessoryExtended;

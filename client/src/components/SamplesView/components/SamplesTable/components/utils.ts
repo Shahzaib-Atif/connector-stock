@@ -1,7 +1,3 @@
-import { getConnectorId } from "@/utils/idUtils";
-
-export { getConnectorId };
-
 export function getObservation(
   Observacoes: string,
   qty_com_fio?: number,

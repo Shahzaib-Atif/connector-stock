@@ -1,7 +1,7 @@
-import { AnaliseTabRow } from "@/types/sampleCreation";
+import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 import { useState, useMemo } from "react";
 
-export default function useFilters(analiseTabData: AnaliseTabRow[]) {
+export default function useFilters(analiseTabData: AnaliseTabDto[]) {
   const [estadoFilter, setEstadoFilter] = useState("");
   const [encomendaFilter, setEncomendaFilter] = useState("");
 

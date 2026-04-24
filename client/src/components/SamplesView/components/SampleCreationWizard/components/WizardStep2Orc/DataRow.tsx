@@ -1,12 +1,12 @@
-import { RegAmostrasOrcRow } from "@/types/sampleCreation";
 import { API } from "@/utils/api";
+import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
 import { ImageIcon } from "lucide-react";
 
 interface Props {
-  row: RegAmostrasOrcRow;
+  row: RegAmostrasOrcDto;
   connectorId: string;
-  selectedRegRow: RegAmostrasOrcRow;
-  selectRegRow: (row: RegAmostrasOrcRow) => void;
+  selectedRegRow: RegAmostrasOrcDto;
+  selectRegRow: (row: RegAmostrasOrcDto) => void;
   hasError?: boolean;
   handleImgError: (id: string) => void;
 }

@@ -1,14 +1,14 @@
-import { RegAmostrasEncRow } from "@/types/sampleCreation";
 import { ArrowLeft, FileCheck, ImageIcon } from "lucide-react";
 import { API } from "@/utils/api";
-import { getConnectorId } from "@/utils/idUtils";
+import { getConnectorId } from "@shared/utils/getConnectorId";
 import { useState } from "react";
+import { RegAmostrasEncDto } from "@shared/dto/RegAmostrasEncDto";
 
 interface Props {
-  regAmostrasData: RegAmostrasEncRow[];
-  selectedRegRow: RegAmostrasEncRow | null;
+  regAmostrasData: RegAmostrasEncDto[];
+  selectedRegRow: RegAmostrasEncDto | null;
   handleCreateRegister: () => void;
-  selectRegRow: (row: RegAmostrasEncRow) => void;
+  selectRegRow: (row: RegAmostrasEncDto) => void;
   reset: () => void;
   goBack: () => void;
   error: string | null;

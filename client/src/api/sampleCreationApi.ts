@@ -1,15 +1,17 @@
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
-import { AnaliseTabRow, RegAmostrasEncRow, RegAmostrasOrcRow } from "@/types/sampleCreation";
+import { RegAmostrasEncDto } from "@shared/dto/RegAmostrasEncDto";
+import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
+import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
 
 /**
  * Fetch AnaliseTab data by RefCliente for the sample creation wizard (Step 1)
  */
 export const fetchAnaliseTabData = async (
-  refCliente: string
-): Promise<AnaliseTabRow[]> => {
+  refCliente: string,
+): Promise<AnaliseTabDto[]> => {
   const response = await fetchWithAuth(
-    `${API.samples}/analise-tab/${encodeURIComponent(refCliente)}`
+    `${API.samples}/analise-tab/${encodeURIComponent(refCliente)}`,
   );
   if (!response.ok) {
     throw new Error("Failed to fetch AnaliseTab data");
@@ -24,10 +26,10 @@ export const fetchAnaliseTabData = async (
 export const fetchRegAmostrasEncData = async (
   refCliente: string,
   projeto: string,
-  conectorDV: string
-): Promise<RegAmostrasEncRow[]> => {
+  conectorDV: string,
+): Promise<RegAmostrasEncDto[]> => {
   const response = await fetchWithAuth(
-    `${API.samples}/reg-amostras-enc/${encodeURIComponent(refCliente)}?projeto=${encodeURIComponent(projeto)}&conectorDV=${encodeURIComponent(conectorDV)}`
+    `${API.samples}/reg-amostras-enc/${encodeURIComponent(refCliente)}?projeto=${encodeURIComponent(projeto)}&conectorDV=${encodeURIComponent(conectorDV)}`,
   );
   if (!response.ok) {
     throw new Error("Failed to fetch RegAmostrasEnc data");
@@ -35,13 +37,16 @@ export const fetchRegAmostrasEncData = async (
   return response.json();
 };
 
-
 /**
  * @deprecated Use Redux-stored orcSamples instead.
  * Fetch data starting from ORC documents
  */
-export const fetchSamplesFromOrc = async (numorc: string): Promise<RegAmostrasOrcRow[]> => {
-  const response = await fetchWithAuth(`${API.samples}/from-orc?numorc=${encodeURIComponent(numorc)}`);
+export const fetchSamplesFromOrc = async (
+  numorc: string,
+): Promise<RegAmostrasOrcDto[]> => {
+  const response = await fetchWithAuth(
+    `${API.samples}/from-orc?numorc=${encodeURIComponent(numorc)}`,
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch samples from ORC");
   }

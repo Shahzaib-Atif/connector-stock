@@ -5,7 +5,7 @@ import { SamplesRepo } from 'src/repository/samples.repo';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
 import { AccessoryRepo } from 'src/repository/accessories.repo';
 import { TransactionsService } from './transactions.service';
-import { getConnectorId } from 'src/utils/getConnectorId';
+import { getConnectorId } from '@shared/utils/getConnectorId';
 import { getErrorMsg } from '@shared/utils/getErrorMsg';
 import { Transaction } from '@shared/types/Transaction';
 import { WireTypes } from '@shared/enums/WireTypes';
@@ -80,7 +80,7 @@ export class SamplesService {
       const totalQuantity = this.parseQuantity(dto.Quantidade);
 
       if (qtyComFio > 0 || qtySemFio > 0 || totalQuantity > 0) {
-        const connectorId = getConnectorId(dto.Amostra);
+        const connectorId = getConnectorId(dto.Amostra ?? '');
         if (connectorId) {
           // Process COM FIO
           if (qtyComFio > 0) {

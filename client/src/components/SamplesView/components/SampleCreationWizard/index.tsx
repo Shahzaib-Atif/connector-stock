@@ -1,6 +1,7 @@
 import React from "react";
 import { useSampleCreationWizard } from "@/hooks/useSampleCreationWizard";
-import { RegAmostrasEncRow, RegAmostrasOrcRow } from "@/types/sampleCreation";
+import { RegAmostrasEncDto } from "@shared/dto/RegAmostrasEncDto";
+import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
 import WizardStep1 from "./components/WizardStep1";
 import WizardStep2 from "./components/WizardStep2";
 import WizardStep3Enc from "./components/WizardStep3Enc";
@@ -98,20 +99,24 @@ export const SampleCreationWizard: React.FC<SampleCreationWizardProps> = ({
                   error={error}
                   goBack={goBack}
                   handleCreateRegister={handleCreateRegister}
-                  regAmostrasData={regAmostrasData as RegAmostrasEncRow[]}
+                  regAmostrasData={regAmostrasData as RegAmostrasEncDto[]}
                   reset={reset}
-                  selectRegRow={selectRegRow as (row: RegAmostrasEncRow) => void}
-                  selectedRegRow={selectedRegRow as RegAmostrasEncRow | null}
+                  selectRegRow={
+                    selectRegRow as (row: RegAmostrasEncDto) => void
+                  }
+                  selectedRegRow={selectedRegRow as RegAmostrasEncDto | null}
                 />
               ) : (
                 <WizardStep2Orc
                   error={error}
                   goBack={goBack}
                   handleCreateRegister={handleCreateRegister}
-                  regAmostrasData={regAmostrasData as RegAmostrasOrcRow[]}
+                  regAmostrasData={regAmostrasData as RegAmostrasOrcDto[]}
                   reset={reset}
-                  selectRegRow={selectRegRow as (row: RegAmostrasOrcRow) => void}
-                  selectedRegRow={selectedRegRow as RegAmostrasOrcRow | null}
+                  selectRegRow={
+                    selectRegRow as (row: RegAmostrasOrcDto) => void
+                  }
+                  selectedRegRow={selectedRegRow as RegAmostrasOrcDto}
                 />
               )}
             </>

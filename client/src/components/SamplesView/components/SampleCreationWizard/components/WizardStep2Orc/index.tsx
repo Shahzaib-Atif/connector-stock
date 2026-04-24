@@ -1,17 +1,17 @@
-import { RegAmostrasOrcRow } from "@/types/sampleCreation";
 import { ArrowLeft, FileCheck } from "lucide-react";
-import { getConnectorId } from "@/utils/idUtils";
+import { getConnectorId } from "@shared/utils/getConnectorId";
 import { useState } from "react";
 import Filters from "./Filters";
 import useFilters from "./useFilters";
 import HeaderRow from "./HeaderRow";
 import DataRow from "./DataRow";
+import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
 
 interface Props {
-  regAmostrasData: RegAmostrasOrcRow[];
-  selectedRegRow: RegAmostrasOrcRow | null;
+  regAmostrasData: RegAmostrasOrcDto[];
+  selectedRegRow: RegAmostrasOrcDto;
   handleCreateRegister: () => void;
-  selectRegRow: (row: RegAmostrasOrcRow) => void;
+  selectRegRow: (row: RegAmostrasOrcDto) => void;
   reset: () => void;
   goBack: () => void;
   error: string | null;
@@ -78,7 +78,7 @@ function WizardStep2Orc({
             {filteredData.map((row, idx) => {
               // Get connector ID and check for image error
               const connectorId = getConnectorId(
-                row.CDU_ModuloRefConetorDV || ""
+                row.CDU_ModuloRefConetorDV || "",
               );
               const hasError = imgErrors[connectorId];
 

@@ -1,6 +1,7 @@
 /**
  * Extracts the connector ID from an amostra string.
  * If the string contains '+', it takes the part before the '+' and returns the first 6 characters.
+ * If it is a versioned string (like W382P3-1), it returns the first 8 characters.
  * Otherwise, it returns the trimmed string.
  */
 export function getConnectorId(amostra: string | undefined): string {

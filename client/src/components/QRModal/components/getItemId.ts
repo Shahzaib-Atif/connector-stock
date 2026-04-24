@@ -1,5 +1,5 @@
 import { ROUTES } from "@/components/AppRoutes";
-import { getConnectorId } from "@/utils/idUtils";
+import { getConnectorId } from "@shared/utils/getConnectorId";
 
 // Returns a link path for the given item ID, handling both boxes and connectors
 export function getItemIdLink(itemId: string) {

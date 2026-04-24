@@ -1,7 +1,7 @@
-import { RegAmostrasOrcRow } from "@/types/sampleCreation";
+import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
 import { useState, useMemo } from "react";
 
-export default function useFilters(regAmostrasData: RegAmostrasOrcRow[]) {
+export default function useFilters(regAmostrasData: RegAmostrasOrcDto[]) {
   const [amostraFilter, setAmostraFilter] = useState("");
   const [refClienteFilter, setRefClienteFilter] = useState("");
 
@@ -13,7 +13,7 @@ export default function useFilters(regAmostrasData: RegAmostrasOrcRow[]) {
       const matchesAmostra = amostraFilter
         ? conector.toLowerCase().includes(amostraFilter.toLowerCase())
         : true;
-        
+
       const matchesRefCliente = refClienteFilter
         ? refCliente.toLowerCase().includes(refClienteFilter.toLowerCase())
         : true;

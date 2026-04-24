@@ -1,18 +1,19 @@
 import React from "react";
-import { Sample } from "@/utils/types";
 import { QRData } from "@/utils/types/shared";
 import { Link } from "react-router-dom";
-import { getConnectorId, getObservation } from "./utils";
+import { getObservation } from "./utils";
+import { getConnectorId } from "@shared/utils/getConnectorId";
 import SamplesActionButtons from "./SamplesActionButtons";
 import OpenFolderBtn from "./OpenFolderBtn";
+import { SamplesDto } from "@shared/dto/SamplesDto";
 
 interface TableRowProps {
-  sample: Sample;
+  sample: SamplesDto;
   index: number;
-  onEdit: (sample: Sample) => void;
-  onDelete: (sample: Sample) => void;
+  onEdit: (sample: SamplesDto) => void;
+  onDelete: (sample: SamplesDto) => void;
   onOpenQR?: (qrData: QRData) => void;
-  onClone?: (sample: Sample) => void;
+  onClone?: (sample: SamplesDto) => void;
   showActions?: boolean;
 }
 
@@ -62,16 +63,16 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data break-all">{Quantidade || "-"}</td>
       {
         <td className="table-data">
-          <OpenFolderBtn N_Envio={N_Envio} showFolderBtn={showActions} />
+          <OpenFolderBtn N_Envio={N_Envio ?? ""} showFolderBtn={showActions} />
         </td>
       }
-      <td className="table-data break-all" title={Entregue_a}>
+      <td className="table-data break-all" title={Entregue_a ?? ""}>
         {Entregue_a || "-"}
       </td>
       <td className="table-data font-mono">{Data_recepcao || "-"}</td>
       <td className="table-data">{NumORC}</td>
       <td className="table-data font-mono break-all">
-        {getObservation(Observacoes ?? "", qty_com_fio, qty_sem_fio)}
+        {getObservation(Observacoes ?? "", qty_com_fio ?? 0, qty_sem_fio ?? 0)}
       </td>
       {/* Action buttons */}
       {showActions && (

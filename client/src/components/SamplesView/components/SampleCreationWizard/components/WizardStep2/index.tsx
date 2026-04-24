@@ -1,4 +1,4 @@
-import { AnaliseTabRow } from "@/types/sampleCreation";
+import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 import { ArrowLeft, Database } from "lucide-react";
 import Filters from "./Filters";
 import useFilters from "./useFilters";
@@ -6,10 +6,10 @@ import useFilters from "./useFilters";
 interface Props {
   loading: boolean;
   proceedToRegAmostras: () => Promise<void>;
-  selectedAnaliseRow: AnaliseTabRow | null;
-  selectAnaliseRow: (row: AnaliseTabRow) => void;
+  selectedAnaliseRow: AnaliseTabDto | null;
+  selectAnaliseRow: (row: AnaliseTabDto) => void;
 
-  analiseTabData: AnaliseTabRow[];
+  analiseTabData: AnaliseTabDto[];
   error: string | null;
   goBack: () => void;
 }
@@ -102,7 +102,9 @@ function WizardStep2({
                 <td className="px-3 py-2 text-slate-300">
                   {row.CDU_ProjetoCliente}
                 </td>
-                <td className="px-3 py-2 text-slate-300">{row.DataAbertura}</td>
+                <td className="px-3 py-2 text-slate-300">
+                  {row.DataAbertura?.toString()}
+                </td>
                 <td className="px-3 py-2 text-slate-300">{row.Estado}</td>
                 <td className="px-3 py-2 text-slate-300">
                   {row.Quantidade || "-"}
