@@ -83,7 +83,7 @@ export const SampleForm: React.FC<Props> = ({
             id: sample.ID,
             data: {
               ...formData,
-              Amostra: formData.Amostra,
+              Amostra: formData.Amostra?.toUpperCase(),
               LasUpdateBy: currentUser,
               ActualUser: currentUser,
               associatedItemIds: selectedAccessoryIds,
@@ -94,7 +94,7 @@ export const SampleForm: React.FC<Props> = ({
         await dispatch(
           createSampleThunk({
             ...formData,
-            Amostra: formData.Amostra,
+            Amostra: formData.Amostra?.toUpperCase(),
             CreatedBy: currentUser,
             ActualUser: currentUser,
             associatedItemIds: selectedAccessoryIds,
