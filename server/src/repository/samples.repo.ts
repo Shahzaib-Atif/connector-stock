@@ -51,7 +51,10 @@ export class SamplesRepo {
     }
   }
 
-  async updateSample(id: number, dto: SamplesDto): Promise<SamplesDto | null> {
+  async updateSample(
+    id: number,
+    dto: CreateSamplesDto,
+  ): Promise<SamplesDto | null> {
     try {
       // Remove associatedItemIds from dto before creating prisma record
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -181,7 +181,7 @@ export class SamplesService {
   async updateSample(id: number, dto: SamplesDto) {
     // Remove associatedItemIds from dto before creating prisma record
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { associatedItemIds, ...sampleData } = dto;
+    const { associatedItemIds, ID, ...sampleData } = dto;
 
     // 1. Create sample metadata
     return await this.prisma.$transaction(async (tx) => {
@@ -196,7 +196,6 @@ export class SamplesService {
       }
 
       // Update sample record
-
       const updated = await tx.rEG_Amostras.update({
         where: { ID: id },
         data: {
