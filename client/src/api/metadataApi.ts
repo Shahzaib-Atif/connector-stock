@@ -1,6 +1,7 @@
-import { IColor, IVias, ConnPosition, ConnPositionsMap } from "@/utils/types";
+import { IColor, IVias, ConnPositionsMap } from "@/utils/types";
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
+import { BoxDto } from "@shared/dto/BoxDto";
 
 export const fetchColors = async (): Promise<{
   colorsUK: Record<string, string>;
@@ -53,7 +54,7 @@ export const fetchPositions = async (): Promise<ConnPositionsMap> => {
   if (!response.ok) {
     throw new Error("Failed to fetch positions");
   }
-  const data: ConnPosition[] = await response.json();
+  const data: BoxDto[] = await response.json();
 
   // convert positions to positionsMap
   return data.reduce<ConnPositionsMap>((acc, item) => {

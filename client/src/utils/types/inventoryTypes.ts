@@ -1,15 +1,13 @@
 import { ConnectorDto } from "@shared/dto/ConnectorDto";
 import { AccessoryDto } from "@shared/dto/AccessoryDto";
+import { BoxDto } from "@shared/dto/BoxDto";
 
 // has extra properties
 export type ConnectorExtended = ConnectorDto & {
   colorName?: string;
   colorNamePT?: string;
   viasName?: string;
-  cv?: string | null;
-  ch?: string | null;
-  cv_ma?: string | null;
-  ch_ma?: string | null;
+  position?: BoxDto | null;
   accessories: AccessoryDto[]; // Linked accessories
 };
 
@@ -18,15 +16,11 @@ export type AccessoryExtended = AccessoryDto & {
   posId: string | null; // e.g. A255
 };
 
-export type ConnectorMap = Record<string, ConnectorExtended>;
-export type AccessoryMap = Record<number, AccessoryExtended>;
-
-export interface Box {
-  id: string; // e.g., A255 (4 chars)
-  cv: string | null;
-  ch: string | null;
-  cv_ma: string | null;
-  ch_ma: string | null;
+export type BoxExtended = BoxDto & {
   connectors: ConnectorExtended[]; // connectors in this box
   accessories: AccessoryDto[]; // accessories in this box
-}
+};
+
+export type ConnectorMap = Record<string, ConnectorExtended>;
+export type AccessoryMap = Record<number, AccessoryExtended>;
+export type ConnPositionsMap = Record<string, BoxDto>;

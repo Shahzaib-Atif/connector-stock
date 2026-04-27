@@ -2,7 +2,6 @@ import React from "react";
 import { MapPin, CircuitBoard, Wrench } from "lucide-react";
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { Box } from "../../utils/types";
 import { getBoxDetails } from "../../utils/functions/connector";
 import { CollapsibleSection } from "../common/CollapsibleSection";
 import { DetailHeader } from "../common/DetailHeader";
@@ -16,6 +15,7 @@ import AccessoryInfo from "./components/AccessoryInfo";
 import { useGlobalBackNavigation } from "../../hooks/useGlobalBackNavigation";
 import { QRData } from "@/utils/types/shared";
 import { useAppSelector } from "@/store/hooks";
+import { BoxExtended } from "@/utils/types";
 
 interface BoxViewProps {
   onOpenQR: (qrData: QRData) => void;
@@ -24,7 +24,8 @@ interface BoxViewProps {
 export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
   const { id } = useParams<{ id: string }>();
   const masterData = useAppSelector((state) => state.masterData.data);
-  const box = useMemo<Box | null>(() => {
+
+  const box = useMemo<BoxExtended | null>(() => {
     if (!id || id.length !== 4 || !masterData) {
       return null;
     }
@@ -37,7 +38,7 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
   useGlobalBackNavigation(goBack);
 
   // show not found page if box not found or has no coordinates
-  if (!box || (!box.ch && !box.cv && !box.ch_ma && !box.cv_ma)) {
+  if (!box || (!box.CH && !box.CV && !box.CH_Ma && !box.CV_Ma)) {
     return <NotFoundPage label="Box" icon={MapPin} onBack={goBack} />;
   }
 
@@ -57,9 +58,9 @@ export const BoxView: React.FC<BoxViewProps> = ({ onOpenQR }) => {
       {/* Header */}
       <DetailHeader
         label="Box Storage"
-        title={box.id}
+        title={box.CON}
         onBack={goBack}
-        handleQRClick={() => onOpenQR({ id: box.id, source: "box" })}
+        handleQRClick={() => onOpenQR({ id: box.CON, source: "box" })}
       />
 
       <div className="max-w-3xl mx-auto p-4 space-y-6">

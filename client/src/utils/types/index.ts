@@ -1,4 +1,4 @@
-import { AccessoryMap, ConnectorMap } from "./inventoryTypes";
+import { AccessoryMap, ConnectorMap, ConnPositionsMap } from "./inventoryTypes";
 
 // Re-exports
 export * from "./inventoryTypes";
@@ -43,13 +43,3 @@ export interface ConnectorType {
   Type: string;
   Section: string;
 }
-
-export interface ConnPosition {
-  CON: string;
-  CV?: string;
-  CH?: string;
-  CV_Ma?: string;
-  CH_Ma?: string;
-}
-
-export type ConnPositionsMap = Record<string, ConnPosition>;

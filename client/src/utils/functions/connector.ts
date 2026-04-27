@@ -1,10 +1,10 @@
 import {
   ConnectorExtended,
-  Box,
   MasterData,
   LegacyBackup,
   AccessoryMap,
   ConnPositionsMap,
+  BoxExtended,
 } from "../types";
 import { parseAccessory } from "./accessory";
 import { API } from "../api";
@@ -72,11 +72,8 @@ export const parseConnector = (
     colorName: masterData.colors?.colorsUK[Cor] || "Unknown",
     colorNamePT: masterData.colors?.colorsPT?.[Cor] || "Unknown",
     viasName: masterData.vias[Vias] || "Standard",
-    cv: coords?.CV ?? null,
-    ch: coords?.CH ?? null,
-    cv_ma: coords?.CV_Ma ?? null,
-    ch_ma: coords?.CH_Ma ?? null,
     accessories: accessories ?? [],
+    position: coords,
   };
 };
 
@@ -111,18 +108,15 @@ export const mapToConnectorExtended = (
     colorName: colors?.colorsUK[Cor] || "Unknown",
     colorNamePT: colors?.colorsPT?.[Cor] || "Unknown",
     viasName: vias[Vias] || "Standard",
-    cv: coords?.CV ?? null,
-    ch: coords?.CH ?? null,
-    cv_ma: coords?.CV_Ma ?? null,
-    ch_ma: coords?.CH_Ma ?? null,
     accessories: _accessories ?? [],
+    position: coords,
   };
 };
 
 export const getBoxDetails = (
   boxId: string,
   masterData: MasterData | null,
-): Box | null => {
+): BoxExtended | null => {
   if (!masterData || boxId.length !== 4) return null;
 
   const coords = getCoordinates(boxId, masterData.positions);
@@ -150,11 +144,7 @@ export const getBoxDetails = (
   const accessories = Array.from(accessoryMap.values());
 
   return {
-    id: boxId,
-    cv: coords?.CV ?? null,
-    ch: coords?.CH ?? null,
-    cv_ma: coords?.CV_Ma ?? null,
-    ch_ma: coords?.CH_Ma ?? null,
+    ...coords,
     connectors,
     accessories,
   };

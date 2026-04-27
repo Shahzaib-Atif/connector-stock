@@ -1,9 +1,9 @@
-import { Box } from "@/utils/types";
 import { MapPin } from "lucide-react";
 import CoordinateRow from "./CoordinateRow";
+import { BoxExtended } from "@/utils/types";
 
 interface Props {
-  box: Box;
+  box: BoxExtended;
 }
 
 function BoxCoordinatesCard({ box }: Props) {
@@ -23,14 +23,14 @@ function BoxCoordinatesCard({ box }: Props) {
 
           {/* Coordinates */}
           <div className="flex flex-col gap-1 mt-1">
-            {(box.cv || box.ch) && (
-              <CoordinateRow label="PT" cv={box.cv ?? ""} ch={box.ch ?? ""} />
+            {(box.CV || box.CH) && (
+              <CoordinateRow label="PT" cv={box.CV ?? ""} ch={box.CH ?? ""} />
             )}
-            {(box.cv_ma || box.ch_ma) && (
+            {(box.CV_Ma || box.CH_Ma) && (
               <CoordinateRow
                 label="MA"
-                cv={box.cv_ma ?? ""}
-                ch={box.ch_ma ?? ""}
+                cv={box.CV_Ma ?? ""}
+                ch={box.CH_Ma ?? ""}
               />
             )}
           </div>
