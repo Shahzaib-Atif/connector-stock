@@ -1,16 +1,15 @@
 import React from "react";
-import { Sample } from "@/utils/types";
 import { ModalWrapper } from "@/components/common/ModalWrapper";
 import { FilePenLine } from "lucide-react";
 import { SampleForm } from "./SampleForm";
-import { SampleFormData } from "@/hooks/useSampleForm";
+import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 
 interface SampleFormModalProps {
-  sample: Sample | null;
+  sample: SamplesDto | null;
   onClose: () => void;
   onSuccess: () => void;
   forceCreate?: boolean;
-  initialData?: Partial<SampleFormData>;
+  initialData?: Partial<CreateSamplesDto>;
 }
 
 export const SampleFormModal: React.FC<SampleFormModalProps> = ({

@@ -6,12 +6,12 @@ import WizardStep1 from "./components/WizardStep1";
 import WizardStep2 from "./components/WizardStep2";
 import WizardStep3Enc from "./components/WizardStep3Enc";
 import WizardStep2Orc from "./components/WizardStep2Orc/index";
-import { SampleFormData } from "@/hooks/useSampleForm";
 import SampleWizardModalHeader from "./components/SampleWizardModalHeader";
+import { CreateSamplesDto } from "@shared/dto/SamplesDto";
 
 interface SampleCreationWizardProps {
   onClose: () => void;
-  onProceedToForm: (prefillData: Partial<SampleFormData>) => void;
+  onProceedToForm: (prefillData: Partial<CreateSamplesDto>) => void;
 }
 
 export const SampleCreationWizard: React.FC<SampleCreationWizardProps> = ({

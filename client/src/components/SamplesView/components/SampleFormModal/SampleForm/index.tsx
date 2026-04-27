@@ -1,11 +1,10 @@
 import React from "react";
-import { Sample } from "@/utils/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   createSampleThunk,
   updateSampleThunk,
 } from "@/store/slices/samplesSlice";
-import { useSampleForm, SampleFormData } from "@/hooks/useSampleForm";
+import { useSampleForm } from "@/hooks/useSampleForm";
 import { FormField } from "./components/FormField";
 import {
   FORM_FIELDS,
@@ -20,13 +19,15 @@ import { useConnectorId } from "./components/useConnectorId";
 import useMissingConnectorWarning from "./components/useMissingConnectorWarning";
 import ErrorBanner from "./components/ErrorBanner";
 import ActionButtons from "./components/ActionButtons";
+import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
+import { getErrorMsg } from "@shared/utils/getErrorMsg";
 
 interface Props {
-  sample: Sample | null;
+  sample: SamplesDto | null;
   onClose: () => void;
   onSuccess: () => void;
   isEditing: boolean;
-  initialData?: Partial<SampleFormData>;
+  initialData?: Partial<CreateSamplesDto>;
 }
 
 export const SampleForm: React.FC<Props> = ({
@@ -49,7 +50,7 @@ export const SampleForm: React.FC<Props> = ({
   } = useSampleForm(sample, initialData);
   const [formError, setFormError] = React.useState<string | null>(null);
 
-  const connectorId = useConnectorId(formData.Amostra); // get connector ID from Amostra
+  const connectorId = useConnectorId(formData?.Amostra ?? ""); // get connector ID from Amostra
   const { associatedAccessories } = useAssociatedAccessories(connectorId); // fetch associated accessories
   const { checkConnectorWarning } = useMissingConnectorWarning(); // check missing connector warning
   const { getOptions } = useSampleOptions(); // autocomplete options
@@ -66,7 +67,7 @@ export const SampleForm: React.FC<Props> = ({
     }
 
     // Handle missing connector warning
-    if (!checkConnectorWarning(formData.Amostra, setFormError)) return;
+    if (!checkConnectorWarning(formData.Amostra ?? "", setFormError)) return;
 
     // Proceed to create or update sample
     await createOrUpdateSample();
@@ -104,9 +105,7 @@ export const SampleForm: React.FC<Props> = ({
       onSuccess();
     } catch (err) {
       console.error(err);
-      setFormError(
-        typeof err === "string" ? err : err.message || "An error occurred.",
-      );
+      setFormError(getErrorMsg(err));
     }
   };
 
@@ -117,10 +116,10 @@ export const SampleForm: React.FC<Props> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {FORM_FIELDS.map((field) => (
           <FormField
-            key={field.name}
-            name={field.name}
+            key={field.name?.toString()}
+            name={field.name?.toString()}
             label={field.label}
-            value={formData[field.name]}
+            value={formData[field?.name]}
             onChange={handleChange}
             placeholder={field.placeholder}
             disabled={field.disabled || (field.disabledOnEdit && isEditing)}

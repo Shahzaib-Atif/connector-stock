@@ -1,12 +1,10 @@
-import { AccessoryFilters } from "@/components/AccessoriesListView/constants";
-import { ConnectorFilters } from "@/components/ConnectorsTable/constants";
-
 /**
  * Generic utility to count active filters by comparing them with default values.
  */
-export function getActiveFilterCount<
-  T extends ConnectorFilters | AccessoryFilters,
->(filters: T, defaults: T): number {
+export function getActiveFilterCount<T extends object>(
+  filters: T,
+  defaults: T,
+): number {
   let count = 0;
 
   (Object.keys(defaults) as Array<keyof T>).forEach((key) => {

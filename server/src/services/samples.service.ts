@@ -150,7 +150,7 @@ export class SamplesService {
           for (const accId of associatedItemIds) {
             await this.transactionsService.processTransaction(
               {
-                itemId: accId,
+                itemId: accId?.toString(),
                 transactionType: 'IN',
                 amount: accAmount,
                 itemType: 'accessory',
@@ -361,7 +361,7 @@ export class SamplesService {
           for (const accId of dto.associatedItemIds) {
             await this.transactionsService.processTransaction(
               {
-                itemId: accId,
+                itemId: accId?.toString(),
                 transactionType: type,
                 amount: Math.abs(accDelta),
                 itemType: 'accessory',

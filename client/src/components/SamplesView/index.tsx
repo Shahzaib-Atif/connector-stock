@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sample } from "@/utils/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   fetchSamplesThunk,
@@ -13,13 +12,14 @@ import { SamplesTable } from "./components/SamplesTable";
 import { Pagination } from "../common/Pagination";
 import { SampleFormModal } from "./components/SampleFormModal";
 import { SampleCreationWizard } from "./components/SampleCreationWizard";
-import { SampleFormData } from "@/hooks/useSampleForm";
 import Spinner from "../common/Spinner";
 import DeleteDialog from "../common/DeleteDialog";
-import { FilterBar } from "../common/FilterBar";
 import { ROUTES } from "../AppRoutes";
 import { QRData } from "@/utils/types/shared";
 import { UserRoles } from "@shared/enums/UserRoles";
+import { SamplesFilterBar } from "./SamplesFilterBar";
+import { getActiveFilterCount } from "./constants";
+import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -34,8 +34,9 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
 
   // Custom hook for filters
-  const { filters, setFilterColumn, setSearchQuery, filteredSamples } =
+  const { filters, setFilterField, filteredSamples, clearFilters } =
     useSampleFilters(samples);
+  const activeFiltersCount = getActiveFilterCount(filters);
 
   const {
     paginatedItems: paginatedSamples,
@@ -48,11 +49,13 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingSample, setEditingSample] = useState<Sample | null>(null);
-  const [duplicateSample, setDuplicateSample] = useState<Sample | null>(null);
+  const [editingSample, setEditingSample] = useState<SamplesDto | null>(null);
+  const [duplicateSample, setDuplicateSample] = useState<SamplesDto | null>(
+    null,
+  );
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [prefillData, setPrefillData] = useState<
-    Partial<SampleFormData> | undefined
+    Partial<CreateSamplesDto> | undefined
   >();
 
   // Fetch samples on mount (only if not already loaded)
@@ -73,19 +76,19 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (sample: Sample) => {
+  const handleEdit = (sample: SamplesDto) => {
     setEditingSample(sample);
     setDuplicateSample(null);
     setIsModalOpen(true);
   };
 
-  const handleClone = (sample: Sample) => {
+  const handleClone = (sample: SamplesDto) => {
     setDuplicateSample(sample);
     setEditingSample(null);
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (sample: Sample) => {
+  const handleDelete = async (sample: SamplesDto) => {
     setEditingSample(sample);
     setOpenDltDlg(true);
   };
@@ -109,7 +112,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
     setIsWizardOpen(false);
   };
 
-  const handleProceedToForm = (data: Partial<SampleFormData>) => {
+  const handleProceedToForm = (data: Partial<CreateSamplesDto>) => {
     setPrefillData(data);
     setEditingSample(null);
     setDuplicateSample(null);
@@ -151,23 +154,16 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
             </div>
           )}
 
-          <FilterBar
-            filterColumn={filters.filterColumn}
-            searchQuery={filters.searchQuery}
-            filterByOptions={[
-              "cliente",
-              "refDescricao",
-              "encDivmac",
-              "amostra",
-              "numORC",
-            ]}
-            onFilterColumnChange={setFilterColumn}
-            onSearchQueryChange={setSearchQuery}
+          <SamplesFilterBar
+            filters={filters}
+            setFilterField={setFilterField}
+            onClearFilters={clearFilters}
+            activeFiltersCount={activeFiltersCount}
           />
 
           <div className="table-container-outer">
             <SamplesTable
-              samples={paginatedSamples as Sample[]}
+              samples={paginatedSamples as SamplesDto[]}
               onEdit={handleEdit}
               onDelete={handleDelete}
               onOpenQR={onOpenQR}

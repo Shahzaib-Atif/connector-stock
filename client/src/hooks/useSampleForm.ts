@@ -1,9 +1,7 @@
+import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { useState, useEffect, useCallback } from "react";
-import { Sample } from "@/utils/types";
 
-export type SampleFormData = Omit<Sample, "ID" | "associatedItemIds">;
-
-const initialFormData: SampleFormData = {
+const initialFormData: CreateSamplesDto = {
   Cliente: "",
   Projeto: "",
   EncDivmac: "",
@@ -24,10 +22,10 @@ const initialFormData: SampleFormData = {
 };
 
 export function useSampleForm(
-  sample: Sample | null,
-  initialData?: Partial<SampleFormData>,
+  sample: SamplesDto | null,
+  initialData?: Partial<CreateSamplesDto>,
 ) {
-  const [formData, setFormData] = useState<SampleFormData>(initialFormData);
+  const [formData, setFormData] = useState<CreateSamplesDto>(initialFormData);
   const [selectedAccessoryIds, setSelectedAccessoryIds] = useState<number[]>(
     [],
   );
@@ -36,21 +34,7 @@ export function useSampleForm(
     // If editing an existing sample, populate fields
     if (sample) {
       setFormData({
-        Cliente: sample.Cliente || "",
-        Projeto: sample.Projeto || "",
-        EncDivmac: sample.EncDivmac || "",
-        Ref_Descricao: sample.Ref_Descricao || "",
-        Ref_Fornecedor: sample.Ref_Fornecedor || "",
-        Amostra: sample.Amostra || "",
-        Data_do_pedido: sample.Data_do_pedido || "",
-        Data_recepcao: sample.Data_recepcao || "",
-        Entregue_a: sample.Entregue_a || "",
-        N_Envio: sample.N_Envio || "",
-        Quantidade: sample.Quantidade || "0",
-        Observacoes: sample.Observacoes || "",
-        NumORC: sample.NumORC || "",
-        CreatedBy: sample.CreatedBy || "",
-        ActualUser: sample.ActualUser || "",
+        ...sample,
         qty_com_fio: sample.qty_com_fio ?? 0,
         qty_sem_fio: sample.qty_sem_fio ?? 0,
       });

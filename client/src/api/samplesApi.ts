@@ -32,7 +32,7 @@ export const createSample = async (
 
 export const updateSample = async (
   id: number,
-  sample: SamplesDto,
+  sample: CreateSamplesDto,
 ): Promise<SamplesDto> => {
   const response = await fetchWithAuth(`${API.samples}/${id}`, {
     method: "PUT",

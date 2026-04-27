@@ -4,10 +4,10 @@ import {
   fetchAnaliseTabData,
   fetchRegAmostrasEncData,
 } from "@/api/sampleCreationApi";
-import { SampleFormData } from "./useSampleForm";
 import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 import { RegAmostrasEncDto } from "@shared/dto/RegAmostrasEncDto";
 import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
+import { CreateSamplesDto } from "@shared/dto/SamplesDto";
 
 type WizardStep = 1 | 2 | 3;
 export type WizardFlow = "ECL" | "ORC";
@@ -31,7 +31,7 @@ interface UseSampleCreationWizardReturn {
   selectAnaliseRow: (row: AnaliseTabDto) => void;
   proceedToRegAmostras: () => Promise<void>;
   selectRegRow: (row: RegAmostrasEncDto | RegAmostrasOrcDto) => void;
-  getPrefillData: () => Partial<SampleFormData>;
+  getPrefillData: () => Partial<CreateSamplesDto>;
   reset: () => void;
   goBack: () => void;
 }
@@ -153,7 +153,7 @@ export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
     [],
   );
 
-  const getPrefillData = useCallback((): Partial<SampleFormData> => {
+  const getPrefillData = useCallback((): Partial<CreateSamplesDto> => {
     if (!selectedRegRow) return {};
 
     // Format dates to YYYY-MM-DD format

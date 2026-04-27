@@ -1,7 +1,7 @@
-import { SampleFormData } from "@/hooks/useSampleForm";
+import { CreateSamplesDto } from "@shared/dto/SamplesDto";
 
 export interface FORM_FIELDS_Type {
-  name: keyof SampleFormData;
+  name: keyof CreateSamplesDto;
   label: string;
   placeholder: string;
   disabledOnEdit?: boolean;

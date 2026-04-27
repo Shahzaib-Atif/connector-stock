@@ -21,7 +21,7 @@ export interface SamplesDto {
   Ref_Fornecedor?: string | null;
   qty_com_fio?: number | null;
   qty_sem_fio?: number | null;
-  associatedItemIds?: string[];
+  associatedItemIds?: number[];
 }
 
 export type CreateSamplesDto = Omit<

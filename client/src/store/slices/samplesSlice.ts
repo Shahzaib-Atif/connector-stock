@@ -61,7 +61,7 @@ export const createSampleThunk = createAsyncThunk(
 // Update an existing sample
 export const updateSampleThunk = createAsyncThunk(
   "samples/update",
-  async ({ id, data }: { id: number; data: SamplesDto }) => {
+  async ({ id, data }: { id: number; data: CreateSamplesDto }) => {
     const sample = await updateSample(id, data);
     return sample;
   },

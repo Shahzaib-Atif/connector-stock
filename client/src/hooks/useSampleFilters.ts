@@ -1,84 +1,128 @@
-import { useState, useMemo, useCallback } from "react";
-import { Sample } from "@/utils/types";
-import { FilterColumnTypes } from "@/components/common/FilterBar";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import {
+  SampleFilters,
+  defaultFilters,
+  STORAGE_KEY,
+} from "@/components/SamplesView/constants";
+import { SamplesDto } from "@shared/dto/SamplesDto";
 
-interface SampleFilters {
-  filterColumn: FilterColumnTypes;
-  searchQuery: string;
-}
-
-interface useSampleFiltersReturn {
+interface UseSampleFiltersReturn {
   filters: SampleFilters;
-  setFilterColumn: (column: FilterColumnTypes) => void;
-  setSearchQuery: (query: string) => void;
-  filteredSamples: Sample[];
+  setFilterField: (key: keyof SampleFilters, value: string) => void;
+  filteredSamples: SamplesDto[];
   clearFilters: () => void;
 }
 
-export function useSampleFilters(samples: Sample[]): useSampleFiltersReturn {
-  const [filters, setFilters] = useState<SampleFilters>({
-    filterColumn: "all",
-    searchQuery: "",
+export function useSampleFilters(
+  samples: SamplesDto[],
+): UseSampleFiltersReturn {
+  const [filters, setFilters] = useState<SampleFilters>(() => {
+    if (typeof window === "undefined") {
+      return defaultFilters;
+    }
+
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) {
+        return defaultFilters;
+      }
+
+      const parsed = JSON.parse(stored) as Partial<SampleFilters>;
+      return { ...defaultFilters, ...parsed };
+    } catch {
+      return defaultFilters;
+    }
   });
 
-  const setFilterColumn = useCallback((column: FilterColumnTypes) => {
-    setFilters((prev) => ({ ...prev, filterColumn: column }));
-  }, []);
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(filters));
+    } catch {
+      // ignore write errors
+    }
+  }, [filters]);
 
-  const setSearchQuery = useCallback((query: string) => {
-    setFilters((prev) => ({ ...prev, searchQuery: query }));
-  }, []);
+  const setFilterField = useCallback(
+    (key: keyof SampleFilters, value: string) => {
+      setFilters((prev) => ({ ...prev, [key]: value }));
+    },
+    [],
+  );
 
   const clearFilters = useCallback(() => {
-    setFilters({ filterColumn: "all", searchQuery: "" });
+    setFilters(defaultFilters);
   }, []);
 
   const filteredSamples = useMemo(() => {
-    const normalizedQuery = filters.searchQuery.trim().toLowerCase();
-
-    if (!normalizedQuery) {
-      return samples;
-    }
+    const normalizedFilters = {
+      idQuery: normalizeValue(filters.idQuery),
+      cliente: normalizeValue(filters.cliente),
+      projeto: normalizeValue(filters.projeto),
+      encDivmac: normalizeValue(filters.encDivmac),
+      refDescricao: normalizeValue(filters.refDescricao),
+      amostra: normalizeValue(filters.amostra),
+      numORC: normalizeValue(filters.numORC),
+      entregueA: normalizeValue(filters.entregueA),
+    };
 
     return samples.filter((sample) => {
-      if (filters.filterColumn === "all") {
-        return matchesAnyField(sample, normalizedQuery); // Search across all columns
-      } else {
-        // Search only in selected column
-        const columnValue = getColumnValue(sample, filters.filterColumn);
-        return columnValue.includes(normalizedQuery);
-      }
+      const matchesId =
+        !normalizedFilters.idQuery ||
+        normalizeValue(sample.ID).includes(normalizedFilters.idQuery);
+
+      const matchesCliente =
+        !normalizedFilters.cliente ||
+        normalizeValue(sample.Cliente).includes(normalizedFilters.cliente);
+
+      const matchesProjeto =
+        !normalizedFilters.projeto ||
+        normalizeValue(sample.Projeto).includes(normalizedFilters.projeto);
+
+      const matchesEncDivmac =
+        !normalizedFilters.encDivmac ||
+        normalizeValue(sample.EncDivmac).includes(normalizedFilters.encDivmac);
+
+      const matchesRefDescricao =
+        !normalizedFilters.refDescricao ||
+        normalizeValue(sample.Ref_Descricao).includes(
+          normalizedFilters.refDescricao,
+        );
+
+      const matchesAmostra =
+        !normalizedFilters.amostra ||
+        normalizeValue(sample.Amostra).includes(normalizedFilters.amostra);
+
+      const matchesNumORC =
+        !normalizedFilters.numORC ||
+        normalizeValue(sample.NumORC).includes(normalizedFilters.numORC);
+
+      const matchesEntregueA =
+        !normalizedFilters.entregueA ||
+        normalizeValue(sample.Entregue_a).includes(normalizedFilters.entregueA);
+
+      return (
+        matchesId &&
+        matchesCliente &&
+        matchesProjeto &&
+        matchesEncDivmac &&
+        matchesRefDescricao &&
+        matchesAmostra &&
+        matchesNumORC &&
+        matchesEntregueA
+      );
     });
   }, [samples, filters]);
 
   return {
     filters,
-    setFilterColumn,
-    setSearchQuery,
+    setFilterField,
     filteredSamples,
     clearFilters,
   };
 }
 
-function matchesAnyField(sample: Sample, normalizedQuery: string) {
-  return Object.values(sample).some(
-    (value) =>
-      typeof value === "string" &&
-      value.toLowerCase().includes(normalizedQuery),
-  );
+function normalizeValue(value: string | number | null | undefined): string {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase();
 }
-
-const getColumnValue = (sample: Sample, column: string) => {
-  switch (column) {
-    case "cliente":
-      return sample.Cliente?.toLowerCase() ?? "";
-    case "refDescricao":
-      return sample.Ref_Descricao?.toLowerCase() ?? "";
-    case "encDivmac":
-      return sample.EncDivmac?.toLowerCase() ?? "";
-    case "amostra":
-      return sample.Amostra?.toLowerCase() ?? "";
-    case "numORC":
-      return sample.NumORC?.toLowerCase() ?? "";
-  }
-};

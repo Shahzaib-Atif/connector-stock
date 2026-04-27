@@ -1,15 +1,16 @@
 import React from "react";
-import { QRData, Sample } from "@/utils/types";
+import { QRData } from "@/utils/types";
 import TableHeader from "./components/TableHeader";
 import TableRow from "./components/TableRow";
 import NoSamplesFound from "./components/NoSamplesFound";
+import { SamplesDto } from "@shared/dto/SamplesDto";
 
 interface SamplesTableProps {
-  samples: Sample[];
-  onEdit: (sample: Sample) => void;
-  onDelete: (sample: Sample) => void;
+  samples: SamplesDto[];
+  onEdit: (sample: SamplesDto) => void;
+  onDelete: (sample: SamplesDto) => void;
   onOpenQR?: (qrData: QRData) => void;
-  onClone?: (sample: Sample) => void;
+  onClone?: (sample: SamplesDto) => void;
   showActions?: boolean;
 }
 

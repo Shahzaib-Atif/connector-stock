@@ -1,7 +1,7 @@
-import { SampleFormData } from "@/hooks/useSampleForm";
+import { CreateSamplesDto } from "@shared/dto/SamplesDto";
 import { FORM_FIELDS } from "./SampleFormFields";
 
-export function performValidation(formData: SampleFormData) {
+export function performValidation(formData: CreateSamplesDto) {
   // check for missing required fields
   const requiredFields = FORM_FIELDS.filter((f) => f.required);
   const missing = requiredFields.filter((f) => !formData[f.name]);
@@ -13,7 +13,11 @@ export function performValidation(formData: SampleFormData) {
   }
 
   // validate connector has minimum length 6 (except when it is "NEW")
-  if (formData.Amostra?.length < 6 && formData.Amostra !== "NEW") {
+  if (
+    formData?.Amostra?.length &&
+    formData.Amostra.length < 6 &&
+    formData.Amostra !== "NEW"
+  ) {
     return "Amostra is not valid!"; // return error message
   }
 

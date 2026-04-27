@@ -1,13 +1,14 @@
 import { Printer, Pencil, Trash2 } from "lucide-react";
-import { QRData, Sample } from "@/utils/types";
+import { QRData } from "@/utils/types";
 import { btnClass1 } from "./utils";
+import { SamplesDto } from "@shared/dto/SamplesDto";
 
 interface Props {
-  sample: Sample;
-  onEdit: (sample: Sample) => void;
-  onDelete: (sample: Sample) => void;
+  sample: SamplesDto;
+  onEdit: (sample: SamplesDto) => void;
+  onDelete: (sample: SamplesDto) => void;
   onOpenQR?: (qrData: QRData) => void;
-  onClone?: (sample: Sample) => void;
+  onClone?: (sample: SamplesDto) => void;
 }
 
 function SamplesActionButtons({
@@ -27,10 +28,10 @@ function SamplesActionButtons({
           onClick={() =>
             onOpenQR({
               // id: getConnectorId(Amostra),
-              id: Amostra,
+              id: Amostra ?? "",
               source: "sample",
-              refCliente: Ref_Descricao,
-              encomenda: EncDivmac,
+              refCliente: Ref_Descricao ?? "",
+              encomenda: EncDivmac ?? "",
               qty: Quantidade ? parseInt(Quantidade) : undefined,
             })
           }

@@ -97,7 +97,7 @@ model REG_AccessoriesSamples {
 }
 
 model REG_Amostras {
-  ID               Int       @unique(map: "REG_Amostras_UNIQUE") @default(autoincrement())
+  ID               Int       @id @default(autoincrement())
   Cliente          String?   @db.NVarChar(100)
   Projeto          String?   @db.NVarChar(150)
   EncDivmac        String?   @db.NVarChar(100)
