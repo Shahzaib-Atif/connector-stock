@@ -5,6 +5,7 @@ generator client {
 
 datasource db {
   provider = "sqlserver"
+  // url      = env("DATABASE_URL")
 }
 
 model AccessoryTypes {
@@ -384,4 +385,17 @@ model V_RegAmostrasFromORC {
 
   @@id([orcDoc, CDU_ModuloRefCliente, ID])
   @@map("V_RegAmostrasFromORC")
+}
+
+model Cord_CON {
+  CON            String?   @db.NVarChar(255)
+  CV             String?   @db.NVarChar(255)
+  CH             String?   @db.NVarChar(255)
+  LastChangeBy   String?   @db.NVarChar(100)
+  LastChangeDate DateTime? @db.DateTime
+  ESTADO         Int
+  CV_Ma          String?   @db.NVarChar(100)
+  CH_Ma          String?   @db.NVarChar(100)
+  SampleSection  String?   @db.VarChar(100)
+  Id             Int       @id(map: "PK__Cord_CON__3214EC0711AC2F70") @default(autoincrement())
 }
