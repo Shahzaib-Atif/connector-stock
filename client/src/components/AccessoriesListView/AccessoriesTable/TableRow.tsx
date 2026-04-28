@@ -53,11 +53,11 @@ const TableRow: React.FC<TableRowProps> = ({ accessory }) => {
       <td className="table-data">{accessory.AccessoryType || "-"}</td>
       <td className="table-data break-all">{accessory.RefClient || "-"}</td>
       <td className="table-data break-all">{accessory.RefDV || "-"}</td>
-      <td className="table-data">{accessory.CapotAngle || "-"}</td>
       <td className="table-data">{accessory.ClipColor || "-"}</td>
       <td className="table-data text-center text-emerald-200">
         {accessory.Qty ?? 0}
       </td>
+      <td className="table-data">{accessory.CapotAngle || "-"}</td>
     </tr>
   );
 };

@@ -4,7 +4,9 @@ export interface AccessoryFilters {
   connName: string;
   refClient: string;
   refDV: string;
+  angle: string;
   clipColor: string;
+  qty: string;
 }
 
 export const STORAGE_KEY = "accessories_filters_v1";
@@ -15,5 +17,7 @@ export const defaultFilters: AccessoryFilters = {
   connName: "",
   refClient: "",
   refDV: "",
+  angle: "",
   clipColor: "all",
+  qty: "",
 };

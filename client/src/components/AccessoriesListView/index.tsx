@@ -10,6 +10,7 @@ import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
 import { Accessory } from "@/utils/types";
+import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersToggle";
 
 export const AccessoriesListView: React.FC = () => {
   const navigate = useNavigate();
@@ -19,6 +20,9 @@ export const AccessoriesListView: React.FC = () => {
 
   // Get accessories from masterData (default to empty object if not loaded)
   const accessories = masterData?.accessories ?? {};
+  const { showFilters, setShowFilters } = useFiltersToggle(
+    "accessories_show_filters",
+  );
 
   // Custom hook for filters
   const { 
@@ -60,17 +64,21 @@ export const AccessoriesListView: React.FC = () => {
       <div id="accessories-content" className="table-view-content">
         <div className="table-view-inner-content">
           <AccessoriesFilterBar
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
             filters={filters}
-            setFilterField={setFilterField}
             onClearFilters={clearFilters}
-            typeOptions={typeOptions}
-            colorOptions={colorOptions}
           >
           </AccessoriesFilterBar>
 
           <div className="table-container-outer">
             <AccessoriesTable
               accessories={paginatedAccessories as Accessory[]}
+              showFilters={showFilters}
+              filters={filters}
+              setFilterField={setFilterField}
+              typeOptions={typeOptions}
+              colorOptions={colorOptions}
             />
           </div>
 

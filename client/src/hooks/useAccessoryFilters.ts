@@ -70,6 +70,8 @@ export function useAccessoryFilters(
     const connNameQuery = filters.connName.trim().toLowerCase();
     const refClientQuery = filters.refClient.trim().toLowerCase();
     const refDVQuery = filters.refDV.trim().toLowerCase();
+    const angleQuery = filters.angle.trim().toLowerCase();
+    const qtyQuery = filters.qty.trim().toLowerCase();
 
     return accessoriesList.filter((accessory) => {
       const matchesId =
@@ -84,9 +86,16 @@ export function useAccessoryFilters(
         accessory.RefClient?.toLowerCase().includes(refClientQuery);
       const matchesRefDV =
         !refDVQuery || accessory.RefDV?.toLowerCase().includes(refDVQuery);
+      const matchesAngle =
+        !angleQuery ||
+        String(accessory.CapotAngle ?? "")
+          .toLowerCase()
+          .includes(angleQuery);
       const matchesColor =
         filters.clipColor === "all" ||
         accessory.ClipColor === filters.clipColor;
+      const matchesQty =
+        !qtyQuery || String(accessory.Qty ?? "").toLowerCase().includes(qtyQuery);
 
       return (
         matchesId &&
@@ -94,7 +103,9 @@ export function useAccessoryFilters(
         matchesConn &&
         matchesRefClient &&
         matchesRefDV &&
-        matchesColor
+        matchesAngle &&
+        matchesColor &&
+        matchesQty
       );
     });
   }, [accessoriesList, filters]);
