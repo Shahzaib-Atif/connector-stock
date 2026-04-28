@@ -31,7 +31,7 @@ const TableRow: React.FC<TableRowProps> = ({
   );
   const {
     Cliente,
-    Projeto,
+    // Projeto,
     EncDivmac,
     Ref_Descricao,
     Amostra,
@@ -42,16 +42,14 @@ const TableRow: React.FC<TableRowProps> = ({
     qty_com_fio,
     qty_sem_fio,
     Observacoes,
-    Entregue_a,
+    // Entregue_a,
   } = sample;
   const connectorId = Amostra ? getConnectorId(Amostra) : "";
   const hasConnector = Boolean(connectorId && connectors?.[connectorId]);
 
   return (
     <tr className={"table-row table-row-bg"} key={sample.ID}>
-      <td className="table-data font-mono">{sample.ID}</td>
       <td className="table-data">{Cliente || "-"}</td>
-      <td className="table-data break-all">{Projeto || "-"}</td>
       <td className="table-data break-all">{EncDivmac || "-"}</td>
       <td className="table-data break-all">{Ref_Descricao || "-"}</td>
       <td className="table-data break-all">
@@ -73,9 +71,6 @@ const TableRow: React.FC<TableRowProps> = ({
           <OpenFolderBtn N_Envio={N_Envio ?? ""} showFolderBtn={showActions} />
         </td>
       }
-      <td className="table-data break-all" title={Entregue_a ?? ""}>
-        {Entregue_a || "-"}
-      </td>
       <td className="table-data break-all">{Quantidade || "-"}</td>
       <td className="table-data font-mono">{Data_recepcao || "-"}</td>
       <td className="table-data font-mono break-all">

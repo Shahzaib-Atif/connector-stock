@@ -10,23 +10,12 @@ interface Props {
 function FilterRow({ showActions = true, filters, setFilterField }: Props) {
   return (
     <tr id="samples-filter-row" className="bg-slate-900/50">
-      <th className="px-2 py-2"></th>
       <th className="px-2 py-2 align-top">
         <input
           id="sample-cliente-search"
           type="text"
           value={filters.cliente}
           onChange={(e) => setFilterField("cliente", e.target.value)}
-          placeholder="All"
-          className={filterStyles.input}
-        />
-      </th>
-      <th className="px-2 py-2 align-top">
-        <input
-          id="sample-projeto-search"
-          type="text"
-          value={filters.projeto}
-          onChange={(e) => setFilterField("projeto", e.target.value)}
           placeholder="All"
           className={filterStyles.input}
         />
@@ -77,16 +66,6 @@ function FilterRow({ showActions = true, filters, setFilterField }: Props) {
           type="text"
           value={filters.nEnvio}
           onChange={(e) => setFilterField("nEnvio", e.target.value)}
-          placeholder="All"
-          className={filterStyles.input}
-        />
-      </th>
-      <th className="px-2 py-2 align-top">
-        <input
-          id="sample-entreguea-search"
-          type="text"
-          value={filters.entregueA}
-          onChange={(e) => setFilterField("entregueA", e.target.value)}
           placeholder="All"
           className={filterStyles.input}
         />
