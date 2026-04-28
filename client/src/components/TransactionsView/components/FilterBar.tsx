@@ -1,7 +1,24 @@
-import { Department } from "@/utils/types/shared";
 import React from "react";
+import { Eraser, Filter } from "lucide-react";
+import { ActiveFiltersIndicator } from "@/components/common/ActiveFiltersIndicator";
+import {
+  FILTER_BAR_CONTAINER,
+  FILTER_BAR_TOP_ROW,
+  filterStyles,
+  getActiveFilterCount,
+} from "@/utils/filterUtils";
+
+const defaultFilters = {
+  transactionType: "all" as const,
+  itemType: "all" as const,
+  itemIdQuery: "",
+  department: "",
+  sender: "",
+};
 
 interface Props {
+  showFilters: boolean;
+  setShowFilters: React.Dispatch<React.SetStateAction<boolean>>;
   transactionType: "all" | "IN" | "OUT";
   itemType: "all" | "connector" | "accessory";
   onTransactionTypeChange: (type: "all" | "IN" | "OUT") => void;
@@ -9,10 +26,14 @@ interface Props {
   itemIdQuery: string;
   onSearchItemIdChange: (value: string) => void;
   department: string;
-  onDepartmentChange: (value: Department | "all") => void;
+  onDepartmentChange: (value: string) => void;
+  sender: string;
+  onSenderChange: (value: string) => void;
 }
 
 export const FilterBar: React.FC<Props> = ({
+  showFilters,
+  setShowFilters,
   transactionType,
   itemType,
   onTransactionTypeChange,
@@ -21,92 +42,50 @@ export const FilterBar: React.FC<Props> = ({
   onSearchItemIdChange,
   department,
   onDepartmentChange,
+  sender,
+  onSenderChange,
 }) => {
-  const selectStyle =
-    "w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
-  const conainerDiv = "w-full sm:w-64";
+  const activeFiltersCount = getActiveFilterCount(
+    { transactionType, itemType, itemIdQuery, department, sender },
+    defaultFilters,
+  );
+
+  const clearFilters = () => {
+    onTransactionTypeChange("all");
+    onItemTypeChange("all");
+    onSearchItemIdChange("");
+    onDepartmentChange("");
+    onSenderChange("");
+  };
 
   return (
-    <div
-      id="filter-transactions"
-      className="grid grid-cols-2 lg:flex gap-3 md:gap-4 p-3 md:p-4 bg-slate-800/50 rounded-xl border border-slate-700"
-    >
-      {/* Search Item ID */}
-      <div className={conainerDiv}>
-        <label htmlFor="ItemID" className="label-style-1">
-          Search Item ID
-        </label>
-        <input
-          id="ItemID"
-          type="text"
-          value={itemIdQuery}
-          onChange={(e) => onSearchItemIdChange(e.target.value)}
-          autoComplete="off"
-          placeholder="Enter item ID"
-          className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+    <div id="filter-transactions" className={FILTER_BAR_CONTAINER}>
+      <div className={FILTER_BAR_TOP_ROW}>
+        <div className="flex-row">
+          <button
+            type="button"
+            onClick={() => setShowFilters((prev) => !prev)}
+            className={filterStyles.button}
+            aria-expanded={showFilters}
+            aria-controls="transactions-filter-row"
+          >
+            <Filter className="h-4 w-4" />
+            <span className="hidden sm:inline">
+              {showFilters ? "Hide filters" : "Show filters"}
+            </span>
+          </button>
 
-      {/* Transaction Type Filter */}
-      <div className={conainerDiv}>
-        <label htmlFor="TransactionType" className="label-style-1">
-          Transaction Type
-        </label>
-        <select
-          id="TransactionType"
-          value={transactionType}
-          onChange={(e) =>
-            onTransactionTypeChange(e.target.value as "all" | "IN" | "OUT")
-          }
-          className={selectStyle}
-        >
-          <option value="all">All</option>
-          <option value="IN">IN</option>
-          <option value="OUT">OUT</option>
-        </select>
-      </div>
+          <button
+            type="button"
+            onClick={clearFilters}
+            className={filterStyles.button}
+          >
+            <Eraser className="h-4 w-4" />
+            Clear filters
+          </button>
 
-      {/* Item Type Filter */}
-      <div className={conainerDiv}>
-        <label htmlFor="ItemType" className="label-style-1">
-          Item Type
-        </label>
-        <select
-          id="ItemType"
-          value={itemType}
-          onChange={(e) =>
-            onItemTypeChange(
-              e.target.value as "all" | "connector" | "accessory",
-            )
-          }
-          className={selectStyle}
-        >
-          <option value="all">All</option>
-          <option value="connector">Connector</option>
-          <option value="accessory">Accessory</option>
-        </select>
-      </div>
-
-      {/* Department Filter */}
-      <div className={conainerDiv}>
-        <label htmlFor="Department" className="label-style-1">
-          Department
-        </label>
-        <select
-          id="Department"
-          value={department}
-          onChange={(e) =>
-            onDepartmentChange(e.target.value as "all" | Department)
-          }
-          className={selectStyle}
-        >
-          <option value="all">All</option>
-          {Object.values(Department).map((d) => (
-            <option key={d} value={d}>
-              {d}
-            </option>
-          ))}
-        </select>
+          <ActiveFiltersIndicator count={activeFiltersCount} />
+        </div>
       </div>
     </div>
   );

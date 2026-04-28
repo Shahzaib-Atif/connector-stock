@@ -8,13 +8,16 @@ import { useTransactionsFilter } from "@/hooks/useTransactionsFilters";
 import { usePagination } from "@/hooks/usePagination";
 import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
-import { Department } from "@/utils/types/shared";
 import { Pagination } from "../common/Pagination";
 import { Transaction } from "@shared/types/Transaction";
+import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersToggle";
 
 export const TransactionsView: React.FC = () => {
   const navigate = useNavigate();
   const { transactions, loading } = useAppSelector((state) => state.txData);
+  const { showFilters, setShowFilters } = useFiltersToggle(
+    "transactions_show_filters",
+  );
 
   // filter
   const {
@@ -27,6 +30,8 @@ export const TransactionsView: React.FC = () => {
     setItemIdQuery,
     department,
     setDepartment,
+    sender,
+    setSender,
   } = useTransactionsFilter(transactions);
 
   // pagination
@@ -54,8 +59,13 @@ export const TransactionsView: React.FC = () => {
     setCurrentPage(1);
   };
 
-  const handleDepartmentChange = (value: Department | "all") => {
+  const handleDepartmentChange = (value: string) => {
     setDepartment(value);
+    setCurrentPage(1);
+  };
+
+  const handleSenderChange = (value: string) => {
+    setSender(value);
     setCurrentPage(1);
   };
 
@@ -73,8 +83,10 @@ export const TransactionsView: React.FC = () => {
       />
 
       <div id="transactions-content" className="table-view-content">
-        <div className="table-view-inner-content max-w-xl md:max-w-7xl">
+        <div className="table-view-inner-content">
           <FilterBar
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
             transactionType={transactionType}
             itemType={itemType}
             onTransactionTypeChange={handleTransactionTypeChange}
@@ -83,11 +95,24 @@ export const TransactionsView: React.FC = () => {
             onSearchItemIdChange={handleItemIdQueryChange}
             department={department}
             onDepartmentChange={handleDepartmentChange}
+            sender={sender}
+            onSenderChange={handleSenderChange}
           />
 
           <div className="table-container-outer">
             <TransactionsTable
               transactions={paginatedTransactions as Transaction[]}
+              showFilters={showFilters}
+              transactionType={transactionType}
+              itemType={itemType}
+              itemIdQuery={itemIdQuery}
+              department={department}
+              sender={sender}
+              onTransactionTypeChange={handleTransactionTypeChange}
+              onItemTypeChange={handleItemTypeChange}
+              onSearchItemIdChange={handleItemIdQueryChange}
+              onDepartmentChange={handleDepartmentChange}
+              onSenderChange={handleSenderChange}
             />
           </div>
 

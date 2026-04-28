@@ -1,4 +1,3 @@
-import { Department } from "@/utils/types/shared";
 import { Transaction } from "@shared/types/Transaction";
 import { useState, useMemo } from "react";
 
@@ -10,12 +9,14 @@ export function useTransactionsFilter(transactions: Transaction[]) {
     "all",
   );
   const [itemIdQuery, setItemIdQuery] = useState("");
-  const [department, setDepartment] = useState<Department | "all">("all");
+  const [department, setDepartment] = useState("");
+  const [sender, setSender] = useState("");
 
   const filteredTransactions = useMemo(() => {
     // Normalize search inputs for case-insensitive matching
     const normalizedQuery = itemIdQuery.trim().toLowerCase();
-    const normalizedDepartment = department.toLowerCase();
+    const normalizedDepartment = department.trim().toLowerCase();
+    const normalizedSender = sender.trim().toLowerCase();
 
     // Apply all active filters to transaction list
     return transactions.filter((tx) => {
@@ -29,16 +30,22 @@ export function useTransactionsFilter(transactions: Transaction[]) {
 
       const txDepartment = tx.department?.toLowerCase();
       const matchesDepartment =
-        normalizedDepartment === "all" || txDepartment === normalizedDepartment;
+        !normalizedDepartment ||
+        txDepartment?.includes(normalizedDepartment) === true;
+
+      const matchesSender =
+        !normalizedSender ||
+        tx.sender?.toLowerCase().includes(normalizedSender) === true;
 
       return (
         matchesTransactionType &&
         matchesItemType &&
         matchesItemId &&
-        matchesDepartment
+        matchesDepartment &&
+        matchesSender
       );
     });
-  }, [transactions, transactionType, itemType, itemIdQuery, department]);
+  }, [transactions, transactionType, itemType, itemIdQuery, department, sender]);
 
   return {
     filteredTransactions,
@@ -50,5 +57,7 @@ export function useTransactionsFilter(transactions: Transaction[]) {
     setItemIdQuery,
     department,
     setDepartment,
+    sender,
+    setSender,
   };
 }
