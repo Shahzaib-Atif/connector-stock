@@ -2,6 +2,7 @@ import { ConnectorExtended, ConnectorMap, MasterData } from "@/utils/types";
 import { parseConnector } from "@/utils/functions/connector";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { ConnectorFilters, defaultFilters, STORAGE_KEY } from "./constants";
+import { getUniqueOptions } from "@/utils/functions/getUniqueOptions";
 
 export function useConnectorFilters(
   connectors: ConnectorMap,
@@ -75,8 +76,10 @@ export function useConnectorFilters(
   // Apply filters to connectors list
   const filteredConnectors = useMemo(() => {
     const normalizedIdQuery = filters.idQuery.trim().toLowerCase();
+    const normalizedPosQuery = filters.posQuery.trim().toLowerCase();
     const normalizedViasQuery = filters.vias.trim().toLowerCase();
     const normalizedFamilyQuery = filters.family.trim().toLowerCase();
+    const normalizedRefQuery = filters.refFabricante.trim().toLowerCase();
     const normalizedIntQuery = filters.internalDiameter.trim().toLowerCase();
     const normalizedExtQuery = filters.externalDiameter.trim().toLowerCase();
     const normalizedThickQuery = filters.thickness.trim().toLowerCase();
@@ -86,12 +89,22 @@ export function useConnectorFilters(
         !normalizedIdQuery ||
         connector.CODIVMAC?.toLowerCase().includes(normalizedIdQuery);
 
+      const matchesPos =
+        !normalizedPosQuery ||
+        connector.PosId?.toLowerCase().includes(normalizedPosQuery);
+
       const matchesType =
         filters.type === "all" || connector.ConnType === filters.type;
 
       const matchesFabricante =
         filters.fabricante === "all" ||
         connector.details?.Fabricante === filters.fabricante;
+
+      const matchesRefabricante =
+        !normalizedRefQuery ||
+        connector.details?.Refabricante?.toLowerCase().includes(
+          normalizedRefQuery,
+        );
 
       const familyValue =
         connector.details?.Family !== undefined &&
@@ -140,8 +153,10 @@ export function useConnectorFilters(
 
       return (
         matchesId &&
+        matchesPos &&
         matchesType &&
         matchesFabricante &&
+        matchesRefabricante &&
         matchesFamily &&
         matchesVias &&
         matchesColor &&
@@ -161,19 +176,4 @@ export function useConnectorFilters(
     fabricanteOptions,
     colorOptions,
   };
-}
-
-// Helper function to get unique, non-empty options from an array of values
-function getUniqueOptions(
-  values: Array<string | number | null | undefined>,
-): string[] {
-  const normalized = values
-    .filter((v) => v !== undefined && v !== null && v !== "")
-    .map((v) => String(v));
-
-  const unique = Array.from(new Set(normalized));
-
-  return unique.sort((a, b) =>
-    a.localeCompare(b, undefined, { sensitivity: "base", numeric: true }),
-  );
 }

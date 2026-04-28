@@ -1,7 +1,9 @@
 export interface ConnectorFilters {
   idQuery: string;
+  posQuery: string;
   type: string;
   fabricante: string;
+  refFabricante: string;
   family: string;
   vias: string;
   color: string;
@@ -14,8 +16,10 @@ const STORAGE_KEY = "connectors_filters_v1";
 
 const defaultFilters: ConnectorFilters = {
   idQuery: "",
+  posQuery: "",
   type: "all",
   fabricante: "all",
+  refFabricante: "",
   family: "",
   vias: "",
   color: "all",

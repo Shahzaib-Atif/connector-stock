@@ -20,6 +20,7 @@ import { UserRoles } from "@shared/enums/UserRoles";
 import { SamplesFilterBar } from "./SamplesFilterBar";
 import { getActiveFilterCount } from "./constants";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
+import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersToggle";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -34,9 +35,17 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
 
   // Custom hook for filters
-  const { filters, setFilterField, filteredSamples, clearFilters } =
-    useSampleFilters(samples);
+  const {
+    filters,
+    setFilterField,
+    filteredSamples,
+    clearFilters,
+    entregueOptions,
+  } = useSampleFilters(samples);
   const activeFiltersCount = getActiveFilterCount(filters);
+  const { showFilters, setShowFilters } = useFiltersToggle(
+    "samples_show_filters",
+  );
 
   const {
     paginatedItems: paginatedSamples,
@@ -155,8 +164,8 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
           )}
 
           <SamplesFilterBar
-            filters={filters}
-            setFilterField={setFilterField}
+            showFilters={showFilters}
+            onToggleFilters={() => setShowFilters((prev) => !prev)}
             onClearFilters={clearFilters}
             activeFiltersCount={activeFiltersCount}
           />
@@ -169,6 +178,10 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
               onOpenQR={onOpenQR}
               onClone={handleClone}
               showActions={isAuthenticated && isAdmin}
+              showFilters={showFilters}
+              filters={filters}
+              setFilterField={setFilterField}
+              entregueOptions={entregueOptions}
             />
           </div>
 

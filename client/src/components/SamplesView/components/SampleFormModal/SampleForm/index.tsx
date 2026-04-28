@@ -1,26 +1,16 @@
 import React from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import {
-  createSampleThunk,
-  updateSampleThunk,
-} from "@/store/slices/samplesSlice";
+import { useAppSelector } from "@/store/hooks";
 import { useSampleForm } from "@/hooks/useSampleForm";
 import { FormField } from "./components/FormField";
-import {
-  FORM_FIELDS,
-  labelClass,
-  inputClass,
-} from "./components/SampleFormFields";
+import { labelClass, inputClass } from "./components/SampleFormFields";
 import { useAssociatedAccessories } from "@/hooks/useAssociatedAccessories";
 import AccessoryChecklist from "@/components/TransactionModal/components/AccessoryChecklist";
-import { performValidation } from "./components/SampleFormUtils";
 import useSampleOptions from "./components/useSampleOptions";
 import { useConnectorId } from "./components/useConnectorId";
-import useMissingConnectorWarning from "./components/useMissingConnectorWarning";
 import ErrorBanner from "./components/ErrorBanner";
 import ActionButtons from "./components/ActionButtons";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
-import { getErrorMsg } from "@shared/utils/getErrorMsg";
+import { useSampleFormSubmit } from "./components/useSampleFormSubmit ";
 
 interface Props {
   sample: SamplesDto | null;
@@ -37,98 +27,152 @@ export const SampleForm: React.FC<Props> = ({
   isEditing,
   initialData,
 }) => {
-  const dispatch = useAppDispatch();
   const { loading, error: reduxError } = useAppSelector(
     (state) => state.samples,
   );
-  const { user } = useAppSelector((state) => state.auth);
   const {
     formData,
     handleChange,
     selectedAccessoryIds,
     setSelectedAccessoryIds,
   } = useSampleForm(sample, initialData);
-  const [formError, setFormError] = React.useState<string | null>(null);
 
   const connectorId = useConnectorId(formData?.Amostra ?? ""); // get connector ID from Amostra
   const { associatedAccessories } = useAssociatedAccessories(connectorId); // fetch associated accessories
-  const { checkConnectorWarning } = useMissingConnectorWarning(); // check missing connector warning
   const { getOptions } = useSampleOptions(); // autocomplete options
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormError(null);
-
-    // Perform Validations for missing fields and Amostra length
-    const isError = performValidation(formData);
-    if (isError) {
-      setFormError(isError);
-      return;
-    }
-
-    // Handle missing connector warning
-    if (!checkConnectorWarning(formData.Amostra ?? "", setFormError)) return;
-
-    // Proceed to create or update sample
-    await createOrUpdateSample();
-  };
-
-  const createOrUpdateSample = async () => {
-    try {
-      const currentUser = user || "system";
-
-      if (isEditing && sample) {
-        await dispatch(
-          updateSampleThunk({
-            id: sample.ID,
-            data: {
-              ...formData,
-              Amostra: formData.Amostra?.toUpperCase(),
-              LasUpdateBy: currentUser,
-              ActualUser: currentUser,
-              associatedItemIds: selectedAccessoryIds,
-            },
-          }),
-        ).unwrap();
-      } else {
-        await dispatch(
-          createSampleThunk({
-            ...formData,
-            Amostra: formData.Amostra?.toUpperCase(),
-            CreatedBy: currentUser,
-            ActualUser: currentUser,
-            associatedItemIds: selectedAccessoryIds,
-          }),
-        ).unwrap();
-      }
-
-      onSuccess();
-    } catch (err) {
-      console.error(err);
-      setFormError(getErrorMsg(err));
-    }
-  };
+  const { handleSubmit, formError } = useSampleFormSubmit({
+    formData,
+    isEditing,
+    sample,
+    selectedAccessoryIds,
+    onSuccess,
+  });
 
   return (
     <form onSubmit={handleSubmit} className="p-6">
       <ErrorBanner message={formError || reduxError || ""} />
 
+      {/* Form Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {FORM_FIELDS.map((field) => (
-          <FormField
-            key={field.name?.toString()}
-            name={field.name?.toString()}
-            label={field.label}
-            value={formData[field?.name]}
-            onChange={handleChange}
-            placeholder={field.placeholder}
-            disabled={field.disabled || (field.disabledOnEdit && isEditing)}
-            type={field.type}
-            fullWidth={field.fullWidth}
-            required={field.required}
-            options={getOptions(field)}
-          />
-        ))}
+        <FormField
+          name="Cliente"
+          label="Cliente"
+          value={formData.Cliente ?? ""}
+          onChange={handleChange}
+          placeholder="Client name"
+          type="autocomplete"
+          required
+          options={getOptions("Cliente")}
+        />
+        <FormField
+          name="Projeto"
+          label="Projeto"
+          value={formData.Projeto ?? ""}
+          onChange={handleChange}
+          placeholder="Project name"
+          type="autocomplete"
+          options={getOptions("Projeto")}
+        />
+        <FormField
+          name="EncDivmac"
+          label="EncDivmac"
+          value={formData.EncDivmac ?? ""}
+          onChange={handleChange}
+          placeholder="EncDivmac"
+        />
+        <FormField
+          name="Ref_Descricao"
+          label="Ref. Descricao"
+          value={formData.Ref_Descricao ?? ""}
+          onChange={handleChange}
+          placeholder="Reference description"
+          required
+        />
+        <FormField
+          name="Ref_Fornecedor"
+          label="Ref. Fornecedor"
+          value={formData.Ref_Fornecedor ?? ""}
+          onChange={handleChange}
+          placeholder="Supplier reference"
+        />
+        <FormField
+          name="Amostra"
+          label="Amostra"
+          value={formData.Amostra ?? ""}
+          onChange={handleChange}
+          placeholder="Sample code"
+          type="autocomplete"
+          required
+          options={getOptions("Amostra")}
+        />
+        <FormField
+          name="qty_com_fio"
+          label="Quantidade Com Fio"
+          value={formData.qty_com_fio ?? 0}
+          onChange={handleChange}
+          placeholder="Qty with wire"
+          type="number"
+        />
+        <FormField
+          name="qty_sem_fio"
+          label="Quantidade Sem Fio"
+          value={formData.qty_sem_fio ?? 0}
+          onChange={handleChange}
+          placeholder="Qty without wire"
+          type="number"
+        />
+        <FormField
+          name="Quantidade"
+          label="Quantidade Total"
+          value={formData.Quantidade ?? ""}
+          onChange={handleChange}
+          placeholder="Total Quantity"
+          type="number"
+          disabled={true}
+        />
+        <FormField
+          name="NumORC"
+          label="NumORC"
+          value={formData.NumORC ?? ""}
+          onChange={handleChange}
+          placeholder="ORC Number"
+        />
+        <FormField
+          name="Data_do_pedido"
+          label="Data do Pedido"
+          value={formData.Data_do_pedido ?? ""}
+          onChange={handleChange}
+          placeholder="Request date"
+          type="date"
+        />
+        <FormField
+          name="Data_recepcao"
+          label="Data Rececao"
+          value={formData.Data_recepcao ?? ""}
+          onChange={handleChange}
+          placeholder="Reception date"
+          type="date"
+        />
+        <FormField
+          name="Entregue_a"
+          label="Entregue A"
+          value={formData.Entregue_a ?? ""}
+          onChange={handleChange}
+          placeholder="Delivered to"
+          type="select"
+          options={getOptions("Entregue_a", [
+            "vivianni.azevedo",
+            "joana.conceicao",
+            "anashia.nazim",
+          ])}
+        />
+        <FormField
+          name="N_Envio"
+          label="N. Envio"
+          value={formData.N_Envio ?? ""}
+          onChange={handleChange}
+          placeholder="Shipping number"
+        />
       </div>
 
       {/* observation textarea*/}
@@ -136,7 +180,7 @@ export const SampleForm: React.FC<Props> = ({
         <label className={labelClass}>Observações</label>
         <textarea
           name="Observacoes"
-          value={formData.Observacoes}
+          value={formData.Observacoes ?? ""}
           onChange={handleChange}
           rows={2}
           className={inputClass}

@@ -57,10 +57,9 @@ export function useSampleForm(
 
   const handleChange = useCallback(
     (
-      e:
-        | React.ChangeEvent<HTMLInputElement>
-        | React.ChangeEvent<HTMLTextAreaElement>
-        | React.ChangeEvent<HTMLSelectElement>,
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >,
     ) => {
       const { name, value, type } = e.target;
 

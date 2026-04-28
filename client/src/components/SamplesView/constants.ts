@@ -8,6 +8,7 @@ export interface SampleFilters {
   refDescricao: string;
   amostra: string;
   numORC: string;
+  nEnvio: string;
   entregueA: string;
 }
 
@@ -21,6 +22,7 @@ export const defaultFilters: SampleFilters = {
   refDescricao: "",
   amostra: "",
   numORC: "",
+  nEnvio: "",
   entregueA: "",
 };
 

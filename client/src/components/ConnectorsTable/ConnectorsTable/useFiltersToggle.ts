@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
-export const useFiltersToggle = () => {
-  const storageKey = "connectors_show_filters";
+export const useFiltersToggle = (
+  storageKey = "connectors_show_filters",
+) => {
 
   const [showFilters, setShowFilters] = useState<boolean>(() => {
     const show = localStorage.getItem(storageKey);

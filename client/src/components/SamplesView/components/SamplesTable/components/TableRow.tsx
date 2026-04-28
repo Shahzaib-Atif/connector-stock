@@ -52,7 +52,7 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data font-mono">{sample.ID}</td>
       <td className="table-data">{Cliente || "-"}</td>
       <td className="table-data break-all">{Projeto || "-"}</td>
-      <td className="table-data">{EncDivmac || "-"}</td>
+      <td className="table-data break-all">{EncDivmac || "-"}</td>
       <td className="table-data break-all">{Ref_Descricao || "-"}</td>
       <td className="table-data break-all">
         {Amostra ? (
@@ -67,7 +67,7 @@ const TableRow: React.FC<TableRowProps> = ({
           "-"
         )}
       </td>
-      <td className="table-data break-all">{Quantidade || "-"}</td>
+      <td className="table-data">{NumORC}</td>
       {
         <td className="table-data">
           <OpenFolderBtn N_Envio={N_Envio ?? ""} showFolderBtn={showActions} />
@@ -76,8 +76,8 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data break-all" title={Entregue_a ?? ""}>
         {Entregue_a || "-"}
       </td>
+      <td className="table-data break-all">{Quantidade || "-"}</td>
       <td className="table-data font-mono">{Data_recepcao || "-"}</td>
-      <td className="table-data">{NumORC}</td>
       <td className="table-data font-mono break-all">
         {getObservation(Observacoes ?? "", qty_com_fio ?? 0, qty_sem_fio ?? 0)}
       </td>

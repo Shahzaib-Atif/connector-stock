@@ -1,6 +1,6 @@
 import React from "react";
-import { FORM_FIELDS_Type } from "./FormFieldType";
 import { useAppSelector } from "@/store/hooks";
+import { CreateSamplesDto } from "@shared/dto/SamplesDto";
 
 export default function useSampleOptions() {
   const { data: masterData } = useAppSelector((state) => state.masterData);
@@ -16,11 +16,15 @@ export default function useSampleOptions() {
   const clientsOptions = useAppSelector((state) => state.samples.clients);
 
   // Get options for autocomplete fields
-  function getOptions(field: FORM_FIELDS_Type): string[] {
-    if (field.name === "Projeto") return projectsOptions;
-    else if (field.name === "Amostra") return connectorOptions;
-    else if (field.name === "Cliente") return clientsOptions;
-    else return field.options;
+  function getOptions(
+    fieldName: keyof CreateSamplesDto,
+    fallbackOptions: string[] = [],
+  ) {
+    if (fieldName === "Projeto") return projectsOptions;
+    if (fieldName === "Amostra") return connectorOptions;
+    if (fieldName === "Cliente") return clientsOptions;
+
+    return fallbackOptions;
   }
 
   return { getOptions };

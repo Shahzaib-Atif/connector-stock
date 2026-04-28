@@ -15,6 +15,7 @@ import { useLegacyData } from "./ConnectorsTable/useLegacyData";
 import { getActiveFilterCount } from "./constants";
 import LegacyToggleBtn from "./ConnectorsTable/LegacyToggleBtn";
 import ImageToggleBtn from "../common/ImageToggleBtn";
+import { useFiltersToggle } from "./ConnectorsTable/useFiltersToggle";
 
 export const ConnectorsListView: React.FC = () => {
   const navigate = useNavigate();
@@ -46,6 +47,9 @@ export const ConnectorsListView: React.FC = () => {
   } = useConnectorFilters(connectors, isLegacyMode ? null : masterData);
 
   const activeFiltersCount = getActiveFilterCount(filters);
+  const { showFilters, setShowFilters } = useFiltersToggle(
+    "connectors_show_filters",
+  );
 
   const {
     paginatedItems: paginatedConnectors,
@@ -81,19 +85,8 @@ export const ConnectorsListView: React.FC = () => {
       <div id="connectors-content" className="table-view-content">
         <div className="table-view-inner-content">
           <ConnectorsFilterBar
-            setFilterField={setFilterField}
-            idQuery={filters.idQuery}
-            type={filters.type}
-            typeOptions={typeOptions}
-            fabricante={filters.fabricante}
-            fabricanteOptions={fabricanteOptions}
-            family={filters.family}
-            vias={filters.vias}
-            color={filters.color}
-            colorOptions={colorOptions}
-            internalDiameter={filters.internalDiameter}
-            externalDiameter={filters.externalDiameter}
-            thickness={filters.thickness}
+            showFilters={showFilters}
+            onToggleFilters={() => setShowFilters((prev) => !prev)}
             onClearFilters={clearFilters}
             activeFiltersCount={activeFiltersCount}
           >
@@ -116,6 +109,12 @@ export const ConnectorsListView: React.FC = () => {
               connectors={paginatedConnectors as ConnectorExtended[]}
               showImages={showImages && !isLegacyMode}
               isLegacyMode={isLegacyMode}
+              showFilters={showFilters}
+              filters={filters}
+              setFilterField={setFilterField}
+              typeOptions={typeOptions}
+              fabricanteOptions={fabricanteOptions}
+              colorOptions={colorOptions}
             />
           </div>
 

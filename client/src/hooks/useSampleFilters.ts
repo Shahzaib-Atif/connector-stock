@@ -5,12 +5,14 @@ import {
   STORAGE_KEY,
 } from "@/components/SamplesView/constants";
 import { SamplesDto } from "@shared/dto/SamplesDto";
+import { getUniqueOptions } from "@/utils/functions/getUniqueOptions";
 
 interface UseSampleFiltersReturn {
   filters: SampleFilters;
   setFilterField: (key: keyof SampleFilters, value: string) => void;
   filteredSamples: SamplesDto[];
   clearFilters: () => void;
+  entregueOptions: string[];
 }
 
 export function useSampleFilters(
@@ -53,6 +55,10 @@ export function useSampleFilters(
     setFilters(defaultFilters);
   }, []);
 
+  const entregueOptions = useMemo(() => {
+    return getUniqueOptions(samples.map((s) => s.Entregue_a));
+  }, [samples]);
+
   const filteredSamples = useMemo(() => {
     const normalizedFilters = {
       idQuery: normalizeValue(filters.idQuery),
@@ -62,6 +68,7 @@ export function useSampleFilters(
       refDescricao: normalizeValue(filters.refDescricao),
       amostra: normalizeValue(filters.amostra),
       numORC: normalizeValue(filters.numORC),
+      nEnvio: normalizeValue(filters.nEnvio),
       entregueA: normalizeValue(filters.entregueA),
     };
 
@@ -96,6 +103,10 @@ export function useSampleFilters(
         !normalizedFilters.numORC ||
         normalizeValue(sample.NumORC).includes(normalizedFilters.numORC);
 
+      const matchesNEnvio =
+        !normalizedFilters.nEnvio ||
+        normalizeValue(sample.N_Envio).includes(normalizedFilters.nEnvio);
+
       const matchesEntregueA =
         !normalizedFilters.entregueA ||
         normalizeValue(sample.Entregue_a).includes(normalizedFilters.entregueA);
@@ -108,6 +119,7 @@ export function useSampleFilters(
         matchesRefDescricao &&
         matchesAmostra &&
         matchesNumORC &&
+        matchesNEnvio &&
         matchesEntregueA
       );
     });
@@ -118,6 +130,7 @@ export function useSampleFilters(
     setFilterField,
     filteredSamples,
     clearFilters,
+    entregueOptions,
   };
 }
 

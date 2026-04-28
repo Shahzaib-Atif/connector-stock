@@ -1,13 +1,19 @@
 import { CreateSamplesDto } from "@shared/dto/SamplesDto";
-import { FORM_FIELDS } from "./SampleFormFields";
 
 export function performValidation(formData: CreateSamplesDto) {
   // check for missing required fields
-  const requiredFields = FORM_FIELDS.filter((f) => f.required);
-  const missing = requiredFields.filter((f) => !formData[f.name]);
+  const requiredFields: Array<{
+    name: keyof CreateSamplesDto;
+    label: string;
+  }> = [
+    { name: "Cliente", label: "Cliente" },
+    { name: "Ref_Descricao", label: "Ref. Descricao" },
+    { name: "Amostra", label: "Amostra" },
+  ];
+  const missing = requiredFields.filter((field) => !formData[field.name]);
   if (missing.length > 0) {
     const error = `Please fill in all mandatory fields: ${missing
-      .map((f) => f.label)
+      .map((field) => field.label)
       .join(", ")}`;
     return error; // return error message
   }
