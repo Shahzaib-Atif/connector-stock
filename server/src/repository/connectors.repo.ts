@@ -58,9 +58,13 @@ export class ConnectorRepo {
     }
   }
 
-  async getConnectorByCodivmac(codivmac: string): Promise<ConnectorDto | null> {
+  async getConnectorByCodivmac(
+    codivmac: string,
+    tx?: TransactionClient,
+  ): Promise<ConnectorDto | null> {
     try {
-      const data = await this.prisma.connectors_Main.findUnique({
+      const client = tx || this.prisma;
+      const data = await client.connectors_Main.findUnique({
         where: { CODIVMAC: codivmac },
         include: {
           Connectors_Details: true,
@@ -92,14 +96,16 @@ export class ConnectorRepo {
       const client = tx || this.prisma;
       const data = this.incrementQty(amount, subType);
 
-      await client.connectors_Main.update({
+      const result = await client.connectors_Main.updateMany({
         where: {
           CODIVMAC: codivmacId,
         },
         data,
       });
-    } catch (ex: any) {
-      console.error(ex.message);
+      if (result.count === 0)
+        console.warn(`No record found when updating codivmacId: ${codivmacId}`);
+    } catch (ex: unknown) {
+      getErrorMsg(ex);
     }
   }
 
