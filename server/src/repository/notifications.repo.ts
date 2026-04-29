@@ -1,14 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { SamplesDto } from '@shared/dto/SamplesDto';
 import { PrismaService } from 'prisma/prisma.service';
-import { CreateTransactionsDto } from '@shared/types/Transaction';
 import { AppNotification } from '@shared/types/Notification';
 import { NotificationMapper } from '@infra/NotificationMapper';
-import { WireTypes } from '@shared/enums/WireTypes';
-import { UpdateConnectorDto } from 'src/dtos/connector.dto';
+import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
+import { CreateTransactionsDto } from '@shared/types/Transaction';
 import { ConnectorRepo } from './connectors.repo';
 import { TransactionsRepo } from './transactions.repo';
-import { getErrorMsg } from '@shared/utils/getErrorMsg';
+
+type ConnectorStockUpdateData = {
+  codivmac: string;
+  Qty: number;
+  Qty_com_fio: number;
+  Qty_sem_fio: number;
+  updatedBy: string;
+};
 
 @Injectable()
 export class NotificationsRepo {
@@ -98,81 +104,54 @@ export class NotificationsRepo {
     }
   }
 
-  /**
-   * Mark notification as finished and update sample quantity in a transaction
-   */
+  /** Mark notification as finished */
+  async finishNotification(
+    notificationId: number,
+    completionNote?: string,
+    tx?: TransactionClient,
+  ): Promise<AppNotification> {
+    const client = tx || this.prisma;
+    const updatedNotification = await client.notification_Users.update({
+      where: { id: notificationId },
+      data: {
+        Finished: true,
+        FinishedDate: new Date(),
+        CompletionNote: completionNote,
+      },
+    });
+
+    return NotificationMapper.prismaToDto(updatedNotification);
+  }
+
   async finishNotificationTransaction(
     notificationId: number,
-    connectorUpdate?: UpdateConnectorDto,
-    transactionDto?: CreateTransactionsDto,
     completionNote?: string,
+    connectorStockUpdate?: ConnectorStockUpdateData,
+    transactionDto?: CreateTransactionsDto,
   ): Promise<AppNotification> {
-    return await this.prisma.$transaction(async (tx) => {
-      // 1. Mark notification as finished
-      const updatedNotification = await tx.notification_Users.update({
-        where: { id: notificationId },
-        data: {
-          Finished: true,
-          FinishedDate: new Date(),
-          CompletionNote: completionNote,
-        },
-      });
+    return this.prisma.$transaction(async (tx) => {
+      const finishedNotification = await this.finishNotification(
+        notificationId,
+        completionNote,
+        tx,
+      );
 
-      try {
-        // 2. Update connector quantity if provided
-        if (connectorUpdate?.codivmac) {
-          const current = await this.connRepo.getConnectorByCodivmac(
-            connectorUpdate.codivmac,
-            tx,
-          );
-
-          if (!current) {
-            throw new Error(
-              `Connector not found during transaction: ${connectorUpdate.codivmac}`,
-            );
-          }
-
-          // Calculate new quantities based on subtype
-          const currentWithWire = current.Qty_com_fio ?? 0;
-          const currentWithoutWire = current.Qty_sem_fio ?? 0;
-
-          // Ensure quantityTakenOut is a valid number
-          const take = Math.max(
-            0,
-            Number(connectorUpdate.quantityTakenOut) || 0,
-          );
-
-          // Prevent taking out more than available
-          let newWithWire = currentWithWire;
-          let newWithoutWire = currentWithoutWire;
-
-          if (connectorUpdate.subType === WireTypes.COM_FIO) {
-            newWithWire = Math.max(0, currentWithWire - take);
-          } else if (connectorUpdate.subType === WireTypes.SEM_FIO) {
-            newWithoutWire = Math.max(0, currentWithoutWire - take);
-          }
-
-          const newTotal = newWithWire + newWithoutWire;
-
-          await this.connRepo.updateConnectorStock(
-            connectorUpdate.codivmac,
-            newTotal,
-            newWithWire,
-            newWithoutWire,
-            connectorUpdate.updatedBy,
-            tx,
-          );
-        }
-      } catch (e) {
-        console.log(getErrorMsg(e));
+      if (connectorStockUpdate) {
+        await this.connRepo.updateConnectorStock(
+          connectorStockUpdate.codivmac,
+          connectorStockUpdate.Qty,
+          connectorStockUpdate.Qty_com_fio,
+          connectorStockUpdate.Qty_sem_fio,
+          connectorStockUpdate.updatedBy,
+          tx,
+        );
       }
 
-      // 3. Create transaction record if provided
       if (transactionDto) {
         await this.transactionRepo.addTransaction(transactionDto, tx);
       }
 
-      return NotificationMapper.prismaToDto(updatedNotification);
+      return finishedNotification;
     });
   }
 }

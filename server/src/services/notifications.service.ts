@@ -12,6 +12,14 @@ import {
 import { WireTypes } from '@shared/enums/WireTypes';
 import { UpdateConnectorDto } from 'src/dtos/connector.dto';
 
+type ConnectorStockUpdateData = {
+  codivmac: string;
+  Qty: number;
+  Qty_com_fio: number;
+  Qty_sem_fio: number;
+  updatedBy: string;
+};
+
 @Injectable()
 export class NotificationsService {
   constructor(
@@ -73,62 +81,6 @@ export class NotificationsService {
     return null;
   }
 
-  private buildConnectorUpdate(
-    dto: FinishNotificationDto,
-    notification: AppNotification,
-    connector: ConnectorDto | null,
-  ): UpdateConnectorDto | undefined {
-    const { quantityTakenOut, subType, finishedBy } = dto;
-
-    if (quantityTakenOut <= 0) return undefined;
-
-    if (!connector && notification.parsedConector?.includes('-')) {
-      throw new Error(
-        'Cannot take stock out: please select a specific connector version',
-      );
-    }
-
-    if (notification.linkedConnector && !subType) {
-      throw new Error(
-        'Wire type is required when taking stock out (COM_FIO or SEM_FIO)',
-      );
-    }
-
-    return {
-      codivmac: connector?.CODIVMAC ?? '',
-      quantityTakenOut,
-      subType: subType as WireTypes,
-      updatedBy: finishedBy || 'system',
-    };
-  }
-
-  private buildTransactionDto(
-    dto: FinishNotificationDto,
-    notification: AppNotification,
-    connector: ConnectorDto | null,
-  ): CreateTransactionsDto | undefined {
-    const connectorId =
-      connector?.CODIVMAC ??
-      dto.connectorVersionId ??
-      notification.parsedConector;
-
-    if (!connectorId) {
-      console.log('Skipping transaction logging: No connector ID available');
-      return undefined;
-    }
-
-    return {
-      itemId: connectorId,
-      transactionType: 'OUT',
-      amount: Number(dto.quantityTakenOut) || 0,
-      itemType: 'connector',
-      subType: dto.subType,
-      department: notification.SenderSector ?? '',
-      sender: notification.SenderUser,
-      notes: dto.completionNote,
-    };
-  }
-
   /** Mark notification as finished and optionally update connector quantity */
   async finishNotification(
     dto: FinishNotificationDto,
@@ -157,11 +109,18 @@ export class NotificationsService {
       effectiveConnector,
     );
 
+    // Build connector stock update data
+    const connectorStockUpdate = this.buildConnectorStockUpdate(
+      updateConnectorDto,
+      effectiveConnector,
+    );
+
+    // Finish notification and perform updates in a transaction
     return this.notificationsRepo.finishNotificationTransaction(
       dto.notificationId,
-      updateConnectorDto,
-      transactionDto,
       dto.completionNote,
+      connectorStockUpdate,
+      transactionDto,
     );
   }
 
@@ -234,4 +193,96 @@ export class NotificationsService {
 
     return { linkedSample, linkedConnector };
   };
+
+  private buildConnectorUpdate(
+    dto: FinishNotificationDto,
+    notification: AppNotification,
+    connector: ConnectorDto | null,
+  ): UpdateConnectorDto | undefined {
+    const { quantityTakenOut, subType, finishedBy } = dto;
+
+    if (quantityTakenOut <= 0) return undefined;
+
+    if (!connector && notification.parsedConector?.includes('-')) {
+      throw new Error(
+        'Cannot take stock out: please select a specific connector version',
+      );
+    }
+
+    if (notification.linkedConnector && !subType) {
+      throw new Error(
+        'Wire type is required when taking stock out (COM_FIO or SEM_FIO)',
+      );
+    }
+
+    return {
+      codivmac: connector?.CODIVMAC ?? '',
+      quantityTakenOut,
+      subType: subType as WireTypes,
+      updatedBy: finishedBy || 'system',
+    };
+  }
+
+  private buildTransactionDto(
+    dto: FinishNotificationDto,
+    notification: AppNotification,
+    connector: ConnectorDto | null,
+  ): CreateTransactionsDto | undefined {
+    const connectorId =
+      connector?.CODIVMAC ??
+      dto.connectorVersionId ??
+      notification.parsedConector;
+
+    if (!connectorId) {
+      console.log('Skipping transaction logging: No connector ID available');
+      return undefined;
+    }
+
+    return {
+      itemId: connectorId,
+      transactionType: 'OUT',
+      amount: Number(dto.quantityTakenOut) || 0,
+      itemType: 'connector',
+      subType: dto.subType,
+      department: notification.SenderSector ?? '',
+      sender: notification.SenderUser,
+      notes: dto.completionNote,
+    };
+  }
+
+  private buildConnectorStockUpdate(
+    connectorUpdate: UpdateConnectorDto | undefined,
+    connector: ConnectorDto | null,
+  ): ConnectorStockUpdateData | undefined {
+    if (!connectorUpdate?.codivmac) {
+      return undefined;
+    }
+
+    if (!connector) {
+      throw new Error(
+        `Connector not found for stock update: ${connectorUpdate.codivmac}`,
+      );
+    }
+
+    const currentWithWire = connector.Qty_com_fio ?? 0;
+    const currentWithoutWire = connector.Qty_sem_fio ?? 0;
+    const take = Math.max(0, Number(connectorUpdate.quantityTakenOut) || 0);
+
+    let newWithWire = currentWithWire;
+    let newWithoutWire = currentWithoutWire;
+
+    if (connectorUpdate.subType === WireTypes.COM_FIO) {
+      newWithWire = Math.max(0, currentWithWire - take);
+    } else if (connectorUpdate.subType === WireTypes.SEM_FIO) {
+      newWithoutWire = Math.max(0, currentWithoutWire - take);
+    }
+
+    return {
+      codivmac: connectorUpdate.codivmac,
+      Qty: newWithWire + newWithoutWire,
+      Qty_com_fio: newWithWire,
+      Qty_sem_fio: newWithoutWire,
+      updatedBy: connectorUpdate.updatedBy,
+    };
+  }
 }
