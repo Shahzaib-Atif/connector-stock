@@ -149,6 +149,27 @@ export class ConnectorRepo {
     }
   }
 
+  async updateConnectorStock(
+    codivmac: string,
+    Qty: number,
+    Qty_com_fio: number,
+    Qty_sem_fio: number,
+    LastChangeBy: string,
+    tx?: TransactionClient,
+  ) {
+    const client = tx || this.prisma;
+    await client.connectors_Main.update({
+      where: { CODIVMAC: codivmac },
+      data: {
+        Qty,
+        Qty_com_fio,
+        Qty_sem_fio,
+        LastChangeBy,
+        LastUpdateDate: new Date(),
+      },
+    });
+  }
+
   // update connectors_Main
   private async updateMain(
     codivmac: string,

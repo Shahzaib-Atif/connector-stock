@@ -57,6 +57,7 @@ export const LinkedConnector: React.FC<LinkedConnectorProps> = ({
         </div>
 
         <button
+          type="button"
           onClick={handleNavigate}
           className="ml-4 p-2.5 bg-blue-600 hover:bg-blue-50 text-white hover:text-blue-600 rounded-lg transition-all shadow-lg shadow-blue-600/20"
           title="View Connector Details"

@@ -54,8 +54,6 @@ export class ImageController {
     @Param('connectorId') connectorId: string,
     @Param('type') type: string,
   ) {
-    console.log(connectorId, type);
-
     return this.imageService.getRelatedImagesForConnectors(connectorId, type);
   }
 

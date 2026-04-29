@@ -1,4 +1,3 @@
-import { TransactionMapper } from '@infra/TransactionMapper';
 import { Injectable } from '@nestjs/common';
 import { SamplesDto } from '@shared/dto/SamplesDto';
 import { PrismaService } from 'prisma/prisma.service';
@@ -7,10 +6,17 @@ import { AppNotification } from '@shared/types/Notification';
 import { NotificationMapper } from '@infra/NotificationMapper';
 import { WireTypes } from '@shared/enums/WireTypes';
 import { UpdateConnectorDto } from 'src/dtos/connector.dto';
+import { ConnectorRepo } from './connectors.repo';
+import { TransactionsRepo } from './transactions.repo';
+import { getErrorMsg } from '@shared/utils/getErrorMsg';
 
 @Injectable()
 export class NotificationsRepo {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private connRepo: ConnectorRepo,
+    private transactionRepo: TransactionsRepo,
+  ) {}
 
   /** Get all unfinished notifications ordered by creation date */
   async getUnfinishedNotifications(): Promise<AppNotification[]> {
@@ -114,63 +120,56 @@ export class NotificationsRepo {
 
       try {
         // 2. Update connector quantity if provided
-        if (connectorUpdate) {
-          const current = await tx.connectors_Main.findUnique({
-            where: { CODIVMAC: connectorUpdate.codivmac },
-            select: {
-              Qty: true,
-              Qty_com_fio: true,
-              Qty_sem_fio: true,
-            },
-          });
+        if (connectorUpdate?.codivmac) {
+          const current = await this.connRepo.getConnectorByCodivmac(
+            connectorUpdate.codivmac,
+            tx,
+          );
 
           if (!current) {
-            throw new Error(`Connector not found: ${connectorUpdate.codivmac}`);
+            throw new Error(
+              `Connector not found during transaction: ${connectorUpdate.codivmac}`,
+            );
           }
 
-          const currentWith = current.Qty_com_fio ?? 0;
-          const currentWithout = current.Qty_sem_fio ?? 0;
+          // Calculate new quantities based on subtype
+          const currentWithWire = current.Qty_com_fio ?? 0;
+          const currentWithoutWire = current.Qty_sem_fio ?? 0;
 
+          // Ensure quantityTakenOut is a valid number
           const take = Math.max(
             0,
             Number(connectorUpdate.quantityTakenOut) || 0,
           );
 
-          let newWith = currentWith;
-          let newWithout = currentWithout;
+          // Prevent taking out more than available
+          let newWithWire = currentWithWire;
+          let newWithoutWire = currentWithoutWire;
 
           if (connectorUpdate.subType === WireTypes.COM_FIO) {
-            newWith = Math.max(0, currentWith - take);
+            newWithWire = Math.max(0, currentWithWire - take);
           } else if (connectorUpdate.subType === WireTypes.SEM_FIO) {
-            newWithout = Math.max(0, currentWithout - take);
+            newWithoutWire = Math.max(0, currentWithoutWire - take);
           }
 
-          const newTotal = newWith + newWithout;
+          const newTotal = newWithWire + newWithoutWire;
 
-          await tx.connectors_Main.update({
-            where: { CODIVMAC: connectorUpdate.codivmac },
-            data: {
-              Qty: newTotal,
-              Qty_com_fio: newWith,
-              Qty_sem_fio: newWithout,
-              LastChangeBy: connectorUpdate.updatedBy,
-              LastUpdateDate: new Date(),
-            },
-          });
+          await this.connRepo.updateConnectorStock(
+            connectorUpdate.codivmac,
+            newTotal,
+            newWithWire,
+            newWithoutWire,
+            connectorUpdate.updatedBy,
+            tx,
+          );
         }
-      } catch (e: any) {
-        console.log(e.message);
+      } catch (e) {
+        console.log(getErrorMsg(e));
       }
 
       // 3. Create transaction record if provided
       if (transactionDto) {
-        try {
-          await tx.transactions.create({
-            data: TransactionMapper.toPrismaCreate(transactionDto),
-          });
-        } catch (e: any) {
-          console.error('Failed to create transaction record:', e.message);
-        }
+        await this.transactionRepo.addTransaction(transactionDto, tx);
       }
 
       return NotificationMapper.prismaToDto(updatedNotification);
