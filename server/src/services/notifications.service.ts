@@ -48,21 +48,8 @@ export class NotificationsService {
     const parsed = this.parseNotificationMessage(notification.Message);
 
     // Try to find matching sample and connector
-    let linkedSample: SamplesDto | null = null;
-    let linkedConnector: ConnectorDto | null = null;
-
-    if (parsed.conector) {
-      linkedConnector = await this.connectorRepo.getConnectorByCodivmac(
-        parsed.conector,
-      );
-
-      if (parsed.encomenda) {
-        linkedSample = await this.notificationsRepo.findMatchingSample(
-          parsed.conector,
-          parsed.encomenda,
-        );
-      }
-    }
+    const { linkedSample, linkedConnector } =
+      await this.findLinkedSampleAndConnector(parsed);
 
     return {
       ...notification,
@@ -71,8 +58,8 @@ export class NotificationsService {
       parsedProdId: parsed.prodId,
       parsedWireType: parsed.wireType,
       parsedSample: parsed.sample,
-      linkedSample: linkedSample || undefined,
-      linkedConnector: linkedConnector || undefined,
+      linkedSample,
+      linkedConnector,
     };
   }
 
@@ -210,4 +197,25 @@ export class NotificationsService {
 
     return parsed;
   }
+
+  private findLinkedSampleAndConnector = async (parsed: ParsedMessage) => {
+    let linkedSample: SamplesDto | undefined;
+    let linkedConnector: ConnectorDto | undefined;
+
+    if (parsed.conector) {
+      linkedConnector =
+        (await this.connectorRepo.getConnectorByCodivmac(parsed.conector)) ??
+        undefined;
+
+      if (parsed.encomenda) {
+        linkedSample =
+          (await this.notificationsRepo.findMatchingSample(
+            parsed.conector,
+            parsed.encomenda,
+          )) ?? undefined;
+      }
+    }
+
+    return { linkedSample, linkedConnector };
+  };
 }
