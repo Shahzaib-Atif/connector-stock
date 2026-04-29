@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { NotificationsRepo } from 'src/repository/notifications.repo';
 import { ConnectorRepo } from 'src/repository/connectors.repo';
 import { ParsedMessage } from 'src/utils/types';
@@ -22,6 +22,7 @@ type ConnectorStockUpdateData = {
 
 @Injectable()
 export class NotificationsService {
+  private readonly logger = new Logger(NotificationsService.name);
   constructor(
     private readonly notificationsRepo: NotificationsRepo,
     private readonly connectorRepo: ConnectorRepo,
@@ -234,7 +235,9 @@ export class NotificationsService {
       notification.parsedConector;
 
     if (!connectorId) {
-      console.log('Skipping transaction logging: No connector ID available');
+      this.logger.log(
+        'Skipping transaction logging: No connector ID available',
+      );
       return undefined;
     }
 

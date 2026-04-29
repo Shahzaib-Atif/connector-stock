@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import { getErrorMsg } from '@shared/utils/getErrorMsg';
@@ -9,6 +9,7 @@ export class ImageService {
   private readonly connectorsBasePath: string;
   private readonly accessoriesBasePath: string;
   private readonly accessoriesExtrasPath: string;
+  private readonly logger = new Logger(ImageService.name);
 
   constructor(private readonly AccRepo: AccessoryRepo) {
     this.connectorsBasePath = process.env.CONNECTORS_BASE_PATH ?? '';
@@ -57,7 +58,7 @@ export class ImageService {
     const extrasPath = path.join(this.connectorsBasePath, _subType, '_Extras');
 
     if (!fs.existsSync(extrasPath)) {
-      console.error('Path for extra images not found!');
+      this.logger.error('Path for extra images not found!');
       return [];
     }
 
@@ -68,7 +69,7 @@ export class ImageService {
         file.toLowerCase().includes(connectorId.toLowerCase()),
       );
     } catch (e) {
-      console.error('Error reading _Extras directory:', getErrorMsg(e));
+      this.logger.error('Error reading _Extras directory:', getErrorMsg(e));
       return [];
     }
   }
@@ -94,7 +95,7 @@ export class ImageService {
   getRelatedImagesForAccessories(accessoryId: string): string[] {
     const extrasPath = this.accessoriesExtrasPath;
     if (!fs.existsSync(extrasPath)) {
-      console.error('Path for extra images not found!');
+      this.logger.error('Path for extra images not found!');
       return [];
     }
 
@@ -105,7 +106,7 @@ export class ImageService {
         file.toLowerCase().includes(accessoryId.toLowerCase()),
       );
     } catch (e) {
-      console.error(
+      this.logger.error(
         'Error reading _Accessories/_Extras directory:',
         getErrorMsg(e),
       );

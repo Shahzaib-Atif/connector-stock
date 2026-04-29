@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { TransactionClient } from 'src/generated/prisma/internal/prismaNamespace';
 import { SamplesRepo } from 'src/repository/samples.repo';
@@ -12,6 +12,7 @@ import { CreateSamplesDto, SamplesDto } from '@shared/dto/SamplesDto';
 
 @Injectable()
 export class SamplesService {
+  private readonly logger = new Logger(SamplesService.name);
   constructor(
     private readonly prisma: PrismaService,
     private readonly samplesRepo: SamplesRepo,
@@ -95,7 +96,7 @@ export class SamplesService {
                 tx,
               );
             } catch (e: unknown) {
-              console.error(
+              this.logger.error(
                 'Failed to log COM_FIO transaction:',
                 getErrorMsg(e),
               );
@@ -116,7 +117,7 @@ export class SamplesService {
                 tx,
               );
             } catch (e: unknown) {
-              console.error(
+              this.logger.error(
                 'Failed to log SEM_FIO transaction:',
                 getErrorMsg(e),
               );
@@ -136,7 +137,7 @@ export class SamplesService {
                 tx,
               );
             } catch (e: unknown) {
-              console.error(
+              this.logger.error(
                 'Failed to log total quantity transaction:',
                 getErrorMsg(e),
               );
@@ -497,7 +498,7 @@ export class SamplesService {
     try {
       await this.transactionsService.processTransaction(tx, txClient);
     } catch (e: unknown) {
-      console.error(
+      this.logger.error(
         `Failed to process transaction for ${tx.itemId}:`,
         getErrorMsg(e),
       );
@@ -535,7 +536,7 @@ export class SamplesService {
         currentUser,
       );
     } catch (e: unknown) {
-      console.error('Error upserting reference mapping:', getErrorMsg(e));
+      this.logger.error('Error upserting reference mapping:', getErrorMsg(e));
       // We log but don't necessarily want to fail the main sample update if mapping fails
     }
   }

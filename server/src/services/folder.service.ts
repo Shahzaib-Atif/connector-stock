@@ -3,6 +3,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -10,6 +11,7 @@ import { exec } from 'child_process';
 
 @Injectable()
 export class FolderService {
+  private readonly logger = new Logger(FolderService.name);
   async openFolder(folderName: string): Promise<{ message: string }> {
     const basePath = process.env.FOLDER_BASE_PATH;
 
@@ -37,7 +39,7 @@ export class FolderService {
 
       exec(command, (error) => {
         if (error) {
-          console.error(`Error opening folder: ${error.message}`);
+          this.logger.error(`Error opening folder: ${error.message}`);
           reject(new InternalServerErrorException('Failed to open folder.'));
         } else {
           resolve({ message: 'Folder opened successfully.' });
