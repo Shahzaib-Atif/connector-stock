@@ -1,8 +1,9 @@
 import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
 import {
-  AppNotification,
   FinishNotificationDto,
+  FinishNotificationResult,
+  AppNotification,
 } from "@shared/types/Notification";
 
 export const getUnfinishedNotifications = async (): Promise<
@@ -23,7 +24,7 @@ export const getNotificationWithSample = async (
 
 export const finishNotification = async (
   dto: FinishNotificationDto,
-): Promise<void> => {
+): Promise<FinishNotificationResult> => {
   const response = await fetchWithAuth(
     `${API.notifications}/${dto.notificationId}/finish`,
     {

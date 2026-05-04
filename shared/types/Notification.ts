@@ -32,3 +32,9 @@ export interface FinishNotificationDto {
   finishedBy?: string;
   completionNote?: string;
 }
+
+export interface FinishNotificationResult {
+  notification: AppNotification;
+  stockUpdateFailed: boolean;
+  warning?: string;
+}

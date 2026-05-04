@@ -8,6 +8,7 @@ import { ConnectorDto } from '@shared/dto/ConnectorDto';
 import {
   AppNotification,
   FinishNotificationDto,
+  FinishNotificationResult,
 } from '@shared/types/Notification';
 import { WireTypes } from '@shared/enums/WireTypes';
 import { UpdateConnectorDto } from 'src/dtos/connector.dto';
@@ -85,7 +86,7 @@ export class NotificationsService {
   /** Mark notification as finished and optionally update connector quantity */
   async finishNotification(
     dto: FinishNotificationDto,
-  ): Promise<AppNotification> {
+  ): Promise<FinishNotificationResult> {
     // Get notification with sample
     const { notificationId, connectorVersionId } = dto;
     const notificationData = await this.getNotificationExtended(notificationId);
@@ -98,31 +99,56 @@ export class NotificationsService {
       connectorVersionId,
     );
 
-    // Build connector update and transaction DTOs
-    const updateConnectorDto = this.buildConnectorUpdate(
-      dto,
-      notificationData,
-      effectiveConnector,
-    );
-    const transactionDto = this.buildTransactionDto(
-      dto,
-      notificationData,
-      effectiveConnector,
-    );
+    let connectorStockUpdate: ConnectorStockUpdateData | undefined;
+    let transactionDto: CreateTransactionsDto | undefined;
+    let stockUpdateWarning: string | undefined;
 
-    // Build connector stock update data
-    const connectorStockUpdate = this.buildConnectorStockUpdate(
-      updateConnectorDto,
-      effectiveConnector,
-    );
+    try {
+      const updateConnectorDto = this.buildConnectorUpdate(
+        dto,
+        notificationData,
+        effectiveConnector,
+      );
+      transactionDto = this.buildTransactionDto(
+        dto,
+        notificationData,
+        effectiveConnector,
+      );
+      connectorStockUpdate = this.buildConnectorStockUpdate(
+        updateConnectorDto,
+        effectiveConnector,
+      );
+    } catch (error) {
+      stockUpdateWarning = this.getStockUpdateWarning(error);
+      this.logger.warn(stockUpdateWarning);
+    }
 
-    // Finish notification and perform updates in a transaction
-    return this.notificationsRepo.finishNotificationTransaction(
-      dto.notificationId,
-      dto.completionNote,
-      connectorStockUpdate,
-      transactionDto,
-    );
+    const finishedNotification =
+      await this.notificationsRepo.finishNotification(
+        dto.notificationId,
+        dto.completionNote,
+      );
+
+    if (!stockUpdateWarning && (connectorStockUpdate || transactionDto)) {
+      try {
+        await this.notificationsRepo.applyFinishSideEffects(
+          connectorStockUpdate,
+          transactionDto,
+        );
+      } catch (error) {
+        stockUpdateWarning = this.getStockUpdateWarning(error);
+        this.logger.error(
+          stockUpdateWarning,
+          error instanceof Error ? error.stack : undefined,
+        );
+      }
+    }
+
+    return {
+      notification: finishedNotification,
+      stockUpdateFailed: !!stockUpdateWarning,
+      warning: stockUpdateWarning,
+    };
   }
 
   /** Mark notification as read */
@@ -287,5 +313,14 @@ export class NotificationsService {
       Qty_sem_fio: newWithoutWire,
       updatedBy: connectorUpdate.updatedBy,
     };
+  }
+
+  private getStockUpdateWarning(error: unknown): string {
+    const details =
+      error instanceof Error && error.message
+        ? error.message
+        : 'Unknown stock update error';
+
+    return `Notification was finished, but the stock update failed: ${details}`;
   }
 }

@@ -8,6 +8,7 @@ import {
 import {
   AppNotification,
   FinishNotificationDto,
+  FinishNotificationResult,
 } from "@shared/types/Notification";
 
 interface NotificationsState {
@@ -46,8 +47,7 @@ export const fetchNotificationWithSample = createAsyncThunk(
 export const finishNotificationThunk = createAsyncThunk(
   "notifications/finish",
   async (dto: FinishNotificationDto) => {
-    await finishNotification(dto);
-    return dto.notificationId;
+    return await finishNotification(dto);
   },
 );
 
@@ -112,10 +112,10 @@ const notificationsSlice = createSlice({
       })
       .addCase(
         finishNotificationThunk.fulfilled,
-        (state, action: PayloadAction<number>) => {
+        (state, action: PayloadAction<FinishNotificationResult>) => {
           state.loading = false;
           state.notifications = state.notifications.filter(
-            (n) => n.id !== action.payload,
+            (n) => n.id !== action.payload.notification.id,
           );
           state.unfinishedCount = state.notifications.length;
           state.unreadCount = state.notifications.filter(

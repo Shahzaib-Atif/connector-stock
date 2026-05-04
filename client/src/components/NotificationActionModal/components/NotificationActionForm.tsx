@@ -49,7 +49,13 @@ export const NotificationActionForm: React.FC<Props> = ({
           <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
         </div>
       ) : status === "success" ? (
-        <ShowSuccess title="Request Completed!" message="Closing..." />
+        <ShowSuccess
+          title={errorMessage ? "Request Completed With Warning" : "Request Completed!"}
+          message={errorMessage || "Closing..."}
+          variant={errorMessage ? "warning" : "success"}
+          actionLabel={errorMessage ? "Close" : undefined}
+          onAction={errorMessage ? onClose : undefined}
+        />
       ) : (
         <form onSubmit={handleFinish} className="space-y-6">
           <ParsedInfo

@@ -6,6 +6,7 @@ import { WireTypes } from "@shared/enums/WireTypes";
 import { getErrorMsg } from "@shared/utils/getErrorMsg";
 import { ConnectorDto } from "@shared/dto/ConnectorDto";
 import { RequestState } from "@/utils/types/RequestState";
+import { FinishNotificationResult } from "@shared/types/Notification";
 
 interface Params {
   notificationId: number;
@@ -112,7 +113,7 @@ export function useFinishNotification({
     }
 
     try {
-      await dispatch(
+      const result = (await dispatch(
         finishNotificationThunk({
           notificationId,
           quantityTakenOut: qty,
@@ -120,10 +121,14 @@ export function useFinishNotification({
           connectorVersionId: connectorId,
           completionNote: finalNote,
         }),
-      ).unwrap();
+      ).unwrap()) as FinishNotificationResult;
+
+      setErrorMessage(result.warning || "");
 
       setStatus("success");
-      setTimeout(() => onClose(), 1500);
+      if (!result.warning) {
+        setTimeout(() => onClose(), 1500);
+      }
     } catch (err) {
       setErrorMessage(getErrorMsg(err, "Failed to finish notification"));
       setStatus("error");

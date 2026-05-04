@@ -31,27 +31,6 @@ export const NotificationsView: React.FC = () => {
     dispatch(fetchUnfinishedNotifications());
   };
 
-  // Show message if there are no notifications
-  if (!loading && notifications.length === 0) {
-    return (
-      <div id="notifications-page" className="table-view-wrapper">
-        <DetailHeader
-          label="Notifications"
-          title={`Sample Requests (${unfinishedCount})`}
-          onBack={() => navigate(ROUTES.HOME)}
-        />
-
-        <div id="notifications-content" className="table-view-content">
-          <div className="table-view-inner-content max-w-xl md:max-w-4xl overflow-auto">
-            <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-              <p className="text-lg">No pending notifications</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   // Show spinner while loading
   if (loading && notifications.length === 0) {
     // return <Spinner />;
@@ -68,10 +47,16 @@ export const NotificationsView: React.FC = () => {
 
       <div id="notifications-content" className="table-view-content">
         <div className="table-view-inner-content max-w-xl md:max-w-4xl overflow-auto">
-          <NotificationsList
-            notifications={notifications}
-            onNotificationClick={handleNotificationClick}
-          />
+          {!loading && notifications.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+              <p className="text-lg">No pending notifications</p>
+            </div>
+          ) : (
+            <NotificationsList
+              notifications={notifications}
+              onNotificationClick={handleNotificationClick}
+            />
+          )}
         </div>
       </div>
 

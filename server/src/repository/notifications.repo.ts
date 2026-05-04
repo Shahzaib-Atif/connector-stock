@@ -123,19 +123,11 @@ export class NotificationsRepo {
     return NotificationMapper.prismaToDto(updatedNotification);
   }
 
-  async finishNotificationTransaction(
-    notificationId: number,
-    completionNote?: string,
+  async applyFinishSideEffects(
     connectorStockUpdate?: ConnectorStockUpdateData,
     transactionDto?: CreateTransactionsDto,
-  ): Promise<AppNotification> {
+  ): Promise<void> {
     return this.prisma.$transaction(async (tx) => {
-      const finishedNotification = await this.finishNotification(
-        notificationId,
-        completionNote,
-        tx,
-      );
-
       if (connectorStockUpdate) {
         await this.connRepo.updateConnectorStock(
           connectorStockUpdate.codivmac,
@@ -150,8 +142,6 @@ export class NotificationsRepo {
       if (transactionDto) {
         await this.transactionRepo.addTransaction(transactionDto, tx);
       }
-
-      return finishedNotification;
     });
   }
 }
