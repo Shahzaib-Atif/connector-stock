@@ -1,27 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Bell, X } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchUnfinishedNotifications } from "@/store/slices/notificationsSlice";
+import { useAppSelector } from "@/store/hooks";
 import { ROUTES } from "../AppRoutes";
 
 export const NotificationPopup: React.FC = () => {
-  const dispatch = useAppDispatch();
   const { unreadCount } = useAppSelector((state) => state.notifications);
   const [isVisible, setIsVisible] = useState(false);
-  const checkInterval = 2; // minutes
-
-  // Poll for new notifications periodically
-  useEffect(() => {
-    const interval = setInterval(
-      () => {
-        dispatch(fetchUnfinishedNotifications());
-      },
-      checkInterval * 60 * 1000,
-    );
-
-    return () => clearInterval(interval);
-  }, [dispatch]);
 
   // Show popup whenever unread count increases
   useEffect(() => {

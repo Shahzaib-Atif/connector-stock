@@ -108,6 +108,14 @@ export const initTransactionsData = createAsyncThunk(
   },
 );
 
+export const refreshTransactionsData = createAsyncThunk(
+  "transactions/refresh",
+  async () => {
+    const transactions = await getTransactions();
+    return { transactions };
+  },
+);
+
 export const transactionsSlice = createSlice({
   name: "transactions",
   initialState,
@@ -147,6 +155,12 @@ export const transactionsSlice = createSlice({
       .addCase(initTransactionsData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to load transactions";
+      })
+      .addCase(refreshTransactionsData.fulfilled, (state, action) => {
+        state.transactions = action.payload.transactions;
+      })
+      .addCase(refreshTransactionsData.rejected, (state, action) => {
+        state.error = action.error.message || "Failed to refresh transactions";
       });
   },
 });

@@ -38,6 +38,13 @@ export const initUsersList = createAsyncThunk("usersList/init", async () => {
   return await fetchUsersApi();
 });
 
+export const refreshUsersList = createAsyncThunk(
+  "usersList/refresh",
+  async () => {
+    return await fetchUsersApi();
+  },
+);
+
 export const createUserThunk = createAsyncThunk(
   "usersList/create",
   async (userData: User, { dispatch }) => {
@@ -115,6 +122,12 @@ export const authSlice = createSlice({
       .addCase(initUsersList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to load users list";
+      })
+      .addCase(refreshUsersList.fulfilled, (state, action) => {
+        state.users = action.payload;
+      })
+      .addCase(refreshUsersList.rejected, (state, action) => {
+        state.error = action.error.message || "Failed to refresh users list";
       });
   },
 });

@@ -23,6 +23,14 @@ export const initMasterData = createAsyncThunk("masterData/init", async () => {
   return data;
 });
 
+export const refreshMasterData = createAsyncThunk(
+  "masterData/refresh",
+  async () => {
+    const data = await fetchMasterData();
+    return data;
+  },
+);
+
 export const masterDataSlice = createSlice({
   name: "masterData",
   initialState,
@@ -60,6 +68,12 @@ export const masterDataSlice = createSlice({
       .addCase(initMasterData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to load master data";
+      })
+      .addCase(refreshMasterData.fulfilled, (state, action) => {
+        state.data = action.payload;
+      })
+      .addCase(refreshMasterData.rejected, (state, action) => {
+        state.error = action.error.message || "Failed to refresh master data";
       });
   },
 });
