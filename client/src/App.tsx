@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "./store/hooks";
-import {
-  initMasterData,
-  refreshMasterData,
-} from "./store/slices/masterDataSlice";
+import { initMasterData } from "./store/slices/masterDataSlice";
 import { fetchOrcSamplesThunk } from "./store/slices/samplesSlice";
 import { useTransactionFlow } from "./hooks/useTransactionFlow";
 
@@ -12,27 +9,18 @@ import { QRModal } from "./components/QRModal";
 import { AppRoutes } from "./components/AppRoutes";
 import { useScan } from "./hooks/useScan";
 import { TransactionModal } from "./components/TransactionModal";
-import {
-  initTransactionsData,
-  refreshTransactionsData,
-} from "./store/slices/transactionsSlice";
-import {
-  initUsersList,
-  logout,
-  refreshUsersList,
-} from "./store/slices/authSlice";
-import { AUTH_EXPIRED_EVENT } from "./utils/constants";
+import { initTransactionsData } from "./store/slices/transactionsSlice";
+import { initUsersList } from "./store/slices/authSlice";
 import { QRData } from "./utils/types/shared";
 import { NotificationPopup } from "./components/common/NotificationPopup";
-import { fetchUnfinishedNotifications } from "./store/slices/notificationsSlice";
-import { UserRoles } from "@shared/enums/UserRoles";
+import { useBackgroundRefresh } from "./hooks/useBackgroundRefresh";
+import { useAuthExpiredListener } from "./hooks/useAuthExpiredListener";
 
-const BACKGROUND_REFRESH_INTERVAL_MS = 0.5 * 60 * 1000;
+const BACKGROUND_REFRESH_INTERVAL_MS = 1 * 60 * 1000; // 1 minute
 
 // Main App Component
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { user, role } = useAppSelector((state) => state.auth);
   const { loading } = useAppSelector((state) => state.masterData);
   const [qrData, setQrData] = useState<QRData | null>(null);
   const { handleScan, error, clearError } = useScan();
@@ -54,41 +42,11 @@ const App: React.FC = () => {
     dispatch(fetchOrcSamplesThunk());
   }, [dispatch]);
 
-  useEffect(() => {
-    const refreshData = () => {
-      if (document.hidden) return;
+  // Set up a background refresh mechanism that periodically updates critical data
+  useBackgroundRefresh(BACKGROUND_REFRESH_INTERVAL_MS);
 
-      dispatch(refreshMasterData());
-      dispatch(refreshTransactionsData());
-      dispatch(fetchOrcSamplesThunk());
-
-      const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
-      if (user && isAdmin) {
-        dispatch(fetchUnfinishedNotifications());
-      }
-
-      if (user && role === UserRoles.Master) {
-        dispatch(refreshUsersList());
-      }
-    };
-
-    const interval = window.setInterval(
-      refreshData,
-      BACKGROUND_REFRESH_INTERVAL_MS,
-    );
-
-    return () => window.clearInterval(interval);
-  }, [dispatch, role, user]);
-
-  useEffect(() => {
-    const handleAuthExpired = () => {
-      dispatch(logout());
-    };
-
-    window.addEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
-    return () =>
-      window.removeEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
-  }, [dispatch]);
+  // Listen for auth expiration events to automatically log out the user
+  useAuthExpiredListener();
 
   const handleOpenQR = (qrData: QRData) => {
     setQrData(qrData);
