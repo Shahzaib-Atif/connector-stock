@@ -33,9 +33,21 @@ export class SamplesRepo {
   }
 
   async createSample(dto: CreateSamplesDto): Promise<SamplesDto | null> {
-    // Remove associatedItemIds from dto before creating prisma record
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { associatedItemIds, ...sampleData } = dto;
+    // Defensively strip identity/generated fields if the client sends them anyway.
+    const {
+      associatedItemIds,
+      ID,
+      IsActive,
+      DateOfCreation,
+      DateOfLastUpdate,
+      ...sampleData
+    } = dto as CreateSamplesDto &
+      Partial<
+        Pick<
+          SamplesDto,
+          'ID' | 'IsActive' | 'DateOfCreation' | 'DateOfLastUpdate'
+        >
+      >;
 
     try {
       return await this.prisma.rEG_Amostras.create({

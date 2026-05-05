@@ -62,8 +62,21 @@ export class SamplesService {
   async createSample(dto: CreateSamplesDto) {
     return await this.prisma.$transaction(async (tx) => {
       // 1. Create sample metadata
-      // Remove associatedItemIds from dto before creating prisma record
-      const { associatedItemIds, ...sampleData } = dto;
+      // Defensively strip identity/generated fields if the client sends them anyway.
+      const {
+        associatedItemIds,
+        ID,
+        IsActive,
+        DateOfCreation,
+        DateOfLastUpdate,
+        ...sampleData
+      } = dto as CreateSamplesDto &
+        Partial<
+          Pick<
+            SamplesDto,
+            'ID' | 'IsActive' | 'DateOfCreation' | 'DateOfLastUpdate'
+          >
+        >;
 
       const created = await tx.rEG_Amostras.create({
         data: {
