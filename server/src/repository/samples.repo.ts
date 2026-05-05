@@ -79,7 +79,9 @@ export class SamplesRepo {
         },
       });
     } catch (ex: unknown) {
-      console.error(ex instanceof Error ? ex.message : 'Unknown error');
+      console.error(
+        ex instanceof Error ? ex.message : 'Unable to update sample',
+      );
       return null;
     }
   }

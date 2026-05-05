@@ -79,7 +79,9 @@ export const useSampleFormSubmit = ({
       onSuccess();
     } catch (err) {
       console.error(err);
-      setFormError(getErrorMsg(err));
+      setFormError(
+        getErrorMsg(err, "Failed to save sample. Please try again."),
+      );
     }
   };
 
