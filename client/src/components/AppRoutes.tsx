@@ -22,6 +22,7 @@ interface AppRoutesProps {
 import { Login } from "./Login";
 import { UsersView } from "./UsersView";
 import { QRData } from "@/utils/types/shared";
+import Temp from "./Temp";
 
 export const AppRoutes: React.FC<AppRoutesProps> = ({
   onScan,
@@ -34,6 +35,7 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({
     <Routes>
       <Route path={ROUTES.LOGIN} element={<Login />} />
       <Route path={ROUTES.USERS} element={<UsersView />} />
+      <Route path={"/temp"} element={<Temp />} />
       <Route
         path={ROUTES.HOME}
         element={

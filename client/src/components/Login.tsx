@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { login, setUsersList } from "../store/slices/authSlice";
 import { loginApi, fetchUsersApi } from "../api/authApi";
 import { ROUTES } from "./AppRoutes";
+import { getErrorMsg } from "@shared/utils/getErrorMsg";
 
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -34,7 +35,7 @@ export const Login: React.FC = () => {
 
       navigate(ROUTES.HOME);
     } catch (err) {
-      setError(err.message || "Invalid credentials.");
+      setError(getErrorMsg(err, "Invalid credentials."));
     } finally {
       setIsLoading(false);
     }
