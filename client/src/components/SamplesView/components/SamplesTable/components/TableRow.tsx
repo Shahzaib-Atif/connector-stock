@@ -68,7 +68,7 @@ const TableRow: React.FC<TableRowProps> = ({
       <td className="table-data">{NumORC}</td>
       {
         <td className="table-data">
-          <OpenFolderBtn N_Envio={N_Envio ?? ""} showFolderBtn={true} />
+          <OpenFolderBtn N_Envio={N_Envio ?? ""} showFolderBtn={false} />
         </td>
       }
       <td className="table-data break-all">{Quantidade || "-"}</td>
