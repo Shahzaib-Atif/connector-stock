@@ -64,7 +64,7 @@ function FilterCell({
   setFilterField: (key: keyof SampleFilters, value: string) => void;
 }) {
   return (
-    <th className="px-2 py-2 align-top">
+    <th className="sticky top-[40px] z-20 bg-slate-900/95 px-2 py-2 align-top backdrop-blur">
       <FilterInput
         id={id}
         value={value}
@@ -113,10 +113,12 @@ function FilterRow({ showActions = true, filters, setFilterField }: Props) {
         filterKey="nEnvio"
         setFilterField={setFilterField}
       />
-      <th className="px-2 py-2" />
-      <th className="px-2 py-2" />
-      <th className="px-2 py-2" />
-      {showActions && <th className="px-2 py-2" />}
+      <th className="sticky top-[40px] z-20 bg-slate-900/95 px-2 py-2 backdrop-blur" />
+      <th className="sticky top-[40px] z-20 bg-slate-900/95 px-2 py-2 backdrop-blur" />
+      <th className="sticky top-[40px] z-20 bg-slate-900/95 px-2 py-2 backdrop-blur" />
+      {showActions && (
+        <th className="sticky top-[40px] z-20 bg-slate-900/95 px-2 py-2 backdrop-blur" />
+      )}
     </tr>
   );
 }

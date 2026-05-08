@@ -17,21 +17,24 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   setFilterField,
   // entregueOptions,
 }) => {
+  const headerCellClass =
+    "table-header-cell sticky top-0 z-30 bg-slate-800/95 backdrop-blur";
+
   return (
     <thead className="table-header">
       {/* Header Row */}
       <tr>
-        <th className="table-header-cell w-48">Cliente</th>
-        <th className="table-header-cell w-32">EncDivmac</th>
-        <th className="table-header-cell w-40">Ref. Descrição</th>
-        <th className="table-header-cell w-40">Amostra</th>
-        <th className="table-header-cell w-32">NumORC</th>
-        <th className="table-header-cell w-48">N_Envio</th>
-        <th className="table-header-cell w-30">Qty.</th>
-        <th className="table-header-cell w-30">Data Receção</th>
-        <th className="table-header-cell w-36">Observacoes</th>
+        <th className={`${headerCellClass} w-48`}>Cliente</th>
+        <th className={`${headerCellClass} w-32`}>EncDivmac</th>
+        <th className={`${headerCellClass} w-40`}>Ref. Descrição</th>
+        <th className={`${headerCellClass} w-40`}>Amostra</th>
+        <th className={`${headerCellClass} w-32`}>NumORC</th>
+        <th className={`${headerCellClass} w-48`}>N_Envio</th>
+        <th className={`${headerCellClass} w-30`}>Qty.</th>
+        <th className={`${headerCellClass} w-30`}>Data Receção</th>
+        <th className={`${headerCellClass} w-36`}>Observacoes</th>
         {showActions && (
-          <th className="table-header-cell text-center">Actions</th>
+          <th className={`${headerCellClass} text-center`}>Actions</th>
         )}
       </tr>
       {/* Filter Row */}
