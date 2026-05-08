@@ -13,6 +13,7 @@ export interface ConnectorFilters {
 }
 
 const STORAGE_KEY = "connectors_filters_v1";
+const MISSING_TYPE_FILTER = "__missing__";
 
 const defaultFilters: ConnectorFilters = {
   idQuery: "",
@@ -30,7 +31,7 @@ const defaultFilters: ConnectorFilters = {
 
 import { getActiveFilterCount as countFilters } from "@/utils/filterUtils";
 
-export { STORAGE_KEY, defaultFilters };
+export { STORAGE_KEY, defaultFilters, MISSING_TYPE_FILTER };
 
 /**
  * Calculates how many filters are currently active.

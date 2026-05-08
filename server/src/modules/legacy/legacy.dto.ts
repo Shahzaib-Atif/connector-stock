@@ -13,3 +13,8 @@ export interface LegacyBackupDto {
   LastUpdateDate: Date | null;
   SampleType: string | null;
 }
+
+export interface UpdateLegacyConnectorTypeDto {
+  connType: string;
+  lastChangeBy?: string | null;
+}

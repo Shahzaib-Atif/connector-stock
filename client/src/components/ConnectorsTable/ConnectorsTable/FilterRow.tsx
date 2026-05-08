@@ -4,7 +4,7 @@ import {
   StickyFilterCell,
   StickySpacerCell,
 } from "@/components/common/TableFilters";
-import { ConnectorFilters } from "../constants";
+import { ConnectorFilters, MISSING_TYPE_FILTER } from "../constants";
 
 interface Props {
   showImages?: boolean;
@@ -13,10 +13,12 @@ interface Props {
   typeOptions: string[];
   fabricanteOptions: string[];
   colorOptions: string[];
+  isLegacyMode?: boolean;
 }
 
 function FilterRow({
   showImages = false,
+  isLegacyMode = false,
   filters,
   setFilterField,
   typeOptions,
@@ -56,20 +58,32 @@ function FilterRow({
         />
       </StickyFilterCell>
       <StickyFilterCell>
-        <SelectFilter
+        <select
           id="connector-type-filter"
           value={filters.type}
-          onChange={(value) => setFilterField("type", value)}
-          options={typeOptions}
-        />
+          onChange={(e) => setFilterField("type", e.target.value)}
+          className="w-full rounded-lg border border-slate-700 bg-slate-900/50 px-2 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="all">All</option>
+          {isLegacyMode && (
+            <option value={MISSING_TYPE_FILTER}>Missing Type</option>
+          )}{" "}
+          {typeOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
       </StickyFilterCell>
-      <StickyFilterCell>
-        <ClearableTextFilter
-          id="connector-family-filter"
-          value={filters.family}
-          onChange={(value) => setFilterField("family", value)}
-        />
-      </StickyFilterCell>
+      {!isLegacyMode && (
+        <StickyFilterCell>
+          <ClearableTextFilter
+            id="connector-family-filter"
+            value={filters.family}
+            onChange={(value) => setFilterField("family", value)}
+          />
+        </StickyFilterCell>
+      )}
       <StickyFilterCell>
         <SelectFilter
           id="connector-fabricante-filter"
@@ -85,28 +99,31 @@ function FilterRow({
           onChange={(value) => setFilterField("refFabricante", value)}
         />
       </StickyFilterCell>
-      <StickyFilterCell>
-        <div className="grid grid-cols-3 gap-2">
-          <ClearableTextFilter
-            id="connector-intdiameter-filter"
-            value={filters.internalDiameter}
-            onChange={(value) => setFilterField("internalDiameter", value)}
-            placeholder="Int"
-          />
-          <ClearableTextFilter
-            id="connector-extdiameter-filter"
-            value={filters.externalDiameter}
-            onChange={(value) => setFilterField("externalDiameter", value)}
-            placeholder="Ext"
-          />
-          <ClearableTextFilter
-            id="connector-thickness-filter"
-            value={filters.thickness}
-            onChange={(value) => setFilterField("thickness", value)}
-            placeholder="Thick"
-          />
-        </div>
-      </StickyFilterCell>
+      {/* Dimensions Filter */}
+      {!isLegacyMode && (
+        <StickyFilterCell>
+          <div className="grid grid-cols-3 gap-2">
+            <ClearableTextFilter
+              id="connector-intdiameter-filter"
+              value={filters.internalDiameter}
+              onChange={(value) => setFilterField("internalDiameter", value)}
+              placeholder="Int"
+            />
+            <ClearableTextFilter
+              id="connector-extdiameter-filter"
+              value={filters.externalDiameter}
+              onChange={(value) => setFilterField("externalDiameter", value)}
+              placeholder="Ext"
+            />
+            <ClearableTextFilter
+              id="connector-thickness-filter"
+              value={filters.thickness}
+              onChange={(value) => setFilterField("thickness", value)}
+              placeholder="Thick"
+            />
+          </div>
+        </StickyFilterCell>
+      )}
       <StickySpacerCell />
       <StickySpacerCell />
       <StickySpacerCell />

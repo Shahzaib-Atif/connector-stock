@@ -33,4 +33,19 @@ export class LegacyRepo {
       return [];
     }
   }
+
+  async updateConnectorType(
+    codivmac: string,
+    connType: string,
+    lastChangeBy?: string | null,
+  ) {
+    return this.prisma.refer_ncias_bk.update({
+      where: { CODIVMAC: codivmac },
+      data: {
+        ConnType: connType,
+        LastChangeBy: lastChangeBy ?? undefined,
+        LastUpdateDate: new Date(),
+      },
+    });
+  }
 }

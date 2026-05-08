@@ -8,6 +8,10 @@ interface ConnectorsTableProps {
   connectors: ConnectorExtended[];
   showImages?: boolean;
   isLegacyMode?: boolean;
+  onLegacyConnectorUpdated?: (
+    connectorId: string,
+    connectorPatch: Partial<ConnectorExtended>,
+  ) => void;
   showFilters?: boolean;
   filters: ConnectorFilters;
   setFilterField: (key: keyof ConnectorFilters, value: string) => void;
@@ -20,6 +24,7 @@ export const ConnectorsTable: React.FC<ConnectorsTableProps> = ({
   connectors,
   showImages = false,
   isLegacyMode = false,
+  onLegacyConnectorUpdated,
   showFilters = false,
   filters,
   setFilterField,
@@ -38,6 +43,7 @@ export const ConnectorsTable: React.FC<ConnectorsTableProps> = ({
           typeOptions={typeOptions}
           fabricanteOptions={fabricanteOptions}
           colorOptions={colorOptions}
+          isLegacyMode={isLegacyMode}
         />
         <tbody>
           {connectors.length === 0 ? (
@@ -56,6 +62,7 @@ export const ConnectorsTable: React.FC<ConnectorsTableProps> = ({
                 connector={connector}
                 showImages={showImages}
                 isLegacyMode={isLegacyMode}
+                onLegacyConnectorUpdated={onLegacyConnectorUpdated}
               />
             ))
           )}

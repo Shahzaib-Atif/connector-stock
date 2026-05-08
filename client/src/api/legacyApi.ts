@@ -9,3 +9,26 @@ export const fetchLegacyBackups = async (): Promise<LegacyBackup[]> => {
   }
   return await response.json();
 };
+
+export const updateLegacyConnectorType = async (
+  connectorId: string,
+  connType: string,
+  lastChangeBy?: string | null,
+) => {
+  const response = await fetchWithAuth(
+    API.legacy.updateConnectorType(connectorId),
+    {
+      method: "POST",
+      body: JSON.stringify({
+        connType,
+        lastChangeBy,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to update!");
+  }
+
+  return response.json();
+};

@@ -1,11 +1,14 @@
 import { fetchLegacyBackups } from "@/api/legacyApi";
 import { mapLegacyToConnector } from "@/utils/functions/connector";
 import { useAppSelector } from "@/store/hooks";
-import { ConnectorMap } from "@/utils/types";
+import { ConnectorExtended, ConnectorMap } from "@/utils/types";
 import { useEffect, useState } from "react";
+import { useLegacyToggle } from "./useLegacyToggle";
 
 export const useLegacyData = () => {
-  const [isLegacyMode, setIsLegacyMode] = useState(false);
+  const { isLegacyMode, setIsLegacyMode } = useLegacyToggle(
+    "connectors_legacy_mode",
+  );
   const [legacyData, setLegacyData] = useState<ConnectorMap>({});
   const [legacyLoading, setLegacyLoading] = useState(false);
 
@@ -34,5 +37,29 @@ export const useLegacyData = () => {
     }
   }, [isLegacyMode, masterData]);
 
-  return { isLegacyMode, setIsLegacyMode, legacyData, legacyLoading };
+  const updateLegacyConnector = (
+    connectorId: string,
+    connectorPatch: Partial<ConnectorExtended>,
+  ) => {
+    setLegacyData((prev) => {
+      const existing = prev[connectorId];
+      if (!existing) return prev;
+
+      return {
+        ...prev,
+        [connectorId]: {
+          ...existing,
+          ...connectorPatch,
+        },
+      };
+    });
+  };
+
+  return {
+    isLegacyMode,
+    setIsLegacyMode,
+    legacyData,
+    legacyLoading,
+    updateLegacyConnector,
+  };
 };

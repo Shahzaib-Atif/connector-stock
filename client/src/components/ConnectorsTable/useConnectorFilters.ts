@@ -1,7 +1,12 @@
 import { ConnectorExtended, ConnectorMap, MasterData } from "@/utils/types";
 import { parseConnector } from "@/utils/functions/connector";
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { ConnectorFilters, defaultFilters, STORAGE_KEY } from "./constants";
+import {
+  ConnectorFilters,
+  defaultFilters,
+  MISSING_TYPE_FILTER,
+  STORAGE_KEY,
+} from "./constants";
 import { getUniqueOptions } from "@/utils/functions/getUniqueOptions";
 
 export function useConnectorFilters(
@@ -94,7 +99,11 @@ export function useConnectorFilters(
         connector.PosId?.toLowerCase().includes(normalizedPosQuery);
 
       const matchesType =
-        filters.type === "all" || connector.ConnType === filters.type;
+        filters.type === "all"
+          ? true
+          : filters.type === MISSING_TYPE_FILTER
+            ? !connector.ConnType?.trim()
+            : connector.ConnType === filters.type;
 
       const matchesFabricante =
         filters.fabricante === "all" ||

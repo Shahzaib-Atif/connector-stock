@@ -11,11 +11,13 @@ interface TableHeaderProps {
   typeOptions: string[];
   fabricanteOptions: string[];
   colorOptions: string[];
+  isLegacyMode?: boolean;
 }
 
 const TableHeader: React.FC<TableHeaderProps> = ({
   showImages = false,
   showFilters = false,
+  isLegacyMode = false,
   filters,
   setFilterField,
   typeOptions,
@@ -26,16 +28,22 @@ const TableHeader: React.FC<TableHeaderProps> = ({
     <thead className="table-header">
       {/* Header Row */}
       <tr>
-        {showImages && <StickyHeaderCell className="w-24">Photo</StickyHeaderCell>}
+        {showImages && (
+          <StickyHeaderCell className="w-24">Photo</StickyHeaderCell>
+        )}
         <StickyHeaderCell className="w-28">Codivmac Id</StickyHeaderCell>
         <StickyHeaderCell className="w-24">Position</StickyHeaderCell>
         <StickyHeaderCell className="w-20">Color</StickyHeaderCell>
         <StickyHeaderCell className="w-20">Vias</StickyHeaderCell>
-        <StickyHeaderCell className="w-24">Type</StickyHeaderCell>
-        <StickyHeaderCell className="w-20">Family</StickyHeaderCell>
+        <StickyHeaderCell className="w-32">Type</StickyHeaderCell>
+        {!isLegacyMode && (
+          <StickyHeaderCell className="w-20">Family</StickyHeaderCell>
+        )}
         <StickyHeaderCell className="w-32">Fabricante</StickyHeaderCell>
         <StickyHeaderCell className="w-32">Ref. Fabricante</StickyHeaderCell>
-        <StickyHeaderCell className="w-32">Dimensions (mm)</StickyHeaderCell>
+        {!isLegacyMode && (
+          <StickyHeaderCell className="w-32">Dimensions (mm)</StickyHeaderCell>
+        )}
         <StickyHeaderCell className="w-20 text-center text-blue-300">
           Total
         </StickyHeaderCell>
@@ -50,6 +58,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       {/* Filter Row */}
       {showFilters && (
         <FilterRow
+          isLegacyMode={isLegacyMode}
           showImages={showImages}
           colorOptions={colorOptions}
           fabricanteOptions={fabricanteOptions}

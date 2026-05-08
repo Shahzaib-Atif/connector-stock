@@ -55,5 +55,7 @@ export const API = {
   notifications: `${API_BASE_URL}/notifications`,
   legacy: {
     backups: `${API_BASE_URL}/legacy/backups`,
+    updateConnectorType: (id: string) =>
+      `${API_BASE_URL}/legacy/connectors/${encodeURIComponent(id)}/type`,
   },
 };

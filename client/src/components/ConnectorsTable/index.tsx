@@ -29,8 +29,13 @@ export const ConnectorsListView: React.FC = () => {
   );
 
   // Legacy data handling
-  const { isLegacyMode, setIsLegacyMode, legacyData, legacyLoading } =
-    useLegacyData();
+  const {
+    isLegacyMode,
+    setIsLegacyMode,
+    legacyData,
+    legacyLoading,
+    updateLegacyConnector,
+  } = useLegacyData();
 
   // Get connectors from masterData or legacy data
   const connectors = isLegacyMode ? legacyData : (masterData?.connectors ?? {});
@@ -109,6 +114,7 @@ export const ConnectorsListView: React.FC = () => {
               connectors={paginatedConnectors as ConnectorExtended[]}
               showImages={showImages && !isLegacyMode}
               isLegacyMode={isLegacyMode}
+              onLegacyConnectorUpdated={updateLegacyConnector}
               showFilters={showFilters}
               filters={filters}
               setFilterField={setFilterField}
