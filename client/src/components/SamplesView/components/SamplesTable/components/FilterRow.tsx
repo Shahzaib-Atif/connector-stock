@@ -72,7 +72,6 @@ function FilterRow({ showActions = true, filters, setFilterField }: Props) {
       </th>
       <th className="px-2 py-2" />
       <th className="px-2 py-2" />
-      <th className="px-2 py-2" />
       {showActions && <th className="px-2 py-2" />}
     </tr>
   );
