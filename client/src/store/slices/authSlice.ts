@@ -106,7 +106,7 @@ export const authSlice = createSlice({
       state.role = null;
       state.token = undefined;
       state.users = [];
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.clear();
     },
     setUsersList: (state, action: PayloadAction<UserDto[]>) => {
       state.users = action.payload;
