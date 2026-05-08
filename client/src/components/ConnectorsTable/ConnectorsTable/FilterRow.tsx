@@ -124,9 +124,9 @@ function FilterRow({
           </div>
         </StickyFilterCell>
       )}
-      <StickySpacerCell />
-      <StickySpacerCell />
-      <StickySpacerCell />
+      {!isLegacyMode && <StickySpacerCell />}
+      {!isLegacyMode && <StickySpacerCell />}
+      {!isLegacyMode && <StickySpacerCell />}
       <StickySpacerCell />
     </tr>
   );

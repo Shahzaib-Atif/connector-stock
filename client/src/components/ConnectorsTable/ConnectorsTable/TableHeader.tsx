@@ -42,17 +42,23 @@ const TableHeader: React.FC<TableHeaderProps> = ({
         <StickyHeaderCell className="w-32">Fabricante</StickyHeaderCell>
         <StickyHeaderCell className="w-32">Ref. Fabricante</StickyHeaderCell>
         {!isLegacyMode && (
-          <StickyHeaderCell className="w-32">Dimensions (mm)</StickyHeaderCell>
+          <StickyHeaderCell className="w-36">Dimensions (mm)</StickyHeaderCell>
         )}
-        <StickyHeaderCell className="w-20 text-center text-blue-300">
-          Total
-        </StickyHeaderCell>
-        <StickyHeaderCell className="w-16 text-center text-slate-400">
-          CF
-        </StickyHeaderCell>
-        <StickyHeaderCell className="w-16 text-center text-slate-400">
-          SF
-        </StickyHeaderCell>
+        {!isLegacyMode && (
+          <StickyHeaderCell className="w-20 text-center text-blue-300">
+            Total
+          </StickyHeaderCell>
+        )}
+        {!isLegacyMode && (
+          <StickyHeaderCell className="w-16 text-center text-slate-400">
+            CF
+          </StickyHeaderCell>
+        )}
+        {!isLegacyMode && (
+          <StickyHeaderCell className="w-16 text-center text-slate-400">
+            SF
+          </StickyHeaderCell>
+        )}
         <StickyHeaderCell className="w-32">OBS</StickyHeaderCell>
       </tr>
       {/* Filter Row */}
