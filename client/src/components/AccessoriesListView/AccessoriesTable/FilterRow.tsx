@@ -1,5 +1,10 @@
+import {
+  ClearableTextFilter,
+  SelectFilter,
+  StickyFilterCell,
+  StickySpacerCell,
+} from "@/components/common/TableFilters";
 import { AccessoryFilters } from "../constants";
-import { filterStyles } from "@/utils/filterUtils";
 
 interface Props {
   filters: AccessoryFilters;
@@ -16,83 +21,57 @@ function FilterRow({
 }: Props) {
   return (
     <tr id="accessories-filter-row" className="bg-slate-900/50">
-      <th className="px-2 py-2" />
-      <th className="px-2 py-2 align-top">
-        <input
+      <StickySpacerCell />
+      <StickyFilterCell>
+        <ClearableTextFilter
           id="acc-id-search"
-          type="text"
           value={filters.idQuery}
-          onChange={(e) => setFilterField("idQuery", e.target.value)}
+          onChange={(value) => setFilterField("idQuery", value)}
           autoComplete="off"
-          placeholder="All"
-          className={filterStyles.input}
         />
-      </th>
-      <th className="px-2 py-2 align-top">
-        <input
+      </StickyFilterCell>
+      <StickyFilterCell>
+        <ClearableTextFilter
           id="acc-conn-search"
-          type="text"
           value={filters.connName}
-          onChange={(e) => setFilterField("connName", e.target.value)}
+          onChange={(value) => setFilterField("connName", value)}
           autoComplete="off"
-          placeholder="All"
-          className={filterStyles.input}
         />
-      </th>
-      <th className="px-2 py-2 align-top">
-        <select
+      </StickyFilterCell>
+      <StickyFilterCell>
+        <SelectFilter
           id="acc-type-filter"
           value={filters.type}
-          onChange={(e) => setFilterField("type", e.target.value)}
-          className={filterStyles.select}
-        >
-          <option value="all">All</option>
-          {typeOptions.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      </th>
-      <th className="px-2 py-2 align-top">
-        <input
+          onChange={(value) => setFilterField("type", value)}
+          options={typeOptions}
+        />
+      </StickyFilterCell>
+      <StickyFilterCell>
+        <ClearableTextFilter
           id="acc-refclient-search"
-          type="text"
           value={filters.refClient}
-          onChange={(e) => setFilterField("refClient", e.target.value)}
+          onChange={(value) => setFilterField("refClient", value)}
           autoComplete="off"
-          placeholder="All"
-          className={filterStyles.input}
         />
-      </th>
-      <th className="px-2 py-2 align-top">
-        <input
+      </StickyFilterCell>
+      <StickyFilterCell>
+        <ClearableTextFilter
           id="acc-refdv-search"
-          type="text"
           value={filters.refDV}
-          onChange={(e) => setFilterField("refDV", e.target.value)}
+          onChange={(value) => setFilterField("refDV", value)}
           autoComplete="off"
-          placeholder="All"
-          className={filterStyles.input}
         />
-      </th>
-      <th className="px-2 py-2 align-top">
-        <select
+      </StickyFilterCell>
+      <StickyFilterCell>
+        <SelectFilter
           id="acc-color-filter"
           value={filters.clipColor}
-          onChange={(e) => setFilterField("clipColor", e.target.value)}
-          className={filterStyles.select}
-        >
-          <option value="all">All</option>
-          {colorOptions.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      </th>
-      <th className="px-2 py-2" />
-      <th className="px-2 py-2" />
+          onChange={(value) => setFilterField("clipColor", value)}
+          options={colorOptions}
+        />
+      </StickyFilterCell>
+      <StickySpacerCell />
+      <StickySpacerCell />
     </tr>
   );
 }

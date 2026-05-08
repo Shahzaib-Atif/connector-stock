@@ -1,5 +1,6 @@
 import React from "react";
 import FilterRow from "./FilterRow";
+import { StickyHeaderCell } from "@/components/common/TableFilters";
 
 interface TableHeaderProps {
   showFilters?: boolean;
@@ -31,17 +32,17 @@ function TableHeader({
   return (
     <thead>
       <tr className="table-header">
-        <th className="table-header-cell w-12">No.</th>
-        <th className="table-header-cell min-w-60">Item ID</th>
-        <th className="table-header-cell min-w-32">Type</th>
-        <th className="table-header-cell min-w-36">Item Type</th>
-        <th className="table-header-cell min-w-36">Department</th>
-        <th className="table-header-cell min-w-36">Amount</th>
-        <th className="table-header-cell min-w-36">Sender</th>
-        <th className="table-header-cell min-w-36">Encomenda</th>
-        <th className="table-header-cell min-w-60">Notes</th>
-        <th className="table-header-cell min-w-32">Wires</th>
-        <th className="table-header-cell min-w-32">Date</th>
+        <StickyHeaderCell className="w-12">No.</StickyHeaderCell>
+        <StickyHeaderCell className="min-w-60">Item ID</StickyHeaderCell>
+        <StickyHeaderCell className="min-w-32">Type</StickyHeaderCell>
+        <StickyHeaderCell className="min-w-36">Item Type</StickyHeaderCell>
+        <StickyHeaderCell className="min-w-36">Department</StickyHeaderCell>
+        <StickyHeaderCell className="min-w-36">Amount</StickyHeaderCell>
+        <StickyHeaderCell className="min-w-36">Sender</StickyHeaderCell>
+        <StickyHeaderCell className="min-w-36">Encomenda</StickyHeaderCell>
+        <StickyHeaderCell className="min-w-60">Notes</StickyHeaderCell>
+        <StickyHeaderCell className="min-w-32">Wires</StickyHeaderCell>
+        <StickyHeaderCell className="min-w-32">Date</StickyHeaderCell>
       </tr>
       {showFilters && (
         <FilterRow

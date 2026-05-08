@@ -1,6 +1,7 @@
 import React from "react";
 import { ConnectorFilters } from "../constants";
 import FilterRow from "./FilterRow";
+import { StickyHeaderCell } from "@/components/common/TableFilters";
 
 interface TableHeaderProps {
   showImages?: boolean;
@@ -25,26 +26,26 @@ const TableHeader: React.FC<TableHeaderProps> = ({
     <thead className="table-header">
       {/* Header Row */}
       <tr>
-        {showImages && <th className="table-header-cell w-24">Photo</th>}
-        <th className="table-header-cell w-28">Codivmac Id</th>
-        <th className="table-header-cell w-24">Position</th>
-        <th className="table-header-cell w-20">Color</th>
-        <th className="table-header-cell w-20">Vias</th>
-        <th className="table-header-cell w-24">Type</th>
-        <th className="table-header-cell w-20">Family</th>
-        <th className="table-header-cell w-32">Fabricante</th>
-        <th className="table-header-cell w-32">Ref. Fabricante</th>
-        <th className="table-header-cell w-32">Dimensions (mm)</th>
-        <th className="table-header-cell w-20 text-center text-blue-300">
+        {showImages && <StickyHeaderCell className="w-24">Photo</StickyHeaderCell>}
+        <StickyHeaderCell className="w-28">Codivmac Id</StickyHeaderCell>
+        <StickyHeaderCell className="w-24">Position</StickyHeaderCell>
+        <StickyHeaderCell className="w-20">Color</StickyHeaderCell>
+        <StickyHeaderCell className="w-20">Vias</StickyHeaderCell>
+        <StickyHeaderCell className="w-24">Type</StickyHeaderCell>
+        <StickyHeaderCell className="w-20">Family</StickyHeaderCell>
+        <StickyHeaderCell className="w-32">Fabricante</StickyHeaderCell>
+        <StickyHeaderCell className="w-32">Ref. Fabricante</StickyHeaderCell>
+        <StickyHeaderCell className="w-32">Dimensions (mm)</StickyHeaderCell>
+        <StickyHeaderCell className="w-20 text-center text-blue-300">
           Total
-        </th>
-        <th className="table-header-cell w-16 text-center text-slate-400">
+        </StickyHeaderCell>
+        <StickyHeaderCell className="w-16 text-center text-slate-400">
           CF
-        </th>
-        <th className="table-header-cell w-16 text-center text-slate-400">
+        </StickyHeaderCell>
+        <StickyHeaderCell className="w-16 text-center text-slate-400">
           SF
-        </th>
-        <th className="table-header-cell w-32">OBS</th>
+        </StickyHeaderCell>
+        <StickyHeaderCell className="w-32">OBS</StickyHeaderCell>
       </tr>
       {/* Filter Row */}
       {showFilters && (

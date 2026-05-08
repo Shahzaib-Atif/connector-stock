@@ -1,6 +1,7 @@
 import React from "react";
 import { AccessoryFilters } from "../constants";
 import FilterRow from "./FilterRow";
+import { StickyHeaderCell } from "@/components/common/TableFilters";
 
 interface TableHeaderProps {
   showFilters?: boolean;
@@ -20,17 +21,17 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   return (
     <thead className="table-header">
       <tr>
-        <th className="table-header-cell w-20">Photo</th>
-        <th className="table-header-cell w-28">Name</th>
-        <th className="table-header-cell w-28 text-left">Connector</th>
-        <th className="table-header-cell w-28">Type</th>
-        <th className="table-header-cell w-32">Ref. Client</th>
-        <th className="table-header-cell w-32">Ref. DV</th>
-        <th className="table-header-cell w-16">Color</th>
-        <th className="table-header-cell w-16 text-center text-blue-300">
+        <StickyHeaderCell className="w-20">Photo</StickyHeaderCell>
+        <StickyHeaderCell className="w-28">Name</StickyHeaderCell>
+        <StickyHeaderCell className="w-28 text-left">Connector</StickyHeaderCell>
+        <StickyHeaderCell className="w-28">Type</StickyHeaderCell>
+        <StickyHeaderCell className="w-32">Ref. Client</StickyHeaderCell>
+        <StickyHeaderCell className="w-32">Ref. DV</StickyHeaderCell>
+        <StickyHeaderCell className="w-16">Color</StickyHeaderCell>
+        <StickyHeaderCell className="w-16 text-center text-blue-300">
           Qty
-        </th>
-        <th className="table-header-cell w-16">Angle</th>
+        </StickyHeaderCell>
+        <StickyHeaderCell className="w-16">Angle</StickyHeaderCell>
       </tr>
       {showFilters && (
         <FilterRow

@@ -1,4 +1,9 @@
-import { filterStyles } from "@/utils/filterUtils";
+import {
+  ClearableTextFilter,
+  SelectFilter,
+  StickyFilterCell,
+  StickySpacerCell,
+} from "@/components/common/TableFilters";
 
 interface Props {
   transactionType: "all" | "IN" | "OUT";
@@ -27,55 +32,42 @@ function FilterRow({
 }: Props) {
   return (
     <tr id="transactions-filter-row" className="bg-slate-900/50">
-      <th className="px-2 py-2" />
-      <th className="px-2 py-2 align-top">
-        <input
+      <StickySpacerCell />
+      <StickyFilterCell>
+        <ClearableTextFilter
           id="transaction-itemid-filter"
-          type="text"
           value={itemIdQuery}
-          onChange={(e) => onSearchItemIdChange(e.target.value)}
+          onChange={onSearchItemIdChange}
           autoComplete="off"
-          placeholder="All"
-          className={filterStyles.input}
         />
-      </th>
-      <th className="px-2 py-2 align-top">
-        <select
+      </StickyFilterCell>
+      <StickyFilterCell>
+        <SelectFilter
           id="transaction-type-filter"
           value={transactionType}
-          onChange={(e) =>
-            onTransactionTypeChange(e.target.value as "all" | "IN" | "OUT")
+          onChange={(value) =>
+            onTransactionTypeChange(value as "all" | "IN" | "OUT")
           }
-          className={filterStyles.select}
-        >
-          <option value="all">All</option>
-          <option value="IN">IN</option>
-          <option value="OUT">OUT</option>
-        </select>
-      </th>
-      <th className="px-2 py-2 align-top">
-        <select
+          options={["IN", "OUT"]}
+        />
+      </StickyFilterCell>
+      <StickyFilterCell>
+        <SelectFilter
           id="transaction-itemtype-filter"
           value={itemType}
-          onChange={(e) =>
-            onItemTypeChange(
-              e.target.value as "all" | "connector" | "accessory",
-            )
+          onChange={(value) =>
+            onItemTypeChange(value as "all" | "connector" | "accessory")
           }
-          className={filterStyles.select}
-        >
-          <option value="all">All</option>
-          <option value="connector">Connector</option>
-          <option value="accessory">Accessory</option>
-        </select>
-      </th>
-      <th className="px-2 py-2" />
-      <th className="px-2 py-2" />
-      <th className="px-2 py-2" />
-      <th className="px-2 py-2" />
-      <th className="px-2 py-2" />
-      <th className="px-2 py-2" />
-      <th className="px-2 py-2" />
+          options={["connector", "accessory"]}
+        />
+      </StickyFilterCell>
+      <StickySpacerCell />
+      <StickySpacerCell />
+      <StickySpacerCell />
+      <StickySpacerCell />
+      <StickySpacerCell />
+      <StickySpacerCell />
+      <StickySpacerCell />
     </tr>
   );
 }
