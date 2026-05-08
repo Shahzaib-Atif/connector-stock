@@ -36,7 +36,11 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       </tr>
       {/* Filter Row */}
       {showFilters && (
-        <FilterRow filters={filters} setFilterField={setFilterField} />
+        <FilterRow
+          showActions={showActions}
+          filters={filters}
+          setFilterField={setFilterField}
+        />
       )}
     </thead>
   );
