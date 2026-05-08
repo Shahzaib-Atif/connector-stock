@@ -4,10 +4,11 @@ import { useAppSelector } from "@/store/hooks";
 import { ConnectorExtended, ConnectorMap } from "@/utils/types";
 import { useEffect, useState } from "react";
 import { useLegacyToggle } from "./useLegacyToggle";
+import { STORAGE_KEYS } from "@/utils/constants";
 
 export const useLegacyData = () => {
   const { isLegacyMode, setIsLegacyMode } = useLegacyToggle(
-    "connectors_legacy_mode",
+    STORAGE_KEYS.CONNECTORS_LEGACY_MODE,
   );
   const [legacyData, setLegacyData] = useState<ConnectorMap>({});
   const [legacyLoading, setLegacyLoading] = useState(false);

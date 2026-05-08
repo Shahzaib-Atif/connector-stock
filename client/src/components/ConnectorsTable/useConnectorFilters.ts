@@ -5,14 +5,15 @@ import {
   ConnectorFilters,
   defaultFilters,
   MISSING_TYPE_FILTER,
-  STORAGE_KEY,
 } from "./constants";
 import { getUniqueOptions } from "@/utils/functions/getUniqueOptions";
+import { STORAGE_KEYS } from "@/utils/constants";
 
 export function useConnectorFilters(
   connectors: ConnectorMap,
   masterData?: MasterData | null,
 ) {
+  const STORAGE_KEY = STORAGE_KEYS.CONNECTORS_FILTERS;
   const [filters, setFilters] = useState<ConnectorFilters>(() => {
     if (typeof window === "undefined") {
       return defaultFilters;

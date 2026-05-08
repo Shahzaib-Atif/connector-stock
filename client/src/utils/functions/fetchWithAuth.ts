@@ -1,8 +1,9 @@
-import { AUTH_EXPIRED_EVENT, SESSION_KEY } from "../constants";
+import { AUTH_EXPIRED_EVENT, STORAGE_KEYS } from "../constants";
+const sessionKey = STORAGE_KEYS.SESSION;
 
 const getAuthToken = () => {
   try {
-    const session = localStorage.getItem(SESSION_KEY);
+    const session = localStorage.getItem(sessionKey);
     if (session) {
       const parsed = JSON.parse(session);
       return parsed.token;
@@ -28,7 +29,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   });
 
   if (response.status === 401) {
-    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(sessionKey);
     window.dispatchEvent(new CustomEvent(AUTH_EXPIRED_EVENT));
     throw new Error("Session has expired. Please log in again.");
   }

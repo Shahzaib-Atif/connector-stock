@@ -4,23 +4,26 @@ import {
   deleteUserApi,
   fetchUsersApi,
 } from "@/api/authApi";
-import { User, UserRoles } from "@/utils/types";
-import { SESSION_KEY } from "@/utils/constants";
+import { STORAGE_KEYS } from "@/utils/constants";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { UserDto } from "@shared/dto/UserDto";
+import { UserRoles } from "@shared/enums/UserRoles";
 
 interface AuthState {
   isAuthenticated: boolean;
   user: string | null;
   role: UserRoles | null;
   token?: string;
-  users: User[];
+  users: UserDto[];
   loading?: boolean;
   error?: string | null;
 }
 
+const STORAGE_KEY = STORAGE_KEYS.SESSION;
+
 const loadSession = (): AuthState => {
   try {
-    const serializedState = localStorage.getItem(SESSION_KEY);
+    const serializedState = localStorage.getItem(STORAGE_KEY);
     if (serializedState === null) {
       return { isAuthenticated: false, user: null, role: null, users: [] };
     }
@@ -47,7 +50,7 @@ export const refreshUsersList = createAsyncThunk(
 
 export const createUserThunk = createAsyncThunk(
   "usersList/create",
-  async (userData: User, { dispatch }) => {
+  async (userData: UserDto, { dispatch }) => {
     const result = await createUserApi(userData);
     dispatch(initUsersList());
     return result;
@@ -88,7 +91,7 @@ export const authSlice = createSlice({
       state.token = action.payload.token;
 
       localStorage.setItem(
-        SESSION_KEY,
+        STORAGE_KEY,
         JSON.stringify({
           isAuthenticated: state.isAuthenticated,
           user: state.user,
@@ -103,9 +106,9 @@ export const authSlice = createSlice({
       state.role = null;
       state.token = undefined;
       state.users = [];
-      localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(STORAGE_KEY);
     },
-    setUsersList: (state, action: PayloadAction<User[]>) => {
+    setUsersList: (state, action: PayloadAction<UserDto[]>) => {
       state.users = action.payload;
     },
   },

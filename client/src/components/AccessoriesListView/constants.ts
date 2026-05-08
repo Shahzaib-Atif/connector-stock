@@ -9,8 +9,6 @@ export interface AccessoryFilters {
   qty: string;
 }
 
-export const STORAGE_KEY = "accessories_filters_v1";
-
 export const defaultFilters: AccessoryFilters = {
   idQuery: "",
   type: "all",

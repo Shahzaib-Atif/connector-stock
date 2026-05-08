@@ -21,6 +21,7 @@ import { SamplesFilterBar } from "./SamplesFilterBar";
 import { getActiveFilterCount } from "./constants";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersToggle";
+import { STORAGE_KEYS } from "@/utils/constants";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -44,7 +45,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   } = useSampleFilters(samples);
   const activeFiltersCount = getActiveFilterCount(filters);
   const { showFilters, setShowFilters } = useFiltersToggle(
-    "samples_show_filters",
+    STORAGE_KEYS.SAMPLES_SHOW_FILTERS,
   );
 
   const {

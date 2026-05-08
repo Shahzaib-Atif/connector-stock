@@ -3,8 +3,8 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import {
   AccessoryFilters,
   defaultFilters,
-  STORAGE_KEY,
 } from "@/components/AccessoriesListView/constants";
+import { STORAGE_KEYS } from "@/utils/constants";
 
 interface UseAccessoryFiltersReturn {
   filters: AccessoryFilters;
@@ -14,6 +14,8 @@ interface UseAccessoryFiltersReturn {
   typeOptions: string[];
   colorOptions: string[];
 }
+
+const STORAGE_KEY = STORAGE_KEYS.ACCESSORIES_FILTERS;
 
 export function useAccessoryFilters(
   accessories: AccessoryMap,
@@ -95,7 +97,10 @@ export function useAccessoryFilters(
         filters.clipColor === "all" ||
         accessory.ClipColor === filters.clipColor;
       const matchesQty =
-        !qtyQuery || String(accessory.Qty ?? "").toLowerCase().includes(qtyQuery);
+        !qtyQuery ||
+        String(accessory.Qty ?? "")
+          .toLowerCase()
+          .includes(qtyQuery);
 
       return (
         matchesId &&

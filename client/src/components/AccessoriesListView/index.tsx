@@ -11,6 +11,7 @@ import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
 import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersToggle";
 import { AccessoryExtended } from "@/utils/types";
+import { STORAGE_KEYS } from "@/utils/constants";
 
 export const AccessoriesListView: React.FC = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export const AccessoriesListView: React.FC = () => {
   // Get accessories from masterData (default to empty object if not loaded)
   const accessories = masterData?.accessories ?? {};
   const { showFilters, setShowFilters } = useFiltersToggle(
-    "accessories_show_filters",
+    STORAGE_KEYS.ACCESSORIES_SHOW_FILTERS,
   );
 
   // Custom hook for filters

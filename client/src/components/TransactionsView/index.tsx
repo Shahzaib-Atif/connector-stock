@@ -11,12 +11,13 @@ import { ROUTES } from "../AppRoutes";
 import { Pagination } from "../common/Pagination";
 import { Transaction } from "@shared/types/Transaction";
 import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersToggle";
+import { STORAGE_KEYS } from "@/utils/constants";
 
 export const TransactionsView: React.FC = () => {
   const navigate = useNavigate();
   const { transactions, loading } = useAppSelector((state) => state.txData);
   const { showFilters, setShowFilters } = useFiltersToggle(
-    "transactions_show_filters",
+    STORAGE_KEYS.TRANSACTIONS_SHOW_FILTERS,
   );
 
   // filter

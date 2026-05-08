@@ -16,6 +16,7 @@ import { getActiveFilterCount } from "./constants";
 import LegacyToggleBtn from "./ConnectorsTable/LegacyToggleBtn";
 import ImageToggleBtn from "../common/ImageToggleBtn";
 import { useFiltersToggle } from "./ConnectorsTable/useFiltersToggle";
+import { STORAGE_KEYS } from "@/utils/constants";
 
 export const ConnectorsListView: React.FC = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ export const ConnectorsListView: React.FC = () => {
 
   // Photo visibility state with persistence
   const { showImages, setShowImages } = useImageToggle(
-    "connectors_show_images",
+    STORAGE_KEYS.CONNECTORS_SHOW_IMAGES,
   );
 
   // Legacy data handling
@@ -53,7 +54,7 @@ export const ConnectorsListView: React.FC = () => {
 
   const activeFiltersCount = getActiveFilterCount(filters);
   const { showFilters, setShowFilters } = useFiltersToggle(
-    "connectors_show_filters",
+    STORAGE_KEYS.CONNECTORS_SHOW_FILTERS,
   );
 
   const {

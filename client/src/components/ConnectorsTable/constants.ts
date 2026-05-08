@@ -12,7 +12,6 @@ export interface ConnectorFilters {
   thickness: string;
 }
 
-const STORAGE_KEY = "connectors_filters_v1";
 const MISSING_TYPE_FILTER = "__missing__";
 
 const defaultFilters: ConnectorFilters = {
@@ -31,7 +30,7 @@ const defaultFilters: ConnectorFilters = {
 
 import { getActiveFilterCount as countFilters } from "@/utils/filterUtils";
 
-export { STORAGE_KEY, defaultFilters, MISSING_TYPE_FILTER };
+export { defaultFilters, MISSING_TYPE_FILTER };
 
 /**
  * Calculates how many filters are currently active.

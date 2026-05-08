@@ -2,34 +2,27 @@ import { RequestState } from "@/utils/types/RequestState";
 import { API } from "@/utils/api";
 import { QRData } from "@/utils/types";
 import { useState } from "react";
-import { Printer_t } from "@/utils/constants";
+import { STORAGE_KEYS } from "@/utils/constants";
+import usePrinterSelection from "./useSelectPrinter";
+import usePrinterLabelSizeSelection from "./usePrinterLabelSizeSelection";
 
 export default function usePrinting(qrData: QRData, itemIdLink: string) {
   const { id: itemId, source, refCliente, encomenda, qty } = qrData;
 
   const [isPrinting, setIsPrinting] = useState(false);
   const [printQty, setPrintQty] = useState(qty || 1);
-
-  const [selectedPrinter, setSelectedPrinter] = useState<Printer_t>(() => {
-    const stored = localStorage.getItem("selected_printer");
-    return Object.values(Printer_t).includes(stored as Printer_t)
-      ? (stored as Printer_t)
-      : Printer_t.PRINTER_1;
-  });
+  const { selectedPrinter, updatePrinter } = usePrinterSelection(
+    STORAGE_KEYS.SELECTED_PRINTER,
+  );
 
   const [printStatus, setPrintStatus] = useState<{
     type: RequestState;
     message: string;
   } | null>(null);
 
-  const [useSmallLabels, setUseSmallLabels] = useState<boolean>(() => {
-    return localStorage.getItem("use_small_labels") === "true";
-  });
-
-  const updateLabelSize = (val: boolean) => {
-    setUseSmallLabels(val);
-    localStorage.setItem("use_small_labels", String(val));
-  };
+  const { useSmallLabels, updateLabelSize } = usePrinterLabelSizeSelection(
+    STORAGE_KEYS.USE_SMALL_LABELS,
+  );
 
   const handlePrint = async () => {
     setIsPrinting(true);
@@ -72,11 +65,6 @@ export default function usePrinting(qrData: QRData, itemIdLink: string) {
     } finally {
       setIsPrinting(false);
     }
-  };
-
-  const updatePrinter = (printer: Printer_t) => {
-    setSelectedPrinter(printer);
-    localStorage.setItem("selected_printer", printer);
   };
 
   return {

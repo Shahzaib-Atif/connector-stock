@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from "@/utils/constants";
 import { getActiveFilterCount as countFilters } from "@/utils/filterUtils";
 
 export interface SampleFilters {
@@ -12,7 +13,7 @@ export interface SampleFilters {
   entregueA: string;
 }
 
-export const STORAGE_KEY = "samples_filters_v1";
+export const STORAGE_KEY = STORAGE_KEYS.SAMPLES_FILTERS;
 
 export const defaultFilters: SampleFilters = {
   idQuery: "",
