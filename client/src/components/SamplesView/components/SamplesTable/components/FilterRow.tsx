@@ -75,8 +75,6 @@ function FilterCell({
 }
 
 function FilterRow({ showActions = true, filters, setFilterField }: Props) {
-  console.log("showActions: ", showActions);
-
   return (
     <tr id="samples-filter-row" className="bg-slate-900/50">
       <FilterCell
