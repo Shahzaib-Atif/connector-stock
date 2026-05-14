@@ -47,33 +47,16 @@ export const useSampleFormSubmit = ({
     await createOrUpdateSample();
   };
 
+  // Function to create or update sample based on the form state
   const createOrUpdateSample = async () => {
     try {
       const currentUser = user || "system";
 
+      // If editing, update the sample; otherwise, create a new one
       if (isEditing && sample) {
-        await dispatch(
-          updateSampleThunk({
-            id: sample.ID,
-            data: {
-              ...formData,
-              Amostra: formData.Amostra?.toUpperCase(),
-              LasUpdateBy: currentUser,
-              ActualUser: currentUser,
-              associatedItemIds: selectedAccessoryIds,
-            },
-          }),
-        ).unwrap();
+        await updateSample(sample, currentUser);
       } else {
-        await dispatch(
-          createSampleThunk({
-            ...formData,
-            Amostra: formData.Amostra?.toUpperCase(),
-            CreatedBy: currentUser,
-            ActualUser: currentUser,
-            associatedItemIds: selectedAccessoryIds,
-          }),
-        ).unwrap();
+        await createSample(currentUser);
       }
 
       onSuccess();
@@ -83,6 +66,33 @@ export const useSampleFormSubmit = ({
         getErrorMsg(err, "Failed to save sample. Please try again."),
       );
     }
+  };
+
+  const updateSample = async (sample: SamplesDto, currentUser: string) => {
+    await dispatch(
+      updateSampleThunk({
+        id: sample.ID,
+        data: {
+          ...formData,
+          Amostra: formData.Amostra?.toUpperCase(),
+          LasUpdateBy: currentUser,
+          ActualUser: currentUser,
+          associatedItemIds: selectedAccessoryIds,
+        },
+      }),
+    ).unwrap();
+  };
+
+  const createSample = async (currentUser: string) => {
+    await dispatch(
+      createSampleThunk({
+        ...formData,
+        Amostra: formData.Amostra?.toUpperCase(),
+        CreatedBy: currentUser,
+        ActualUser: currentUser,
+        associatedItemIds: selectedAccessoryIds,
+      }),
+    ).unwrap();
   };
 
   return { handleSubmit, formError };

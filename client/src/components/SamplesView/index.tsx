@@ -22,6 +22,7 @@ import { getActiveFilterCount } from "./constants";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersToggle";
 import { STORAGE_KEYS } from "@/utils/constants";
+import ActionBar from "./components/ActionBar";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -146,22 +147,10 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
         <div className="table-view-inner-content">
           {/* Action Bar */}
           {isAuthenticated && isAdmin && (
-            <div className="flex justify-end gap-3 flex-none">
-              <>
-                <button
-                  onClick={handleOpenWizard}
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-purple-600/30"
-                >
-                  Create from Reference
-                </button>
-                <button
-                  onClick={handleCreateNew}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-green-600/30"
-                >
-                  + New Sample
-                </button>
-              </>
-            </div>
+            <ActionBar
+              handleCreateNew={handleCreateNew}
+              handleOpenWizard={handleOpenWizard}
+            />
           )}
 
           <SamplesFilterBar
@@ -199,6 +188,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
         </div>
       </div>
 
+      {/* Modal */}
       {isModalOpen && (
         <SampleFormModal
           sample={editingSample ?? duplicateSample}
@@ -209,6 +199,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
         />
       )}
 
+      {/* Wizard */}
       {isWizardOpen && (
         <SampleCreationWizard
           onClose={handleWizardClose}
@@ -216,6 +207,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
         />
       )}
 
+      {/* Delete Dialog */}
       {!isModalOpen && (
         <DeleteDialog
           open={openDltDlg}

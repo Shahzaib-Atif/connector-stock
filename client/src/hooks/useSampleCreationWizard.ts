@@ -12,31 +12,7 @@ import { CreateSamplesDto } from "@shared/dto/SamplesDto";
 type WizardStep = 1 | 2 | 3;
 export type WizardFlow = "ECL" | "ORC";
 
-interface UseSampleCreationWizardReturn {
-  // State
-  currentStep: WizardStep;
-  refCliente: string;
-  analiseTabData: AnaliseTabDto[];
-  regAmostrasData: (RegAmostrasEncDto | RegAmostrasOrcDto)[];
-  selectedAnaliseRow: AnaliseTabDto | null;
-  selectedRegRow: (RegAmostrasEncDto | RegAmostrasOrcDto) | null;
-  flow: WizardFlow;
-  loading: boolean;
-  error: string | null;
-
-  // Actions
-  setFlow: (flow: WizardFlow) => void;
-  setRefCliente: (value: string) => void;
-  searchAnaliseTab: () => Promise<void>;
-  selectAnaliseRow: (row: AnaliseTabDto) => void;
-  proceedToRegAmostras: () => Promise<void>;
-  selectRegRow: (row: RegAmostrasEncDto | RegAmostrasOrcDto) => void;
-  getPrefillData: () => Partial<CreateSamplesDto>;
-  reset: () => void;
-  goBack: () => void;
-}
-
-export function useSampleCreationWizard(): UseSampleCreationWizardReturn {
+export function useSampleCreationWizard() {
   const [currentStep, setCurrentStep] = useState<WizardStep>(1);
   const [refCliente, setRefCliente] = useState("");
   const [analiseTabData, setAnaliseTabData] = useState<AnaliseTabDto[]>([]);
