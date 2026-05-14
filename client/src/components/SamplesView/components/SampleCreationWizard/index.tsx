@@ -8,10 +8,14 @@ import WizardStep3Enc from "./components/WizardStep3Enc";
 import WizardStep2Orc from "./components/WizardStep2Orc/index";
 import SampleWizardModalHeader from "./components/SampleWizardModalHeader";
 import { CreateSamplesDto } from "@shared/dto/SamplesDto";
+import { LineStatusContext } from "@/utils/functions/divDesk";
 
 interface SampleCreationWizardProps {
   onClose: () => void;
-  onProceedToForm: (prefillData: Partial<CreateSamplesDto>) => void;
+  onProceedToForm: (
+    prefillData: Partial<CreateSamplesDto>,
+    statusContext?: LineStatusContext,
+  ) => void;
 }
 
 export const SampleCreationWizard: React.FC<SampleCreationWizardProps> = ({
@@ -47,7 +51,15 @@ export const SampleCreationWizard: React.FC<SampleCreationWizardProps> = ({
     }
 
     const prefillData = getPrefillData();
-    onProceedToForm(prefillData);
+    const statusContext =
+      flow === "ECL" && selectedAnaliseRow
+        ? {
+            enc: selectedAnaliseRow.Encomenda,
+            line: selectedAnaliseRow.NumLinha,
+          }
+        : undefined;
+
+    onProceedToForm(prefillData, statusContext);
     reset();
     onClose();
   };

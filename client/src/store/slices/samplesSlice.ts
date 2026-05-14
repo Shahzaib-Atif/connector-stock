@@ -6,7 +6,6 @@ import {
   deleteSample,
   getAllSamplesFromORC,
 } from "@/api/samplesApi";
-import { setLineStatus } from "@/utils/functions/setLineStatus";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
 
@@ -53,7 +52,6 @@ export const createSampleThunk = createAsyncThunk(
   "samples/create",
   async (sampleData: CreateSamplesDto) => {
     const sample = await createSample(sampleData); // create sample
-    setLineStatus(sample.EncDivmac ?? "", sample.Ref_Descricao ?? "");
     return sample;
   },
 );

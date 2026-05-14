@@ -23,6 +23,7 @@ import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersToggle";
 import { STORAGE_KEYS } from "@/utils/constants";
 import ActionBar from "./components/ActionBar";
+import { LineStatusContext } from "@/utils/functions/divDesk";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -68,6 +69,9 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   const [prefillData, setPrefillData] = useState<
     Partial<CreateSamplesDto> | undefined
   >();
+  const [lineStatusContext, setLineStatusContext] = useState<
+    LineStatusContext | undefined
+  >();
 
   // Fetch samples on mount (only if not already loaded)
   useEffect(() => {
@@ -109,6 +113,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
     setEditingSample(null);
     setDuplicateSample(null);
     setPrefillData(undefined);
+    setLineStatusContext(undefined);
   };
 
   const handleSaveSuccess = () => {
@@ -123,8 +128,12 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
     setIsWizardOpen(false);
   };
 
-  const handleProceedToForm = (data: Partial<CreateSamplesDto>) => {
+  const handleProceedToForm = (
+    data: Partial<CreateSamplesDto>,
+    statusContext?: LineStatusContext,
+  ) => {
     setPrefillData(data);
+    setLineStatusContext(statusContext);
     setEditingSample(null);
     setDuplicateSample(null);
     setIsModalOpen(true);
@@ -196,6 +205,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
           onSuccess={handleSaveSuccess}
           forceCreate={!!duplicateSample}
           initialData={prefillData}
+          lineStatusContext={lineStatusContext}
         />
       )}
 

@@ -1,13 +1,16 @@
 const divDeskDB = import.meta.env.VITE_DIVDESK_DB;
 
-export async function setLineStatus(enc: string, line: string, con: string) {
+export interface LineStatusContext {
+  enc: string;
+  line: string | number;
+}
+
+export async function setLineStatus(enc: string, line: string | number) {
   try {
     const params = ` -t setprilinefatoan -f enc:${enc}$ln:${line}$${divDeskDB}$op:setprilinefatoan`;
     launchDivDesk(params);
   } catch {
-    console.error(
-      `Setting Line Status Failed. order: ${enc} .. line: ${line} .. con: ${con}`,
-    );
+    console.error(`Setting Line Status Failed. order: ${enc} .. line: ${line}`);
   }
 }
 

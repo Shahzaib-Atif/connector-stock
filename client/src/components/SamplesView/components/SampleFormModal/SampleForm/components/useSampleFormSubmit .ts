@@ -8,6 +8,7 @@ import useMissingConnectorWarning from "./useMissingConnectorWarning";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { getErrorMsg } from "@shared/utils/getErrorMsg";
 import { useState } from "react";
+import { LineStatusContext, setLineStatus } from "@/utils/functions/divDesk";
 
 interface Props {
   formData: CreateSamplesDto;
@@ -15,6 +16,7 @@ interface Props {
   sample: SamplesDto | null;
   selectedAccessoryIds: number[];
   onSuccess: () => void;
+  lineStatusContext?: LineStatusContext;
 }
 
 export const useSampleFormSubmit = ({
@@ -23,6 +25,7 @@ export const useSampleFormSubmit = ({
   sample,
   selectedAccessoryIds,
   onSuccess,
+  lineStatusContext,
 }: Props) => {
   const [formError, setFormError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
@@ -93,6 +96,10 @@ export const useSampleFormSubmit = ({
         associatedItemIds: selectedAccessoryIds,
       }),
     ).unwrap();
+
+    if (lineStatusContext?.enc && lineStatusContext.line) {
+      await setLineStatus(lineStatusContext.enc, lineStatusContext.line);
+    }
   };
 
   return { handleSubmit, formError };

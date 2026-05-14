@@ -3,6 +3,7 @@ import { ModalWrapper } from "@/components/common/ModalWrapper";
 import { FilePenLine } from "lucide-react";
 import { SampleForm } from "./SampleForm";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
+import { LineStatusContext } from "@/utils/functions/divDesk";
 
 interface SampleFormModalProps {
   sample: SamplesDto | null;
@@ -10,6 +11,7 @@ interface SampleFormModalProps {
   onSuccess: () => void;
   forceCreate?: boolean;
   initialData?: Partial<CreateSamplesDto>;
+  lineStatusContext?: LineStatusContext;
 }
 
 export const SampleFormModal: React.FC<SampleFormModalProps> = ({
@@ -18,6 +20,7 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
   onSuccess,
   forceCreate = false,
   initialData,
+  lineStatusContext,
 }) => {
   const isEditing = !!sample && !forceCreate;
 
@@ -34,6 +37,7 @@ export const SampleFormModal: React.FC<SampleFormModalProps> = ({
         onSuccess={onSuccess}
         onClose={onClose}
         initialData={initialData}
+        lineStatusContext={lineStatusContext}
       />
     </ModalWrapper>
   );

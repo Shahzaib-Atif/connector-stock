@@ -69,6 +69,7 @@ function WizardStep2({
             <tr className="text-slate-300">
               <th className="px-3 py-2 text-left">Select</th>
               <th className="px-3 py-2 text-left">Encomenda</th>
+              <th className="px-3 py-2 text-left">NumLinha</th>
               <th className="px-3 py-2 text-left">Conector</th>
               <th className="px-3 py-2 text-left min-w-40">Cliente</th>
               <th className="px-3 py-2 text-left">RefCliente</th>
@@ -96,6 +97,7 @@ function WizardStep2({
                   />
                 </td>
                 <td className="px-3 py-2 text-white">{row.Encomenda}</td>
+                <td className="px-3 py-2 text-white">{row.NumLinha}</td>
                 <td className="px-3 py-2 text-white">{row.Conector}</td>
                 <td className="px-3 py-2 text-white">{row.Cliente}</td>
                 <td className="px-3 py-2 text-white">{row.RefCliente}</td>

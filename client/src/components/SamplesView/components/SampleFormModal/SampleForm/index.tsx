@@ -11,6 +11,7 @@ import ErrorBanner from "./components/ErrorBanner";
 import ActionButtons from "./components/ActionButtons";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { useSampleFormSubmit } from "./components/useSampleFormSubmit ";
+import { LineStatusContext } from "@/utils/functions/divDesk";
 
 interface Props {
   sample: SamplesDto | null;
@@ -18,6 +19,7 @@ interface Props {
   onSuccess: () => void;
   isEditing: boolean;
   initialData?: Partial<CreateSamplesDto>;
+  lineStatusContext?: LineStatusContext;
 }
 
 export const SampleForm: React.FC<Props> = ({
@@ -26,6 +28,7 @@ export const SampleForm: React.FC<Props> = ({
   onSuccess,
   isEditing,
   initialData,
+  lineStatusContext,
 }) => {
   const { loading, error: reduxError } = useAppSelector(
     (state) => state.samples,
@@ -46,6 +49,7 @@ export const SampleForm: React.FC<Props> = ({
     sample,
     selectedAccessoryIds,
     onSuccess,
+    lineStatusContext,
   });
 
   return (
