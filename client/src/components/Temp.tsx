@@ -16,7 +16,7 @@ function Temp() {
       setStatus("");
     }, 5000);
 
-    // Using 3 slashes as per your requirement
+    // Encode the parameters and trigger the custom protocol
     window.location.href = "divdesk:///" + encodeURIComponent(params);
   }
 
