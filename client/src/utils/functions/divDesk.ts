@@ -1,3 +1,5 @@
+import { createLineStatusLog } from "@/api/lineStatusLogsApi";
+
 const divDeskDB = import.meta.env.VITE_DIVDESK_DB;
 
 export interface LineStatusContext {
@@ -5,9 +7,25 @@ export interface LineStatusContext {
   line: string | number;
 }
 
-export async function setLineStatus(enc: string, line: string | number) {
+export async function setLineStatus(
+  enc: string,
+  line: string | number,
+  user: string,
+) {
+  const params = ` -t setprilinefatoan -f enc:${enc}$ln:${line}$${divDeskDB}$op:setprilinefatoan`;
+
   try {
-    const params = ` -t setprilinefatoan -f enc:${enc}$ln:${line}$${divDeskDB}$op:setprilinefatoan`;
+    await createLineStatusLog({
+      enc,
+      line,
+      divDeskDb: divDeskDB,
+      userAgent: user,
+    });
+  } catch (error) {
+    console.error("Creating line status log failed.", error);
+  }
+
+  try {
     launchDivDesk(params);
   } catch {
     console.error(`Setting Line Status Failed. order: ${enc} .. line: ${line}`);

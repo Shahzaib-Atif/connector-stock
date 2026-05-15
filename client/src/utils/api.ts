@@ -53,6 +53,7 @@ export const API = {
   transactions: `${API_BASE_URL}/transactions`,
   samples: `${API_BASE_URL}/samples`,
   notifications: `${API_BASE_URL}/notifications`,
+  lineStatusLogs: `${API_BASE_URL}/line-status-logs`,
   legacy: {
     backups: `${API_BASE_URL}/legacy/backups`,
     updateConnectorType: (id: string) =>

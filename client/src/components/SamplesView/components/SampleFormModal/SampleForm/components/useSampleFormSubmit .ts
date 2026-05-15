@@ -98,7 +98,11 @@ export const useSampleFormSubmit = ({
     ).unwrap();
 
     if (lineStatusContext?.enc && lineStatusContext.line) {
-      await setLineStatus(lineStatusContext.enc, lineStatusContext.line);
+      await setLineStatus(
+        lineStatusContext.enc,
+        lineStatusContext.line,
+        user ?? "system",
+      );
     }
   };
 

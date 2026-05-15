@@ -30,6 +30,8 @@ import { AuthModule } from './auth/auth.module';
 import { LegacyModule } from './modules/legacy/legacy.module';
 
 import { ScheduleModule } from '@nestjs/schedule';
+import { LineStatusLogsController } from './controllers/line-status-logs.controller';
+import { LineStatusLogsService } from './services/line-status-logs.service';
 
 @Module({
   imports: [
@@ -53,6 +55,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     PrintController,
     NotificationsController,
     FolderController,
+    LineStatusLogsController,
   ],
   providers: [
     PrismaService,
@@ -71,6 +74,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     NotificationsService,
     NotificationsRepo,
     FolderService,
+    LineStatusLogsService,
   ],
 })
 export class AppModule {}
