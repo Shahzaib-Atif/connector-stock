@@ -16,9 +16,9 @@ export default function TableHeader({
     <thead className="table-header">
       {/* Header row */}
       <tr>
-        <th className={headerCellClass}>Encomenda</th>
-        <th className={headerCellClass}>NumLinha</th>
-        <th className={headerCellClass}>Estado</th>
+        <th className={`${headerCellClass} w-28`}>Encomenda</th>
+        <th className={`${headerCellClass} w-20`}>NumLinha</th>
+        <th className={`${headerCellClass} w-24`}>Estado</th>
         <th className={headerCellClass}>Descricao</th>
         <th className={headerCellClass}>Conector</th>
         <th className={headerCellClass}>RefCliente</th>
