@@ -8,6 +8,7 @@ import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 import { RegAmostrasEncDto } from "@shared/dto/RegAmostrasEncDto";
 import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
 import { CreateSamplesDto } from "@shared/dto/SamplesDto";
+import { normalizeValue } from "@/utils/functions/normalizeValue";
 
 type WizardStep = 1 | 2 | 3;
 export type WizardFlow = "ECL" | "ORC";
@@ -54,7 +55,7 @@ export function useSampleCreationWizard() {
           setCurrentStep(2);
         }
       } else if (flow === "ORC") {
-        const searchTerm = refCliente.trim().toLowerCase();
+        const searchTerm = normalizeValue(refCliente);
         // Filter from Redux cache
         const data = orcSamples.filter(
           (s) =>

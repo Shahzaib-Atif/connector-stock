@@ -1,3 +1,4 @@
+import { normalizeValue } from "@/utils/functions/normalizeValue";
 import { Transaction } from "@shared/types/Transaction";
 import { useState, useMemo } from "react";
 
@@ -14,9 +15,9 @@ export function useTransactionsFilter(transactions: Transaction[]) {
 
   const filteredTransactions = useMemo(() => {
     // Normalize search inputs for case-insensitive matching
-    const normalizedQuery = itemIdQuery.trim().toLowerCase();
-    const normalizedDepartment = department.trim().toLowerCase();
-    const normalizedSender = sender.trim().toLowerCase();
+    const normalizedQuery = normalizeValue(itemIdQuery);
+    const normalizedDepartment = normalizeValue(department);
+    const normalizedSender = normalizeValue(sender);
 
     // Apply all active filters to transaction list
     return transactions.filter((tx) => {
@@ -45,7 +46,14 @@ export function useTransactionsFilter(transactions: Transaction[]) {
         matchesSender
       );
     });
-  }, [transactions, transactionType, itemType, itemIdQuery, department, sender]);
+  }, [
+    transactions,
+    transactionType,
+    itemType,
+    itemIdQuery,
+    department,
+    sender,
+  ]);
 
   return {
     filteredTransactions,

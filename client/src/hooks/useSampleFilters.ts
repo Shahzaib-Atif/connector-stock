@@ -6,6 +6,7 @@ import {
 } from "@/components/SamplesView/constants";
 import { SamplesDto } from "@shared/dto/SamplesDto";
 import { getUniqueOptions } from "@/utils/functions/getUniqueOptions";
+import { normalizeValue } from "@/utils/functions/normalizeValue";
 
 interface UseSampleFiltersReturn {
   filters: SampleFilters;
@@ -132,10 +133,4 @@ export function useSampleFilters(
     clearFilters,
     entregueOptions,
   };
-}
-
-function normalizeValue(value: string | number | null | undefined): string {
-  return String(value ?? "")
-    .trim()
-    .toLowerCase();
 }

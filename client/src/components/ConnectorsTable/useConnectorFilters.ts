@@ -8,6 +8,7 @@ import {
 } from "./constants";
 import { getUniqueOptions } from "@/utils/functions/getUniqueOptions";
 import { STORAGE_KEYS } from "@/utils/constants";
+import { normalizeValue } from "@/utils/functions/normalizeValue";
 
 export function useConnectorFilters(
   connectors: ConnectorMap,
@@ -81,14 +82,14 @@ export function useConnectorFilters(
 
   // Apply filters to connectors list
   const filteredConnectors = useMemo(() => {
-    const normalizedIdQuery = filters.idQuery.trim().toLowerCase();
-    const normalizedPosQuery = filters.posQuery.trim().toLowerCase();
-    const normalizedViasQuery = filters.vias.trim().toLowerCase();
-    const normalizedFamilyQuery = filters.family.trim().toLowerCase();
-    const normalizedRefQuery = filters.refFabricante.trim().toLowerCase();
-    const normalizedIntQuery = filters.internalDiameter.trim().toLowerCase();
-    const normalizedExtQuery = filters.externalDiameter.trim().toLowerCase();
-    const normalizedThickQuery = filters.thickness.trim().toLowerCase();
+    const normalizedIdQuery = normalizeValue(filters.idQuery);
+    const normalizedPosQuery = normalizeValue(filters.posQuery);
+    const normalizedViasQuery = normalizeValue(filters.vias);
+    const normalizedFamilyQuery = normalizeValue(filters.family);
+    const normalizedRefQuery = normalizeValue(filters.refFabricante);
+    const normalizedIntQuery = normalizeValue(filters.internalDiameter);
+    const normalizedExtQuery = normalizeValue(filters.externalDiameter);
+    const normalizedThickQuery = normalizeValue(filters.thickness);
 
     return connectorsList.filter((connector) => {
       const matchesId =

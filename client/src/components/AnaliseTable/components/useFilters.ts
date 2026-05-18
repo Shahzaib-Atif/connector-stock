@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AnaliseTabFilters, defaultFilters } from "./constants";
 import { STORAGE_KEYS } from "@/utils/constants";
 import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
+import { normalizeValue } from "@/utils/functions/normalizeValue";
 
 interface Props {
   rows: AnaliseTabDto[];
@@ -76,12 +77,4 @@ export default function useFilters({ rows }: Props) {
     activeFiltersCount,
     clearFilters,
   };
-}
-
-function normalizeValue(
-  value: string | number | Date | null | undefined,
-): string {
-  return String(value ?? "")
-    .trim()
-    .toLowerCase();
 }

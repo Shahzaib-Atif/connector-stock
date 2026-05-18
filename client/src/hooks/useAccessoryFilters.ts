@@ -5,6 +5,7 @@ import {
   defaultFilters,
 } from "@/components/AccessoriesListView/constants";
 import { STORAGE_KEYS } from "@/utils/constants";
+import { normalizeValue } from "@/utils/functions/normalizeValue";
 
 interface UseAccessoryFiltersReturn {
   filters: AccessoryFilters;
@@ -68,12 +69,12 @@ export function useAccessoryFilters(
   );
 
   const filteredAccessories = useMemo(() => {
-    const idQuery = filters.idQuery.trim().toLowerCase();
-    const connNameQuery = filters.connName.trim().toLowerCase();
-    const refClientQuery = filters.refClient.trim().toLowerCase();
-    const refDVQuery = filters.refDV.trim().toLowerCase();
-    const angleQuery = filters.angle.trim().toLowerCase();
-    const qtyQuery = filters.qty.trim().toLowerCase();
+    const idQuery = normalizeValue(filters.idQuery);
+    const connNameQuery = normalizeValue(filters.connName);
+    const refClientQuery = normalizeValue(filters.refClient);
+    const refDVQuery = normalizeValue(filters.refDV);
+    const angleQuery = normalizeValue(filters.angle);
+    const qtyQuery = normalizeValue(filters.qty);
 
     return accessoriesList.filter((accessory) => {
       const matchesId =
