@@ -32,8 +32,8 @@ const TableHeader: React.FC<TableHeaderProps> = ({
         <th className={`${headerCellClass} w-32`}>EncDivmac</th>
         <th className={`${headerCellClass} w-40`}>Ref. Descrição</th>
         <th className={`${headerCellClass} w-40`}>Amostra</th>
-        <th className={`${headerCellClass} w-32`}>NumORC</th>
         <th className={`${headerCellClass} w-48`}>N_Envio</th>
+        <th className={`${headerCellClass} w-32`}>NumORC</th>
         <th className={`${headerCellClass} w-30`}>Qty.</th>
         <th className={`${headerCellClass} w-30`}>
           <button

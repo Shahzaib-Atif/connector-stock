@@ -102,15 +102,15 @@ function FilterRow({ showActions = true, filters, setFilterField }: Props) {
         setFilterField={setFilterField}
       />
       <FilterCell
-        id="sample-numorc-search"
-        value={filters.numORC}
-        filterKey="numORC"
-        setFilterField={setFilterField}
-      />
-      <FilterCell
         id="sample-nenvio-search"
         value={filters.nEnvio}
         filterKey="nEnvio"
+        setFilterField={setFilterField}
+      />
+      <FilterCell
+        id="sample-numorc-search"
+        value={filters.numORC}
+        filterKey="numORC"
         setFilterField={setFilterField}
       />
       <th className="sticky top-[40px] z-20 bg-slate-900/95 px-2 py-2 backdrop-blur" />

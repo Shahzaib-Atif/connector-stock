@@ -66,16 +66,14 @@ const TableRow: React.FC<TableRowProps> = ({
           "-"
         )}
       </td>
-      <td className="table-data">{NumORC}</td>
       {
         <td className="table-data">
           <OpenFolderBtn N_Envio={N_Envio ?? ""} showFolderBtn={false} />
         </td>
       }
+      <td className="table-data">{NumORC}</td>
       <td className="table-data break-all">{Quantidade || "-"}</td>
-      <td className="table-data font-mono">
-        {formatDateToIso(Data_recepcao)}
-      </td>
+      <td className="table-data font-mono">{formatDateToIso(Data_recepcao)}</td>
       <td className="table-data font-mono break-all">
         {getObservation(Observacoes ?? "", qty_com_fio ?? 0, qty_sem_fio ?? 0)}
       </td>
