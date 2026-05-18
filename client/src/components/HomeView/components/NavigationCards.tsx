@@ -1,6 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Receipt, Beaker, Cable, Wrench, LucideIcon } from "lucide-react";
+import {
+  Receipt,
+  Beaker,
+  Cable,
+  Wrench,
+  ClipboardList,
+  LucideIcon,
+} from "lucide-react";
 import { ROUTES } from "@/components/AppRoutes";
 
 interface NavCardProps {
@@ -66,6 +73,13 @@ export const NavigationCards: React.FC = () => {
       icon: Beaker,
       description: "View and register project samples",
       color: "bg-emerald-500",
+    },
+    {
+      to: ROUTES.ANALISE_TAB,
+      title: "Analise Tab",
+      icon: ClipboardList,
+      description: "Browse analysis rows with filters and pagination",
+      color: "bg-cyan-500",
     },
     {
       to: ROUTES.TRANSACTIONS,

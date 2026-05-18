@@ -41,6 +41,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   boxes: "BOXES",
   transactions: "TRANSACTIONS",
   samples: "SAMPLES",
+  "analise-tab": "ANALISE",
   notifications: "NOTIFICATIONS",
   users: "USERS",
   login: "LOGIN",

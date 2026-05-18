@@ -15,7 +15,7 @@ import { useLegacyData } from "./ConnectorsTable/useLegacyData";
 import { getActiveFilterCount } from "./constants";
 import LegacyToggleBtn from "./ConnectorsTable/LegacyToggleBtn";
 import ImageToggleBtn from "../common/ImageToggleBtn";
-import { useFiltersToggle } from "./ConnectorsTable/useFiltersToggle";
+import { useFiltersToggle } from "../../hooks/useFiltersToggle";
 import { STORAGE_KEYS } from "@/utils/constants";
 
 export const ConnectorsListView: React.FC = () => {

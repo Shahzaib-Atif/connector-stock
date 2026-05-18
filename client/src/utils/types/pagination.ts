@@ -1,11 +1,13 @@
 import { SamplesDto } from "@shared/dto/SamplesDto";
 import type { AccessoryExtended, ConnectorExtended } from "./inventoryTypes";
 import { Transaction } from "@shared/types/Transaction";
+import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 
 export type PaginatedItems_T =
   | SamplesDto[]
   | ConnectorExtended[]
   | AccessoryExtended[]
+  | AnaliseTabDto[]
   | Transaction[];
 
 export interface PaginatedData {

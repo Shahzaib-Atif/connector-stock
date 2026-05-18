@@ -10,7 +10,7 @@ import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
 import { Pagination } from "../common/Pagination";
 import { Transaction } from "@shared/types/Transaction";
-import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersToggle";
+import { useFiltersToggle } from "../../hooks/useFiltersToggle";
 import { STORAGE_KEYS } from "@/utils/constants";
 
 export const TransactionsView: React.FC = () => {

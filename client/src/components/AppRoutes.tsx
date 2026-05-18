@@ -10,6 +10,7 @@ import { ConnectorsListView } from "./ConnectorsTable";
 import { AccessoriesListView } from "./AccessoriesListView";
 import { NotificationsView } from "./NotificationsView";
 import { TransactionOpenOptions } from "@/utils/types/transactionTypes";
+import { AnaliseTable } from "./AnaliseTable";
 
 interface AppRoutesProps {
   onScan: (code: string) => void;
@@ -64,6 +65,7 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({
         path={ROUTES.SAMPLES}
         element={<SamplesView onOpenQR={onOpenQR} />}
       />
+      <Route path={ROUTES.ANALISE_TAB} element={<AnaliseTable />} />
       <Route path={ROUTES.CONNECTORS} element={<ConnectorsListView />} />
       <Route path={ROUTES.ACCESSORIES} element={<AccessoriesListView />} />
       <Route path={ROUTES.NOTIFICATIONS} element={<NotificationsView />} />
@@ -81,6 +83,7 @@ export const ROUTES = {
   ACCESSORY_VIEW: "/accessories/:id",
   TRANSACTIONS: "/transactions",
   SAMPLES: "/samples",
+  ANALISE_TAB: "/analise-tab",
   CONNECTORS: "/connectors",
   ACCESSORIES: "/accessories",
   NOTIFICATIONS: "/notifications",

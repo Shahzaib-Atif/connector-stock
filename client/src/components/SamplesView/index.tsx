@@ -17,10 +17,10 @@ import DeleteDialog from "../common/DeleteDialog";
 import { ROUTES } from "../AppRoutes";
 import { QRData } from "@/utils/types/shared";
 import { UserRoles } from "@shared/enums/UserRoles";
-import { SamplesFilterBar } from "./SamplesFilterBar";
+import { FilterToolbar } from "../common/FilterToolbar";
 import { getActiveFilterCount } from "./constants";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
-import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersToggle";
+import { useFiltersToggle } from "../../hooks/useFiltersToggle";
 import { STORAGE_KEYS } from "@/utils/constants";
 import ActionBar from "./components/ActionBar";
 import { LineStatusContext } from "@/utils/functions/divDesk";
@@ -167,7 +167,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
             />
           )}
 
-          <SamplesFilterBar
+          <FilterToolbar
             showFilters={showFilters}
             onToggleFilters={() => setShowFilters((prev) => !prev)}
             onClearFilters={clearFilters}

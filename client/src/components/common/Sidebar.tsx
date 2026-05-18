@@ -14,6 +14,7 @@ import {
   X,
   Key,
   Bell,
+  ClipboardList,
 } from "lucide-react";
 import { useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -141,6 +142,16 @@ export function Sidebar({
         >
           <Beaker className="sidebar-btn-icon" />
           <span>View Samples</span>
+        </Link>
+
+        <Link
+          to={ROUTES.ANALISE_TAB}
+          id="view-analise-tab-btn"
+          onClick={closeMenu}
+          className={getButtonClass(ROUTES.ANALISE_TAB)}
+        >
+          <ClipboardList className="sidebar-btn-icon" />
+          <span>View Analise Tab</span>
         </Link>
 
         {/* View Connectors */}

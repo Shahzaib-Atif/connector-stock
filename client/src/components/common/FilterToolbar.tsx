@@ -1,6 +1,6 @@
 import React from "react";
 import { Eraser, Filter } from "lucide-react";
-import { ActiveFiltersIndicator } from "../common/ActiveFiltersIndicator";
+import { ActiveFiltersIndicator } from "./ActiveFiltersIndicator";
 import {
   FILTER_BAR_CONTAINER,
   FILTER_BAR_TOP_ROW,
@@ -15,7 +15,7 @@ interface SamplesFilterBarProps {
   children?: React.ReactNode;
 }
 
-export const SamplesFilterBar: React.FC<SamplesFilterBarProps> = ({
+export const FilterToolbar: React.FC<SamplesFilterBarProps> = ({
   showFilters,
   onToggleFilters,
   onClearFilters,

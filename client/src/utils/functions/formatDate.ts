@@ -64,6 +64,22 @@ function parseFlexibleDate(dateString: string): Date | null {
     return new Date(Number(year), Number(month) - 1, Number(day));
   }
 
+  const isoDateTimeMatch = normalizedDate.match(
+    /^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?/,
+  );
+  if (isoDateTimeMatch) {
+    const [, year, month, day, hours, minutes, seconds = "0"] =
+      isoDateTimeMatch;
+    return new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hours),
+      Number(minutes),
+      Number(seconds),
+    );
+  }
+
   // Matches legacy format: DD/MM/YYYY or DD/MM/YYYY HH:mm[:ss]
   const legacyDateMatch = normalizedDate.match(
     /^(\d{2})\/(\d{2})\/(\d{4})(?:\s+(\d{2}):(\d{2})(?::(\d{2}))?)?$/,

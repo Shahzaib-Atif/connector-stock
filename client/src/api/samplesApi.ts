@@ -2,6 +2,7 @@ import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
+import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 
 export const getSamples = async (): Promise<{
   samples: SamplesDto[];
@@ -57,5 +58,11 @@ export const deleteSample = async (id: number): Promise<SamplesDto> => {
 export const getAllSamplesFromORC = async (): Promise<RegAmostrasOrcDto[]> => {
   const response = await fetchWithAuth(`${API.samples}/all-from-orc`);
   if (!response.ok) throw new Error("Failed to fetch all ORC samples");
+  return response.json();
+};
+
+export const getAnaliseTab = async (): Promise<AnaliseTabDto[]> => {
+  const response = await fetchWithAuth(`${API.samples}/analise-tab`);
+  if (!response.ok) throw new Error("Failed to fetch AnaliseTab data");
   return response.json();
 };

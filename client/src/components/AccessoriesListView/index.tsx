@@ -9,7 +9,7 @@ import { AccessoriesFilterBar } from "./AccessoriesFilterBar";
 import { Pagination } from "../common/Pagination";
 import Spinner from "../common/Spinner";
 import { ROUTES } from "../AppRoutes";
-import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersToggle";
+import { useFiltersToggle } from "../../hooks/useFiltersToggle";
 import { AccessoryExtended } from "@/utils/types";
 import { STORAGE_KEYS } from "@/utils/constants";
 
