@@ -67,6 +67,7 @@ export function Sidebar({
     dispatch(logout());
     closeMenu();
     navigate(ROUTES.LOGIN);
+    localStorage.clear();
   };
 
   return (

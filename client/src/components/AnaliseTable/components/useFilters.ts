@@ -40,7 +40,13 @@ export default function useFilters({ rows }: Props) {
         normalizeValue(row.Encomenda).includes(
           normalizeValue(filters.encomenda),
         ) &&
+        normalizeValue(row.NumLinha).includes(
+          normalizeValue(filters.numLinha),
+        ) &&
         normalizeValue(row.Estado).includes(normalizeValue(filters.estado)) &&
+        normalizeValue(row.Descricao).includes(
+          normalizeValue(filters.descricao),
+        ) &&
         normalizeValue(row.Conector).includes(
           normalizeValue(filters.conector),
         ) &&
@@ -50,9 +56,7 @@ export default function useFilters({ rows }: Props) {
         normalizeValue(row.Cliente).includes(normalizeValue(filters.cliente)) &&
         normalizeValue(row.CDU_ProjetoCliente).includes(
           normalizeValue(filters.projeto),
-        ) &&
-        normalizeValue(row.Artigo).includes(normalizeValue(filters.artigo)) &&
-        normalizeValue(row.Sector).includes(normalizeValue(filters.sector))
+        )
       );
     });
   }, [rows, filters]);

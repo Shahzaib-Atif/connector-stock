@@ -23,13 +23,10 @@ export default function TableHeader({
         <th className={headerCellClass}>Encomenda</th>
         <th className={headerCellClass}>NumLinha</th>
         <th className={headerCellClass}>Estado</th>
-        <th className={headerCellClass}>Quantidade</th>
-        <th className={headerCellClass}>Artigo</th>
         <th className={headerCellClass}>Descricao</th>
         <th className={headerCellClass}>Conector</th>
         <th className={headerCellClass}>RefCliente</th>
         <th className={headerCellClass}>Cliente</th>
-        <th className={headerCellClass}>Sector</th>
         <th className={headerCellClass}>DataAbertura</th>
         <th className={headerCellClass}>DataEntrega</th>
         <th className={headerCellClass}>CDU_ProjetoCliente</th>
@@ -42,19 +39,21 @@ export default function TableHeader({
             value={filters.encomenda}
             onChange={(value) => setFilterField("encomenda", value)}
           />
-          <th className={filterCellClass} />
+          <FilterCell
+            id="analise-estado-filter"
+            value={filters.numLinha}
+            onChange={(value) => setFilterField("numLinha", value)}
+          />{" "}
           <FilterCell
             id="analise-estado-filter"
             value={filters.estado}
             onChange={(value) => setFilterField("estado", value)}
           />
-          <th className={filterCellClass} />
           <FilterCell
-            id="analise-artigo-filter"
-            value={filters.artigo}
-            onChange={(value) => setFilterField("artigo", value)}
-          />
-          <th className={filterCellClass} />
+            id="analise-estado-filter"
+            value={filters.descricao}
+            onChange={(value) => setFilterField("descricao", value)}
+          />{" "}
           <FilterCell
             id="analise-conector-filter"
             value={filters.conector}
@@ -69,11 +68,6 @@ export default function TableHeader({
             id="analise-cliente-filter"
             value={filters.cliente}
             onChange={(value) => setFilterField("cliente", value)}
-          />
-          <FilterCell
-            id="analise-sector-filter"
-            value={filters.sector}
-            onChange={(value) => setFilterField("sector", value)}
           />
           <th className={filterCellClass} />
           <th className={filterCellClass} />

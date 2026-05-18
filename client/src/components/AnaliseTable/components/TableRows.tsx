@@ -21,13 +21,10 @@ export default function TableRows({ paginatedItems }: Props) {
         <td className="table-data">{row.Encomenda || "-"}</td>
         <td className="table-data">{row.NumLinha ?? "-"}</td>
         <td className="table-data">{row.Estado || "-"}</td>
-        <td className="table-data">{row.Quantidade ?? "-"}</td>
-        <td className="table-data break-all">{row.Artigo || "-"}</td>
         <td className="table-data break-all">{row.Descricao || "-"}</td>
         <td className="table-data break-all">{row.Conector || "-"}</td>
         <td className="table-data break-all">{row.RefCliente || "-"}</td>
         <td className="table-data break-all">{row.Cliente || "-"}</td>
-        <td className="table-data">{row.Sector || "-"}</td>
         <td className="table-data font-mono">
           {formatDateToIso(toDateString(row.DataAbertura))}
         </td>
