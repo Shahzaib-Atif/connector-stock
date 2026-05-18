@@ -106,6 +106,18 @@ export class SamplesRepo {
     }
   }
 
+  /** Get all AnaliseTab data */
+  async getAnaliseTab(): Promise<AnaliseTabDto[]> {
+    try {
+      return await this.prisma.v_AnaliseTab.findMany({
+        orderBy: { DataAbertura: 'desc' },
+      });
+    } catch (ex: any) {
+      console.error('Failed to get AnaliseTab data:', ex.message);
+      return [];
+    }
+  }
+
   /** Get AnaliseTab data by RefCliente for sample creation wizard */
   async getAnaliseTabByRefCliente(
     refCliente: string,

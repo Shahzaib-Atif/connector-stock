@@ -38,6 +38,11 @@ export class SamplesService {
     return this.samplesRepo.getSampleById(id);
   }
 
+  /** Get all AnaliseTab data */
+  getAnaliseTab() {
+    return this.samplesRepo.getAnaliseTab();
+  }
+
   /** Get AnaliseTab data by RefCliente for multi-step sample creation */
   getAnaliseTabByRefCliente(refCliente: string) {
     return this.samplesRepo.getAnaliseTabByRefCliente(refCliente);
