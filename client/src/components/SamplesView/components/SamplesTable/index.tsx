@@ -17,6 +17,8 @@ interface SamplesTableProps {
   filters: SampleFilters;
   setFilterField: (key: keyof SampleFilters, value: string) => void;
   entregueOptions: string[];
+  dateSortDirection: "asc" | "desc" | null;
+  onDateSortToggle: () => void;
 }
 
 export const SamplesTable: React.FC<SamplesTableProps> = ({
@@ -30,6 +32,8 @@ export const SamplesTable: React.FC<SamplesTableProps> = ({
   filters,
   setFilterField,
   entregueOptions,
+  dateSortDirection,
+  onDateSortToggle,
 }) => {
   return (
     <div id="samples-table" className="table-container-inner">
@@ -40,6 +44,8 @@ export const SamplesTable: React.FC<SamplesTableProps> = ({
           filters={filters}
           setFilterField={setFilterField}
           entregueOptions={entregueOptions}
+          dateSortDirection={dateSortDirection}
+          onDateSortToggle={onDateSortToggle}
         />
         <tbody>
           {samples.length === 0 ? (

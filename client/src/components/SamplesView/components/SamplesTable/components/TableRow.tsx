@@ -7,6 +7,7 @@ import SamplesActionButtons from "./SamplesActionButtons";
 import OpenFolderBtn from "./OpenFolderBtn";
 import { SamplesDto } from "@shared/dto/SamplesDto";
 import { useAppSelector } from "@/store/hooks";
+import { formatDateToIso } from "@/utils/functions/formatDate";
 
 interface TableRowProps {
   sample: SamplesDto;
@@ -72,7 +73,9 @@ const TableRow: React.FC<TableRowProps> = ({
         </td>
       }
       <td className="table-data break-all">{Quantidade || "-"}</td>
-      <td className="table-data font-mono">{Data_recepcao || "-"}</td>
+      <td className="table-data font-mono">
+        {formatDateToIso(Data_recepcao)}
+      </td>
       <td className="table-data font-mono break-all">
         {getObservation(Observacoes ?? "", qty_com_fio ?? 0, qty_sem_fio ?? 0)}
       </td>

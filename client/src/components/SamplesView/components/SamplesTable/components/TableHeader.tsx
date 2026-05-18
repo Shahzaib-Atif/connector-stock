@@ -8,6 +8,8 @@ interface TableHeaderProps {
   filters: SampleFilters;
   setFilterField: (key: keyof SampleFilters, value: string) => void;
   entregueOptions: string[];
+  dateSortDirection: "asc" | "desc" | null;
+  onDateSortToggle: () => void;
 }
 
 const TableHeader: React.FC<TableHeaderProps> = ({
@@ -16,6 +18,8 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   filters,
   setFilterField,
   // entregueOptions,
+  dateSortDirection,
+  onDateSortToggle,
 }) => {
   const headerCellClass =
     "table-header-cell sticky top-0 z-30 bg-slate-800/95 backdrop-blur";
@@ -31,7 +35,20 @@ const TableHeader: React.FC<TableHeaderProps> = ({
         <th className={`${headerCellClass} w-32`}>NumORC</th>
         <th className={`${headerCellClass} w-48`}>N_Envio</th>
         <th className={`${headerCellClass} w-30`}>Qty.</th>
-        <th className={`${headerCellClass} w-30`}>Data Receção</th>
+        <th className={`${headerCellClass} w-30`}>
+          <button
+            type="button"
+            onClick={onDateSortToggle}
+            className="flex items-center gap-1 text-left"
+          >
+            <span>Data Receção</span>
+            {dateSortDirection && (
+              <span aria-hidden="true">
+                {dateSortDirection === "asc" ? "↑" : "↓"}
+              </span>
+            )}
+          </button>
+        </th>
         <th className={`${headerCellClass} w-36`}>Observacoes</th>
         {showActions && (
           <th className={`${headerCellClass} text-center`}>Actions</th>

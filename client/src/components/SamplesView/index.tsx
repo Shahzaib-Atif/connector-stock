@@ -24,6 +24,7 @@ import { useFiltersToggle } from "../ConnectorsTable/ConnectorsTable/useFiltersT
 import { STORAGE_KEYS } from "@/utils/constants";
 import ActionBar from "./components/ActionBar";
 import { LineStatusContext } from "@/utils/functions/divDesk";
+import { useSorting } from "./useSorting";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -50,6 +51,10 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
     STORAGE_KEYS.SAMPLES_SHOW_FILTERS,
   );
 
+  const { sortedSamples, dateSortDirection, handleDateSortToggle } = useSorting(
+    { filteredSamples },
+  );
+
   const {
     paginatedItems: paginatedSamples,
     currentPage,
@@ -57,7 +62,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
     itemsPerPage,
     setCurrentPage,
     setItemsPerPage,
-  } = usePagination({ items: filteredSamples });
+  } = usePagination({ items: sortedSamples });
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -181,6 +186,8 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
               filters={filters}
               setFilterField={setFilterField}
               entregueOptions={entregueOptions}
+              dateSortDirection={dateSortDirection}
+              onDateSortToggle={handleDateSortToggle}
             />
           </div>
 
