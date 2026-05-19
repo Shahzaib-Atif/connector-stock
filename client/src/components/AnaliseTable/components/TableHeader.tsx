@@ -1,3 +1,4 @@
+import DateSortButton from "@/components/common/DateSortButton";
 import { AnaliseTabFilters } from "./constants";
 import FilterRow from "./FilterRow";
 
@@ -5,12 +6,16 @@ interface Props {
   showFilters: boolean;
   filters: AnaliseTabFilters;
   setFilters: (value: React.SetStateAction<AnaliseTabFilters>) => void;
+  dateSortDirection: "asc" | "desc" | null;
+  onDateSortToggle: () => void;
 }
 
 export default function TableHeader({
   showFilters,
   filters,
   setFilters,
+  dateSortDirection,
+  onDateSortToggle,
 }: Props) {
   return (
     <thead className="table-header">
@@ -23,7 +28,12 @@ export default function TableHeader({
         <th className={headerCellClass}>Conector</th>
         <th className={headerCellClass}>RefCliente</th>
         <th className={headerCellClass}>Cliente</th>
-        <th className={headerCellClass}>DataAbertura</th>
+        <th className={headerCellClass}>
+          <DateSortButton
+            onClick={onDateSortToggle}
+            dateSortDirection={dateSortDirection}
+          />
+        </th>
         <th className={headerCellClass}>DataEntrega</th>
         <th className={headerCellClass}>CDU_ProjetoCliente</th>
       </tr>

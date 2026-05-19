@@ -13,6 +13,7 @@ import TableHeader from "./components/TableHeader";
 import TableRows from "./components/TableRows";
 import useFilters from "./components/useFilters";
 import useData from "./components/useData";
+import { useSorting } from "./useSorting";
 
 export const AnaliseTable: React.FC = () => {
   const navigate = useNavigate();
@@ -31,6 +32,10 @@ export const AnaliseTable: React.FC = () => {
     clearFilters,
   } = useFilters({ rows });
 
+  const { sortedRows, dateSortDirection, handleDateSortToggle } = useSorting({
+    filteredRows,
+  });
+
   // Pagination state and logic
   const {
     paginatedItems,
@@ -39,7 +44,7 @@ export const AnaliseTable: React.FC = () => {
     itemsPerPage,
     setCurrentPage,
     setItemsPerPage,
-  } = usePagination({ items: filteredRows });
+  } = usePagination({ items: sortedRows });
 
   // Reset to first page when filters change
   useEffect(() => {
@@ -81,6 +86,8 @@ export const AnaliseTable: React.FC = () => {
                   filters={filters}
                   setFilters={setFilters}
                   showFilters={showFilters}
+                  dateSortDirection={dateSortDirection}
+                  onDateSortToggle={handleDateSortToggle}
                 />
                 <tbody>
                   <TableRows

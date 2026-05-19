@@ -22,7 +22,7 @@ export default function FilterRow({ filters, setFilters }: Props) {
         id="analise-estado-filter"
         value={filters.numLinha}
         onChange={(value) => setFilterField("numLinha", value)}
-      />{" "}
+      />
       <FilterCell
         id="analise-estado-filter"
         value={filters.estado}
@@ -32,7 +32,7 @@ export default function FilterRow({ filters, setFilters }: Props) {
         id="analise-estado-filter"
         value={filters.descricao}
         onChange={(value) => setFilterField("descricao", value)}
-      />{" "}
+      />
       <FilterCell
         id="analise-conector-filter"
         value={filters.conector}

@@ -1,6 +1,7 @@
 import React from "react";
 import { SampleFilters } from "../../../constants";
 import FilterRow from "./FilterRow";
+import DateSortButton from "@/components/common/DateSortButton";
 
 interface TableHeaderProps {
   showActions?: boolean;
@@ -36,18 +37,10 @@ const TableHeader: React.FC<TableHeaderProps> = ({
         <th className={`${headerCellClass} w-32`}>NumORC</th>
         <th className={`${headerCellClass} w-30`}>Qty.</th>
         <th className={`${headerCellClass} w-30`}>
-          <button
-            type="button"
+          <DateSortButton
             onClick={onDateSortToggle}
-            className="flex items-center gap-1 text-left"
-          >
-            <span>Data Receção</span>
-            {dateSortDirection && (
-              <span aria-hidden="true">
-                {dateSortDirection === "asc" ? "↑" : "↓"}
-              </span>
-            )}
-          </button>
+            dateSortDirection={dateSortDirection}
+          />
         </th>
         <th className={`${headerCellClass} w-36`}>Observacoes</th>
         {showActions && (
