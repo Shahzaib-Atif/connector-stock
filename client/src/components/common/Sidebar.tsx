@@ -226,6 +226,7 @@ export function Sidebar({
         <div className="flex bottom-0 left-0 right-0 border-t border-slate-700 p-2">
           <Link
             to={ROUTES.LOGIN}
+            state={{ from: location }}
             id="login-nav-btn"
             onClick={closeMenu}
             className="sidebar-btn"

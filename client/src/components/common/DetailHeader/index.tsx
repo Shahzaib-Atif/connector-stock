@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { QrCode, Menu, LogIn } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { UserRoles } from "@shared/enums/UserRoles";
 import RefreshButton from "./RefreshButton";
 import { useAppSelector } from "@/store/hooks";
@@ -24,6 +24,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
   const user = useAppSelector((state) => state.auth.user);
   const role = useAppSelector((state) => state.auth.role);
 
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
@@ -64,6 +65,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
             {!user && (
               <Link
                 to={ROUTES.LOGIN}
+                state={{ from: location }}
                 className="flex items-center gap-1 sm:gap-2 px-1 sm:px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all"
                 title="login"
               >

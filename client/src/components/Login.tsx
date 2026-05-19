@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Lock, User } from "lucide-react";
 import { useAppDispatch } from "../store/hooks";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { login, setUsersList } from "../store/slices/authSlice";
 import { loginApi, fetchUsersApi } from "../api/authApi";
 import { ROUTES } from "./AppRoutes";
@@ -10,6 +10,7 @@ import { getErrorMsg } from "@shared/utils/getErrorMsg";
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -33,7 +34,8 @@ export const Login: React.FC = () => {
       const users = await fetchUsersApi();
       dispatch(setUsersList(users));
 
-      navigate(ROUTES.HOME);
+      const origin = location.state?.from?.pathname || ROUTES.HOME;
+      navigate(origin, { replace: true });
     } catch (err) {
       setError(getErrorMsg(err, "Invalid credentials."));
     } finally {
