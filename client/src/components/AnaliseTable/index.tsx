@@ -17,7 +17,17 @@ import { useSorting } from "./useSorting";
 
 export const AnaliseTable: React.FC = () => {
   const navigate = useNavigate();
-  const { rows, loading, error } = useData();
+  const { rows, loading, error, setRows } = useData();
+
+  const handleUpdateConnector = (encomenda: string, numLinha: number, newConnector: string) => {
+    setRows((prevRows) =>
+      prevRows.map((row) =>
+        row.Encomenda === encomenda && row.NumLinha === numLinha
+          ? { ...row, Conector: newConnector }
+          : row
+      )
+    );
+  };
 
   const { showFilters, setShowFilters } = useFiltersToggle(
     STORAGE_KEYS.ANALISE_TAB_SHOW_FILTERS,
@@ -92,6 +102,7 @@ export const AnaliseTable: React.FC = () => {
                 <tbody>
                   <TableRows
                     paginatedItems={paginatedItems as AnaliseTabDto[]}
+                    onUpdateConnector={handleUpdateConnector}
                   />
                 </tbody>
               </table>

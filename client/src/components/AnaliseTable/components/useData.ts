@@ -7,27 +7,27 @@ export default function useData() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const load = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await getAnaliseTab();
+      setRows(data);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to fetch AnaliseTab data",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const data = await getAnaliseTab();
-        setRows(data);
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Failed to fetch AnaliseTab data",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
     load();
   }, []);
 
-  return { rows, loading, error };
+  return { rows, loading, error, setRows, refresh: load };
 }
