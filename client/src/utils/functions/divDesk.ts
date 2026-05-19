@@ -1,4 +1,7 @@
-import { createLineStatusLog } from "@/api/lineStatusLogsApi";
+import {
+  createLineStatusLog,
+  createUpdateConnNameLog,
+} from "@/api/lineStatusLogsApi";
 
 const divDeskDB = import.meta.env.VITE_DIVDESK_DB;
 
@@ -33,6 +36,17 @@ export async function setLineStatus(
 }
 
 export async function updateConnName(enc: string, line: string, con: string) {
+  try {
+    await createUpdateConnNameLog({
+      enc,
+      line,
+      con,
+      divDeskDb: divDeskDB,
+    });
+  } catch (error) {
+    console.error("Creating update connector name log failed.", error);
+  }
+
   try {
     const params = ` -t updateconnweb -f enc:${enc}$ln:${line}$concode:${con}$${divDeskDB}$op:updateconnweb`;
     launchDivDesk(params);
