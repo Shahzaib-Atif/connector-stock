@@ -51,8 +51,8 @@ export const fetchOrcSamplesThunk = createAsyncThunk(
 export const createSampleThunk = createAsyncThunk(
   "samples/create",
   async (sampleData: CreateSamplesDto) => {
-    const sample = await createSample(sampleData); // create sample
-    return sample;
+    await createSample(sampleData);
+    return getSamples();
   },
 );
 
@@ -104,7 +104,9 @@ export const samplesSlice = createSlice({
         state.error = null;
       })
       .addCase(createSampleThunk.fulfilled, (state, action) => {
-        state.samples.unshift(action.payload); // Add to beginning
+        state.samples = action.payload.samples;
+        state.projects = action.payload.projects;
+        state.clients = action.payload.clients;
         state.loading = false;
       })
       .addCase(createSampleThunk.rejected, (state, action) => {
