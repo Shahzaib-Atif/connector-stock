@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from 'prisma/prisma.service';
 import { ImageController } from './controllers/image.controller';
@@ -32,6 +33,8 @@ import { LegacyModule } from './modules/legacy/legacy.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { LineStatusLogsController } from './controllers/line-status-logs.controller';
 import { LineStatusLogsService } from './services/line-status-logs.service';
+import { JsonCacheService } from './cache/json-cache.service';
+import { AnaliseCacheService } from './services/analise-cache.service';
 
 @Module({
   imports: [
@@ -40,6 +43,9 @@ import { LineStatusLogsService } from './services/line-status-logs.service';
       envFilePath: process.env.NODE_ENV
         ? `.env.${process.env.NODE_ENV}`
         : '.env',
+    }),
+    CacheModule.register({
+      isGlobal: true,
     }),
     ScheduleModule.forRoot(),
     AuthModule,
@@ -75,6 +81,8 @@ import { LineStatusLogsService } from './services/line-status-logs.service';
     NotificationsRepo,
     FolderService,
     LineStatusLogsService,
+    JsonCacheService,
+    AnaliseCacheService,
   ],
 })
 export class AppModule {}

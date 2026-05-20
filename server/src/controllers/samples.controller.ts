@@ -13,6 +13,7 @@ import {
 import { SamplesService } from 'src/services/samples.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreateSamplesDto, SamplesDto } from '@shared/dto/SamplesDto';
+import { AnaliseTabQueryDto } from '@shared/dto/AnaliseTabQueryDto';
 
 @Controller('api/samples')
 export class SamplesController {
@@ -24,8 +25,13 @@ export class SamplesController {
   }
 
   @Get('analise-tab')
-  async getAnaliseTab() {
-    return await this.service.getAnaliseTab();
+  async getAnaliseTab(@Query() query: AnaliseTabQueryDto) {
+    return await this.service.getAnaliseTab(query);
+  }
+
+  @Post('analise-tab/refresh')
+  async refreshAnaliseTabCache() {
+    return await this.service.refreshAnaliseTabCache('frontend-change');
   }
 
   @Get('analise-tab/:refCliente')

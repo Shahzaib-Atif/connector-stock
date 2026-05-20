@@ -2,6 +2,7 @@ import {
   createLineStatusLog,
   createUpdateConnNameLog,
 } from "@/api/lineStatusLogsApi";
+import { refreshAnaliseTabCache } from "@/api/samplesApi";
 
 const divDeskDB = import.meta.env.VITE_DIVDESK_DB;
 
@@ -54,6 +55,12 @@ export async function updateConnName(enc: string, line: string, con: string) {
     console.error(
       `Updating Connector Name Failed. order: ${enc} .. line: ${line} .. con: ${con}`,
     );
+  }
+
+  try {
+    await refreshAnaliseTabCache();
+  } catch (error) {
+    console.error("Refreshing AnaliseTab cache failed.", error);
   }
 }
 

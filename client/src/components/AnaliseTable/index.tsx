@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DetailHeader } from "../common/DetailHeader";
 import { ROUTES } from "../AppRoutes";
@@ -8,7 +8,6 @@ import { FilterToolbar } from "../common/FilterToolbar";
 import { useFiltersToggle } from "../../hooks/useFiltersToggle";
 import { STORAGE_KEYS } from "@/utils/constants";
 import { Pagination } from "../common/Pagination";
-import { usePagination } from "@/hooks/usePagination";
 import TableHeader from "./components/TableHeader";
 import TableRows from "./components/TableRows";
 import useFilters from "./components/useFilters";
@@ -17,44 +16,36 @@ import { useSorting } from "./useSorting";
 
 export const AnaliseTable: React.FC = () => {
   const navigate = useNavigate();
-  const { rows, loading, error, setRows } = useData();
-
-  const handleUpdateConnector = (encomenda: string, numLinha: number, newConnector: string) => {
-    setRows((prevRows) =>
-      prevRows.map((row) =>
-        row.Encomenda === encomenda && row.NumLinha === numLinha
-          ? { ...row, Conector: newConnector }
-          : row
-      )
-    );
-  };
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const { showFilters, setShowFilters } = useFiltersToggle(
     STORAGE_KEYS.ANALISE_TAB_SHOW_FILTERS,
   );
 
-  // Filters state and logic
-  const {
+  const { filters, setFilters, activeFiltersCount, clearFilters } =
+    useFilters();
+  const { dateSortDirection, handleDateSortToggle } = useSorting();
+  const { rows, loading, error, setRows, totalItems, totalPages } = useData({
     filters,
-    setFilters,
-    filteredRows,
-    activeFiltersCount,
-    clearFilters,
-  } = useFilters({ rows });
-
-  const { sortedRows, dateSortDirection, handleDateSortToggle } = useSorting({
-    filteredRows,
+    currentPage,
+    itemsPerPage,
+    dateSortDirection,
   });
 
-  // Pagination state and logic
-  const {
-    paginatedItems,
-    currentPage,
-    totalPages,
-    itemsPerPage,
-    setCurrentPage,
-    setItemsPerPage,
-  } = usePagination({ items: sortedRows });
+  const handleUpdateConnector = (
+    encomenda: string,
+    numLinha: number,
+    newConnector: string,
+  ) => {
+    setRows((prevRows) =>
+      prevRows.map((row) =>
+        row.Encomenda === encomenda && row.NumLinha === numLinha
+          ? { ...row, Conector: newConnector }
+          : row,
+      ),
+    );
+  };
 
   // Reset to first page when filters change
   useEffect(() => {
@@ -62,7 +53,7 @@ export const AnaliseTable: React.FC = () => {
   }, [filters, setCurrentPage]);
 
   // Show loading spinner while fetching data
-  if (loading) {
+  if (loading && rows.length === 0) {
     return <Spinner />;
   }
 
@@ -101,7 +92,7 @@ export const AnaliseTable: React.FC = () => {
                 />
                 <tbody>
                   <TableRows
-                    paginatedItems={paginatedItems as AnaliseTabDto[]}
+                    paginatedItems={rows as AnaliseTabDto[]}
                     onUpdateConnector={handleUpdateConnector}
                   />
                 </tbody>
@@ -109,12 +100,12 @@ export const AnaliseTable: React.FC = () => {
             </div>
           </div>
 
-          {filteredRows.length > 0 && (
+          {totalItems > 0 && (
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
               itemsPerPage={itemsPerPage}
-              totalItems={filteredRows.length}
+              totalItems={totalItems}
               setCurrentPage={setCurrentPage}
               setItemsPerPage={setItemsPerPage}
             />

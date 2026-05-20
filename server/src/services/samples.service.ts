@@ -9,6 +9,8 @@ import { getErrorMsg } from '@shared/utils/getErrorMsg';
 import { Transaction } from '@shared/types/Transaction';
 import { WireTypes } from '@shared/enums/WireTypes';
 import { CreateSamplesDto, SamplesDto } from '@shared/dto/SamplesDto';
+import { AnaliseTabQueryDto } from '@shared/dto/AnaliseTabQueryDto';
+import { AnaliseCacheService } from './analise-cache.service';
 
 @Injectable()
 export class SamplesService {
@@ -18,6 +20,7 @@ export class SamplesService {
     private readonly samplesRepo: SamplesRepo,
     private readonly connectorRepo: ConnectorRepo,
     private readonly transactionsService: TransactionsService,
+    private readonly analiseCacheService: AnaliseCacheService,
   ) {}
 
   /** Get all samples with unique projects and clients */
@@ -39,13 +42,17 @@ export class SamplesService {
   }
 
   /** Get all AnaliseTab data */
-  getAnaliseTab() {
-    return this.samplesRepo.getAnaliseTab();
+  getAnaliseTab(query: AnaliseTabQueryDto) {
+    return this.analiseCacheService.getPage(query);
   }
 
   /** Get AnaliseTab data by RefCliente for multi-step sample creation */
   getAnaliseTabByRefCliente(refCliente: string) {
-    return this.samplesRepo.getAnaliseTabByRefCliente(refCliente);
+    return this.analiseCacheService.getByRefCliente(refCliente);
+  }
+
+  refreshAnaliseTabCache(reason = 'frontend-request') {
+    return this.analiseCacheService.invalidateAndRefresh(reason);
   }
 
   /** Get RegAmostrasEnc data with filters for multi-step sample creation */

@@ -1,14 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnaliseTabFilters, defaultFilters } from "./constants";
 import { STORAGE_KEYS } from "@/utils/constants";
-import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
-import { normalizeValue } from "@/utils/functions/normalizeValue";
 
-interface Props {
-  rows: AnaliseTabDto[];
-}
-
-export default function useFilters({ rows }: Props) {
+export default function useFilters() {
   const FILTER_STORAGE_KEY = STORAGE_KEYS.ANALISE_TAB_FILTERS;
 
   const [filters, setFilters] = useState<AnaliseTabFilters>(() => {
@@ -35,33 +29,6 @@ export default function useFilters({ rows }: Props) {
     }
   }, [filters]);
 
-  const filteredRows = useMemo(() => {
-    return rows.filter((row) => {
-      return (
-        normalizeValue(row.Encomenda).includes(
-          normalizeValue(filters.encomenda),
-        ) &&
-        normalizeValue(row.NumLinha).includes(
-          normalizeValue(filters.numLinha),
-        ) &&
-        normalizeValue(row.Estado).includes(normalizeValue(filters.estado)) &&
-        normalizeValue(row.Descricao).includes(
-          normalizeValue(filters.descricao),
-        ) &&
-        normalizeValue(row.Conector).includes(
-          normalizeValue(filters.conector),
-        ) &&
-        normalizeValue(row.RefCliente).includes(
-          normalizeValue(filters.refCliente),
-        ) &&
-        normalizeValue(row.Cliente).includes(normalizeValue(filters.cliente)) &&
-        normalizeValue(row.CDU_ProjetoCliente).includes(
-          normalizeValue(filters.projeto),
-        )
-      );
-    });
-  }, [rows, filters]);
-
   const activeFiltersCount = Object.entries(filters).filter(([, value]) =>
     value.trim(),
   ).length;
@@ -73,7 +40,6 @@ export default function useFilters({ rows }: Props) {
   return {
     filters,
     setFilters,
-    filteredRows,
     activeFiltersCount,
     clearFilters,
   };
