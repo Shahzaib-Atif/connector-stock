@@ -10,7 +10,9 @@ import { Transaction } from '@shared/types/Transaction';
 import { WireTypes } from '@shared/enums/WireTypes';
 import { CreateSamplesDto, SamplesDto } from '@shared/dto/SamplesDto';
 import { AnaliseTabQueryDto } from '@shared/dto/AnaliseTabQueryDto';
+import { SamplesQueryDto } from '@shared/dto/SamplesQueryDto';
 import { AnaliseCacheService } from './analise-cache.service';
+import { SamplesCacheService } from './samples-cache.service';
 
 @Injectable()
 export class SamplesService {
@@ -21,20 +23,23 @@ export class SamplesService {
     private readonly connectorRepo: ConnectorRepo,
     private readonly transactionsService: TransactionsService,
     private readonly analiseCacheService: AnaliseCacheService,
+    private readonly samplesCacheService: SamplesCacheService,
   ) {}
 
-  /** Get all samples with unique projects and clients */
-  async getAllSamples() {
-    const samples = await this.samplesRepo.getAllSamples();
-    // create a unique array of projects from samples
-    const projects = new Set(samples.map((s) => s.Projeto).filter(Boolean));
-    const clients = new Set(samples.map((s) => s.Cliente).filter(Boolean));
+  getSamplesPage(query: SamplesQueryDto) {
+    return this.samplesCacheService.getPage(query);
+  }
 
-    return {
-      samples,
-      projects: Array.from(projects),
-      clients: Array.from(clients),
-    };
+  getSamplesOptions() {
+    return this.samplesCacheService.getOptions();
+  }
+
+  refreshSamplesCache(reason = 'frontend-request') {
+    return this.samplesCacheService.invalidateAndRefresh(reason);
+  }
+
+  searchOrcSamples(query: string) {
+    return this.samplesCacheService.searchOrc(query);
   }
 
   async getSampleById(id: number) {
@@ -65,14 +70,14 @@ export class SamplesService {
     return this.samplesRepo.getSamplesFromORC(numorc);
   }
 
-  /** Get all samples from ORC documents */
+  /** Get all samples from ORC documents (served from cache) */
   getAllSamplesFromORC() {
-    return this.samplesRepo.getAllSamplesFromORC();
+    return this.samplesCacheService.getAllOrc();
   }
 
   // Create sample and process transactions atomically
   async createSample(dto: CreateSamplesDto) {
-    return await this.prisma.$transaction(async (tx) => {
+    const created = await this.prisma.$transaction(async (tx) => {
       // 1. Create sample metadata
       // Defensively strip identity/generated fields if the client sends them anyway.
       const {
@@ -201,6 +206,9 @@ export class SamplesService {
 
       return created;
     });
+
+    void this.samplesCacheService.invalidateAndRefresh('sample-created');
+    return created;
   }
 
   // Update sample and adjust quantities atomically
@@ -209,10 +217,7 @@ export class SamplesService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { associatedItemIds, ID, ...sampleData } = dto;
 
-    // 1. Create sample metadata
-    return await this.prisma.$transaction(async (tx) => {
-      // Fetch existing sample
-
+    const updated = await this.prisma.$transaction(async (tx) => {
       const existing = await tx.rEG_Amostras.findUnique({
         where: { ID: id },
       });
@@ -411,11 +416,14 @@ export class SamplesService {
 
       return updated;
     });
+
+    void this.samplesCacheService.invalidateAndRefresh('sample-updated');
+    return updated;
   }
 
   // Soft delete sample and revert all stock atomically
   async deleteSample(id: number, deletedBy?: string): Promise<SamplesDto> {
-    return await this.prisma.$transaction(async (tx) => {
+    const deleted = await this.prisma.$transaction(async (tx) => {
       const existing = await tx.rEG_Amostras.findUnique({
         where: { ID: id },
       });
@@ -507,6 +515,9 @@ export class SamplesService {
         },
       });
     });
+
+    void this.samplesCacheService.invalidateAndRefresh('sample-deleted');
+    return deleted;
   }
 
   //#region -- Private Helpers

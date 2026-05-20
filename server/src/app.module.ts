@@ -35,6 +35,7 @@ import { LineStatusLogsController } from './controllers/line-status-logs.control
 import { LineStatusLogsService } from './services/line-status-logs.service';
 import { JsonCacheService } from './cache/json-cache.service';
 import { AnaliseCacheService } from './services/analise-cache.service';
+import { SamplesCacheService } from './services/samples-cache.service';
 
 @Module({
   imports: [
@@ -83,6 +84,7 @@ import { AnaliseCacheService } from './services/analise-cache.service';
     LineStatusLogsService,
     JsonCacheService,
     AnaliseCacheService,
+    SamplesCacheService,
   ],
 })
 export class AppModule {}

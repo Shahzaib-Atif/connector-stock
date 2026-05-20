@@ -1,5 +1,4 @@
 import React from "react";
-import { useAppSelector } from "@/store/hooks";
 import { useSampleForm } from "@/hooks/useSampleForm";
 import { FormField } from "./components/FormField";
 import { labelClass, inputClass } from "./components/SampleFormFields";
@@ -30,9 +29,6 @@ export const SampleForm: React.FC<Props> = ({
   initialData,
   lineStatusContext,
 }) => {
-  const { loading, error: reduxError } = useAppSelector(
-    (state) => state.samples,
-  );
   const {
     formData,
     handleChange,
@@ -43,7 +39,7 @@ export const SampleForm: React.FC<Props> = ({
   const connectorId = useConnectorId(formData?.Amostra ?? ""); // get connector ID from Amostra
   const { associatedAccessories } = useAssociatedAccessories(connectorId); // fetch associated accessories
   const { getOptions } = useSampleOptions(); // autocomplete options
-  const { handleSubmit, formError } = useSampleFormSubmit({
+  const { handleSubmit, formError, loading } = useSampleFormSubmit({
     formData,
     isEditing,
     sample,
@@ -54,7 +50,7 @@ export const SampleForm: React.FC<Props> = ({
 
   return (
     <form onSubmit={handleSubmit} className="p-6">
-      <ErrorBanner message={formError || reduxError || ""} />
+      <ErrorBanner message={formError || ""} />
 
       {/* Form Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

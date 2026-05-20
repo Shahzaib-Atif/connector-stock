@@ -1,9 +1,6 @@
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppSelector } from "@/store/hooks";
 import { performValidation } from "./SampleFormUtils";
-import {
-  createSampleThunk,
-  updateSampleThunk,
-} from "@/store/slices/samplesSlice";
+import { createSample, updateSample } from "@/api/samplesApi";
 import useMissingConnectorWarning from "./useMissingConnectorWarning";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { getErrorMsg } from "@shared/utils/getErrorMsg";
@@ -15,7 +12,7 @@ interface Props {
   isEditing: boolean;
   sample: SamplesDto | null;
   selectedAccessoryIds: number[];
-  onSuccess: () => void;
+  onSuccess: () => void | Promise<void>;
   lineStatusContext?: LineStatusContext;
 }
 
@@ -28,83 +25,66 @@ export const useSampleFormSubmit = ({
   lineStatusContext,
 }: Props) => {
   const [formError, setFormError] = useState<string | null>(null);
-  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
-  const { checkConnectorWarning } = useMissingConnectorWarning(); // check missing connector warning
+  const { checkConnectorWarning } = useMissingConnectorWarning();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
 
-    // Perform Validations for missing fields and Amostra length
     const isError = performValidation(formData);
     if (isError) {
       setFormError(isError);
       return;
     }
 
-    // Handle missing connector warning
     if (!checkConnectorWarning(formData.Amostra ?? "", setFormError)) return;
 
-    // Proceed to create or update sample
     await createOrUpdateSample();
   };
 
-  // Function to create or update sample based on the form state
   const createOrUpdateSample = async () => {
+    setLoading(true);
     try {
       const currentUser = user || "system";
 
-      // If editing, update the sample; otherwise, create a new one
       if (isEditing && sample) {
-        await updateSample(sample, currentUser);
-      } else {
-        await createSample(currentUser);
-      }
-
-      onSuccess();
-    } catch (err) {
-      console.error(err);
-      setFormError(
-        getErrorMsg(err, "Failed to save sample. Please try again."),
-      );
-    }
-  };
-
-  const updateSample = async (sample: SamplesDto, currentUser: string) => {
-    await dispatch(
-      updateSampleThunk({
-        id: sample.ID,
-        data: {
+        await updateSample(sample.ID, {
           ...formData,
           Amostra: formData.Amostra?.toUpperCase(),
           LasUpdateBy: currentUser,
           ActualUser: currentUser,
           associatedItemIds: selectedAccessoryIds,
-        },
-      }),
-    ).unwrap();
-  };
+        });
+      } else {
+        await createSample({
+          ...formData,
+          Amostra: formData.Amostra?.toUpperCase(),
+          CreatedBy: currentUser,
+          ActualUser: currentUser,
+          associatedItemIds: selectedAccessoryIds,
+        });
 
-  const createSample = async (currentUser: string) => {
-    await dispatch(
-      createSampleThunk({
-        ...formData,
-        Amostra: formData.Amostra?.toUpperCase(),
-        CreatedBy: currentUser,
-        ActualUser: currentUser,
-        associatedItemIds: selectedAccessoryIds,
-      }),
-    ).unwrap();
+        if (lineStatusContext?.enc && lineStatusContext.line) {
+          await setLineStatus(
+            lineStatusContext.enc,
+            lineStatusContext.line,
+            user ?? "system",
+          );
+        }
+      }
 
-    if (lineStatusContext?.enc && lineStatusContext.line) {
-      await setLineStatus(
-        lineStatusContext.enc,
-        lineStatusContext.line,
-        user ?? "system",
+      await onSuccess();
+    } catch (err) {
+      console.error(err);
+      setFormError(
+        getErrorMsg(err, "Failed to save sample. Please try again."),
       );
+    } finally {
+      setLoading(false);
     }
   };
 
-  return { handleSubmit, formError };
+  return { handleSubmit, formError, loading };
 };

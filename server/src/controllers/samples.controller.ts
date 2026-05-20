@@ -14,14 +14,25 @@ import { SamplesService } from 'src/services/samples.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreateSamplesDto, SamplesDto } from '@shared/dto/SamplesDto';
 import { AnaliseTabQueryDto } from '@shared/dto/AnaliseTabQueryDto';
+import { SamplesQueryDto } from '@shared/dto/SamplesQueryDto';
 
 @Controller('api/samples')
 export class SamplesController {
   constructor(private readonly service: SamplesService) {}
 
   @Get('')
-  async getAllSamples() {
-    return await this.service.getAllSamples();
+  async getSamples(@Query() query: SamplesQueryDto) {
+    return await this.service.getSamplesPage(query);
+  }
+
+  @Get('options')
+  async getSamplesOptions() {
+    return await this.service.getSamplesOptions();
+  }
+
+  @Post('refresh')
+  async refreshSamplesCache() {
+    return await this.service.refreshSamplesCache('frontend-change');
   }
 
   @Get('analise-tab')
@@ -60,6 +71,11 @@ export class SamplesController {
   @Get('all-from-orc')
   async getAllSamplesFromORC() {
     return await this.service.getAllSamplesFromORC();
+  }
+
+  @Get('orc-search')
+  async searchOrcSamples(@Query('query') query: string) {
+    return await this.service.searchOrcSamples(query ?? '');
   }
 
   @Get(':id')

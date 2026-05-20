@@ -11,6 +11,8 @@ export class SamplesRepo {
 
   async getAllSamples(): Promise<SamplesDto[]> {
     try {
+      console.log('fetching samples from repo...');
+
       return await this.prisma.rEG_Amostras.findMany({
         where: { IsActive: true },
         orderBy: { ID: 'desc' },

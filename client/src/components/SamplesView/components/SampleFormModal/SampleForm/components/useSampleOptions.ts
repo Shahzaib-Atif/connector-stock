@@ -1,21 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "@/store/hooks";
+import { getSamplesOptions } from "@/api/samplesApi";
 import { CreateSamplesDto } from "@shared/dto/SamplesDto";
 
 export default function useSampleOptions() {
   const { data: masterData } = useAppSelector((state) => state.masterData);
+  const [projectsOptions, setProjectsOptions] = useState<string[]>([]);
+  const [clientsOptions, setClientsOptions] = useState<string[]>([]);
 
-  // Get connector options for autocomplete
+  useEffect(() => {
+    let isActive = true;
+
+    getSamplesOptions()
+      .then((options) => {
+        if (!isActive) return;
+        setProjectsOptions(options.projects);
+        setClientsOptions(options.clients);
+      })
+      .catch((error) => {
+        console.error("Failed to load sample options:", error);
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
   const connectorOptions = React.useMemo(() => {
     if (!masterData?.connectors) return [];
     return Object.keys(masterData.connectors).sort();
   }, [masterData]);
 
-  // get projects and clients options from samples state
-  const projectsOptions = useAppSelector((state) => state.samples.projects);
-  const clientsOptions = useAppSelector((state) => state.samples.clients);
-
-  // Get options for autocomplete fields
   function getOptions(
     fieldName: keyof CreateSamplesDto,
     fallbackOptions: string[] = [],

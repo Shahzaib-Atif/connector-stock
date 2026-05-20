@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "./store/hooks";
 import { initMasterData } from "./store/slices/masterDataSlice";
-import { fetchOrcSamplesThunk } from "./store/slices/samplesSlice";
 import { useTransactionFlow } from "./hooks/useTransactionFlow";
 
 // Components
@@ -39,7 +38,6 @@ const App: React.FC = () => {
     dispatch(initMasterData());
     dispatch(initTransactionsData());
     dispatch(initUsersList());
-    dispatch(fetchOrcSamplesThunk());
   }, [dispatch]);
 
   // Set up a background refresh mechanism that periodically updates critical data

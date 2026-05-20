@@ -4,20 +4,53 @@ import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
 import { AnaliseTabQueryDto } from "@shared/dto/AnaliseTabQueryDto";
 import { AnaliseTabPageDto } from "@shared/dto/AnaliseTabPageDto";
-
-export const getSamples = async (): Promise<{
-  samples: SamplesDto[];
-  projects: string[];
-  clients: string[];
-}> => {
-  const response = await fetchWithAuth(API.samples);
-  if (!response.ok) throw new Error("Failed to fetch samples");
-  return response.json();
-};
+import { SamplesQueryDto } from "@shared/dto/SamplesQueryDto";
+import { SamplesPageDto } from "@shared/dto/SamplesPageDto";
+import { SamplesOptionsDto } from "@shared/dto/SamplesOptionsDto";
 
 export const getSample = async (id: number): Promise<SamplesDto> => {
   const response = await fetchWithAuth(`${API.samples}/${id}`);
   if (!response.ok) throw new Error("Failed to fetch sample");
+  return response.json();
+};
+
+export const getSamples = async (
+  query: SamplesQueryDto,
+  signal?: AbortSignal,
+): Promise<SamplesPageDto> => {
+  const params = new URLSearchParams();
+
+  Object.entries(query).forEach(([key, value]) => {
+    if (value == null || value === "") {
+      return;
+    }
+
+    params.set(key, String(value));
+  });
+
+  const response = await fetchWithAuth(
+    `${API.samples}?${params.toString()}`,
+    { signal },
+  );
+  if (!response.ok) throw new Error("Failed to fetch samples");
+  return response.json();
+};
+
+export const getSamplesOptions = async (): Promise<SamplesOptionsDto> => {
+  const response = await fetchWithAuth(`${API.samples}/options`);
+  if (!response.ok) throw new Error("Failed to fetch sample options");
+  return response.json();
+};
+
+export const refreshSamplesCache = async () => {
+  const response = await fetchWithAuth(`${API.samples}/refresh`, {
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to refresh samples cache");
+  }
+
   return response.json();
 };
 
@@ -53,12 +86,18 @@ export const deleteSample = async (id: number): Promise<SamplesDto> => {
   const response = await fetchWithAuth(`${API.samples}/${id}`, {
     method: "DELETE",
   });
+  if (!response.ok) throw new Error("Failed to delete sample");
   return response.json();
 };
 
-export const getAllSamplesFromORC = async (): Promise<RegAmostrasOrcDto[]> => {
-  const response = await fetchWithAuth(`${API.samples}/all-from-orc`);
-  if (!response.ok) throw new Error("Failed to fetch all ORC samples");
+export const searchOrcSamples = async (
+  query: string,
+): Promise<RegAmostrasOrcDto[]> => {
+  const params = new URLSearchParams({ query });
+  const response = await fetchWithAuth(
+    `${API.samples}/orc-search?${params.toString()}`,
+  );
+  if (!response.ok) throw new Error("Failed to search ORC samples");
   return response.json();
 };
 

@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import {
-  fetchSamplesThunk,
-  deleteSampleThunk,
-} from "@/store/slices/samplesSlice";
-import { usePagination } from "@/hooks/usePagination";
-import { useSampleFilters } from "@/hooks/useSampleFilters";
+import { useAppSelector } from "@/store/hooks";
+import { deleteSample } from "@/api/samplesApi";
 import { DetailHeader } from "../common/DetailHeader";
 import { SamplesTable } from "./components/SamplesTable";
 import { Pagination } from "../common/Pagination";
@@ -18,13 +13,14 @@ import { ROUTES } from "../AppRoutes";
 import { QRData } from "@/utils/types/shared";
 import { UserRoles } from "@shared/enums/UserRoles";
 import { FilterToolbar } from "../common/FilterToolbar";
-import { getActiveFilterCount } from "./constants";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { useFiltersToggle } from "../../hooks/useFiltersToggle";
 import { STORAGE_KEYS } from "@/utils/constants";
 import ActionBar from "./components/ActionBar";
 import { LineStatusContext } from "@/utils/functions/divDesk";
 import { useSorting } from "./useSorting";
+import useFilters from "./components/useFilters";
+import useData from "./components/useData";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -32,37 +28,33 @@ interface SamplesViewProps {
 
 export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { samples, loading } = useAppSelector((state) => state.samples);
   const { isAuthenticated, role } = useAppSelector((state) => state.auth);
   const [openDltDlg, setOpenDltDlg] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
 
-  // Custom hook for filters
-  const {
-    filters,
-    setFilterField,
-    filteredSamples,
-    clearFilters,
-    entregueOptions,
-  } = useSampleFilters(samples);
-  const activeFiltersCount = getActiveFilterCount(filters);
   const { showFilters, setShowFilters } = useFiltersToggle(
     STORAGE_KEYS.SAMPLES_SHOW_FILTERS,
   );
 
-  const { sortedSamples, dateSortDirection, handleDateSortToggle } = useSorting(
-    { filteredSamples },
-  );
-
+  const { filters, setFilterField, activeFiltersCount, clearFilters } =
+    useFilters();
+  const { dateSortDirection, handleDateSortToggle } = useSorting();
   const {
-    paginatedItems: paginatedSamples,
-    currentPage,
+    rows,
+    loading,
+    error,
+    totalItems,
     totalPages,
+    entregueOptions,
+    refetch,
+  } = useData({
+    filters,
+    currentPage,
     itemsPerPage,
-    setCurrentPage,
-    setItemsPerPage,
-  } = usePagination({ items: sortedSamples });
+    dateSortDirection,
+  });
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,14 +70,6 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
     LineStatusContext | undefined
   >();
 
-  // Fetch samples on mount (only if not already loaded)
-  useEffect(() => {
-    if (samples.length === 0) {
-      dispatch(fetchSamplesThunk());
-    }
-  }, [dispatch, samples.length]);
-
-  // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [filters]);
@@ -121,8 +105,9 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
     setLineStatusContext(undefined);
   };
 
-  const handleSaveSuccess = () => {
+  const handleSaveSuccess = async () => {
     handleModalClose();
+    await refetch();
   };
 
   const handleOpenWizard = () => {
@@ -144,8 +129,16 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
     setIsModalOpen(true);
   };
 
-  // Show spinner only when loading
-  if (loading && samples.length === 0) {
+  const handleConfirmDelete = async () => {
+    if (editingSample?.ID == null) return;
+
+    await deleteSample(editingSample.ID);
+    setOpenDltDlg(false);
+    setEditingSample(null);
+    await refetch();
+  };
+
+  if (loading && rows.length === 0) {
     return <Spinner />;
   }
 
@@ -159,7 +152,6 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
 
       <div id="samples-content" className="table-view-content">
         <div className="table-view-inner-content">
-          {/* Action Bar */}
           {isAuthenticated && isAdmin && (
             <ActionBar
               handleCreateNew={handleCreateNew}
@@ -174,9 +166,15 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
             activeFiltersCount={activeFiltersCount}
           />
 
+          {error && (
+            <div className="rounded-xl border border-red-500/50 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+              {error}
+            </div>
+          )}
+
           <div className="table-container-outer">
             <SamplesTable
-              samples={paginatedSamples as SamplesDto[]}
+              samples={rows}
               onEdit={handleEdit}
               onDelete={handleDelete}
               onOpenQR={onOpenQR}
@@ -191,12 +189,12 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
             />
           </div>
 
-          {filteredSamples.length > 0 && (
+          {totalItems > 0 && (
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
               itemsPerPage={itemsPerPage}
-              totalItems={filteredSamples.length}
+              totalItems={totalItems}
               setCurrentPage={setCurrentPage}
               setItemsPerPage={setItemsPerPage}
             />
@@ -204,7 +202,6 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
         </div>
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <SampleFormModal
           sample={editingSample ?? duplicateSample}
@@ -216,7 +213,6 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
         />
       )}
 
-      {/* Wizard */}
       {isWizardOpen && (
         <SampleCreationWizard
           onClose={handleWizardClose}
@@ -224,14 +220,13 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
         />
       )}
 
-      {/* Delete Dialog */}
       {!isModalOpen && (
         <DeleteDialog
           open={openDltDlg}
           setOpen={setOpenDltDlg}
           msg="Are you sure you want to delete this sample?"
           title="Delete Sample"
-          onDelete={() => dispatch(deleteSampleThunk(editingSample?.ID))}
+          onDelete={handleConfirmDelete}
         />
       )}
     </div>

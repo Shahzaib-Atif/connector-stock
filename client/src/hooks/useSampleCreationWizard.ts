@@ -1,14 +1,13 @@
 import { useState, useCallback } from "react";
-import { useAppSelector } from "@/store/hooks";
 import {
   fetchAnaliseTabData,
   fetchRegAmostrasEncData,
 } from "@/api/sampleCreationApi";
+import { searchOrcSamples } from "@/api/samplesApi";
 import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 import { RegAmostrasEncDto } from "@shared/dto/RegAmostrasEncDto";
 import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
 import { CreateSamplesDto } from "@shared/dto/SamplesDto";
-import { normalizeValue } from "@/utils/functions/normalizeValue";
 
 type WizardStep = 1 | 2 | 3;
 export type WizardFlow = "ECL" | "ORC";
@@ -28,8 +27,6 @@ export function useSampleCreationWizard() {
   const [flow, setFlow] = useState<WizardFlow>("ECL");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const { orcSamples } = useAppSelector((state) => state.samples);
 
   const searchAnaliseTab = useCallback(async () => {
     if ((flow === "ECL" || flow === "ORC") && !refCliente.trim()) {
@@ -55,13 +52,7 @@ export function useSampleCreationWizard() {
           setCurrentStep(2);
         }
       } else if (flow === "ORC") {
-        const searchTerm = normalizeValue(refCliente);
-        // Filter from Redux cache
-        const data = orcSamples.filter(
-          (s) =>
-            s.orcDoc.toLowerCase().includes(searchTerm) ||
-            s.CDU_ModuloRefCliente.toLowerCase().includes(searchTerm),
-        );
+        const data = await searchOrcSamples(refCliente.trim());
 
         setRegAmostrasData(data);
         if (data.length === 0) {
@@ -75,7 +66,7 @@ export function useSampleCreationWizard() {
     } finally {
       setLoading(false);
     }
-  }, [refCliente, flow, orcSamples]);
+  }, [refCliente, flow]);
 
   const selectAnaliseRow = useCallback((row: AnaliseTabDto) => {
     setSelectedAnaliseRow(row);
