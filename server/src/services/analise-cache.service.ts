@@ -66,16 +66,18 @@ export class AnaliseCacheService implements OnModuleInit {
     private readonly samplesRepo: SamplesRepo,
   ) {}
 
+  // Warms analise cache when the module starts.
   onModuleInit() {
     void this.runRefresh('startup');
   }
 
+  // Refreshes analise cache every hour via cron.
   @Cron(CronExpression.EVERY_HOUR)
   handleHourlyRefresh() {
     void this.runRefresh('hourly-cron');
   }
 
-  // Returns cached data, refreshing first if missing or stale
+  // Loads cache, refreshing when missing or stale.
   private async ensureDataset(): Promise<CachedAnaliseDataset> {
     const dataset = await this.readDataset();
 
@@ -89,6 +91,7 @@ export class AnaliseCacheService implements OnModuleInit {
     return dataset;
   }
 
+  // Applies case-insensitive filters to cached rows.
   private filterRows(rows: AnaliseTabDto[], query: NormalizedAnaliseQuery) {
     return rows.filter(
       (row) =>
@@ -103,6 +106,7 @@ export class AnaliseCacheService implements OnModuleInit {
     );
   }
 
+  // Sorts rows using the requested field and direction.
   private sortRows(rows: AnaliseTabDto[], query: NormalizedAnaliseQuery) {
     return [...rows].sort((left, right) =>
       compareNullableValues(
@@ -113,7 +117,7 @@ export class AnaliseCacheService implements OnModuleInit {
     );
   }
 
-  // allows manual trigger of cache refresh via API without waiting for the hourly cron
+  // Returns filtered, sorted, paginated analise rows.
   async getPage(queryDto: AnaliseTabQueryDto): Promise<AnaliseTabPageDto> {
     const query = normalizeAnaliseQuery(queryDto);
     const dataset = await this.ensureDataset();
@@ -129,7 +133,32 @@ export class AnaliseCacheService implements OnModuleInit {
     };
   }
 
-  // Gets all AnaliseTab rows for a RefCliente without pagination (used in sample creation wizard)
+  // Returns cached rows sharing order, status, client, project.
+  async getSimilarRows(query: {
+    encomenda: string;
+    numLinha: number;
+    estado?: string | null;
+    cliente?: string | null;
+    cduProjetoCliente?: string | null;
+    newConnector?: string;
+  }): Promise<AnaliseTabDto[]> {
+    const dataset = await this.ensureDataset();
+    const normalizedNewConnector = query.newConnector?.trim().toLowerCase();
+
+    return dataset.rows.filter((row) => {
+      if (row.NumLinha === query.numLinha) return false;
+      if (!matchesSimilarityKey(row, query)) return false;
+
+      if (normalizedNewConnector) {
+        const current = (row.Conector ?? '').trim().toLowerCase();
+        if (current === normalizedNewConnector) return false;
+      }
+
+      return true;
+    });
+  }
+
+  // Returns unique analise rows for one RefCliente.
   async getByRefCliente(refCliente: string): Promise<AnaliseTabDto[]> {
     const dataset = await this.ensureDataset();
 
@@ -154,7 +183,7 @@ export class AnaliseCacheService implements OnModuleInit {
     );
   }
 
-  // allows manual trigger of cache refresh via API without waiting for the hourly cron
+  // Refreshes analise cache from the database.
   async runRefresh(reason: string) {
     if (this.refreshPromise) {
       return this.refreshPromise;
@@ -168,7 +197,7 @@ export class AnaliseCacheService implements OnModuleInit {
     return this.refreshPromise;
   }
 
-  // Manually triggers cache refresh and clears existing cache.
+  // Clears analise cache then triggers a refresh.
   async invalidateAndRefresh(reason: string) {
     await this.cacheService.delete(DATA_KEY);
     await this.cacheService.delete(META_KEY);
@@ -177,7 +206,7 @@ export class AnaliseCacheService implements OnModuleInit {
     return { accepted: true };
   }
 
-  // Refreshes dataset from DB and updates cache with refresh metadata
+  // Reloads analise rows from DB into JSON cache.
   private async refreshAndPersist(
     reason: string,
   ): Promise<CachedAnaliseDataset> {
@@ -197,7 +226,7 @@ export class AnaliseCacheService implements OnModuleInit {
     return { rows, meta };
   }
 
-  // Reads the cached dataset and its metadata. Returns null if no cached data is available.
+  // Reads cached analise rows and metadata from storage.
   private async readDataset(): Promise<CachedAnaliseDataset | null> {
     const [rows, meta] = await Promise.all([
       this.cacheService.get<AnaliseTabDto[]>(DATA_KEY),
@@ -214,6 +243,7 @@ export class AnaliseCacheService implements OnModuleInit {
     };
   }
 
+  // True when cache age exceeds the refresh interval.
   private isStale(lastRefreshedAt?: string | null) {
     if (!lastRefreshedAt) {
       return true;
@@ -225,7 +255,7 @@ export class AnaliseCacheService implements OnModuleInit {
   }
 }
 
-// Normalizes and validates AnaliseTab query params with defaults and constraints
+// Normalizes analise list query params and defaults.
 function normalizeAnaliseQuery(
   query: AnaliseTabQueryDto,
 ): NormalizedAnaliseQuery {
@@ -250,7 +280,7 @@ function normalizeAnaliseQuery(
   };
 }
 
-// Ensures a value is a positive integer, otherwise returns the fallback default
+// Parses a positive integer or returns fallback.
 function normalizePositiveInt(
   value: string | number | undefined,
   fallback: number,
@@ -259,7 +289,31 @@ function normalizePositiveInt(
   return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
 }
 
-// Validates and normalizes the sortBy field, defaulting to 'DataAbertura' if invalid
+// True when row matches order, status, client, project keys.
+function matchesSimilarityKey(
+  row: AnaliseTabDto,
+  query: {
+    encomenda: string;
+    estado?: string | null;
+    cliente?: string | null;
+    cduProjetoCliente?: string | null;
+  },
+) {
+  return (
+    normalizeField(row.Encomenda) === normalizeField(query.encomenda) &&
+    normalizeField(row.Estado) === normalizeField(query.estado) &&
+    normalizeField(row.Cliente) === normalizeField(query.cliente) &&
+    normalizeField(row.CDU_ProjetoCliente) ===
+      normalizeField(query.cduProjetoCliente)
+  );
+}
+
+// Trims nullable string fields for comparisons.
+function normalizeField(value: string | null | undefined) {
+  return (value ?? '').trim();
+}
+
+// Validates sort field or defaults to DataAbertura.
 function normalizeSortBy(value?: string): AnaliseSortField {
   const allowed: AnaliseSortField[] = [
     'Encomenda',

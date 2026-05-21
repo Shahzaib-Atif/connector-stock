@@ -6,16 +6,15 @@ import ConnectorEditableCell from "./ConnectorEditableCell";
 
 interface Props {
   paginatedItems: AnaliseTabDto[];
-  onUpdateConnector: (
-    encomenda: string,
-    numLinha: number,
-    newConnector: string,
-  ) => void;
+  isCheckingSimilar?: boolean;
+  onConnectorSave: (row: AnaliseTabDto, newConnector: string) => void | Promise<void>;
 }
 
+// Renders analise table body rows and connector cells.
 export default function TableRows({
   paginatedItems,
-  onUpdateConnector,
+  isCheckingSimilar = false,
+  onConnectorSave,
 }: Props) {
   const { role } = useAppSelector((state) => state.auth);
   const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
@@ -39,10 +38,9 @@ export default function TableRows({
         <td className="table-data break-all">
           <ConnectorEditableCell
             initialValue={row.Conector || ""}
-            encomenda={row.Encomenda}
-            numLinha={row.NumLinha}
             isAdmin={isAdmin}
-            onSave={onUpdateConnector}
+            isSaving={isCheckingSimilar}
+            onSave={(newConnector) => onConnectorSave(row, newConnector)}
           />
         </td>
         <td className="table-data break-all">{row.RefCliente || "-"}</td>
@@ -61,6 +59,7 @@ export default function TableRows({
   );
 }
 
+// Normalizes date values to ISO strings.
 function toDateString(value: string | Date | null | undefined): string | null {
   if (!value) return null;
   return value instanceof Date ? value.toISOString() : value;

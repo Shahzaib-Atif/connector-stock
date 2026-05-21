@@ -2,18 +2,18 @@ import { API } from "@/utils/api";
 import { fetchWithAuth } from "@/utils/functions/fetchWithAuth";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { RegAmostrasOrcDto } from "@shared/dto/RegAmostrasOrcDto";
-import { AnaliseTabQueryDto } from "@shared/dto/AnaliseTabQueryDto";
-import { AnaliseTabPageDto } from "@shared/dto/AnaliseTabPageDto";
 import { SamplesQueryDto } from "@shared/dto/SamplesQueryDto";
 import { SamplesPageDto } from "@shared/dto/SamplesPageDto";
 import { SamplesOptionsDto } from "@shared/dto/SamplesOptionsDto";
 
+// Fetches one sample record by database id.
 export const getSample = async (id: number): Promise<SamplesDto> => {
   const response = await fetchWithAuth(`${API.samples}/${id}`);
   if (!response.ok) throw new Error("Failed to fetch sample");
   return response.json();
 };
 
+// Fetches paginated samples from server cache.
 export const getSamples = async (
   query: SamplesQueryDto,
   signal?: AbortSignal,
@@ -28,20 +28,21 @@ export const getSamples = async (
     params.set(key, String(value));
   });
 
-  const response = await fetchWithAuth(
-    `${API.samples}?${params.toString()}`,
-    { signal },
-  );
+  const response = await fetchWithAuth(`${API.samples}?${params.toString()}`, {
+    signal,
+  });
   if (!response.ok) throw new Error("Failed to fetch samples");
   return response.json();
 };
 
+// Fetches autocomplete options for sample forms.
 export const getSamplesOptions = async (): Promise<SamplesOptionsDto> => {
   const response = await fetchWithAuth(`${API.samples}/options`);
   if (!response.ok) throw new Error("Failed to fetch sample options");
   return response.json();
 };
 
+// Triggers server samples cache invalidation and refresh.
 export const refreshSamplesCache = async () => {
   const response = await fetchWithAuth(`${API.samples}/refresh`, {
     method: "POST",
@@ -54,6 +55,7 @@ export const refreshSamplesCache = async () => {
   return response.json();
 };
 
+// Creates a new sample via authenticated API.
 export const createSample = async (
   sample: CreateSamplesDto,
 ): Promise<SamplesDto> => {
@@ -65,6 +67,7 @@ export const createSample = async (
   return response.json();
 };
 
+// Updates an existing sample by id.
 export const updateSample = async (
   id: number,
   sample: CreateSamplesDto,
@@ -82,6 +85,7 @@ export const updateSample = async (
   return response.json();
 };
 
+// Soft-deletes a sample by id.
 export const deleteSample = async (id: number): Promise<SamplesDto> => {
   const response = await fetchWithAuth(`${API.samples}/${id}`, {
     method: "DELETE",
@@ -90,6 +94,7 @@ export const deleteSample = async (id: number): Promise<SamplesDto> => {
   return response.json();
 };
 
+// Searches cached ORC rows for wizard lookup.
 export const searchOrcSamples = async (
   query: string,
 ): Promise<RegAmostrasOrcDto[]> => {
@@ -98,39 +103,5 @@ export const searchOrcSamples = async (
     `${API.samples}/orc-search?${params.toString()}`,
   );
   if (!response.ok) throw new Error("Failed to search ORC samples");
-  return response.json();
-};
-
-export const getAnaliseTab = async (
-  query: AnaliseTabQueryDto,
-  signal?: AbortSignal,
-): Promise<AnaliseTabPageDto> => {
-  const params = new URLSearchParams();
-
-  Object.entries(query).forEach(([key, value]) => {
-    if (value == null || value === "") {
-      return;
-    }
-
-    params.set(key, String(value));
-  });
-
-  const response = await fetchWithAuth(
-    `${API.samples}/analise-tab?${params.toString()}`,
-    { signal },
-  );
-  if (!response.ok) throw new Error("Failed to fetch AnaliseTab data");
-  return response.json();
-};
-
-export const refreshAnaliseTabCache = async () => {
-  const response = await fetchWithAuth(`${API.samples}/analise-tab/refresh`, {
-    method: "POST",
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to refresh AnaliseTab cache");
-  }
-
   return response.json();
 };

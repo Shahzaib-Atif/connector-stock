@@ -10,6 +10,7 @@ import { Transaction } from '@shared/types/Transaction';
 import { WireTypes } from '@shared/enums/WireTypes';
 import { CreateSamplesDto, SamplesDto } from '@shared/dto/SamplesDto';
 import { AnaliseTabQueryDto } from '@shared/dto/AnaliseTabQueryDto';
+import { AnaliseSimilarQueryDto } from '@shared/dto/AnaliseSimilarQueryDto';
 import { SamplesQueryDto } from '@shared/dto/SamplesQueryDto';
 import { AnaliseCacheService } from './analise-cache.service';
 import { SamplesCacheService } from './samples-cache.service';
@@ -26,56 +27,75 @@ export class SamplesService {
     private readonly samplesCacheService: SamplesCacheService,
   ) {}
 
+  // Returns paginated samples from JSON cache.
   getSamplesPage(query: SamplesQueryDto) {
     return this.samplesCacheService.getPage(query);
   }
 
+  // Returns projects, clients, and entregue option lists.
   getSamplesOptions() {
     return this.samplesCacheService.getOptions();
   }
 
+  // Clears samples cache and schedules a reload.
   refreshSamplesCache(reason = 'frontend-request') {
     return this.samplesCacheService.invalidateAndRefresh(reason);
   }
 
+  // Searches cached ORC rows for the creation wizard.
   searchOrcSamples(query: string) {
     return this.samplesCacheService.searchOrc(query);
   }
 
+  // Loads one active sample row by id.
   async getSampleById(id: number) {
     return this.samplesRepo.getSampleById(id);
   }
 
-  /** Get all AnaliseTab data */
+  // Returns paginated analise rows from cache.
   getAnaliseTab(query: AnaliseTabQueryDto) {
     return this.analiseCacheService.getPage(query);
   }
 
-  /** Get AnaliseTab data by RefCliente for multi-step sample creation */
+  // Returns analise rows for one RefCliente.
   getAnaliseTabByRefCliente(refCliente: string) {
     return this.analiseCacheService.getByRefCliente(refCliente);
   }
 
+  // Returns analise rows similar to the edited connector row.
+  getSimilarAnaliseRows(query: AnaliseSimilarQueryDto) {
+    const numLinha = Number(query.numLinha);
+    return this.analiseCacheService.getSimilarRows({
+      encomenda: query.encomenda,
+      numLinha: Number.isFinite(numLinha) ? numLinha : 0,
+      estado: query.estado,
+      cliente: query.cliente,
+      cduProjetoCliente: query.cduProjetoCliente,
+      newConnector: query.newConnector,
+    });
+  }
+
+  // Clears analise cache and schedules a reload.
   refreshAnaliseTabCache(reason = 'frontend-request') {
     return this.analiseCacheService.invalidateAndRefresh(reason);
   }
 
-  /** Get RegAmostrasEnc data with filters for multi-step sample creation */
+  // Returns RegAmostrasEnc rows for the sample wizard.
   getRegAmostrasEnc(refCliente: string, projeto: string, conectorDV: string) {
     return this.samplesRepo.getRegAmostrasEnc(refCliente, projeto, conectorDV);
   }
 
-  /** Get samples starting from ORC documents */
+  // Returns sample candidates for one ORC document.
   getSamplesFromORC(numorc: string) {
     return this.samplesRepo.getSamplesFromORC(numorc);
   }
 
-  /** Get all samples from ORC documents (served from cache) */
+  // Returns all ORC sample rows from cache.
   getAllSamplesFromORC() {
     return this.samplesCacheService.getAllOrc();
   }
 
-  // Create sample and process transactions atomically
+  // Creates sample metadata and stock IN transactions.
   async createSample(dto: CreateSamplesDto) {
     const created = await this.prisma.$transaction(async (tx) => {
       // 1. Create sample metadata
@@ -211,7 +231,7 @@ export class SamplesService {
     return created;
   }
 
-  // Update sample and adjust quantities atomically
+  // Updates sample metadata and reconciles stock movements.
   async updateSample(id: number, dto: SamplesDto) {
     // Remove associatedItemIds from dto before creating prisma record
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -421,7 +441,7 @@ export class SamplesService {
     return updated;
   }
 
-  // Soft delete sample and revert all stock atomically
+  // Soft-deletes sample and posts compensating stock OUT.
   async deleteSample(id: number, deletedBy?: string): Promise<SamplesDto> {
     const deleted = await this.prisma.$transaction(async (tx) => {
       const existing = await tx.rEG_Amostras.findUnique({
@@ -522,11 +542,13 @@ export class SamplesService {
 
   //#region -- Private Helpers
 
+  // Parses sample quantity strings into numbers.
   private parseQuantity(qty?: string | null): number {
     const parsed = Number(qty);
     return Number.isFinite(parsed) ? parsed : 0;
   }
 
+  // Processes stock transaction; logs errors without throwing.
   private async safeProcessTransaction(
     tx: Omit<Transaction, 'ID'>,
     txClient: TransactionClient,
@@ -541,6 +563,7 @@ export class SamplesService {
     }
   }
 
+  // Upserts connector reference mapping when sample is complete.
   private async upsertReferenceMapping(
     tx: TransactionClient,
     amostra?: string | null,

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DetailHeader } from "../common/DetailHeader";
 import { ROUTES } from "../AppRoutes";
-import Spinner from "../common/Spinner";
 import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 import { FilterToolbar } from "../common/FilterToolbar";
 import { useFiltersToggle } from "../../hooks/useFiltersToggle";
@@ -12,40 +11,53 @@ import TableHeader from "./components/TableHeader";
 import TableRows from "./components/TableRows";
 import useFilters from "./components/useFilters";
 import useData from "./components/useData";
-import { useSorting } from "./useSorting";
+import { useSorting } from "./components/useSorting";
+import { useConnectorSave } from "./components/useConnectorSave";
+import SimilarRowsConnectorModal from "./components/SimilarRowsConnectorModal";
+import DivDeskReclickModal from "./components/DivDeskReclickModal";
+import { useAppSelector } from "@/store/hooks";
+import Spinner from "../common/Spinner";
 
+// Analise tab page with filters, pagination, and edits.
 export const AnaliseTable: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAppSelector((state) => state.auth);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-
   const { showFilters, setShowFilters } = useFiltersToggle(
     STORAGE_KEYS.ANALISE_TAB_SHOW_FILTERS,
   );
 
   const { filters, setFilters, activeFiltersCount, clearFilters } =
     useFilters();
+
   const { dateSortDirection, handleDateSortToggle } = useSorting();
-  const { rows, loading, error, setRows, totalItems, totalPages } = useData({
+  const {
+    rows,
+    loading,
+    error,
+    handleUpdateConnector,
+    totalItems,
+    totalPages,
+  } = useData({
     filters,
     currentPage,
     itemsPerPage,
     dateSortDirection,
   });
 
-  const handleUpdateConnector = (
-    encomenda: string,
-    numLinha: number,
-    newConnector: string,
-  ) => {
-    setRows((prevRows) =>
-      prevRows.map((row) =>
-        row.Encomenda === encomenda && row.NumLinha === numLinha
-          ? { ...row, Conector: newConnector }
-          : row,
-      ),
-    );
-  };
+  const {
+    pendingSave,
+    reclickWizard,
+    isCheckingSimilar,
+    handleConnectorSave,
+    handleOnlyThisRow,
+    handleApplyToAll,
+    handleLaunchReclickStep,
+    closePendingModal,
+    closeReclickWizard,
+  } = useConnectorSave({ onUpdateConnector: handleUpdateConnector, user });
 
   // Reset to first page when filters change
   useEffect(() => {
@@ -93,7 +105,8 @@ export const AnaliseTable: React.FC = () => {
                 <tbody>
                   <TableRows
                     paginatedItems={rows as AnaliseTabDto[]}
-                    onUpdateConnector={handleUpdateConnector}
+                    isCheckingSimilar={isCheckingSimilar}
+                    onConnectorSave={handleConnectorSave}
                   />
                 </tbody>
               </table>
@@ -112,6 +125,27 @@ export const AnaliseTable: React.FC = () => {
           )}
         </div>
       </div>
+
+      {pendingSave && (
+        <SimilarRowsConnectorModal
+          sourceRow={pendingSave.row}
+          newConnector={pendingSave.newConnector}
+          similarRows={pendingSave.similarRows}
+          onOnlyThisRow={handleOnlyThisRow}
+          onApplyToAll={handleApplyToAll}
+          onClose={closePendingModal}
+        />
+      )}
+
+      {reclickWizard && (
+        <DivDeskReclickModal
+          newConnector={reclickWizard.newConnector}
+          steps={reclickWizard.steps}
+          currentStep={reclickWizard.currentStep}
+          onLaunchStep={handleLaunchReclickStep}
+          onClose={closeReclickWizard}
+        />
+      )}
     </div>
   );
 };

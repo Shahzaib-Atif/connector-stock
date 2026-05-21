@@ -1,21 +1,19 @@
 import { useAppSelector } from "@/store/hooks";
-import { updateConnName } from "@/utils/functions/divDesk";
 import { Check, Pencil, X } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 
 interface Props {
   initialValue: string;
-  encomenda: string;
-  numLinha: number;
   isAdmin: boolean;
-  onSave: (encomenda: string, numLinha: number, newValue: string) => void;
+  isSaving?: boolean;
+  onSave: (newValue: string) => void | Promise<void>;
 }
 
+// Inline editor for analise connector names.
 export default function ConnectorEditableCell({
   initialValue,
-  encomenda,
-  numLinha,
   isAdmin,
+  isSaving = false,
   onSave,
 }: Props) {
   const [isEditing, setIsEditing] = useState(false);
@@ -35,28 +33,31 @@ export default function ConnectorEditableCell({
     return <span className="break-all">{initialValue || "-"}</span>;
   }
 
-  const handleSave = () => {
+  // Persists trimmed value when it changed.
+  const handleSave = async () => {
     const trimmed = value.trim();
-    if (trimmed !== initialValue) {
-      updateConnName(encomenda, String(numLinha), trimmed);
-      onSave(encomenda, numLinha, trimmed);
+    if (trimmed !== initialValue.trim()) {
+      await onSave(trimmed);
     }
     setIsEditing(false);
   };
 
+  // Reverts edit mode without saving.
   const handleCancel = () => {
     setValue(initialValue);
     setIsEditing(false);
   };
 
+  // Handles Enter save and Escape cancel.
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      handleSave();
+      void handleSave();
     } else if (e.key === "Escape") {
       handleCancel();
     }
   };
 
+  // return editor when in edit mode, otherwise display value with edit button
   if (isEditing) {
     return (
       <div
@@ -79,9 +80,10 @@ export default function ConnectorEditableCell({
         </datalist>
         <button
           type="button"
-          onClick={handleSave}
+          onClick={() => void handleSave()}
+          disabled={isSaving}
           title="Save"
-          className="p-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 hover:text-emerald-300 transition-colors shrink-0"
+          className="p-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 hover:text-emerald-300 transition-colors shrink-0 disabled:opacity-50"
         >
           <Check className="w-3.5 h-3.5" />
         </button>
@@ -97,6 +99,7 @@ export default function ConnectorEditableCell({
     );
   }
 
+  // return display with edit button
   return (
     <div
       onClick={() => setIsEditing(true)}

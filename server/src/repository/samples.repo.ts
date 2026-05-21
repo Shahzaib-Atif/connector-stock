@@ -9,10 +9,9 @@ import { AnaliseTabDto } from '@shared/dto/AnaliseTabDto';
 export class SamplesRepo {
   constructor(private prisma: PrismaService) {}
 
+  // Loads all active REG_Amostras rows from Prisma.
   async getAllSamples(): Promise<SamplesDto[]> {
     try {
-      console.log('fetching samples from repo...');
-
       return await this.prisma.rEG_Amostras.findMany({
         where: { IsActive: true },
         orderBy: { ID: 'desc' },
@@ -23,6 +22,7 @@ export class SamplesRepo {
     }
   }
 
+  // Loads one REG_Amostras row by primary key.
   async getSampleById(id: number): Promise<SamplesDto | null> {
     try {
       return await this.prisma.rEG_Amostras.findUnique({
@@ -34,6 +34,7 @@ export class SamplesRepo {
     }
   }
 
+  // Inserts a new REG_Amostras row in the database.
   async createSample(dto: CreateSamplesDto): Promise<SamplesDto | null> {
     // Defensively strip identity/generated fields if the client sends them anyway.
     const {
@@ -65,6 +66,7 @@ export class SamplesRepo {
     }
   }
 
+  // Updates an existing REG_Amostras row by id.
   async updateSample(
     id: number,
     dto: CreateSamplesDto,
@@ -88,7 +90,7 @@ export class SamplesRepo {
     }
   }
 
-  /** Soft delete sample by setting IsActive to false   */
+  // Soft-deletes sample by setting IsActive false.
   async deleteSample(
     id: number,
     deletedBy?: string,
@@ -108,7 +110,7 @@ export class SamplesRepo {
     }
   }
 
-  /** Get all AnaliseTab data */
+  // Loads all V_AnaliseTab rows for cache refresh.
   async getAnaliseTab(): Promise<AnaliseTabDto[]> {
     try {
       return await this.prisma.v_AnaliseTab.findMany({
@@ -120,7 +122,7 @@ export class SamplesRepo {
     }
   }
 
-  /** Get AnaliseTab data by RefCliente for sample creation wizard */
+  // Loads analise rows filtered by RefCliente substring.
   async getAnaliseTabByRefCliente(
     refCliente: string,
   ): Promise<AnaliseTabDto[]> {
@@ -136,7 +138,7 @@ export class SamplesRepo {
     }
   }
 
-  /** Get RegAmostrasEnc data filtered by RefCliente, projeto, and conectorDV */
+  // Loads RegAmostrasEnc rows for wizard step three.
   async getRegAmostrasEnc(
     refCliente: string,
     projeto: string,
@@ -156,7 +158,7 @@ export class SamplesRepo {
     }
   }
 
-  /** Get samples starting from ORC documents (using V_RegAmostrasFromORC) */
+  // Loads ORC sample rows for one document or reference.
   async getSamplesFromORC(numorc: string): Promise<RegAmostrasOrcDto[]> {
     const byOrc = await this.prisma.v_RegAmostrasFromORC.findMany({
       where: { orcDoc: numorc },
@@ -171,7 +173,7 @@ export class SamplesRepo {
     });
   }
 
-  /** Get all samples from ORC documents (using V_RegAmostrasFromORC) */
+  // Loads every V_RegAmostrasFromORC row for caching.
   async getAllSamplesFromORC(): Promise<RegAmostrasOrcDto[]> {
     try {
       return await this.prisma.v_RegAmostrasFromORC.findMany();

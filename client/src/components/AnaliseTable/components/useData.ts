@@ -1,4 +1,4 @@
-import { getAnaliseTab } from "@/api/samplesApi";
+import { getAnaliseTab } from "@/api/analiseApi";
 import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 import { AnaliseTabFilters } from "./constants";
 import { useEffect, useState } from "react";
@@ -71,9 +71,24 @@ export default function useData({
     };
   }, [currentPage, itemsPerPage, debouncedFilters, dateSortDirection]);
 
+  // Patches connector text for one row in local state.
+  const handleUpdateConnector = (
+    encomenda: string,
+    numLinha: number,
+    newConnector: string,
+  ) => {
+    setRows((prevRows) =>
+      prevRows.map((row) =>
+        row.Encomenda === encomenda && row.NumLinha === numLinha
+          ? { ...row, Conector: newConnector }
+          : row,
+      ),
+    );
+  };
+
   return {
     rows,
-    setRows,
+    handleUpdateConnector,
     loading,
     error,
     totalItems,
