@@ -60,7 +60,7 @@ export default function ConnectorEditableCell({
   if (isEditing) {
     return (
       <div
-        className="flex items-center gap-1.5 w-full min-w-[180px]"
+        className="flex items-center gap-1.5 w-full min-w-[120px]"
         onClick={(e) => e.stopPropagation()}
       >
         <input

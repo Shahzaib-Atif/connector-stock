@@ -24,18 +24,18 @@ export default function TableHeader({
         <th className={`${headerCellClass} w-28`}>Encomenda</th>
         <th className={`${headerCellClass} w-20`}>NumLinha</th>
         <th className={`${headerCellClass} w-24`}>Estado</th>
-        <th className={headerCellClass}>Descricao</th>
-        <th className={headerCellClass}>Conector</th>
-        <th className={headerCellClass}>RefCliente</th>
-        <th className={headerCellClass}>Cliente</th>
-        <th className={headerCellClass}>
+        <th className={`${headerCellClass} w-28`}>Descricao</th>
+        <th className={`${headerCellClass} w-40 max-w-40`}>Conector</th>
+        <th className={`${headerCellClass} w-36`}>RefCliente</th>
+        <th className={`${headerCellClass} w-36`}>Cliente</th>
+        <th className={`${headerCellClass} w-28`}>
           <DateSortButton
             onClick={onDateSortToggle}
             dateSortDirection={dateSortDirection}
           />
         </th>
-        <th className={headerCellClass}>DataEntrega</th>
-        <th className={headerCellClass}>CDU_ProjetoCliente</th>
+        <th className={`${headerCellClass} w-28`}>DataEntrega</th>
+        <th className={`${headerCellClass} w-36`}>CDU_ProjetoCliente</th>
       </tr>
       {/* Filter row */}
       {showFilters && <FilterRow filters={filters} setFilters={setFilters} />}
