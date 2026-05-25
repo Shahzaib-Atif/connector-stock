@@ -8,6 +8,7 @@ import { SamplesPageDto } from '@shared/dto/SamplesPageDto';
 import { SamplesOptionsDto } from '@shared/dto/SamplesOptionsDto';
 import { RegAmostrasOrcDto } from '@shared/dto/RegAmostrasOrcDto';
 import {
+  compareFlexibleDateValues,
   compareNullableValues,
   containsInsensitive,
   paginateItems,
@@ -199,6 +200,16 @@ export class SamplesCacheService implements OnModuleInit {
   }
 
   private sortRows(rows: SamplesDto[], query: NormalizedSamplesQuery) {
+    if (query.sortBy === 'Data_recepcao') {
+      return [...rows].sort((left, right) =>
+        compareFlexibleDateValues(
+          left.Data_recepcao,
+          right.Data_recepcao,
+          query.sortDirection,
+        ),
+      );
+    }
+
     return [...rows].sort((left, right) =>
       compareNullableValues(
         left[query.sortBy],

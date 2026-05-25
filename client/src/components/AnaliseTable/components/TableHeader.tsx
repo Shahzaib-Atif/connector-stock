@@ -32,6 +32,7 @@ export default function TableHeader({
           <DateSortButton
             onClick={onDateSortToggle}
             dateSortDirection={dateSortDirection}
+            label="DataAbertura"
           />
         </th>
         <th className={`${headerCellClass} w-28`}>DataEntrega</th>

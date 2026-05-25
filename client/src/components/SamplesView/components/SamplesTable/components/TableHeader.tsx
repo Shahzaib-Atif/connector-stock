@@ -40,6 +40,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
           <DateSortButton
             onClick={onDateSortToggle}
             dateSortDirection={dateSortDirection}
+            label="Data Receção"
           />
         </th>
         <th className={`${headerCellClass} w-36`}>Observacoes</th>
