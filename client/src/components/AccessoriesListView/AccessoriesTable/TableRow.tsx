@@ -32,6 +32,8 @@ const TableRow: React.FC<TableRowProps> = ({ accessory }) => {
             src={imageUrl}
             alt={accessory.customId}
             className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+            loading="lazy"
+            decoding="async"
             onError={(e) => {
               const target = e.currentTarget;
               target.onerror = null; // prevent looping

@@ -94,6 +94,7 @@ function LightBoxOverlay({
           src={src}
           alt={selectedImage}
           className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+          decoding="async"
         />
 
         <p className="text-slate-400 font-mono text-sm text-center break-all">

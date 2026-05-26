@@ -21,6 +21,8 @@ function ConnectorInfo({ liveStock, conn }: Props) {
           className={`w-12 h-12 rounded-lg object-cover border ${
             liveStock > 0 ? "border-blue-500/20" : "border-red-500/20"
           }`}
+          loading="lazy"
+          decoding="async"
           onError={() => setImageError(true)}
         />
       ) : (

@@ -86,10 +86,10 @@ export class SamplesCacheService implements OnModuleInit {
     void this.runOrcRefresh('startup');
   }
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.MONDAY_TO_FRIDAY_AT_09_30AM)
   handleHourlyRefresh() {
-    void this.runRefresh('hourly-cron');
-    void this.runOrcRefresh('hourly-cron');
+    void this.runRefresh('daily-cron');
+    void this.runOrcRefresh('daily-cron');
   }
 
   async getPage(queryDto: SamplesQueryDto): Promise<SamplesPageDto> {

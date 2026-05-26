@@ -72,9 +72,9 @@ export class AnaliseCacheService implements OnModuleInit {
   }
 
   // Refreshes analise cache every hour via cron.
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.MONDAY_TO_FRIDAY_AT_09_30AM)
   handleHourlyRefresh() {
-    void this.runRefresh('hourly-cron');
+    void this.runRefresh('daily-cron');
   }
 
   // Loads cache, refreshing when missing or stale.

@@ -103,6 +103,8 @@ const TableRow: React.FC<TableRowProps> = ({
               src={imageUrl}
               alt={connector.CODIVMAC}
               className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+              loading="lazy"
+              decoding="async"
               onError={(e) => {
                 const target = e.currentTarget;
                 target.onerror = null;

@@ -63,6 +63,7 @@ export const RelatedImages: React.FC<RelatedImagesProps> = ({
               alt={filename}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               loading="lazy"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <Maximize2 className="w-6 h-6 text-white" />

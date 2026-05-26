@@ -3,6 +3,10 @@ import { ApiOperation } from '@nestjs/swagger';
 import { Response } from 'express';
 import { ImageService } from 'src/services/image.service';
 import { getErrorMsg } from '@shared/utils/getErrorMsg';
+import {
+  applyImageCacheHeaders,
+  streamFileResponse,
+} from 'src/utils/stream-response.utils';
 
 @Controller('api/images')
 export class ImageController {
@@ -10,7 +14,7 @@ export class ImageController {
 
   @ApiOperation({ summary: 'Get connector image' })
   @Get('connector/:connectorId/:type')
-  getConnectorImage(
+  async getConnectorImage(
     @Param('connectorId') connectorId: string,
     @Param('type') type: string,
     @Res() res: Response,
@@ -21,12 +25,14 @@ export class ImageController {
         type,
       );
 
-      res.setHeader('Content-Type', contentType);
-      stream.pipe(res);
+      applyImageCacheHeaders(res, contentType);
+      await streamFileResponse(res, stream);
     } catch (e) {
       const errMsg = getErrorMsg(e);
       console.error(errMsg);
-      res.status(404).send(errMsg);
+      if (!res.headersSent) {
+        res.status(404).send(errMsg);
+      }
     }
   }
 
@@ -40,11 +46,13 @@ export class ImageController {
       const { contentType, stream } =
         await this.imageService.getAccessoryImage(accessoryId);
 
-      res.setHeader('Content-Type', contentType);
-      stream.pipe(res);
+      applyImageCacheHeaders(res, contentType);
+      await streamFileResponse(res, stream);
     } catch (e) {
       console.error(getErrorMsg(e));
-      res.sendStatus(404);
+      if (!res.headersSent) {
+        res.sendStatus(404);
+      }
     }
   }
 
@@ -59,7 +67,7 @@ export class ImageController {
 
   @ApiOperation({ summary: 'Get individual extras image' })
   @Get('extras/file/:connectorId/:type')
-  getExtrasImage(
+  async getExtrasImage(
     @Param('connectorId') connectorId: string,
     @Param('type') type: string,
     @Res() res: Response,
@@ -68,11 +76,13 @@ export class ImageController {
       const { contentType, stream } =
         this.imageService.getExtrasImageStreamForConnectors(connectorId, type);
 
-      res.setHeader('Content-Type', contentType);
-      stream.pipe(res);
+      applyImageCacheHeaders(res, contentType);
+      await streamFileResponse(res, stream);
     } catch (e) {
       console.error(getErrorMsg(e));
-      res.sendStatus(404);
+      if (!res.headersSent) {
+        res.sendStatus(404);
+      }
     }
   }
 
@@ -84,7 +94,7 @@ export class ImageController {
 
   @ApiOperation({ summary: 'Get individual accessory extras image' })
   @Get('accessory-extras/file/:filename')
-  getAccessoryExtrasImage(
+  async getAccessoryExtrasImage(
     @Param('filename') filename: string,
     @Res() res: Response,
   ) {
@@ -92,11 +102,13 @@ export class ImageController {
       const { contentType, stream } =
         this.imageService.getExtrasImageStreamForAccessories(filename);
 
-      res.setHeader('Content-Type', contentType);
-      stream.pipe(res);
+      applyImageCacheHeaders(res, contentType);
+      await streamFileResponse(res, stream);
     } catch (e) {
       console.error(getErrorMsg(e));
-      res.sendStatus(404);
+      if (!res.headersSent) {
+        res.sendStatus(404);
+      }
     }
   }
 }
