@@ -1,11 +1,8 @@
 import { Logger } from '@nestjs/common';
 import * as path from 'path';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import { spawn } from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
-
-const execAsync = promisify(exec);
 
 // OS + printer communication
 export class PrinterClient {
@@ -19,11 +16,12 @@ export class PrinterClient {
     const tempFile = path.join(os.tmpdir(), `label_${Date.now()}.prn`);
     fs.writeFileSync(tempFile, tsplCommands, { encoding: 'ascii' });
 
-    // Send to printer
-    await this.sendToPrinter(tempFile, printer);
-
-    // Cleanup
-    this.cleanupFile(tempFile);
+    try {
+      // Send to printer
+      await this.sendToPrinter(tempFile, printer);
+    } finally {
+      await this.cleanupFile(tempFile);
+    }
   }
 
   private getPrinterExePath() {
@@ -41,26 +39,86 @@ export class PrinterClient {
     filePath: string,
     printerName: string,
   ): Promise<void> {
-    const command = `"${this.rawPrinterExe}" "${printerName}" "${filePath}"`;
-    this.logger.log(`Executing: ${command}`);
+    this.logger.log(
+      `Executing: "${this.rawPrinterExe}" "${printerName}" "${filePath}"`,
+    );
 
-    const { stdout, stderr } = await execAsync(command, { timeout: 30000 });
+    const { stdout, stderr } = await this.runPrinterProcess(
+      printerName,
+      filePath,
+    );
 
-    if (stdout) this.logger.log(stdout.trim());
-    if (stderr) this.logger.warn(stderr.trim());
+    if (stdout) this.logger.log(stdout);
+    if (stderr) this.logger.warn(stderr);
 
     if (!stdout.includes('SUCCESS')) {
       throw new Error(stdout || stderr || 'Print failed');
     }
   }
 
-  private cleanupFile(filePath: string): void {
-    setTimeout(() => {
-      try {
-        fs.unlinkSync(filePath);
-      } catch {
-        // Ignore cleanup errors
-      }
-    }, 5000);
+  private async runPrinterProcess(
+    printerName: string,
+    filePath: string,
+  ): Promise<{ stdout: string; stderr: string }> {
+    return new Promise((resolve, reject) => {
+      const child = spawn(this.rawPrinterExe, [printerName, filePath], {
+        windowsHide: true,
+        stdio: ['ignore', 'pipe', 'pipe'],
+      });
+
+      let stdout = '';
+      let stderr = '';
+
+      child.stdout?.setEncoding('utf8');
+      child.stderr?.setEncoding('utf8');
+
+      child.stdout?.on('data', (chunk: string) => {
+        stdout = appendCappedOutput(stdout, chunk);
+      });
+
+      child.stderr?.on('data', (chunk: string) => {
+        stderr = appendCappedOutput(stderr, chunk);
+      });
+
+      child.once('error', reject);
+
+      const timeout = setTimeout(() => {
+        child.kill();
+        reject(new Error('Printer process timed out'));
+      }, 30000);
+      timeout.unref();
+
+      child.once('close', (code) => {
+        clearTimeout(timeout);
+
+        if (code !== 0 && !stdout.includes('SUCCESS')) {
+          reject(
+            new Error(
+              stderr || stdout || `Printer process exited with code ${code}`,
+            ),
+          );
+          return;
+        }
+
+        resolve({
+          stdout: stdout.trim(),
+          stderr: stderr.trim(),
+        });
+      });
+    });
   }
+
+  private async cleanupFile(filePath: string): Promise<void> {
+    try {
+      await fs.promises.unlink(filePath);
+    } catch {
+      // Ignore cleanup errors
+    }
+  }
+}
+
+function appendCappedOutput(current: string, chunk: string) {
+  const next = current + chunk;
+  const maxLength = 8192;
+  return next.length > maxLength ? next.slice(-maxLength) : next;
 }
