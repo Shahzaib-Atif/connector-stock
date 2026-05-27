@@ -18,6 +18,11 @@ export function performValidation(formData: CreateSamplesDto) {
     return error; // return error message
   }
 
+  // change connector to uppercase
+  if (formData.Amostra) {
+    formData.Amostra = formData.Amostra.toUpperCase();
+  }
+
   // validate connector has minimum length 6 (except when it is "NEW")
   if (
     formData?.Amostra?.length &&
