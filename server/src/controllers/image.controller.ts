@@ -3,6 +3,7 @@ import { ApiOperation } from '@nestjs/swagger';
 import { Response } from 'express';
 import { ImageService } from 'src/services/image.service';
 import { getErrorMsg } from '@shared/utils/getErrorMsg';
+import { MemoryTelemetryService } from 'src/services/memory-telemetry.service';
 import {
   applyImageCacheHeaders,
   streamFileResponse,
@@ -10,7 +11,10 @@ import {
 
 @Controller('api/images')
 export class ImageController {
-  constructor(private readonly imageService: ImageService) {}
+  constructor(
+    private readonly imageService: ImageService,
+    private readonly memoryTelemetry: MemoryTelemetryService,
+  ) {}
 
   @ApiOperation({ summary: 'Get connector image' })
   @Get('connector/:connectorId/:type')
@@ -19,6 +23,14 @@ export class ImageController {
     @Param('type') type: string,
     @Res() res: Response,
   ) {
+    const shouldSample = this.memoryTelemetry.shouldSampleImageRequest();
+    if (shouldSample) {
+      await this.memoryTelemetry.capture('image', 'before-connector-image', {
+        connectorId,
+        type,
+      });
+    }
+
     try {
       const { contentType, stream } = this.imageService.getConnectorImage(
         connectorId,
@@ -27,9 +39,22 @@ export class ImageController {
 
       applyImageCacheHeaders(res, contentType);
       await streamFileResponse(res, stream);
+      if (shouldSample) {
+        await this.memoryTelemetry.capture('image', 'after-connector-image', {
+          connectorId,
+          type,
+        });
+      }
     } catch (e) {
       const errMsg = getErrorMsg(e);
       console.error(errMsg);
+      if (shouldSample) {
+        await this.memoryTelemetry.capture('image', 'connector-image-error', {
+          connectorId,
+          type,
+          error: errMsg,
+        });
+      }
       if (!res.headersSent) {
         res.status(404).send(errMsg);
       }
@@ -42,14 +67,33 @@ export class ImageController {
     @Param('accessoryId') accessoryId: number,
     @Res() res: Response,
   ) {
+    const shouldSample = this.memoryTelemetry.shouldSampleImageRequest();
+    if (shouldSample) {
+      await this.memoryTelemetry.capture('image', 'before-accessory-image', {
+        accessoryId,
+      });
+    }
+
     try {
       const { contentType, stream } =
         await this.imageService.getAccessoryImage(accessoryId);
 
       applyImageCacheHeaders(res, contentType);
       await streamFileResponse(res, stream);
+      if (shouldSample) {
+        await this.memoryTelemetry.capture('image', 'after-accessory-image', {
+          accessoryId,
+        });
+      }
     } catch (e) {
-      console.error(getErrorMsg(e));
+      const errMsg = getErrorMsg(e);
+      console.error(errMsg);
+      if (shouldSample) {
+        await this.memoryTelemetry.capture('image', 'accessory-image-error', {
+          accessoryId,
+          error: errMsg,
+        });
+      }
       if (!res.headersSent) {
         res.sendStatus(404);
       }
@@ -72,14 +116,36 @@ export class ImageController {
     @Param('type') type: string,
     @Res() res: Response,
   ) {
+    const shouldSample = this.memoryTelemetry.shouldSampleImageRequest();
+    if (shouldSample) {
+      await this.memoryTelemetry.capture('image', 'before-connector-extra', {
+        connectorId,
+        type,
+      });
+    }
+
     try {
       const { contentType, stream } =
         this.imageService.getExtrasImageStreamForConnectors(connectorId, type);
 
       applyImageCacheHeaders(res, contentType);
       await streamFileResponse(res, stream);
+      if (shouldSample) {
+        await this.memoryTelemetry.capture('image', 'after-connector-extra', {
+          connectorId,
+          type,
+        });
+      }
     } catch (e) {
-      console.error(getErrorMsg(e));
+      const errMsg = getErrorMsg(e);
+      console.error(errMsg);
+      if (shouldSample) {
+        await this.memoryTelemetry.capture('image', 'connector-extra-error', {
+          connectorId,
+          type,
+          error: errMsg,
+        });
+      }
       if (!res.headersSent) {
         res.sendStatus(404);
       }
@@ -98,14 +164,33 @@ export class ImageController {
     @Param('filename') filename: string,
     @Res() res: Response,
   ) {
+    const shouldSample = this.memoryTelemetry.shouldSampleImageRequest();
+    if (shouldSample) {
+      await this.memoryTelemetry.capture('image', 'before-accessory-extra', {
+        filename,
+      });
+    }
+
     try {
       const { contentType, stream } =
         this.imageService.getExtrasImageStreamForAccessories(filename);
 
       applyImageCacheHeaders(res, contentType);
       await streamFileResponse(res, stream);
+      if (shouldSample) {
+        await this.memoryTelemetry.capture('image', 'after-accessory-extra', {
+          filename,
+        });
+      }
     } catch (e) {
-      console.error(getErrorMsg(e));
+      const errMsg = getErrorMsg(e);
+      console.error(errMsg);
+      if (shouldSample) {
+        await this.memoryTelemetry.capture('image', 'accessory-extra-error', {
+          filename,
+          error: errMsg,
+        });
+      }
       if (!res.headersSent) {
         res.sendStatus(404);
       }

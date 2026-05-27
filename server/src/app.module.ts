@@ -36,6 +36,7 @@ import { LineStatusLogsService } from './services/line-status-logs.service';
 import { JsonCacheService } from './cache/json-cache.service';
 import { AnaliseCacheService } from './services/analise-cache.service';
 import { SamplesCacheService } from './services/samples-cache.service';
+import { MemoryTelemetryService } from './services/memory-telemetry.service';
 
 @Module({
   imports: [
@@ -85,6 +86,7 @@ import { SamplesCacheService } from './services/samples-cache.service';
     JsonCacheService,
     AnaliseCacheService,
     SamplesCacheService,
+    MemoryTelemetryService,
   ],
 })
 export class AppModule {}

@@ -2,6 +2,7 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { SamplesRepo } from 'src/repository/samples.repo';
 import { JsonCacheService } from 'src/cache/json-cache.service';
+import { MemoryTelemetryService } from './memory-telemetry.service';
 import { SamplesDto } from '@shared/dto/SamplesDto';
 import { SamplesQueryDto } from '@shared/dto/SamplesQueryDto';
 import { SamplesPageDto } from '@shared/dto/SamplesPageDto';
@@ -79,6 +80,7 @@ export class SamplesCacheService implements OnModuleInit {
   constructor(
     private readonly cacheService: JsonCacheService,
     private readonly samplesRepo: SamplesRepo,
+    private readonly memoryTelemetry: MemoryTelemetryService,
   ) {}
 
   onModuleInit() {
@@ -247,6 +249,9 @@ export class SamplesCacheService implements OnModuleInit {
     reason: string,
   ): Promise<CachedSamplesDataset> {
     this.logger.log(`Refreshing Samples cache. Reason: ${reason}`);
+    await this.memoryTelemetry.capture('samples-cache', 'before-refresh', {
+      reason,
+    });
     const rows = await this.samplesRepo.getAllSamples();
 
     const projects = new Set<string>();
@@ -273,6 +278,10 @@ export class SamplesCacheService implements OnModuleInit {
       this.cacheService.set(DATA_KEY, rows),
       this.cacheService.set(META_KEY, meta),
     ]);
+    await this.memoryTelemetry.capture('samples-cache', 'after-refresh', {
+      reason,
+      rowCount: rows.length,
+    });
 
     return { rows, meta };
   }
@@ -281,6 +290,9 @@ export class SamplesCacheService implements OnModuleInit {
     reason: string,
   ): Promise<CachedOrcDataset> {
     this.logger.log(`Refreshing ORC samples cache. Reason: ${reason}`);
+    await this.memoryTelemetry.capture('orc-cache', 'before-refresh', {
+      reason,
+    });
     const rows = await this.samplesRepo.getAllSamplesFromORC();
     const meta: SamplesCacheMeta = {
       lastRefreshedAt: new Date().toISOString(),
@@ -295,6 +307,10 @@ export class SamplesCacheService implements OnModuleInit {
       this.cacheService.set(ORC_DATA_KEY, rows),
       this.cacheService.set(ORC_META_KEY, meta),
     ]);
+    await this.memoryTelemetry.capture('orc-cache', 'after-refresh', {
+      reason,
+      rowCount: rows.length,
+    });
 
     return { rows, meta };
   }

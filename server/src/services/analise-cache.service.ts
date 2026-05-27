@@ -2,6 +2,7 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { SamplesRepo } from 'src/repository/samples.repo';
 import { JsonCacheService } from 'src/cache/json-cache.service';
+import { MemoryTelemetryService } from './memory-telemetry.service';
 import { AnaliseTabDto } from '@shared/dto/AnaliseTabDto';
 import { AnaliseTabQueryDto } from '@shared/dto/AnaliseTabQueryDto';
 import { AnaliseTabPageDto } from '@shared/dto/AnaliseTabPageDto';
@@ -64,6 +65,7 @@ export class AnaliseCacheService implements OnModuleInit {
   constructor(
     private readonly cacheService: JsonCacheService,
     private readonly samplesRepo: SamplesRepo,
+    private readonly memoryTelemetry: MemoryTelemetryService,
   ) {}
 
   // Warms analise cache when the module starts.
@@ -211,6 +213,9 @@ export class AnaliseCacheService implements OnModuleInit {
     reason: string,
   ): Promise<CachedAnaliseDataset> {
     this.logger.log(`Refreshing AnaliseTab cache. Reason: ${reason}`);
+    await this.memoryTelemetry.capture('analise-cache', 'before-refresh', {
+      reason,
+    });
     const rows = await this.samplesRepo.getAnaliseTab();
     const meta: AnaliseCacheMeta = {
       lastRefreshedAt: new Date().toISOString(),
@@ -222,6 +227,10 @@ export class AnaliseCacheService implements OnModuleInit {
       this.cacheService.set(DATA_KEY, rows),
       this.cacheService.set(META_KEY, meta),
     ]);
+    await this.memoryTelemetry.capture('analise-cache', 'after-refresh', {
+      reason,
+      rowCount: rows.length,
+    });
 
     return { rows, meta };
   }

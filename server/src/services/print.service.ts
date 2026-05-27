@@ -4,6 +4,7 @@ import { PrintLabelDto } from 'src/dtos/print.dto';
 import { getErrorMsg } from '@shared/utils/getErrorMsg';
 import { TsplBuilder } from 'src/utils/TsplBuilder';
 import { PrinterClient } from 'src/utils/PrinterClient';
+import { MemoryTelemetryService } from './memory-telemetry.service';
 
 @Injectable()
 export class PrintService {
@@ -12,6 +13,8 @@ export class PrintService {
     __dirname,
     '../../../scripts/RawPrinter.exe',
   );
+
+  constructor(private readonly memoryTelemetry: MemoryTelemetryService) {}
 
   public async printLabel(
     dto: PrintLabelDto,
@@ -22,6 +25,12 @@ export class PrintService {
     );
 
     try {
+      await this.memoryTelemetry.capture('print', 'before-print', {
+        itemId,
+        useSmallLabels,
+        printer: dto.printer || 'PRINTER_1',
+      });
+
       // Generate TSPL commands
       const tsplBuilder = new TsplBuilder();
       const tsplCommands = tsplBuilder.build(dto, useSmallLabels);
@@ -32,10 +41,21 @@ export class PrintService {
       // print using TSPL commands
       const printerClient = new PrinterClient();
       await printerClient.printRaw(tsplCommands, printer);
+      await this.memoryTelemetry.capture('print', 'after-print', {
+        itemId,
+        useSmallLabels,
+        printer: dto.printer || 'PRINTER_1',
+      });
 
       return { success: true, message: `Label printed for ${itemId}` };
     } catch (error) {
       const message = getErrorMsg(error);
+      await this.memoryTelemetry.capture('print', 'print-error', {
+        itemId,
+        useSmallLabels,
+        printer: dto.printer || 'PRINTER_1',
+        error: message,
+      });
       this.logger.error(`Print failed: `, message);
       return { success: false, message };
     }
