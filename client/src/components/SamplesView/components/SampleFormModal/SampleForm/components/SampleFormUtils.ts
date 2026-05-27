@@ -24,7 +24,7 @@ export function performValidation(formData: CreateSamplesDto) {
     formData.Amostra.length < 6 &&
     formData.Amostra !== "NEW"
   ) {
-    return "Amostra is not valid!"; // return error message
+    return "Amostra is not valid: " + formData.Amostra; // return error message
   }
 
   return null; // no errors
