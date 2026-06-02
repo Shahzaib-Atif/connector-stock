@@ -60,7 +60,10 @@ interface NormalizedSamplesQuery {
     amostra: string;
     numORC: string;
     nEnvio: string;
+    quantidade: string;
+    dataRecepcao: string;
     entregueA: string;
+    observacoes: string;
   };
 }
 
@@ -197,7 +200,10 @@ export class SamplesCacheService implements OnModuleInit {
         containsInsensitive(row.Amostra, query.filters.amostra) &&
         containsInsensitive(row.NumORC, query.filters.numORC) &&
         containsInsensitive(row.N_Envio, query.filters.nEnvio) &&
-        containsInsensitive(row.Entregue_a, query.filters.entregueA),
+        containsInsensitive(row.Quantidade, query.filters.quantidade) &&
+        containsInsensitive(row.Data_recepcao, query.filters.dataRecepcao) &&
+        containsInsensitive(row.Entregue_a, query.filters.entregueA) &&
+        containsInsensitive(row.Observacoes, query.filters.observacoes),
     );
   }
 
@@ -376,7 +382,10 @@ function normalizeSamplesQuery(query: SamplesQueryDto): NormalizedSamplesQuery {
       amostra: query.amostra ?? '',
       numORC: query.numORC ?? '',
       nEnvio: query.nEnvio ?? '',
+      quantidade: query.quantidade ?? '',
+      dataRecepcao: query.dataRecepcao ?? '',
       entregueA: query.entregueA ?? '',
+      observacoes: query.observacoes ?? '',
     },
   };
 }

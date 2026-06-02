@@ -11,5 +11,8 @@ export class SamplesQueryDto {
   amostra?: string;
   numORC?: string;
   nEnvio?: string;
+  quantidade?: string;
+  dataRecepcao?: string;
   entregueA?: string;
+  observacoes?: string;
 }

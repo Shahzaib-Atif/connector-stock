@@ -10,7 +10,10 @@ export interface SampleFilters {
   amostra: string;
   numORC: string;
   nEnvio: string;
+  quantidade: string;
+  dataRecepcao: string;
   entregueA: string;
+  observacoes: string;
 }
 
 export const STORAGE_KEY = STORAGE_KEYS.SAMPLES_FILTERS;
@@ -24,7 +27,10 @@ export const defaultFilters: SampleFilters = {
   amostra: "",
   numORC: "",
   nEnvio: "",
+  quantidade: "",
+  dataRecepcao: "",
   entregueA: "",
+  observacoes: "",
 };
 
 export function getActiveFilterCount(filters: SampleFilters): number {

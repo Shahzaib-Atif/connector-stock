@@ -14,7 +14,10 @@ type FilterKey =
   | "refDescricao"
   | "amostra"
   | "numORC"
-  | "nEnvio";
+  | "nEnvio"
+  | "quantidade"
+  | "dataRecepcao"
+  | "observacoes";
 
 function FilterInput({
   id,
@@ -113,9 +116,24 @@ function FilterRow({ showActions = true, filters, setFilterField }: Props) {
         filterKey="numORC"
         setFilterField={setFilterField}
       />
-      <th className="sticky top-[40px] z-20 bg-slate-900/95 px-2 py-2 backdrop-blur" />
-      <th className="sticky top-[40px] z-20 bg-slate-900/95 px-2 py-2 backdrop-blur" />
-      <th className="sticky top-[40px] z-20 bg-slate-900/95 px-2 py-2 backdrop-blur" />
+      <FilterCell
+        id="sample-quantidade-search"
+        value={filters.quantidade}
+        filterKey="quantidade"
+        setFilterField={setFilterField}
+      />
+      <FilterCell
+        id="sample-data-recepcao-search"
+        value={filters.dataRecepcao}
+        filterKey="dataRecepcao"
+        setFilterField={setFilterField}
+      />
+      <FilterCell
+        id="sample-observacoes-search"
+        value={filters.observacoes}
+        filterKey="observacoes"
+        setFilterField={setFilterField}
+      />
       {showActions && (
         <th className="sticky top-[40px] z-20 bg-slate-900/95 px-2 py-2 backdrop-blur" />
       )}
