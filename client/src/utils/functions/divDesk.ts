@@ -3,7 +3,7 @@ import {
   createUpdateConnNameLog,
 } from "@/api/lineStatusLogsApi";
 import { refreshAnaliseTabCache } from "@/api/analiseApi";
-import { UpdateConnNameOptions } from "@/components/AnaliseTable/components/types";
+import { UpdateConnNameOptions } from "@/utils/types/divDesk";
 
 const divDeskDB = import.meta.env.VITE_DIVDESK_DB;
 

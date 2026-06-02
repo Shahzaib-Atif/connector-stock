@@ -10,7 +10,7 @@ import ErrorBanner from "./components/ErrorBanner";
 import ActionButtons from "./components/ActionButtons";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { useSampleFormSubmit } from "./components/useSampleFormSubmit ";
-import { LineStatusContext } from "@/utils/functions/divDesk";
+import { LineStatusContext } from "@/utils/types/divDesk";
 
 interface Props {
   sample: SamplesDto | null;

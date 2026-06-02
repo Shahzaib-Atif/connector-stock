@@ -3,7 +3,7 @@ import { ModalWrapper } from "@/components/common/ModalWrapper";
 import { FilePenLine } from "lucide-react";
 import { SampleForm } from "./SampleForm";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
-import { LineStatusContext } from "@/utils/functions/divDesk";
+import { LineStatusContext } from "@/utils/types/divDesk";
 
 interface SampleFormModalProps {
   sample: SamplesDto | null;

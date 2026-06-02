@@ -17,10 +17,10 @@ import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { useFiltersToggle } from "../../hooks/useFiltersToggle";
 import { STORAGE_KEYS } from "@/utils/constants";
 import ActionBar from "./components/ActionBar";
-import { LineStatusContext } from "@/utils/functions/divDesk";
 import { useSorting } from "./useSorting";
 import useFilters from "./components/useFilters";
 import useData from "./components/useData";
+import { LineStatusContext } from "@/utils/types/divDesk";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;

@@ -1,15 +1,5 @@
 import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 
-export interface LineStatusContext {
-  enc: string;
-  line: string | number;
-}
-
-export interface UpdateConnNameOptions {
-  skipCacheRefresh?: boolean;
-  skipDivDeskLaunch?: boolean;
-}
-
 export interface ConnNameUpdateTarget {
   enc: string;
   line: string | number;

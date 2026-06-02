@@ -5,7 +5,8 @@ import useMissingConnectorWarning from "./useMissingConnectorWarning";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { getErrorMsg } from "@shared/utils/getErrorMsg";
 import { useState } from "react";
-import { LineStatusContext, setLineStatus } from "@/utils/functions/divDesk";
+import { setLineStatus } from "@/utils/functions/divDesk";
+import { LineStatusContext } from "@/utils/types/divDesk";
 
 interface Props {
   formData: CreateSamplesDto;

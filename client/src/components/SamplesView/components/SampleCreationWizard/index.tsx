@@ -8,7 +8,7 @@ import WizardStep3Enc from "./components/WizardStep3Enc";
 import WizardStep2Orc from "./components/WizardStep2Orc/index";
 import SampleWizardModalHeader from "./components/SampleWizardModalHeader";
 import { CreateSamplesDto } from "@shared/dto/SamplesDto";
-import { LineStatusContext } from "@/utils/functions/divDesk";
+import { LineStatusContext } from "@/utils/types/divDesk";
 
 interface SampleCreationWizardProps {
   onClose: () => void;
