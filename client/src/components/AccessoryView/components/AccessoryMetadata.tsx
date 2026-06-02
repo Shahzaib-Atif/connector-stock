@@ -1,8 +1,8 @@
 import CardInfoDiv from "@/components/common/CardInfoDiv";
-import { Accessory } from "@/utils/types";
+import { AccessoryExtended } from "@/utils/types";
 
 interface Props {
-  accessory: Accessory;
+  accessory: AccessoryExtended;
 }
 function AccessoryMetadata({ accessory }: Props) {
   return (

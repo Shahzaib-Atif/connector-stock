@@ -13,11 +13,10 @@ export function useConnectorEditForm(
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { details, dimensions } = connector;
+  const { details } = connector;
 
   const [formData, setFormData] = useState<ConnectorFormData>({
-    Cor: connector.Cor,
-    Vias: connector.Vias,
+    ...connector,
     ConnType: connector.ConnType || "",
     Fabricante: details?.Fabricante || "",
     Refabricante: details?.Refabricante || "",
@@ -27,7 +26,6 @@ export function useConnectorEditForm(
     Qty_sem_fio: connector.Qty_sem_fio || 0,
     ActualViaCount:
       details?.ActualViaCount || parseInt(connector.viasName || "0") || 0,
-    dimensions: dimensions || {},
   });
 
   const setQtyField = (field: "Qty_com_fio" | "Qty_sem_fio", value: number) => {
@@ -51,12 +49,12 @@ export function useConnectorEditForm(
 
   const setDimensionsField = (
     field: keyof ConnectorsDimensions,
-    value: number | undefined,
+    value: number | null,
   ) => {
     setFormData((prev) => ({
       ...prev,
       dimensions: {
-        ...(prev.dimensions || {}),
+        ...(prev.dimensions as ConnectorsDimensions),
         [field]: value,
       },
     }));

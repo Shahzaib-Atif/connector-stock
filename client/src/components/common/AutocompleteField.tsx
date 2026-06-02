@@ -61,7 +61,9 @@ const AutocompleteField: React.FC<Props> = ({
       filteredSuggestions,
       showSuggestions,
       setShowSuggestions,
-      handleSuggestionClick
+      handleSuggestionClick,
+      "",
+      () => {}
     );
 
   useClickOutside(wrapperRef, () => setShowSuggestions(false));

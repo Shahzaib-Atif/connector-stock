@@ -8,14 +8,23 @@ interface Props {
 }
 
 function Coordinates({ connector, PosId }: Props) {
+  const position = connector.position;
   return (
     <div id="connector-position" className="flex flex-col items-end">
       <div className="flex flex-col gap-1.5">
-        {(connector.cv || connector.ch) && (
-          <CoordinateRow label="PT" cv={connector.cv} ch={connector.ch} />
+        {(position?.CV || position?.CH) && (
+          <CoordinateRow
+            label="PT"
+            cv={position.CV ?? ""}
+            ch={position.CH ?? ""}
+          />
         )}
-        {(connector.cv_ma || connector.ch_ma) && (
-          <CoordinateRow label="MA" cv={connector.cv_ma} ch={connector.ch_ma} />
+        {(position?.CV_Ma || position?.CH_Ma) && (
+          <CoordinateRow
+            label="MA"
+            cv={position.CV_Ma ?? ""}
+            ch={position.CH_Ma ?? ""}
+          />
         )}
       </div>
       <div className="mt-2 text-xs text-slate-500 font-mono">POS: {PosId}</div>

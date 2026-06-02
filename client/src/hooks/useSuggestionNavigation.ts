@@ -7,7 +7,7 @@ export function useSuggestionNavigation(
   setShowSuggestions: React.Dispatch<React.SetStateAction<boolean>>,
   handleSuggestionClick: (suggestion: suggestion) => void,
   searchQuery: string,
-  setSearchQuery: (query: string) => void
+  setSearchQuery: (query: string) => void,
 ) {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [originalQuery, setOriginalQuery] = useState("");

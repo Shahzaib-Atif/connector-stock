@@ -11,5 +11,5 @@ export interface ConnectorFormData {
   Qty_com_fio: number;
   Qty_sem_fio: number;
   ActualViaCount?: number;
-  dimensions?: ConnectorsDimensions;
+  dimensions: ConnectorsDimensions | null;
 }
