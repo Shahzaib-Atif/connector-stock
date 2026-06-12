@@ -596,6 +596,15 @@ export class SamplesService {
       );
     } catch (e: unknown) {
       this.logger.error('Error upserting reference mapping:', getErrorMsg(e));
+      console.log('--- DEBUGGING TRUNCATION ERROR ---');
+      console.log(`amostra: "${amostra}" (Length: ${amostra?.length})`);
+      console.log(
+        `refDescricao: "${refDescricao}" (Length: ${refDescricao?.length})`,
+      );
+      console.log(
+        `currentUser: "${currentUser}" (Length: ${currentUser?.length})`,
+      );
+      console.log('----------------------------------');
       // We log but don't necessarily want to fail the main sample update if mapping fails
     }
   }
