@@ -1,6 +1,6 @@
 import { API } from "@/utils/api";
-import { CreateLineStatusLogDto } from "@shared/dto/CreateLineStatusLogDto";
-import { CreateUpdateConnNameLogDto } from "@shared/dto/CreateUpdateConnNameLogDto";
+import { CreateLineStatusLogDto } from "@shared/dto/DivDeskDtos";
+import { CreateUpdateConnNameLogDto } from "@shared/dto/DivDeskDtos";
 
 export const createLineStatusLog = async (payload: CreateLineStatusLogDto) => {
   const response = await fetch(API.lineStatusLogs, {

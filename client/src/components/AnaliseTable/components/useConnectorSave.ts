@@ -39,35 +39,46 @@ export function useConnectorSave({ onUpdateConnector, user }: Props) {
   // Saves connector; opens modal when similar rows exist.
   const handleConnectorSave = useCallback(
     async (row: AnaliseTabDto, newConnector: string) => {
-      const trimmed = newConnector.trim();
+      const { Encomenda: enc, NumLinha: line } = row;
+      const trimmedConn = newConnector.trim();
 
-      if (!trimmed || trimmed === (row.Conector ?? "").trim()) return;
+      if (!trimmedConn || trimmedConn === (row.Conector ?? "").trim()) return;
 
       setIsCheckingSimilar(true);
 
       try {
         const similarRows = await getSimilarAnaliseRows({
-          encomenda: row.Encomenda,
-          numLinha: row.NumLinha,
+          encomenda: enc,
+          numLinha: line,
           estado: row.Estado ?? undefined,
           cliente: row.Cliente ?? undefined,
           cduProjetoCliente: row.CDU_ProjetoCliente ?? undefined,
-          newConnector: trimmed,
+          newConnector: trimmedConn,
         });
 
         if (similarRows.length === 0) {
-          await updateConnName(row.Encomenda, String(row.NumLinha), trimmed);
-          applyConnectorLocally(row.Encomenda, row.NumLinha, trimmed);
+          await updateConnName({
+            enc,
+            line,
+            con: trimmedConn,
+            userAgent: user || "undefined",
+          });
+          applyConnectorLocally(enc, line, trimmedConn);
 
           return;
         }
 
-        setPendingSave({ row, newConnector: trimmed, similarRows });
+        setPendingSave({ row, newConnector: trimmedConn, similarRows });
       } catch (error) {
         console.error("Failed to check similar rows:", error);
 
-        await updateConnName(row.Encomenda, String(row.NumLinha), trimmed);
-        applyConnectorLocally(row.Encomenda, row.NumLinha, trimmed);
+        await updateConnName({
+          enc,
+          line,
+          con: trimmedConn,
+          userAgent: user || "undefined",
+        });
+        applyConnectorLocally(enc, line, trimmedConn);
       } finally {
         setIsCheckingSimilar(false);
       }
@@ -77,19 +88,24 @@ export function useConnectorSave({ onUpdateConnector, user }: Props) {
   );
 
   // Applies connector change to the edited row only.
-  const handleOnlyThisRow = useCallback(() => {
+  const handleOnlyThisRow = useCallback(async () => {
     if (!pendingSave) return;
     const { row, newConnector } = pendingSave;
-    openConnNameInDivDesk(row.Encomenda, row.NumLinha, newConnector);
+    const { Encomenda: enc, NumLinha: line } = row;
 
-    void recordConnNameUpdate(
-      row.Encomenda,
-      row.NumLinha,
-      newConnector,
-      user,
-    ).then(() => refreshConnNameCache());
+    const errMsg = await openConnNameInDivDesk(enc, line, newConnector);
 
-    applyConnectorLocally(row.Encomenda, row.NumLinha, newConnector);
+    // Log the update attempt with result and error message if applicable, then refresh cache.
+    recordConnNameUpdate({
+      enc,
+      line,
+      con: newConnector,
+      userAgent: user || "undefined",
+      result: errMsg ? "failure" : "success",
+      errMsg,
+    }).then(() => refreshConnNameCache());
+
+    applyConnectorLocally(enc, line, newConnector);
 
     setPendingSave(null);
   }, [pendingSave, applyConnectorLocally]);
@@ -110,23 +126,38 @@ export function useConnectorSave({ onUpdateConnector, user }: Props) {
   }, [pendingSave]);
 
   // Launches DIVDESK for the current wizard step on user click.
-  const handleLaunchReclickStep = useCallback(() => {
+  const handleLaunchReclickStep = useCallback(async () => {
     if (!reclickWizard) return;
+
+    // Extract current step data.
     const { steps, currentStep, newConnector } = reclickWizard;
     const step = steps[currentStep];
-    openConnNameInDivDesk(step.enc, step.line, step.con);
+    const { enc, line, con } = step;
 
-    void recordConnNameUpdate(step.enc, step.line, step.con, user);
-    applyConnectorLocally(step.enc, Number(step.line), newConnector);
+    // Open DIVDESK and capture any error message.
+    const errMsg = await openConnNameInDivDesk(enc, Number(line), con);
 
+    // Log the update attempt
+    void recordConnNameUpdate({
+      enc,
+      line: Number(line),
+      con,
+      userAgent: user || "undefined",
+      result: errMsg ? "failure" : "success",
+      errMsg,
+    }).then(() => {
+      applyConnectorLocally(enc, Number(line), newConnector);
+    });
+
+    // Move to next step or finish wizard.
     const nextStep = currentStep + 1;
     if (nextStep < steps.length) {
       setReclickWizard({ steps, currentStep: nextStep, newConnector });
       return;
     }
 
+    // All steps done - refresh cache to sync with any manual DIVDESK changes, and close wizard.
     void refreshConnNameCache();
-
     setReclickWizard(null);
   }, [reclickWizard, applyConnectorLocally]);
 

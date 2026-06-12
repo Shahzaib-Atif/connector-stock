@@ -32,7 +32,7 @@ import { LegacyModule } from './modules/legacy/legacy.module';
 
 import { ScheduleModule } from '@nestjs/schedule';
 import { LineStatusLogsController } from './controllers/line-status-logs.controller';
-import { LineStatusLogsService } from './services/line-status-logs.service';
+import { DivDeskLoggingService } from './services/divdesk-log.service';
 import { JsonCacheService } from './cache/json-cache.service';
 import { AnaliseCacheService } from './services/analise-cache.service';
 import { SamplesCacheService } from './services/samples-cache.service';
@@ -82,7 +82,7 @@ import { MemoryTelemetryService } from './services/memory-telemetry.service';
     NotificationsService,
     NotificationsRepo,
     FolderService,
-    LineStatusLogsService,
+    DivDeskLoggingService,
     JsonCacheService,
     AnaliseCacheService,
     SamplesCacheService,

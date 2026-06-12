@@ -4,29 +4,24 @@ import {
 } from "@/api/lineStatusLogsApi";
 import { refreshAnaliseTabCache } from "@/api/analiseApi";
 import { UpdateConnNameOptions } from "@/utils/types/divDesk";
+import { CreateUpdateConnNameLogDto } from "@shared/dto/DivDeskDtos";
 
 const divDeskDB = import.meta.env.VITE_DIVDESK_DB;
 
 // Opens DIVDESK to set production line status.
-export async function setLineStatus(
-  enc: string,
-  line: string | number,
-  user: string,
-) {
+export async function setLineStatus(enc: string, line: number, user: string) {
   const params = ` -t setprilinefatoan -f enc:${enc}$ln:${line}$${divDeskDB}$op:setprilinefatoan`;
 
-  try {
-    launchDivDesk(params);
-  } catch {
-    console.error(`Setting Line Status Failed. order: ${enc} .. line: ${line}`);
-  }
+  const errMsg = await launchDivDesk(params); // Capture any error message from launching DIVDESK.
 
   try {
     await createLineStatusLog({
       enc,
       line,
+      result: errMsg ? "failure" : "success",
       divDeskDb: divDeskDB,
       userAgent: user,
+      errMsg,
     });
   } catch (error) {
     console.error("Creating line status log failed.", error);
@@ -34,39 +29,29 @@ export async function setLineStatus(
 }
 
 // Builds updateconnweb protocol params for DIVDESK.
-function buildUpdateConnParams(enc: string, line: string, con: string) {
+function buildUpdateConnParams(enc: string, line: number, con: string) {
   return ` -t updateconnweb -f enc:${enc}$ln:${line}$concode:${con}$${divDeskDB}$op:updateconnweb`;
 }
 
 // Opens DIVDESK once; call directly from a click handler.
-export function openConnNameInDivDesk(
+export async function openConnNameInDivDesk(
   enc: string,
-  line: string | number,
+  line: number,
   con: string,
 ) {
-  try {
-    launchDivDesk(buildUpdateConnParams(enc, String(line), con));
-  } catch {
-    console.error(
-      `Updating Connector Name Failed. order: ${enc} .. line: ${line} .. con: ${con}`,
-    );
-  }
+  const params = buildUpdateConnParams(enc, line, con);
+  const errMsg = await launchDivDesk(params);
+  return errMsg;
 }
 
 // Persists one connector update log entry.
 export async function recordConnNameUpdate(
-  enc: string,
-  line: string | number,
-  con: string,
-  user: string | null,
+  dto: Omit<CreateUpdateConnNameLogDto, "divDeskDb">,
 ) {
   try {
     await createUpdateConnNameLog({
-      enc,
-      line: String(line),
-      con,
+      ...dto,
       divDeskDb: divDeskDB,
-      userAgent: user || "undefined",
     });
   } catch (error) {
     console.error("Creating update connector name log failed.", error);
@@ -84,27 +69,26 @@ export async function refreshConnNameCache() {
 
 // Updates one connector via DIVDESK, log, and cache.
 export async function updateConnName(
-  enc: string,
-  line: string,
-  con: string,
+  dto: Omit<CreateUpdateConnNameLogDto, "result" | "divDeskDb">,
   options?: UpdateConnNameOptions,
 ) {
+  const { enc, line, con, userAgent } = dto;
+  let errMsg = "";
+
+  // Launch DIVDESK to update connector name unless explicitly skipped.
   if (!options?.skipDivDeskLaunch) {
-    try {
-      launchDivDesk(buildUpdateConnParams(enc, line, con));
-    } catch {
-      console.error(
-        `Updating Connector Name Failed. order: ${enc} .. line: ${line} .. con: ${con}`,
-      );
-    }
+    errMsg = await launchDivDesk(buildUpdateConnParams(enc, line, con));
   }
 
   try {
     await createUpdateConnNameLog({
       enc,
       line,
+      result: errMsg ? "failure" : "success",
+      userAgent,
       con,
       divDeskDb: divDeskDB,
+      errMsg,
     });
   } catch (error) {
     console.error("Creating update connector name log failed.", error);
@@ -122,12 +106,41 @@ export async function updateConnName(
 }
 
 // Clicks a hidden anchor to open the divdesk protocol.
-function launchDivDesk(params: string) {
-  const url = "divdesk:///" + encodeURIComponent(params);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.style.display = "none";
-  document.body.appendChild(anchor);
-  anchor.click();
-  document.body.removeChild(anchor);
+function launchDivDesk(params: string): Promise<string> {
+  return new Promise((resolve) => {
+    const url = "divdesk:///" + encodeURIComponent(params);
+    let settled = false;
+    let blurSeen = false;
+
+    const cleanup = () => {
+      window.removeEventListener("blur", handleBlur);
+    };
+
+    const finish = (message: string) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve(message);
+    };
+
+    const handleBlur = () => {
+      blurSeen = true;
+
+      window.setTimeout(() => {
+        if (!settled && blurSeen && !document.hasFocus()) {
+          finish("");
+        }
+      }, 250);
+    };
+
+    window.addEventListener("blur", handleBlur, { once: true });
+
+    window.setTimeout(() => {
+      if (!settled) {
+        finish("App may not be installed or failed to launch");
+      }
+    }, 1500);
+
+    window.location.href = url;
+  });
 }

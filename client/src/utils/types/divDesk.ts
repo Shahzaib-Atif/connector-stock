@@ -1,6 +1,6 @@
 export interface LineStatusContext {
   enc: string;
-  line: string | number;
+  line: number;
 }
 
 export interface UpdateConnNameOptions {

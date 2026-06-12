@@ -1,33 +1,19 @@
-import { Body, Controller, Headers, Ip, Post } from '@nestjs/common';
-import { CreateLineStatusLogDto } from '@shared/dto/CreateLineStatusLogDto';
-import { CreateUpdateConnNameLogDto } from '@shared/dto/CreateUpdateConnNameLogDto';
-import { LineStatusLogsService } from 'src/services/line-status-logs.service';
+import { Body, Controller, Post } from '@nestjs/common';
+import { CreateLineStatusLogDto } from '@shared/dto/DivDeskDtos';
+import { CreateUpdateConnNameLogDto } from '@shared/dto/DivDeskDtos';
+import { DivDeskLoggingService } from 'src/services/divdesk-log.service';
 
 @Controller('api/line-status-logs')
 export class LineStatusLogsController {
-  constructor(private readonly service: LineStatusLogsService) {}
+  constructor(private readonly service: DivDeskLoggingService) {}
 
   @Post('')
-  async create(
-    @Body() dto: CreateLineStatusLogDto,
-    @Ip() ip: string,
-    @Headers('referer') referer?: string,
-  ) {
-    return await this.service.create(dto, {
-      ip,
-      referer,
-    });
+  async create(@Body() dto: CreateLineStatusLogDto) {
+    return await this.service.create(dto);
   }
 
   @Post('update-conn-name')
-  async createUpdateConnName(
-    @Body() dto: CreateUpdateConnNameLogDto,
-    @Ip() ip: string,
-    @Headers('referer') referer?: string,
-  ) {
-    return await this.service.createUpdateConnName(dto, {
-      ip,
-      referer,
-    });
+  async createUpdateConnName(@Body() dto: CreateUpdateConnNameLogDto) {
+    return await this.service.createUpdateConnName(dto);
   }
 }
