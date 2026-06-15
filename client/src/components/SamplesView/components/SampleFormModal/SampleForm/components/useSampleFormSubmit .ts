@@ -49,29 +49,26 @@ export const useSampleFormSubmit = ({
     setLoading(true);
     try {
       const currentUser = user || "system";
+      const commonPayload = {
+        ...formData,
+        Amostra: formData.Amostra?.toUpperCase(),
+        ActualUser: currentUser,
+        associatedItemIds: selectedAccessoryIds,
+      };
 
       if (isEditing && sample) {
         await updateSample(sample.ID, {
-          ...formData,
-          Amostra: formData.Amostra?.toUpperCase(),
+          ...commonPayload,
           LasUpdateBy: currentUser,
-          ActualUser: currentUser,
-          associatedItemIds: selectedAccessoryIds,
         });
       } else {
-        await createSample({
-          ...formData,
-          Amostra: formData.Amostra?.toUpperCase(),
-          CreatedBy: currentUser,
-          ActualUser: currentUser,
-          associatedItemIds: selectedAccessoryIds,
-        });
+        await createSample({ ...commonPayload, CreatedBy: currentUser });
 
         if (lineStatusContext?.enc && lineStatusContext.line) {
           await setLineStatus(
             lineStatusContext.enc,
             lineStatusContext.line,
-            user ?? "system",
+            user ?? "undefined",
           );
         }
       }
