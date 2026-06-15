@@ -17,6 +17,7 @@ import SimilarRowsConnectorModal from "./components/SimilarRowsConnectorModal";
 import DivDeskReclickModal from "./components/DivDeskReclickModal";
 import { useAppSelector } from "@/store/hooks";
 import Spinner from "../common/Spinner";
+import { setLineStatus, refreshConnNameCache } from "@/utils/functions/divDesk";
 
 // Analise tab page with filters, pagination, and edits.
 export const AnaliseTable: React.FC = () => {
@@ -38,6 +39,7 @@ export const AnaliseTable: React.FC = () => {
     loading,
     error,
     handleUpdateConnector,
+    handleUpdateStatus,
     totalItems,
     totalPages,
   } = useData({
@@ -58,6 +60,23 @@ export const AnaliseTable: React.FC = () => {
     closePendingModal,
     closeReclickWizard,
   } = useConnectorSave({ onUpdateConnector: handleUpdateConnector, user });
+
+  // Calls setLineStatus via DIVDESK and refreshes cache.
+  const handleStatusSave = React.useCallback(async (row: AnaliseTabDto, newStatus: string) => {
+    if (!row.Encomenda || row.NumLinha == null) return;
+
+    // Local optimistic update
+    handleUpdateStatus(row.Encomenda, row.NumLinha, newStatus);
+
+    try {
+      await setLineStatus(row.Encomenda, row.NumLinha, user || "undefined");
+    } catch (err) {
+      console.error("Failed to update status:", err);
+    }
+
+    // Refresh database cache
+    await refreshConnNameCache();
+  }, [handleUpdateStatus, user]);
 
   // Reset to first page when filters change
   useEffect(() => {
@@ -107,6 +126,7 @@ export const AnaliseTable: React.FC = () => {
                     paginatedItems={rows as AnaliseTabDto[]}
                     isCheckingSimilar={isCheckingSimilar}
                     onConnectorSave={handleConnectorSave}
+                    onStatusSave={handleStatusSave}
                   />
                 </tbody>
               </table>

@@ -3,11 +3,13 @@ import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 import { useAppSelector } from "@/store/hooks";
 import { UserRoles } from "@shared/enums/UserRoles";
 import ConnectorEditableCell from "./ConnectorEditableCell";
+import StatusEditableCell from "./StatusEditableCell";
 
 interface Props {
   paginatedItems: AnaliseTabDto[];
   isCheckingSimilar?: boolean;
   onConnectorSave: (row: AnaliseTabDto, newConnector: string) => void | Promise<void>;
+  onStatusSave: (row: AnaliseTabDto, newStatus: string) => void | Promise<void>;
 }
 
 // Renders analise table body rows and connector cells.
@@ -15,6 +17,7 @@ export default function TableRows({
   paginatedItems,
   isCheckingSimilar = false,
   onConnectorSave,
+  onStatusSave,
 }: Props) {
   const { role } = useAppSelector((state) => state.auth);
   const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
@@ -33,7 +36,13 @@ export default function TableRows({
       >
         <td className="table-data">{row.Encomenda || "-"}</td>
         <td className="table-data">{row.NumLinha ?? "-"}</td>
-        <td className="table-data">{row.Estado || "-"}</td>
+        <td className="table-data">
+          <StatusEditableCell
+            initialValue={row.Estado || ""}
+            isAdmin={isAdmin}
+            onSave={(newStatus) => onStatusSave(row, newStatus)}
+          />
+        </td>
         <td className="table-data break-all">{row.Descricao || "-"}</td>
         <td className="table-data break-all">
           <ConnectorEditableCell

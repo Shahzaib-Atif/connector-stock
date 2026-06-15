@@ -86,9 +86,25 @@ export default function useData({
     );
   };
 
+  // Patches status for one row in local state.
+  const handleUpdateStatus = (
+    encomenda: string,
+    numLinha: number,
+    newStatus: string,
+  ) => {
+    setRows((prevRows) =>
+      prevRows.map((row) =>
+        row.Encomenda === encomenda && row.NumLinha === numLinha
+          ? { ...row, Estado: newStatus }
+          : row,
+      ),
+    );
+  };
+
   return {
     rows,
     handleUpdateConnector,
+    handleUpdateStatus,
     loading,
     error,
     totalItems,
