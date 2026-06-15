@@ -3,12 +3,12 @@ import { getSimilarAnaliseRows } from "@/api/analiseApi";
 import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 import {
   openConnNameInDivDesk,
-  recordConnNameUpdate,
   refreshConnNameCache,
   updateConnName,
 } from "@/utils/functions/divDesk";
 import { PendingSave, ReclickWizard } from "./types";
 import { buildReclickSteps } from "./buildReclickSteps";
+import { recordConnNameUpdate } from "@/utils/functions/divDeskLogging";
 
 interface Props {
   onUpdateConnector: (
@@ -101,7 +101,6 @@ export function useConnectorSave({ onUpdateConnector, user }: Props) {
       line,
       con: newConnector,
       userAgent: user || "undefined",
-      result: errMsg ? "failure" : "success",
       errMsg,
     }).then(() => refreshConnNameCache());
 
@@ -143,7 +142,6 @@ export function useConnectorSave({ onUpdateConnector, user }: Props) {
       line: Number(line),
       con,
       userAgent: user || "undefined",
-      result: errMsg ? "failure" : "success",
       errMsg,
     }).then(() => {
       applyConnectorLocally(enc, Number(line), newConnector);

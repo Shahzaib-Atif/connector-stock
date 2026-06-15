@@ -1,36 +1,18 @@
-import {
-  createLineStatusLog,
-  createUpdateConnNameLog,
-} from "@/api/lineStatusLogsApi";
 import { refreshAnaliseTabCache } from "@/api/analiseApi";
 import { UpdateConnNameOptions } from "@/utils/types/divDesk";
 import { CreateUpdateConnNameLogDto } from "@shared/dto/DivDeskDtos";
+import { recordConnNameUpdate, recordLineStatusUpdate } from "./divDeskLogging";
 
 const divDeskDB = import.meta.env.VITE_DIVDESK_DB;
 
 // Opens DIVDESK to set production line status.
 export async function setLineStatus(enc: string, line: number, user: string) {
+  // launch divdesk and capture any error message
   const params = ` -t setprilinefatoan -f enc:${enc}$ln:${line}$${divDeskDB}$op:setprilinefatoan`;
-
   const errMsg = await launchDivDesk(params); // Capture any error message from launching DIVDESK.
 
-  try {
-    await createLineStatusLog({
-      enc,
-      line,
-      result: errMsg ? "failure" : "success",
-      divDeskDb: divDeskDB,
-      userAgent: user,
-      errMsg,
-    });
-  } catch (error) {
-    console.error("Creating line status log failed.", error);
-  }
-}
-
-// Builds updateconnweb protocol params for DIVDESK.
-function buildUpdateConnParams(enc: string, line: number, con: string) {
-  return ` -t updateconnweb -f enc:${enc}$ln:${line}$concode:${con}$${divDeskDB}$op:updateconnweb`;
+  // log the line status update
+  await recordLineStatusUpdate(enc, line, user, errMsg);
 }
 
 // Opens DIVDESK once; call directly from a click handler.
@@ -42,20 +24,6 @@ export async function openConnNameInDivDesk(
   const params = buildUpdateConnParams(enc, line, con);
   const errMsg = await launchDivDesk(params);
   return errMsg;
-}
-
-// Persists one connector update log entry.
-export async function recordConnNameUpdate(
-  dto: Omit<CreateUpdateConnNameLogDto, "divDeskDb">,
-) {
-  try {
-    await createUpdateConnNameLog({
-      ...dto,
-      divDeskDb: divDeskDB,
-    });
-  } catch (error) {
-    console.error("Creating update connector name log failed.", error);
-  }
 }
 
 // Refreshes analise cache after bulk re-click flow ends.
@@ -72,31 +40,18 @@ export async function updateConnName(
   dto: Omit<CreateUpdateConnNameLogDto, "result" | "divDeskDb">,
   options?: UpdateConnNameOptions,
 ) {
-  const { enc, line, con, userAgent } = dto;
   let errMsg = "";
 
   // Launch DIVDESK to update connector name unless explicitly skipped.
   if (!options?.skipDivDeskLaunch) {
-    errMsg = await launchDivDesk(buildUpdateConnParams(enc, line, con));
+    const params = buildUpdateConnParams(dto.enc, dto.line, dto.con);
+    errMsg = await launchDivDesk(params);
   }
 
-  try {
-    await createUpdateConnNameLog({
-      enc,
-      line,
-      result: errMsg ? "failure" : "success",
-      userAgent,
-      con,
-      divDeskDb: divDeskDB,
-      errMsg,
-    });
-  } catch (error) {
-    console.error("Creating update connector name log failed.", error);
-  }
+  // log the update attempt
+  await recordConnNameUpdate(dto, errMsg);
 
-  if (options?.skipCacheRefresh) {
-    return;
-  }
+  if (options?.skipCacheRefresh) return;
 
   try {
     await refreshAnaliseTabCache();
@@ -143,4 +98,9 @@ function launchDivDesk(params: string): Promise<string> {
 
     window.location.href = url;
   });
+}
+
+// Builds updateconnweb protocol params for DIVDESK.
+function buildUpdateConnParams(enc: string, line: number, con: string) {
+  return ` -t updateconnweb -f enc:${enc}$ln:${line}$concode:${con}$${divDeskDB}$op:updateconnweb`;
 }
