@@ -2,13 +2,11 @@ import { useCallback, useState } from "react";
 import { getSimilarAnaliseRows } from "@/api/analiseApi";
 import { AnaliseTabDto } from "@shared/dto/AnaliseTabDto";
 import {
-  openConnNameInDivDesk,
   refreshConnNameCache,
   updateConnName,
 } from "@/utils/functions/divDesk";
 import { PendingSave, ReclickWizard } from "./types";
 import { buildReclickSteps } from "./buildReclickSteps";
-import { recordConnNameUpdate } from "@/utils/functions/divDeskLogging";
 
 interface Props {
   onUpdateConnector: (
@@ -93,21 +91,17 @@ export function useConnectorSave({ onUpdateConnector, user }: Props) {
     const { row, newConnector } = pendingSave;
     const { Encomenda: enc, NumLinha: line } = row;
 
-    const errMsg = await openConnNameInDivDesk(enc, line, newConnector);
-
-    // Log the update attempt with result and error message if applicable, then refresh cache.
-    recordConnNameUpdate({
+    await updateConnName({
       enc,
       line,
       con: newConnector,
       userAgent: user || "undefined",
-      errMsg,
-    }).then(() => refreshConnNameCache());
+    });
 
     applyConnectorLocally(enc, line, newConnector);
 
     setPendingSave(null);
-  }, [pendingSave, applyConnectorLocally]);
+  }, [pendingSave, applyConnectorLocally, user]);
 
   // Starts step-by-step DIVDESK re-click wizard for all rows.
   const handleApplyToAll = useCallback(() => {
@@ -133,19 +127,18 @@ export function useConnectorSave({ onUpdateConnector, user }: Props) {
     const step = steps[currentStep];
     const { enc, line, con } = step;
 
-    // Open DIVDESK and capture any error message.
-    const errMsg = await openConnNameInDivDesk(enc, Number(line), con);
+    // Open DIVDESK, log the update, but skip cache refresh during bulk operations.
+    await updateConnName(
+      {
+        enc,
+        line: Number(line),
+        con,
+        userAgent: user || "undefined",
+      },
+      { skipCacheRefresh: true }
+    );
 
-    // Log the update attempt
-    void recordConnNameUpdate({
-      enc,
-      line: Number(line),
-      con,
-      userAgent: user || "undefined",
-      errMsg,
-    }).then(() => {
-      applyConnectorLocally(enc, Number(line), newConnector);
-    });
+    applyConnectorLocally(enc, Number(line), newConnector);
 
     // Move to next step or finish wizard.
     const nextStep = currentStep + 1;
@@ -157,7 +150,7 @@ export function useConnectorSave({ onUpdateConnector, user }: Props) {
     // All steps done - refresh cache to sync with any manual DIVDESK changes, and close wizard.
     void refreshConnNameCache();
     setReclickWizard(null);
-  }, [reclickWizard, applyConnectorLocally]);
+  }, [reclickWizard, applyConnectorLocally, user]);
 
   // Dismisses the similar-rows confirmation modal.
   const closePendingModal = useCallback(() => {

@@ -15,17 +15,6 @@ export async function setLineStatus(enc: string, line: number, user: string) {
   await recordLineStatusUpdate(enc, line, user, errMsg);
 }
 
-// Opens DIVDESK once; call directly from a click handler.
-export async function openConnNameInDivDesk(
-  enc: string,
-  line: number,
-  con: string,
-) {
-  const params = buildUpdateConnParams(enc, line, con);
-  const errMsg = await launchDivDesk(params);
-  return errMsg;
-}
-
 // Refreshes analise cache after bulk re-click flow ends.
 export async function refreshConnNameCache() {
   try {
@@ -35,20 +24,18 @@ export async function refreshConnNameCache() {
   }
 }
 
-// Updates one connector via DIVDESK, log, and cache.
+// Updates one connector via DIVDESK, logs it, and optionally refreshes the cache.
 export async function updateConnName(
   dto: Omit<CreateUpdateConnNameLogDto, "result" | "divDeskDb">,
   options?: UpdateConnNameOptions,
 ) {
   let errMsg = "";
 
-  // Launch DIVDESK to update connector name unless explicitly skipped.
-  if (!options?.skipDivDeskLaunch) {
-    const params = buildUpdateConnParams(dto.enc, dto.line, dto.con);
-    errMsg = await launchDivDesk(params);
-  }
+  // Launch DIVDESK to update connector name
+  const params = buildUpdateConnParams(dto.enc, dto.line, dto.con);
+  errMsg = await launchDivDesk(params);
 
-  // log the update attempt
+  // Log the update attempt.
   await recordConnNameUpdate(dto, errMsg);
 
   if (options?.skipCacheRefresh) return;

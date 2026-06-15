@@ -5,5 +5,4 @@ export interface LineStatusContext {
 
 export interface UpdateConnNameOptions {
   skipCacheRefresh?: boolean;
-  skipDivDeskLaunch?: boolean;
 }
