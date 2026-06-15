@@ -5,7 +5,7 @@ import useMissingConnectorWarning from "./useMissingConnectorWarning";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { getErrorMsg } from "@shared/utils/getErrorMsg";
 import { useState } from "react";
-import { setLineStatus } from "@/utils/functions/divDesk";
+import { setLineStatus, updateConnName } from "@/utils/functions/divDesk";
 import { LineStatusContext } from "@/utils/types/divDesk";
 
 interface Props {
@@ -27,6 +27,12 @@ export const useSampleFormSubmit = ({
 }: Props) => {
   const [formError, setFormError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [pendingConnectorUpdate, setPendingConnectorUpdate] = useState<{
+    enc: string;
+    line: number;
+    con: string;
+  } | null>(null);
+
   const { user } = useAppSelector((state) => state.auth);
   const { checkConnectorWarning } = useMissingConnectorWarning();
 
@@ -70,6 +76,19 @@ export const useSampleFormSubmit = ({
             lineStatusContext.line,
             user ?? "undefined",
           );
+
+          // If the user changed the connector name (Amostra) in the final form, prompt them to update it
+          const newCon = formData.Amostra?.trim();
+          const oldCon = lineStatusContext.originalConnector?.trim() || "";
+          if (newCon && newCon !== oldCon) {
+            setPendingConnectorUpdate({
+              enc: lineStatusContext.enc,
+              line: lineStatusContext.line,
+              con: newCon,
+            });
+            setLoading(false);
+            return;
+          }
         }
       }
 
@@ -84,5 +103,39 @@ export const useSampleFormSubmit = ({
     }
   };
 
-  return { handleSubmit, formError, loading };
+  const handleUpdateConnectorName = async () => {
+    if (!pendingConnectorUpdate) return;
+    setLoading(true);
+    try {
+      await updateConnName({
+        enc: pendingConnectorUpdate.enc,
+        line: pendingConnectorUpdate.line,
+        con: pendingConnectorUpdate.con,
+        userAgent: user || "undefined",
+      });
+      await onSuccess();
+    } catch (err) {
+      console.error(err);
+      setFormError(
+        getErrorMsg(err, "Failed to update connector name. Please try again."),
+      );
+    } finally {
+      setLoading(false);
+      setPendingConnectorUpdate(null);
+    }
+  };
+
+  const handleSkipConnectorUpdate = () => {
+    setPendingConnectorUpdate(null);
+    void onSuccess();
+  };
+
+  return {
+    handleSubmit,
+    formError,
+    loading,
+    pendingConnectorUpdate,
+    handleUpdateConnectorName,
+    handleSkipConnectorUpdate,
+  };
 };

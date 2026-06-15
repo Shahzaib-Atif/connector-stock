@@ -56,6 +56,7 @@ export const SampleCreationWizard: React.FC<SampleCreationWizardProps> = ({
         ? {
             enc: selectedAnaliseRow.Encomenda,
             line: selectedAnaliseRow.NumLinha,
+            originalConnector: selectedAnaliseRow.Conector,
           }
         : undefined;
 

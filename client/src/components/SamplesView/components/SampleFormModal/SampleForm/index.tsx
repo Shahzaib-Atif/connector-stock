@@ -11,6 +11,7 @@ import ActionButtons from "./components/ActionButtons";
 import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
 import { useSampleFormSubmit } from "./components/useSampleFormSubmit ";
 import { LineStatusContext } from "@/utils/types/divDesk";
+import ConfirmConnectorRename from "./components/ConfirmConnectorRename";
 
 interface Props {
   sample: SamplesDto | null;
@@ -39,7 +40,14 @@ export const SampleForm: React.FC<Props> = ({
   const connectorId = useConnectorId(formData?.Amostra ?? ""); // get connector ID from Amostra
   const { associatedAccessories } = useAssociatedAccessories(connectorId); // fetch associated accessories
   const { getOptions } = useSampleOptions(); // autocomplete options
-  const { handleSubmit, formError, loading } = useSampleFormSubmit({
+  const {
+    handleSubmit,
+    formError,
+    loading,
+    pendingConnectorUpdate,
+    handleUpdateConnectorName,
+    handleSkipConnectorUpdate,
+  } = useSampleFormSubmit({
     formData,
     isEditing,
     sample,
@@ -47,6 +55,17 @@ export const SampleForm: React.FC<Props> = ({
     onSuccess,
     lineStatusContext,
   });
+
+  if (pendingConnectorUpdate) {
+    return (
+      <ConfirmConnectorRename
+        handleSkipConnectorUpdate={handleSkipConnectorUpdate}
+        handleUpdateConnectorName={handleUpdateConnectorName}
+        loading={loading}
+        pendingConnectorUpdate={pendingConnectorUpdate}
+      />
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="p-6">
@@ -57,7 +76,7 @@ export const SampleForm: React.FC<Props> = ({
         <FormField
           name="Cliente"
           label="Cliente"
-          value={formData.Cliente ?? ""}
+          value={formData.Cliente?.trim() ?? ""}
           onChange={handleChange}
           placeholder="Client name"
           type="autocomplete"
@@ -67,7 +86,7 @@ export const SampleForm: React.FC<Props> = ({
         <FormField
           name="Projeto"
           label="Projeto"
-          value={formData.Projeto ?? ""}
+          value={formData.Projeto?.trim() ?? ""}
           onChange={handleChange}
           placeholder="Project name"
           type="autocomplete"
@@ -76,14 +95,14 @@ export const SampleForm: React.FC<Props> = ({
         <FormField
           name="EncDivmac"
           label="EncDivmac"
-          value={formData.EncDivmac ?? ""}
+          value={formData.EncDivmac?.trim() ?? ""}
           onChange={handleChange}
           placeholder="EncDivmac"
         />
         <FormField
           name="Ref_Descricao"
           label="Ref. Descricao"
-          value={formData.Ref_Descricao ?? ""}
+          value={formData.Ref_Descricao?.trim() ?? ""}
           onChange={handleChange}
           placeholder="Reference description"
           required
@@ -91,14 +110,14 @@ export const SampleForm: React.FC<Props> = ({
         <FormField
           name="Ref_Fornecedor"
           label="Ref. Fornecedor"
-          value={formData.Ref_Fornecedor ?? ""}
+          value={formData.Ref_Fornecedor?.trim() ?? ""}
           onChange={handleChange}
           placeholder="Supplier reference"
         />
         <FormField
           name="Amostra"
           label="Amostra"
-          value={formData.Amostra ?? ""}
+          value={formData.Amostra?.trim() ?? ""}
           onChange={handleChange}
           placeholder="Sample code"
           type="autocomplete"
@@ -124,7 +143,7 @@ export const SampleForm: React.FC<Props> = ({
         <FormField
           name="Quantidade"
           label="Quantidade Total"
-          value={formData.Quantidade ?? ""}
+          value={formData.Quantidade?.trim() ?? ""}
           onChange={handleChange}
           placeholder="Total Quantity"
           type="number"
@@ -133,14 +152,14 @@ export const SampleForm: React.FC<Props> = ({
         <FormField
           name="NumORC"
           label="NumORC"
-          value={formData.NumORC ?? ""}
+          value={formData.NumORC?.trim() ?? ""}
           onChange={handleChange}
           placeholder="ORC Number"
         />
         <FormField
           name="Data_do_pedido"
           label="Data do Pedido"
-          value={formData.Data_do_pedido ?? ""}
+          value={formData.Data_do_pedido?.trim() ?? ""}
           onChange={handleChange}
           placeholder="Request date"
           type="date"
@@ -148,7 +167,7 @@ export const SampleForm: React.FC<Props> = ({
         <FormField
           name="Data_recepcao"
           label="Data Rececao"
-          value={formData.Data_recepcao ?? ""}
+          value={formData.Data_recepcao?.trim() ?? ""}
           onChange={handleChange}
           placeholder="Reception date"
           type="date"
@@ -156,7 +175,7 @@ export const SampleForm: React.FC<Props> = ({
         <FormField
           name="Entregue_a"
           label="Entregue A"
-          value={formData.Entregue_a ?? ""}
+          value={formData.Entregue_a?.trim() ?? ""}
           onChange={handleChange}
           placeholder="Delivered to"
           type="select"
@@ -169,7 +188,7 @@ export const SampleForm: React.FC<Props> = ({
         <FormField
           name="N_Envio"
           label="N. Envio"
-          value={formData.N_Envio ?? ""}
+          value={formData.N_Envio?.trim() ?? ""}
           onChange={handleChange}
           placeholder="Shipping number"
         />
@@ -180,7 +199,7 @@ export const SampleForm: React.FC<Props> = ({
         <label className={labelClass}>Observações</label>
         <textarea
           name="Observacoes"
-          value={formData.Observacoes ?? ""}
+          value={formData.Observacoes?.trim() ?? ""}
           onChange={handleChange}
           rows={2}
           className={inputClass}
