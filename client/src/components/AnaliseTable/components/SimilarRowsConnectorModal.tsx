@@ -27,7 +27,9 @@ export default function SimilarRowsConnectorModal({
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
           <div className="flex items-center gap-2">
             <GitBranch className="w-5 h-5 text-blue-400" />
-            <h3 className="text-lg font-semibold text-white">Similar rows found</h3>
+            <h3 className="text-lg font-semibold text-white">
+              Similar rows found
+            </h3>
           </div>
           <button
             type="button"
@@ -40,20 +42,24 @@ export default function SimilarRowsConnectorModal({
 
         <div className="px-6 py-4 space-y-4 overflow-y-auto">
           <p className="text-sm text-slate-300">
-            Other lines share the same Encomenda, Estado, Cliente, and Projeto.
-            Apply connector <span className="font-mono text-blue-300">{newConnector}</span> to
-            all of them?
+            Other lines have the same Encomenda, Estado, Cliente, and Projeto.
+            Apply the connector name{" "}
+            <span className="font-mono text-blue-300">{newConnector}</span> to
+            all matching lines?
           </p>
 
           <div className="rounded-lg border border-slate-700 bg-slate-800/50 p-3 text-xs text-slate-400 space-y-1">
             <p>
-              <span className="text-slate-500">Encomenda:</span> {sourceRow.Encomenda}
+              <span className="text-slate-500">Encomenda:</span>{" "}
+              {sourceRow.Encomenda}
             </p>
             <p>
-              <span className="text-slate-500">Estado:</span> {sourceRow.Estado || "-"}
+              <span className="text-slate-500">Estado:</span>{" "}
+              {sourceRow.Estado || "-"}
             </p>
             <p>
-              <span className="text-slate-500">Cliente:</span> {sourceRow.Cliente || "-"}
+              <span className="text-slate-500">Cliente:</span>{" "}
+              {sourceRow.Cliente || "-"}
             </p>
             <p>
               <span className="text-slate-500">Projeto:</span>{" "}
@@ -66,7 +72,9 @@ export default function SimilarRowsConnectorModal({
               <thead className="bg-slate-800/80 text-slate-400">
                 <tr>
                   <th className="px-3 py-2 text-left font-medium">Linha</th>
-                  <th className="px-3 py-2 text-left font-medium">Conector atual</th>
+                  <th className="px-3 py-2 text-left font-medium">
+                    Conector atual
+                  </th>
                   <th className="px-3 py-2 text-left font-medium">Descrição</th>
                 </tr>
               </thead>
@@ -86,7 +94,9 @@ export default function SimilarRowsConnectorModal({
                     className="border-t border-slate-700/80"
                   >
                     <td className="px-3 py-2 text-white">{row.NumLinha}</td>
-                    <td className="px-3 py-2 text-amber-300">{row.Conector || "-"}</td>
+                    <td className="px-3 py-2 text-amber-300">
+                      {row.Conector || "-"}
+                    </td>
                     <td className="px-3 py-2 text-slate-400 truncate max-w-[200px]">
                       {row.Descricao || "-"}
                     </td>
