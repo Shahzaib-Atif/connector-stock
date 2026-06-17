@@ -199,7 +199,7 @@ export const SampleForm: React.FC<Props> = ({
         <label className={labelClass}>Observações</label>
         <textarea
           name="Observacoes"
-          value={formData.Observacoes?.trim() ?? ""}
+          value={formData.Observacoes ?? ""}
           onChange={handleChange}
           rows={2}
           className={inputClass}
