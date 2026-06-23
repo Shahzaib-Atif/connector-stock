@@ -49,7 +49,7 @@ export function useConnectorEditForm(
 
   const setDimensionsField = (
     field: keyof ConnectorsDimensions,
-    value: number | null,
+    value: number | undefined,
   ) => {
     setFormData((prev) => ({
       ...prev,

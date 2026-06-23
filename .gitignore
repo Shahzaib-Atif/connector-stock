@@ -4,3 +4,4 @@ server/.env.prod
 server/.env.dev
 server/certs
 client/.env
+AGENTS.md

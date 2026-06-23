@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/store/hooks";
 import { usePagination } from "@/hooks/usePagination";
@@ -17,12 +17,19 @@ import LegacyToggleBtn from "./ConnectorsTable/LegacyToggleBtn";
 import ImageToggleBtn from "../common/ImageToggleBtn";
 import { useFiltersToggle } from "../../hooks/useFiltersToggle";
 import { STORAGE_KEYS } from "@/utils/constants";
+import { Plus } from "lucide-react";
+import { UserRoles } from "@shared/enums/UserRoles";
+import { ModalWrapper } from "../common/ModalWrapper";
+import { ConnectorCreateForm } from "./components/ConnectorCreateForm";
 
 export const ConnectorsListView: React.FC = () => {
   const navigate = useNavigate();
   const { data: masterData, loading } = useAppSelector(
     (state) => state.masterData,
   );
+  const { role, user } = useAppSelector((state) => state.auth);
+  const isEditAllowed = role === UserRoles.Master || user === "admin1";
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   // Photo visibility state with persistence
   const { showImages, setShowImages } = useImageToggle(
@@ -96,8 +103,18 @@ export const ConnectorsListView: React.FC = () => {
             onClearFilters={clearFilters}
             activeFiltersCount={activeFiltersCount}
           >
-            {/* Toggle Buttons */}
-            <div className="flex-row">
+            {/* Toggle & Action Buttons */}
+            <div className="flex-row items-center gap-2">
+              {isEditAllowed && !isLegacyMode && (
+                <button
+                  type="button"
+                  onClick={() => setShowCreateModal(true)}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-xl transition-all shadow-md hover:shadow-blue-600/20"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span className="hidden sm:inline">Create Connector</span>
+                </button>
+              )}
               <ImageToggleBtn
                 showImages={showImages}
                 isLegacyMode={isLegacyMode}
@@ -138,6 +155,20 @@ export const ConnectorsListView: React.FC = () => {
           )}
         </div>
       </div>
+
+      {showCreateModal && (
+        <ModalWrapper
+          onClose={() => setShowCreateModal(false)}
+          title="Create New Connector"
+          Icon={Plus}
+          extraClasses="max-w-2xl"
+        >
+          <ConnectorCreateForm
+            onCancel={() => setShowCreateModal(false)}
+            onSave={() => setShowCreateModal(false)}
+          />
+        </ModalWrapper>
+      )}
     </div>
   );
 };
