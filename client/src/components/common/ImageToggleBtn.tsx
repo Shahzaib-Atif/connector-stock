@@ -24,12 +24,12 @@ function ImageToggleBtn({
       {!showImages ? (
         <>
           <Image className="w-4 h-4" />
-          <span>Photos: Show</span>
+          <span>Show Photos</span>
         </>
       ) : (
         <>
           <ImageOff className="w-4 h-4" />
-          <span>Photos: Hide</span>
+          <span>Hide Photos</span>
         </>
       )}
     </button>
