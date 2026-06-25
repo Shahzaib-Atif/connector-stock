@@ -1,34 +1,30 @@
 import NumberInputDiv from "@/components/common/NumberInputDiv";
-import { ConnectorCreateFormData } from "./useConnectorCreateForm";
 import { useAppSelector } from "@/store/hooks";
+import { ConnectorsDetails } from "@shared/dto/ConnectorDto";
 
 interface Props {
-  family: number;
-  fabricante: string;
-  refabricante: string;
-  setField: <K extends keyof ConnectorCreateFormData>(
-    field: K,
-    value: ConnectorCreateFormData[K],
+  details: ConnectorsDetails;
+  setDetailsField: (
+    field: keyof ConnectorsDetails,
+    value: string | number,
   ) => void;
 }
 
-export default function CreateFormDetails({
-  setField,
-  family,
-  fabricante,
-  refabricante,
-}: Props) {
+export default function CreateFormDetails({ setDetailsField, details }: Props) {
   const masterData = useAppSelector((state) => state.masterData.data);
+  const { Family, Fabricante, Refabricante } = details;
 
   return (
     <>
       {/* Family Input */}
       <NumberInputDiv
         label="Family"
-        value={family}
+        value={Family}
         min={1}
         step={1}
-        onChange={(e) => setField("Family", parseInt(e.target.value) || 0)}
+        onChange={(e) =>
+          setDetailsField("Family", parseInt(e.target.value) || 0)
+        }
       />
 
       {/* Fabricante dropdown */}
@@ -38,8 +34,8 @@ export default function CreateFormDetails({
         </label>
         <select
           id="create-fabricante-select"
-          value={fabricante}
-          onChange={(e) => setField("Fabricante", e.target.value)}
+          value={Fabricante ?? ""}
+          onChange={(e) => setDetailsField("Fabricante", e.target.value)}
           className="input-style-main input-style-enabled appearance-none cursor-pointer"
         >
           <option value="">unknown</option>
@@ -59,8 +55,8 @@ export default function CreateFormDetails({
         <input
           id="create-Refabricante"
           type="text"
-          value={refabricante}
-          onChange={(e) => setField("Refabricante", e.target.value)}
+          value={Refabricante ?? ""}
+          onChange={(e) => setDetailsField("Refabricante", e.target.value)}
           className="input-style-main input-style-enabled"
         />
       </div>

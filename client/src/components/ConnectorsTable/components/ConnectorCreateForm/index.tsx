@@ -20,6 +20,7 @@ export const ConnectorCreateForm: React.FC<Props> = ({ onCancel, onSave }) => {
     setQtyField,
     setField,
     setDimensionsField,
+    setDetailsField,
     handleSubmit,
   } = useConnectorCreateForm(onSave);
 
@@ -43,16 +44,14 @@ export const ConnectorCreateForm: React.FC<Props> = ({ onCancel, onSave }) => {
         />
 
         <CreateFormVias
-          actualViaCount={formData.ActualViaCount}
+          actualViaCount={formData.details.ActualViaCount ?? 0}
           setField={setField}
           vias={formData.Vias}
         />
 
         <CreateFormDetails
-          fabricante={formData.Fabricante}
-          family={formData.Family}
-          refabricante={formData.Refabricante}
-          setField={setField}
+          details={formData.details}
+          setDetailsField={setDetailsField}
         />
 
         {/* Quantities */}

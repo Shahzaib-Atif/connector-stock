@@ -49,6 +49,7 @@ function CreateFormMain({ setField, codivmac, posId, color, connType }: Props) {
           maxLength={4}
           onChange={(e) => setField("PosId", e.target.value.toUpperCase())}
           required
+          autoComplete="off"
           className="input-style-main input-style-enabled"
         />
       </div>

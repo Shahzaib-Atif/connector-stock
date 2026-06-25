@@ -2,14 +2,21 @@ export interface ConnectorDto {
   PosId: string;
   Cor: string;
   Vias: string;
+  ConnType: string | null;
   CODIVMAC: string;
   Qty: number;
   Qty_com_fio: number;
   Qty_sem_fio: number;
-  ConnType: string | null;
   details: ConnectorsDetails | null;
   dimensions: ConnectorsDimensions | null;
   clientReferences: string[];
+}
+
+export interface CreateConnectorDto extends Omit<
+  ConnectorDto,
+  "CODIVMAC" | "clientReferences"
+> {
+  LastChangeBy: string;
 }
 
 export interface ConnectorsDetails {

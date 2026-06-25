@@ -1,6 +1,7 @@
 import { Connector } from '@domain/entities/Connector';
 import { ConnectorMapper } from '@infra/ConnectorMapper';
 import { Injectable } from '@nestjs/common';
+import { CreateConnectorDto } from '@shared/dto/ConnectorDto';
 import { ConnectorDto } from '@shared/dto/ConnectorDto';
 import { WireTypes } from '@shared/enums/WireTypes';
 import { getErrorMsg } from '@shared/utils/getErrorMsg';
@@ -84,6 +85,51 @@ export class ConnectorRepo {
       console.error('Error fetching connector by codivmac:', ex.message);
       return null;
     }
+  }
+
+  async createConnector(
+    codivmac: string,
+    dto: CreateConnectorDto,
+  ): Promise<ConnectorDto | null> {
+    return await this.prisma.$transaction(async (tx) => {
+      await tx.connectors_Main.create({
+        data: {
+          PosId: dto.PosId,
+          Cor: dto.Cor,
+          Vias: dto.Vias,
+          CODIVMAC: codivmac,
+          Qty: dto.Qty,
+          Qty_com_fio: dto.Qty_com_fio,
+          Qty_sem_fio: dto.Qty_sem_fio,
+          ConnType: dto.ConnType,
+          LastChangeBy: dto.LastChangeBy,
+          LastUpdateDate: new Date(),
+        },
+      });
+
+      await tx.connectors_Details.create({
+        data: {
+          ConnId: codivmac,
+          Fabricante: dto.details?.Fabricante,
+          Refabricante: dto.details?.Refabricante,
+          Family: dto.details?.Family,
+          ActualViaCount: dto.details?.ActualViaCount,
+        },
+      });
+
+      if (this.hasDimensions(dto.dimensions)) {
+        await tx.connectors_Dimensions.create({
+          data: {
+            ConnId: codivmac,
+            InternalDiameter: dto.dimensions?.InternalDiameter,
+            ExternalDiameter: dto.dimensions?.ExternalDiameter,
+            Thickness: dto.dimensions?.Thickness,
+          },
+        });
+      }
+
+      return (await this.getConnectorByCodivmac(codivmac, tx)) ?? null;
+    });
   }
 
   async updateQty(
@@ -264,5 +310,16 @@ export class ConnectorRepo {
         Qty_sem_fio: { increment: amount },
       }),
     };
+  }
+
+  private hasDimensions(
+    dimensions?: CreateConnectorDto['dimensions'],
+  ): boolean {
+    return !!(
+      dimensions &&
+      (dimensions.InternalDiameter != null ||
+        dimensions.ExternalDiameter != null ||
+        dimensions.Thickness != null)
+    );
   }
 }

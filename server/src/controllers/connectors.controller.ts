@@ -5,6 +5,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { UserRoles } from '@shared/enums/UserRoles';
 import { ConnectorDto } from '@shared/dto/ConnectorDto';
+import { CreateConnectorDto } from '@shared/dto/ConnectorDto';
 
 @Controller('api/connectors')
 export class ConnectorController {
@@ -18,6 +19,13 @@ export class ConnectorController {
   @Get('')
   async getReferencias() {
     return await this.service.getConnectors();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRoles.Master, UserRoles.Admin)
+  @Post('')
+  async createConnector(@Body() body: CreateConnectorDto) {
+    return await this.service.createConnector(body);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

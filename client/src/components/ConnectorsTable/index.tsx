@@ -112,7 +112,7 @@ export const ConnectorsListView: React.FC = () => {
                   className="flex items-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-xl transition-all shadow-md hover:shadow-blue-600/20"
                 >
                   <Plus className="h-4 w-4" />
-                  <span className="hidden sm:inline">Create Connector</span>
+                  <span className="hidden sm:inline">New Connector</span>
                 </button>
               )}
               <ImageToggleBtn
