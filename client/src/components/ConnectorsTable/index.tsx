@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { usePagination } from "@/hooks/usePagination";
 import { useConnectorFilters } from "@/components/ConnectorsTable/useConnectorFilters";
 import { DetailHeader } from "../common/DetailHeader";
@@ -21,9 +21,11 @@ import { Plus } from "lucide-react";
 import { UserRoles } from "@shared/enums/UserRoles";
 import { ModalWrapper } from "../common/ModalWrapper";
 import { ConnectorCreateForm } from "./components/ConnectorCreateForm";
+import { refreshMasterData } from "@/store/slices/masterDataSlice";
 
 export const ConnectorsListView: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { data: masterData, loading } = useAppSelector(
     (state) => state.masterData,
   );
@@ -165,7 +167,10 @@ export const ConnectorsListView: React.FC = () => {
         >
           <ConnectorCreateForm
             onCancel={() => setShowCreateModal(false)}
-            onSave={() => setShowCreateModal(false)}
+            onSave={() => {
+              setShowCreateModal(false);
+              dispatch(refreshMasterData()).unwrap();
+            }}
           />
         </ModalWrapper>
       )}

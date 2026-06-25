@@ -92,6 +92,7 @@ export class ConnectorRepo {
     dto: CreateConnectorDto,
   ): Promise<ConnectorDto | null> {
     return await this.prisma.$transaction(async (tx) => {
+      // create in main table
       await tx.connectors_Main.create({
         data: {
           PosId: dto.PosId,
@@ -107,23 +108,37 @@ export class ConnectorRepo {
         },
       });
 
-      await tx.connectors_Details.create({
-        data: {
+      // upsert in details table
+      const detailsData = {
+        Fabricante: dto.details?.Fabricante,
+        Refabricante: dto.details?.Refabricante,
+        Family: dto.details?.Family,
+        ActualViaCount: dto.details?.ActualViaCount,
+        ClipColor: dto.details?.ClipColor,
+        OBS: dto.details?.OBS,
+      };
+      await tx.connectors_Details.upsert({
+        where: { ConnId: codivmac },
+        update: detailsData,
+        create: {
           ConnId: codivmac,
-          Fabricante: dto.details?.Fabricante,
-          Refabricante: dto.details?.Refabricante,
-          Family: dto.details?.Family,
-          ActualViaCount: dto.details?.ActualViaCount,
+          ...detailsData,
         },
       });
 
+      // upsert in dimensions table
       if (this.hasDimensions(dto.dimensions)) {
-        await tx.connectors_Dimensions.create({
-          data: {
+        const dimensionsData = {
+          InternalDiameter: dto.dimensions?.InternalDiameter,
+          ExternalDiameter: dto.dimensions?.ExternalDiameter,
+          Thickness: dto.dimensions?.Thickness,
+        };
+        await tx.connectors_Dimensions.upsert({
+          where: { ConnId: codivmac },
+          update: dimensionsData,
+          create: {
             ConnId: codivmac,
-            InternalDiameter: dto.dimensions?.InternalDiameter,
-            ExternalDiameter: dto.dimensions?.ExternalDiameter,
-            Thickness: dto.dimensions?.Thickness,
+            ...dimensionsData,
           },
         });
       }

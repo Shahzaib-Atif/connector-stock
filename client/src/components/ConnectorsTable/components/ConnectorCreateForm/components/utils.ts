@@ -8,10 +8,11 @@ export function ensureValidData(
     return "PosId must be 4 characters long.";
   } else if (codivmac.length !== 6 && codivmac.length !== 8) {
     return "CODIVMAC must be either 6 or 8 characters long.";
-  } else if (
-    formData.Vias?.toUpperCase() === "X" &&
-    (formData.details.ActualViaCount ?? 0 < 31)
-  ) {
-    return "As Vias is set to 'X', then ActualViaCount has to be greater than 30";
   } else return "";
 }
+
+export const inputClassEnabled =
+  "input-style-main input-style-enabled appearance-none cursor-pointer";
+
+export const inputClassDisabled =
+  "input-style-main input-style-disabled appearance-none cursor-pointer opacity-40";

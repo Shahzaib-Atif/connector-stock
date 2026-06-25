@@ -1,9 +1,6 @@
 import React, { FormEvent } from "react";
 import { useConnectorCreateForm } from "./components/useConnectorCreateForm";
-import { CreateFormDimensions } from "./components/CreateFormDimensions";
-import { CreateFormQuantities } from "./components/CreateFormQuantities";
 import CreateFormDetails from "./components/CreateFormDetails";
-import CreateFormVias from "./components/CreateFormVias";
 import CreateFormMain from "./components/CreateFormMain";
 import FormActionBtns from "./components/FormActionBtns";
 
@@ -24,50 +21,30 @@ export const ConnectorCreateForm: React.FC<Props> = ({ onCancel, onSave }) => {
     handleSubmit,
   } = useConnectorCreateForm(onSave);
 
-  const isOlhalType = formData.ConnType?.toLowerCase() === "olhal";
-  const codivmac = formData.PosId
-    ? formData.PosId + formData.Cor + formData.Vias
-    : "";
+  const codivmac =
+    formData.PosId?.length == 4
+      ? formData.PosId + formData.Cor + formData.Vias
+      : "";
 
   return (
     <form
       onSubmit={(e: FormEvent) => handleSubmit(e, codivmac)}
       className="p-6 space-y-5"
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="flex gap-6">
         <CreateFormMain
           codivmac={codivmac}
-          posId={formData.PosId}
-          color={formData.Cor}
-          connType={formData.ConnType}
+          formData={formData}
           setField={setField}
-        />
-
-        <CreateFormVias
-          actualViaCount={formData.details.ActualViaCount ?? 0}
-          setField={setField}
-          vias={formData.Vias}
-        />
-
-        <CreateFormDetails
-          details={formData.details}
+          setDimensionsField={setDimensionsField}
           setDetailsField={setDetailsField}
         />
 
-        {/* Quantities */}
-        <CreateFormQuantities
-          qtyComFio={formData.Qty_com_fio}
-          qtySemFio={formData.Qty_sem_fio}
+        <CreateFormDetails
+          formData={formData}
+          setDetailsField={setDetailsField}
           setQtyField={setQtyField}
         />
-
-        {/* Dimensions (only for "olhal" type) */}
-        {isOlhalType && (
-          <CreateFormDimensions
-            dimensions={formData.dimensions}
-            setDimensionsField={setDimensionsField}
-          />
-        )}
       </div>
 
       {error && (

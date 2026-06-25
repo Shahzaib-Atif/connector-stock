@@ -12,7 +12,7 @@ export default {
         },
         ".btn-secondary": {
           "@apply bg-slate-700 hover:bg-slate-600 text-slate-100": {},
-        }, 
+        },
         ".table-header": {
           "@apply border-b border-slate-700 bg-slate-800 uppercase text-xs": {},
         },
@@ -45,7 +45,7 @@ export default {
         ".table-row": {
           "@apply transition-colors break-normal text-slate-300 overflow-hidden text-ellipsis": {},
         },
-          ".table-row-bg": {
+        ".table-row-bg": {
           "@apply even:bg-slate-800/90 odd:bg-slate-800/10 hover:bg-slate-700/50": {},
         },
         ".sidebar-btn": {
@@ -57,7 +57,7 @@ export default {
         ".label-style-1": {
           "@apply block font-semibold mb-1 sm:mb-2": {},
         },
-          ".label-style-2": {
+        ".label-style-2": {
           "@apply block text-xs text-slate-400 mb-1": {},
         },
         ".label-style-3": {
@@ -70,32 +70,32 @@ export default {
           "@apply w-full border border-slate-800 rounded-xl px-4 py-2.5 text-white outline-none transition-all": {},
         },
         ".input-style-enabled": {
-          "@apply bg-slate-950 focus:ring-2 focus:ring-blue-500/50": {},
-        },    
+          "@apply bg-slate-950/60 focus:ring-2 focus:ring-blue-500/50": {},
+        },
         ".input-style-disabled": {
           "@apply bg-slate-700 appearance-none": {},
-        },   
+        },
         ".flex-row": {
           "@apply flex items-center gap-2": {},
-        },       
+        },
         ".toggle-btn-on-blue": {
           "@apply bg-blue-500/10 border-blue-500/50 text-blue-400 hover:bg-blue-500/20": {},
-        },  
+        },
         ".toggle-btn-on-amber": {
           "@apply bg-amber-500/10 border-amber-500/50 text-amber-400 hover:bg-amber-500/20": {},
-        }, 
+        },
         ".toggle-btn-off": {
           "@apply bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-300 hover:bg-slate-700": {},
-        },  
+        },
         ".link-btn": {
           "@apply text-blue-400 hover:text-blue-300 hover:underline transition-colors": {},
         },
         ".link-icon": {
           "@apply text-slate-400 hover:text-blue-400 transition-colors": {},
-        },         
+        },
         ".filter-panel": {
           "@apply flex flex-col gap-3 sm:gap-4 mt-2": {},
-        },    
+        },
       });
     },
   ],

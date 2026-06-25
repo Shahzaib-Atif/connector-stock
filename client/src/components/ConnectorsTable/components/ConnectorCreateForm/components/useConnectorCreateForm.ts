@@ -64,6 +64,8 @@ export function useConnectorCreateForm(onSave: () => void) {
     field: K,
     value: ConnectorCreateFormData[K],
   ) => {
+    setError(null);
+
     setFormData((prev) => ({
       ...prev,
       [field]: value,
