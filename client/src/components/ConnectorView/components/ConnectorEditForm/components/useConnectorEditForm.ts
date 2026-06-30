@@ -5,6 +5,7 @@ import { ConnectorExtended } from "@/utils/types";
 import { useState } from "react";
 import { ConnectorFormData } from "./ConnectorFormData";
 import { ConnectorsDimensions } from "@shared/dto/ConnectorDto";
+import toast from "react-hot-toast";
 
 export function useConnectorEditForm(
   connector: ConnectorExtended,
@@ -69,6 +70,7 @@ export function useConnectorEditForm(
       await updateConnectorApi(connector.CODIVMAC, formData);
       await dispatch(initMasterData());
       onSave();
+      toast.success("Connector edited successfully!");
     } catch (err: unknown) {
       if (err instanceof Error) setError(err.message);
       else setError("Failed to update connector");
