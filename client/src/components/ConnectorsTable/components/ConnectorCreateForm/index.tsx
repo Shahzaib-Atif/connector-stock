@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React from "react";
 import { useConnectorCreateForm } from "./components/useConnectorCreateForm";
 import CreateFormDetails from "./components/CreateFormDetails";
 import CreateFormMain from "./components/CreateFormMain";
@@ -36,10 +36,7 @@ export const ConnectorCreateForm: React.FC<Props> = ({
       : "";
 
   return (
-    <form
-      onSubmit={(e: FormEvent) => handleSubmit(e, codivmac)}
-      className="p-6 space-y-5"
-    >
+    <form onSubmit={(e) => handleSubmit(e, codivmac)} className="p-6 space-y-5">
       <div className="flex gap-6">
         <CreateFormMain
           codivmac={codivmac}

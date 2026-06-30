@@ -3,6 +3,7 @@ import {
   ConnectorsDetails,
   ConnectorsDimensions,
 } from "@shared/dto/ConnectorDto";
+import { toast } from "react-hot-toast";
 import { createConnector } from "@/api/connectorApi";
 import { CreateConnectorDto } from "@shared/dto/ConnectorDto";
 import { ensureValidData } from "./utils";
@@ -135,6 +136,7 @@ export function useConnectorCreateForm(
       };
 
       await createConnector(payload);
+      toast.success("Connector created successfully!");
       setFormData(initialFormData);
       onSave();
     } catch (err: unknown) {

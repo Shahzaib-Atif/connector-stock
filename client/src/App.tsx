@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 import { useAppSelector, useAppDispatch } from "./store/hooks";
 import { initMasterData } from "./store/slices/masterDataSlice";
 import { useTransactionFlow } from "./hooks/useTransactionFlow";
@@ -81,6 +82,8 @@ const App: React.FC = () => {
           itemType={itemType}
         />
       )}
+
+      <Toaster />
     </>
   );
 };
