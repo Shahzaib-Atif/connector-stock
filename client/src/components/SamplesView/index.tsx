@@ -108,7 +108,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
 
   const handleSaveSuccess = async () => {
     handleModalClose();
-    toast.success("Sample registered successfully!");
+    toast.success("Sample saved successfully!");
     await refetch();
   };
 

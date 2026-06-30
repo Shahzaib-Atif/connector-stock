@@ -83,7 +83,7 @@ const App: React.FC = () => {
         />
       )}
 
-      <Toaster />
+      <Toaster position="top-center" />
     </>
   );
 };

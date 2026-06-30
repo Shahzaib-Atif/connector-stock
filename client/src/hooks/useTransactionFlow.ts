@@ -5,6 +5,7 @@ import {
   TransactionConfirmPayload,
   TransactionOpenOptions,
 } from "@/utils/types/transactionTypes";
+import toast from "react-hot-toast";
 
 export const useTransactionFlow = () => {
   const dispatch = useAppDispatch();
@@ -78,6 +79,7 @@ export const useTransactionFlow = () => {
       }
 
       closeTransaction();
+      toast.success("Transaction completed successfully!");
     } catch (error) {
       console.error("Transaction failed:", error);
       // Optionally handle error state here

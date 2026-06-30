@@ -47,7 +47,8 @@ export const useSampleFormSubmit = ({
       return;
     }
 
-    if (!skipWarning && !checkConnectorWarning(formData.Amostra ?? "")) return;
+    if (!skipWarning && !checkConnectorWarning(formData.Amostra?.trim() ?? ""))
+      return;
 
     await createOrUpdateSample();
     clearWarning();
@@ -59,7 +60,7 @@ export const useSampleFormSubmit = ({
       const currentUser = user || "system";
       const commonPayload = {
         ...formData,
-        Amostra: formData.Amostra?.toUpperCase(),
+        Amostra: formData.Amostra?.trim().toUpperCase(),
         ActualUser: currentUser,
         associatedItemIds: selectedAccessoryIds,
       };

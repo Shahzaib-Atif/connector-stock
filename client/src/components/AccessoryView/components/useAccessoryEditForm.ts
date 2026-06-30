@@ -3,6 +3,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { initMasterData } from "@/store/slices/masterDataSlice";
 import { AccessoryExtended } from "@/utils/types";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 interface AccessoryFormData {
   CapotAngle: number;
@@ -39,6 +40,7 @@ export function useAccessoryEditForm(
       await updateAccessoryApi(accessory.Id, formData);
       await dispatch(initMasterData());
       onSave();
+      toast.success("Accessory edited successfully!");
     } catch (err: unknown) {
       if (err instanceof Error) setError(err.message);
       else setError("Failed to update accessory");
