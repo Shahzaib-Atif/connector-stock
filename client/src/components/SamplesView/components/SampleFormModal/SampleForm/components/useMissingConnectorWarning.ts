@@ -16,7 +16,7 @@ function useMissingConnectorWarning() {
 
     if (exists) return true;
 
-    const message = `Connector ${amostra} not found in the inventory system. Click the Create button again if you still want to proceed.`;
+    const message = `Connector ${amostra} not found in the inventory system. Please choose one of these options.`;
     setWarningMessage(message);
     return false;
   };
