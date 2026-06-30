@@ -34,9 +34,10 @@ export const useSampleFormSubmit = ({
   } | null>(null);
 
   const { user } = useAppSelector((state) => state.auth);
-  const { checkConnectorWarning } = useMissingConnectorWarning();
+  const { checkConnectorWarning, warningMessage, clearWarning } =
+    useMissingConnectorWarning();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, skipWarning = false) => {
     e.preventDefault();
     setFormError(null);
 
@@ -46,9 +47,10 @@ export const useSampleFormSubmit = ({
       return;
     }
 
-    if (!checkConnectorWarning(formData.Amostra ?? "", setFormError)) return;
+    if (!skipWarning && !checkConnectorWarning(formData.Amostra ?? "")) return;
 
     await createOrUpdateSample();
+    clearWarning();
   };
 
   const createOrUpdateSample = async () => {
@@ -137,5 +139,6 @@ export const useSampleFormSubmit = ({
     pendingConnectorUpdate,
     handleUpdateConnectorName,
     handleSkipConnectorUpdate,
+    warningMessage,
   };
 };

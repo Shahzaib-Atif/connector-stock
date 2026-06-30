@@ -3,31 +3,29 @@ import { useState } from "react";
 
 function useMissingConnectorWarning() {
   const { data: masterData } = useAppSelector((state) => state.masterData);
-  const [firstWarningIssued, setFirstWarningIssued] = useState(false);
+  const [warningMessage, setWarningMessage] = useState("");
 
-  const checkConnectorWarning = (
-    amostra: string,
-    setFormError: (error: string) => void
-  ) => {
+  const clearWarning = () => {
+    setWarningMessage("");
+  };
+
+  const checkConnectorWarning = (amostra: string): boolean => {
     const exists =
       masterData?.connectors &&
       Object.keys(masterData.connectors).includes(amostra);
 
     if (exists) return true;
 
-    if (!firstWarningIssued) {
-      setFormError(
-        `Connector ${amostra} not found in the inventory system. Click the Create button again if you still want to proceed.`
-      );
-      setFirstWarningIssued(true);
-      return false;
-    }
-
-    setFirstWarningIssued(false);
-    return true;
+    const message = `Connector ${amostra} not found in the inventory system. Click the Create button again if you still want to proceed.`;
+    setWarningMessage(message);
+    return false;
   };
 
-  return { checkConnectorWarning };
+  return {
+    checkConnectorWarning,
+    warningMessage,
+    clearWarning,
+  };
 }
 
 export default useMissingConnectorWarning;
