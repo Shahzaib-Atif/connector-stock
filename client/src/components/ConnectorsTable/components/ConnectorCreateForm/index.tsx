@@ -7,9 +7,18 @@ import FormActionBtns from "./components/FormActionBtns";
 interface Props {
   onCancel: () => void;
   onSave: () => void;
+  initialData?: {
+    PosId: string;
+    Cor: string;
+    Vias: string;
+  };
 }
 
-export const ConnectorCreateForm: React.FC<Props> = ({ onCancel, onSave }) => {
+export const ConnectorCreateForm: React.FC<Props> = ({
+  onCancel,
+  onSave,
+  initialData,
+}) => {
   const {
     formData,
     loading,
@@ -19,7 +28,7 @@ export const ConnectorCreateForm: React.FC<Props> = ({ onCancel, onSave }) => {
     setDimensionsField,
     setDetailsField,
     handleSubmit,
-  } = useConnectorCreateForm(onSave);
+  } = useConnectorCreateForm(onSave, initialData);
 
   const codivmac =
     formData.PosId?.length == 4

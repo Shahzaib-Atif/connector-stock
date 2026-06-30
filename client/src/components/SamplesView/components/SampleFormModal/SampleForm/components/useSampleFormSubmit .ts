@@ -140,5 +140,6 @@ export const useSampleFormSubmit = ({
     handleUpdateConnectorName,
     handleSkipConnectorUpdate,
     warningMessage,
+    clearWarning,
   };
 };

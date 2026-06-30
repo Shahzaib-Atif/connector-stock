@@ -14,6 +14,10 @@ import { LineStatusContext } from "@/utils/types/divDesk";
 import ConfirmConnectorRename from "./components/ConfirmConnectorRename";
 import WarningBanner from "./components/WarningBanner";
 import { ConnectorCreateForm } from "@/components/ConnectorsTable/components/ConnectorCreateForm";
+import { ModalWrapper } from "@/components/common/ModalWrapper";
+import { Plus } from "lucide-react";
+import { refreshMasterData } from "@/store/slices/masterDataSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 interface Props {
   sample: SamplesDto | null;
@@ -32,6 +36,7 @@ export const SampleForm: React.FC<Props> = ({
   initialData,
   lineStatusContext,
 }) => {
+  const dispatch = useAppDispatch();
   const {
     formData,
     handleChange,
@@ -51,6 +56,7 @@ export const SampleForm: React.FC<Props> = ({
     handleUpdateConnectorName,
     handleSkipConnectorUpdate,
     warningMessage,
+    clearWarning,
   } = useSampleFormSubmit({
     formData,
     isEditing,
@@ -241,10 +247,26 @@ export const SampleForm: React.FC<Props> = ({
       </form>
       {/* Connector creation modal */}
       {showConnectorModal && (
-        <ConnectorCreateForm
-          onCancel={() => setShowConnectorModal(false)}
-          onSave={() => setShowConnectorModal(false)}
-        />
+        <ModalWrapper
+          onClose={() => setShowConnectorModal(false)}
+          title="Create New Connector"
+          Icon={Plus}
+          extraClasses="max-w-2xl"
+        >
+          <ConnectorCreateForm
+            onCancel={() => setShowConnectorModal(false)}
+            onSave={() => {
+              setShowConnectorModal(false);
+              clearWarning();
+              dispatch(refreshMasterData()).unwrap();
+            }}
+            initialData={{
+              PosId: formData.Amostra?.trim()?.substring(0, 4) ?? "",
+              Cor: formData.Amostra?.trim()?.substring(4, 5) ?? "",
+              Vias: formData.Amostra?.trim()?.substring(5, 6) ?? "",
+            }}
+          />
+        </ModalWrapper>
       )}
     </>
   );

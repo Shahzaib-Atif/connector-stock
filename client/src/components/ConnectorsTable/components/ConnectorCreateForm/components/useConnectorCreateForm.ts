@@ -44,9 +44,18 @@ const initialFormData: ConnectorCreateFormData = {
   },
 };
 
-export function useConnectorCreateForm(onSave: () => void) {
-  const [formData, setFormData] =
-    useState<ConnectorCreateFormData>(initialFormData);
+export function useConnectorCreateForm(
+  onSave: () => void,
+  initialData = {
+    PosId: "",
+    Cor: "",
+    Vias: "",
+  },
+) {
+  const [formData, setFormData] = useState<ConnectorCreateFormData>({
+    ...initialFormData,
+    ...initialData,
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAppSelector((state) => state.auth);
