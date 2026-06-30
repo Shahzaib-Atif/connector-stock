@@ -21,6 +21,7 @@ import { useSorting } from "./useSorting";
 import useFilters from "./components/useFilters";
 import useData from "./components/useData";
 import { LineStatusContext } from "@/utils/types/divDesk";
+import toast from "react-hot-toast";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -107,6 +108,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
 
   const handleSaveSuccess = async () => {
     handleModalClose();
+    toast.success("Sample registered successfully!");
     await refetch();
   };
 
