@@ -101,8 +101,8 @@ export class AccessoryRepo {
 
       // Update the accessory
       return await this.prisma.rEG_AccessoriesSamples.updateMany({
-        where: { id: Id },
-        data: updateData,
+        where: { id: Number(Id) },
+        data: { ...updateData, CapotAngle: Number(updateData.CapotAngle) },
       });
     } catch (ex: any) {
       console.error('Error updating accessory properties:', ex.message);
