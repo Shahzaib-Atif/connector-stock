@@ -6,6 +6,7 @@ import { refreshTransactionsData } from "@/store/slices/transactionsSlice";
 import { fetchUnfinishedNotifications } from "@/store/slices/notificationsSlice";
 import { refreshUsersList } from "@/store/slices/authSlice";
 import { useState } from "react";
+import { refreshAnaliseTabCache } from "@/api/analiseApi";
 
 function RefreshButton() {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ function RefreshButton() {
 
       if (user && isAdmin) {
         refreshJobs.push(dispatch(fetchUnfinishedNotifications()).unwrap());
+        refreshJobs.push(refreshAnaliseTabCache());
       }
 
       if (user && role === UserRoles.Master) {
