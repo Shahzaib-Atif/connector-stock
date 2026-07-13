@@ -49,20 +49,20 @@ export default function DivDeskReclickModal({
           </div>
 
           <p className="text-sm text-slate-300">
-            Your browser only allows DIVDESK when you click. Press the button
-            below for each line, then continue in DIVDESK before the next step.
+            Please process one line at a time.
           </p>
 
           <div className="rounded-lg border border-blue-500/40 bg-blue-500/10 p-4 space-y-2">
-            <p className="text-xs text-slate-400 uppercase tracking-wide">
+            <p className="text-xs text-white uppercase tracking-wide">
               Current line
             </p>
-            <p className="text-white font-medium">{current.label}</p>
             <p className="text-sm text-slate-300">
-              <span className="text-slate-500">Encomenda:</span> {current.enc}
-              {" · "}
-              <span className="text-slate-500">Linha:</span> {current.line}
+              <span className="text-slate-500">Line No.</span>
+              {current.line}
+              <br />
+              <span className="text-slate-500">Order No.</span> {current.enc}
             </p>
+
             {current.previousConnector && (
               <p className="text-sm">
                 <span className="text-slate-500">Conector:</span>{" "}
@@ -77,7 +77,7 @@ export default function DivDeskReclickModal({
             )}
           </div>
 
-          <ul className="max-h-36 overflow-y-auto space-y-1 text-xs">
+          <ul className="max-h-64 overflow-y-auto space-y-1 text-sm">
             {steps.map((step, index) => {
               const done = index < currentStep;
               const active = index === currentStep;
@@ -94,7 +94,7 @@ export default function DivDeskReclickModal({
                     <span className="w-3.5 h-3.5 rounded-full border border-slate-600 shrink-0" />
                   )}
                   <span>
-                    Linha {step.line}
+                    Line No: {step.line}
                     {done ? " — done" : active ? " — next" : ""}
                   </span>
                 </li>
@@ -111,8 +111,8 @@ export default function DivDeskReclickModal({
           >
             <ExternalLink className="w-4 h-4" />
             {isLast
-              ? `Open DIVDESK — linha ${current.line} (last)`
-              : `Open DIVDESK — linha ${current.line}`}
+              ? `Open DIVDESK — Line No: ${current.line} (last)`
+              : `Open DIVDESK — Line No: ${current.line}`}
           </button>
           <button
             type="button"
@@ -126,5 +126,3 @@ export default function DivDeskReclickModal({
     </div>
   );
 }
-
-

@@ -68,6 +68,7 @@ export class SamplesService {
     return this.analiseCacheService.getSimilarRows({
       encomenda: query.encomenda,
       numLinha: Number.isFinite(numLinha) ? numLinha : 0,
+      refCliente: query.refCliente,
       estado: query.estado,
       cliente: query.cliente,
       cduProjetoCliente: query.cduProjetoCliente,

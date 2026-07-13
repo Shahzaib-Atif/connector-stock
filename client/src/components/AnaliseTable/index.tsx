@@ -13,11 +13,11 @@ import useFilters from "./components/useFilters";
 import useData from "./components/useData";
 import { useSorting } from "./components/useSorting";
 import { useConnectorSave } from "./components/useConnectorSave";
-import SimilarRowsConnectorModal from "./components/SimilarRowsConnectorModal";
 import DivDeskReclickModal from "./components/DivDeskReclickModal";
 import { useAppSelector } from "@/store/hooks";
 import Spinner from "../common/Spinner";
 import { setLineStatus, refreshConnNameCache } from "@/utils/functions/divDesk";
+import SimilarRowsConnectorModal from "./components/SimilarRowsConnectorModal";
 
 // Analise tab page with filters, pagination, and edits.
 export const AnaliseTable: React.FC = () => {
@@ -62,21 +62,24 @@ export const AnaliseTable: React.FC = () => {
   } = useConnectorSave({ onUpdateConnector: handleUpdateConnector, user });
 
   // Calls setLineStatus via DIVDESK and refreshes cache.
-  const handleStatusSave = React.useCallback(async (row: AnaliseTabDto, newStatus: string) => {
-    if (!row.Encomenda || row.NumLinha == null) return;
+  const handleStatusSave = React.useCallback(
+    async (row: AnaliseTabDto, newStatus: string) => {
+      if (!row.Encomenda || row.NumLinha == null) return;
 
-    // Local optimistic update
-    handleUpdateStatus(row.Encomenda, row.NumLinha, newStatus);
+      // Local optimistic update
+      handleUpdateStatus(row.Encomenda, row.NumLinha, newStatus);
 
-    try {
-      await setLineStatus(row.Encomenda, row.NumLinha, user || "undefined");
-    } catch (err) {
-      console.error("Failed to update status:", err);
-    }
+      try {
+        await setLineStatus(row.Encomenda, row.NumLinha, user || "undefined");
+      } catch (err) {
+        console.error("Failed to update status:", err);
+      }
 
-    // Refresh database cache
-    await refreshConnNameCache();
-  }, [handleUpdateStatus, user]);
+      // Refresh database cache
+      await refreshConnNameCache();
+    },
+    [handleUpdateStatus, user],
+  );
 
   // Reset to first page when filters change
   useEffect(() => {

@@ -11,6 +11,7 @@ import {
   containsInsensitive,
   paginateItems,
 } from 'src/utils/table-query.utils';
+import { AnaliseSimilarQueryDto } from '@shared/dto/AnaliseSimilarQueryDto';
 
 interface AnaliseCacheMeta {
   lastRefreshedAt: string;
@@ -136,18 +137,14 @@ export class AnaliseCacheService implements OnModuleInit {
   }
 
   // Returns cached rows sharing order, status, client, project.
-  async getSimilarRows(query: {
-    encomenda: string;
-    numLinha: number;
-    estado?: string | null;
-    cliente?: string | null;
-    cduProjetoCliente?: string | null;
-    newConnector?: string;
-  }): Promise<AnaliseTabDto[]> {
+  async getSimilarRows(
+    query: AnaliseSimilarQueryDto,
+  ): Promise<AnaliseTabDto[]> {
     const dataset = await this.ensureDataset();
     const normalizedNewConnector = query.newConnector?.trim().toLowerCase();
 
-    return dataset.rows.filter((row) => {
+    // Keep only similar rows, excluding the edited row and the target connector.
+    const filteredRows = dataset.rows.filter((row) => {
       if (row.NumLinha === query.numLinha) return false;
       if (!matchesSimilarityKey(row, query)) return false;
 
@@ -158,6 +155,8 @@ export class AnaliseCacheService implements OnModuleInit {
 
       return true;
     });
+
+    return filteredRows;
   }
 
   // Returns unique analise rows for one RefCliente.
@@ -298,20 +297,16 @@ function normalizePositiveInt(
   return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
 }
 
-// True when row matches order, status, client, project keys.
+// True when row matches order, status, client, refCliente.
 function matchesSimilarityKey(
   row: AnaliseTabDto,
-  query: {
-    encomenda: string;
-    estado?: string | null;
-    cliente?: string | null;
-    cduProjetoCliente?: string | null;
-  },
+  query: AnaliseSimilarQueryDto,
 ) {
   return (
     normalizeField(row.Encomenda) === normalizeField(query.encomenda) &&
     normalizeField(row.Estado) === normalizeField(query.estado) &&
     normalizeField(row.Cliente) === normalizeField(query.cliente) &&
+    normalizeField(row.RefCliente) === normalizeField(query.refCliente) &&
     normalizeField(row.CDU_ProjetoCliente) ===
       normalizeField(query.cduProjetoCliente)
   );

@@ -48,6 +48,7 @@ export function useConnectorSave({ onUpdateConnector, user }: Props) {
         const similarRows = await getSimilarAnaliseRows({
           encomenda: enc,
           numLinha: line,
+          refCliente: row.RefCliente,
           estado: row.Estado ?? undefined,
           cliente: row.Cliente ?? undefined,
           cduProjetoCliente: row.CDU_ProjetoCliente ?? undefined,
@@ -135,7 +136,7 @@ export function useConnectorSave({ onUpdateConnector, user }: Props) {
         con,
         userAgent: user || "undefined",
       },
-      { skipCacheRefresh: true }
+      { skipCacheRefresh: true },
     );
 
     applyConnectorLocally(enc, Number(line), newConnector);

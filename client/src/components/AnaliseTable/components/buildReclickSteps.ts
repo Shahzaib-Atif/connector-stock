@@ -11,7 +11,7 @@ export function buildReclickSteps(
     enc: row.Encomenda,
     line: row.NumLinha,
     con: newConnector,
-    label: `Linha ${row.NumLinha}${row.Descricao ? ` — ${row.Descricao}` : ""}`,
+    label: `Line Number ${row.NumLinha}`,
     previousConnector: row.Conector ?? undefined,
   }));
 }
