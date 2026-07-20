@@ -18,6 +18,10 @@ import { useAppSelector } from "@/store/hooks";
 import Spinner from "../common/Spinner";
 import { setLineStatus, refreshConnNameCache } from "@/utils/functions/divDesk";
 import SimilarRowsConnectorModal from "./components/SimilarRowsConnectorModal";
+import ActionBar from "../common/NewSamplesActionBar";
+import { UserRoles } from "@shared/enums/UserRoles";
+import useSamplesData from "../../components/SamplesView/components/useData";
+import useSamplesFilters from "../../components/SamplesView/components/useFilters";
 
 // Analise tab page with filters, pagination, and edits.
 export const AnaliseTable: React.FC = () => {
@@ -30,8 +34,21 @@ export const AnaliseTable: React.FC = () => {
     STORAGE_KEYS.ANALISE_TAB_SHOW_FILTERS,
   );
 
+  // analise table filters
   const { filters, setFilters, activeFiltersCount, clearFilters } =
     useFilters();
+
+  // Samples filters
+  const { filters: samplesFilters } = useSamplesFilters();
+  const { refetch } = useSamplesData({
+    filters: samplesFilters,
+    currentPage: 1,
+    itemsPerPage: 50,
+    dateSortDirection: "desc",
+  });
+
+  const { isAuthenticated, role } = useAppSelector((state) => state.auth);
+  const isAdmin = role === UserRoles.Admin || role === UserRoles.Master;
 
   const { dateSortDirection, handleDateSortToggle } = useSorting();
   const {
@@ -101,6 +118,8 @@ export const AnaliseTable: React.FC = () => {
 
       <div className="table-view-content">
         <div className="table-view-inner-content">
+          {isAuthenticated && isAdmin && <ActionBar refetch={refetch} />}
+
           <FilterToolbar
             showFilters={showFilters}
             onToggleFilters={() => setShowFilters((prev) => !prev)}

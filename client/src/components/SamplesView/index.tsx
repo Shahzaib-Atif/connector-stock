@@ -5,23 +5,20 @@ import { deleteSample } from "@/api/samplesApi";
 import { DetailHeader } from "../common/DetailHeader";
 import { SamplesTable } from "./components/SamplesTable";
 import { Pagination } from "../common/Pagination";
-import { SampleFormModal } from "./components/SampleFormModal";
-import { SampleCreationWizard } from "./components/SampleCreationWizard";
 import Spinner from "../common/Spinner";
 import DeleteDialog from "../common/DeleteDialog";
 import { ROUTES } from "../AppRoutes";
 import { QRData } from "@/utils/types/shared";
 import { UserRoles } from "@shared/enums/UserRoles";
 import { FilterToolbar } from "../common/FilterToolbar";
-import { CreateSamplesDto, SamplesDto } from "@shared/dto/SamplesDto";
+import { SamplesDto } from "@shared/dto/SamplesDto";
 import { useFiltersToggle } from "../../hooks/useFiltersToggle";
 import { STORAGE_KEYS } from "@/utils/constants";
-import ActionBar from "./components/ActionBar";
 import { useSorting } from "./useSorting";
 import useFilters from "./components/useFilters";
 import useData from "./components/useData";
-import { LineStatusContext } from "@/utils/types/divDesk";
-import toast from "react-hot-toast";
+import ActionBar from "../common/NewSamplesActionBar";
+import useNewSampleModal from "@/hooks/useNewSampleModal";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -58,28 +55,17 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   });
 
   // Modal state
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingSample, setEditingSample] = useState<SamplesDto | null>(null);
-  const [duplicateSample, setDuplicateSample] = useState<SamplesDto | null>(
-    null,
-  );
-  const [isWizardOpen, setIsWizardOpen] = useState(false);
-  const [prefillData, setPrefillData] = useState<
-    Partial<CreateSamplesDto> | undefined
-  >();
-  const [lineStatusContext, setLineStatusContext] = useState<
-    LineStatusContext | undefined
-  >();
+  const {
+    isModalOpen,
+    editingSample,
+    setDuplicateSample,
+    setIsModalOpen,
+    setEditingSample,
+  } = useNewSampleModal({ refetch });
 
   useEffect(() => {
     setCurrentPage(1);
   }, [filters]);
-
-  const handleCreateNew: () => void = () => {
-    setEditingSample(null);
-    setDuplicateSample(null);
-    setIsModalOpen(true);
-  };
 
   const handleEdit = (sample: SamplesDto) => {
     setEditingSample(sample);
@@ -96,39 +82,6 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   const handleDelete = async (sample: SamplesDto) => {
     setEditingSample(sample);
     setOpenDltDlg(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    setEditingSample(null);
-    setDuplicateSample(null);
-    setPrefillData(undefined);
-    setLineStatusContext(undefined);
-  };
-
-  const handleSaveSuccess = async () => {
-    handleModalClose();
-    toast.success("Sample saved successfully!");
-    await refetch();
-  };
-
-  const handleOpenWizard = () => {
-    setIsWizardOpen(true);
-  };
-
-  const handleWizardClose = () => {
-    setIsWizardOpen(false);
-  };
-
-  const handleProceedToForm = (
-    data: Partial<CreateSamplesDto>,
-    statusContext?: LineStatusContext,
-  ) => {
-    setPrefillData(data);
-    setLineStatusContext(statusContext);
-    setEditingSample(null);
-    setDuplicateSample(null);
-    setIsModalOpen(true);
   };
 
   const handleConfirmDelete = async () => {
@@ -154,12 +107,7 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
 
       <div id="samples-content" className="table-view-content">
         <div className="table-view-inner-content">
-          {isAuthenticated && isAdmin && (
-            <ActionBar
-              handleCreateNew={handleCreateNew}
-              handleOpenWizard={handleOpenWizard}
-            />
-          )}
+          {isAuthenticated && isAdmin && <ActionBar refetch={refetch} />}
 
           <FilterToolbar
             showFilters={showFilters}
@@ -203,24 +151,6 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
           )}
         </div>
       </div>
-
-      {isModalOpen && (
-        <SampleFormModal
-          sample={editingSample ?? duplicateSample}
-          onClose={handleModalClose}
-          onSuccess={handleSaveSuccess}
-          forceCreate={!!duplicateSample}
-          initialData={prefillData}
-          lineStatusContext={lineStatusContext}
-        />
-      )}
-
-      {isWizardOpen && (
-        <SampleCreationWizard
-          onClose={handleWizardClose}
-          onProceedToForm={handleProceedToForm}
-        />
-      )}
 
       {!isModalOpen && (
         <DeleteDialog
