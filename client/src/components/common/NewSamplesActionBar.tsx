@@ -67,4 +67,5 @@ function ActionBar({ refetch }: Props) {
 
 export default ActionBar;
 
-const btnStyle1 = "px-4 py-2 text-white rounded-lg transition-colors shadow-lg";
+const btnStyle1 =
+  "px-4 py-2 text-sm text-white rounded-lg transition-colors shadow-lg";
