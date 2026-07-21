@@ -10,6 +10,7 @@ export interface ConnectorDto {
   details: ConnectorsDetails | null;
   dimensions: ConnectorsDimensions | null;
   clientReferences: string[];
+  version?: number;
 }
 
 export interface CreateConnectorDto extends Omit<

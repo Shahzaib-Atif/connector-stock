@@ -78,6 +78,7 @@ export class ConnectorsService {
     const Vias = dto.Vias.trim().toUpperCase();
     const Qty_com_fio = Math.max(0, dto.Qty_com_fio);
     const Qty_sem_fio = Math.max(0, dto.Qty_sem_fio);
+    const Version = dto.version ? `-${dto.version}` : '';
 
     return {
       ...dto,
@@ -96,7 +97,7 @@ export class ConnectorsService {
       Qty: Qty_com_fio + Qty_sem_fio,
       Family: dto.details?.Family || 1,
       ActualViaCount: Vias === 'X' ? dto.details?.ActualViaCount : null,
-      CODIVMAC: `${PosId}${Cor}${Vias}`,
+      CODIVMAC: `${PosId}${Cor}${Vias}${Version}`,
     };
   }
 

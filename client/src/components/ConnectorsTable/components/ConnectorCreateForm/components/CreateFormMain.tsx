@@ -36,7 +36,7 @@ function CreateFormMain({
   const masterData = useAppSelector((state) => state.masterData.data);
 
   const colors = masterData?.colors;
-  const { ConnType, Cor, PosId, Vias, details } = formData;
+  const { ConnType, Cor, PosId, Vias, details, version } = formData;
   const { ActualViaCount, ClipColor } = details;
   const isOlhalType = ConnType?.toLowerCase() === "olhal";
   const isViasX = Vias?.toUpperCase() === "X";
@@ -152,12 +152,30 @@ function CreateFormMain({
         <NumberInputDiv
           label="Actual Vias Count"
           value={ActualViaCount ?? 0}
-          min={1}
+          min={31}
           onChange={(e) =>
             setDetailsField("ActualViaCount", parseInt(e.target.value) || 0)
           }
         />
       )}
+
+      {/* Version */}
+      <div className="space-y-1.5">
+        <label htmlFor="conn-version" className="label-style-4">
+          Version (optional)
+        </label>
+        <input
+          id="conn-version"
+          value={version ?? ""}
+          type="number"
+          min={0}
+          onChange={(e) =>
+            setField("version", parseInt(e.target.value) || undefined)
+          }
+          autoComplete="off"
+          className="input-style-main input-style-enabled"
+        />
+      </div>
 
       {/* Dimensions (only for "olhal" type) */}
       {isOlhalType && (

@@ -3,6 +3,7 @@ import { useConnectorCreateForm } from "./components/useConnectorCreateForm";
 import CreateFormDetails from "./components/CreateFormDetails";
 import CreateFormMain from "./components/CreateFormMain";
 import FormActionBtns from "./components/FormActionBtns";
+import { getCodivmac } from "./components/utils";
 
 interface Props {
   onCancel: () => void;
@@ -30,10 +31,8 @@ export const ConnectorCreateForm: React.FC<Props> = ({
     handleSubmit,
   } = useConnectorCreateForm(onSave, initialData);
 
-  const codivmac =
-    formData.PosId?.length == 4
-      ? formData.PosId + formData.Cor + formData.Vias
-      : "";
+  // Generate CODIVMAC based on form data
+  const codivmac = getCodivmac(formData);
 
   return (
     <form onSubmit={(e) => handleSubmit(e, codivmac)} className="p-6 space-y-5">

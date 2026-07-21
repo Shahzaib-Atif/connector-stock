@@ -11,6 +11,16 @@ export function ensureValidData(
   } else return "";
 }
 
+export function getCodivmac(formData: ConnectorCreateFormData): string {
+  const hasValidPosId = formData.PosId?.length === 4;
+  const versionSuffix = formData.version ? `-${formData.version}` : "";
+  const codivmac = hasValidPosId
+    ? `${formData.PosId}${formData.Cor}${formData.Vias}${versionSuffix}`
+    : "";
+
+  return codivmac;
+}
+
 export const inputClassEnabled =
   "input-style-main input-style-enabled appearance-none cursor-pointer";
 

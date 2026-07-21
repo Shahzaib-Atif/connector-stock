@@ -19,6 +19,7 @@ export interface ConnectorCreateFormData {
   Qty_sem_fio: number;
   details: ConnectorsDetails;
   dimensions: ConnectorsDimensions;
+  version?: number;
 }
 
 const initialFormData: ConnectorCreateFormData = {
