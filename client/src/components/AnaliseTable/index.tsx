@@ -22,6 +22,9 @@ import ActionBar from "../common/NewSamplesActionBar";
 import { UserRoles } from "@shared/enums/UserRoles";
 import useSamplesData from "../../components/SamplesView/components/useData";
 import useSamplesFilters from "../../components/SamplesView/components/useFilters";
+import useNewSampleModal from "@/hooks/useNewSampleModal";
+import { SampleCreationWizard } from "../SamplesView/components/SampleCreationWizard";
+import { SampleFormModal } from "../SamplesView/components/SampleFormModal";
 
 // Analise tab page with filters, pagination, and edits.
 export const AnaliseTable: React.FC = () => {
@@ -65,6 +68,21 @@ export const AnaliseTable: React.FC = () => {
     itemsPerPage,
     dateSortDirection,
   });
+
+  const {
+    isModalOpen,
+    duplicateSample,
+    isWizardOpen,
+    editingSample,
+    lineStatusContext,
+    prefillData,
+    handleCreateNew,
+    handleOpenWizard,
+    handleWizardClose,
+    handleProceedToForm,
+    handleSaveSuccess,
+    handleModalClose,
+  } = useNewSampleModal({ refetch });
 
   const {
     pendingSave,
@@ -124,7 +142,12 @@ export const AnaliseTable: React.FC = () => {
             onClearFilters={clearFilters}
             activeFiltersCount={activeFiltersCount}
           >
-            {isAuthenticated && isAdmin && <ActionBar refetch={refetch} />}
+            {isAuthenticated && isAdmin && (
+              <ActionBar
+                handleCreateNew={handleCreateNew}
+                handleOpenWizard={handleOpenWizard}
+              />
+            )}
           </FilterToolbar>
 
           {error && (
@@ -186,6 +209,24 @@ export const AnaliseTable: React.FC = () => {
           currentStep={reclickWizard.currentStep}
           onLaunchStep={handleLaunchReclickStep}
           onClose={closeReclickWizard}
+        />
+      )}
+
+      {isWizardOpen && (
+        <SampleCreationWizard
+          onClose={handleWizardClose}
+          onProceedToForm={handleProceedToForm}
+        />
+      )}
+
+      {isModalOpen && (
+        <SampleFormModal
+          sample={editingSample ?? duplicateSample}
+          onClose={handleModalClose}
+          onSuccess={handleSaveSuccess}
+          forceCreate={!!duplicateSample}
+          initialData={prefillData}
+          lineStatusContext={lineStatusContext}
         />
       )}
     </div>

@@ -49,6 +49,12 @@ export default function useNewSampleModal({ refetch }: Props) {
     setLineStatusContext(undefined);
   };
 
+  const handleEdit = (sample: SamplesDto) => {
+    setEditingSample(sample);
+    setDuplicateSample(null);
+    setIsModalOpen(true);
+  };
+
   const handleProceedToForm = (
     data: Partial<CreateSamplesDto>,
     statusContext?: LineStatusContext,
@@ -76,5 +82,6 @@ export default function useNewSampleModal({ refetch }: Props) {
     handleProceedToForm,
     handleSaveSuccess,
     handleModalClose,
+    handleEdit,
   };
 }

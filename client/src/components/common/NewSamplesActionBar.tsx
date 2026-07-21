@@ -1,27 +1,9 @@
-import useNewSampleModal from "@/hooks/useNewSampleModal";
-import { SampleCreationWizard } from "../SamplesView/components/SampleCreationWizard";
-import { SampleFormModal } from "../SamplesView/components/SampleFormModal";
-
 interface Props {
-  refetch: () => Promise<void>;
+  handleCreateNew: () => void;
+  handleOpenWizard: () => void;
 }
 
-function ActionBar({ refetch }: Props) {
-  const {
-    isModalOpen,
-    duplicateSample,
-    isWizardOpen,
-    editingSample,
-    lineStatusContext,
-    prefillData,
-    handleCreateNew,
-    handleOpenWizard,
-    handleWizardClose,
-    handleProceedToForm,
-    handleSaveSuccess,
-    handleModalClose,
-  } = useNewSampleModal({ refetch });
-
+function ActionBar({ handleCreateNew, handleOpenWizard }: Props) {
   return (
     <>
       <div className="flex justify-end gap-3 flex-none">
@@ -43,24 +25,6 @@ function ActionBar({ refetch }: Props) {
           + New Sample
         </button>
       </div>
-
-      {isWizardOpen && (
-        <SampleCreationWizard
-          onClose={handleWizardClose}
-          onProceedToForm={handleProceedToForm}
-        />
-      )}
-
-      {isModalOpen && (
-        <SampleFormModal
-          sample={editingSample ?? duplicateSample}
-          onClose={handleModalClose}
-          onSuccess={handleSaveSuccess}
-          forceCreate={!!duplicateSample}
-          initialData={prefillData}
-          lineStatusContext={lineStatusContext}
-        />
-      )}
     </>
   );
 }

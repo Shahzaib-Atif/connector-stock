@@ -19,6 +19,8 @@ import useFilters from "./components/useFilters";
 import useData from "./components/useData";
 import ActionBar from "../common/NewSamplesActionBar";
 import useNewSampleModal from "@/hooks/useNewSampleModal";
+import { SampleFormModal } from "./components/SampleFormModal";
+import { SampleCreationWizard } from "./components/SampleCreationWizard";
 
 interface SamplesViewProps {
   onOpenQR?: (qrData: QRData) => void;
@@ -57,21 +59,26 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
   // Modal state
   const {
     isModalOpen,
+    duplicateSample,
+    isWizardOpen,
     editingSample,
+    lineStatusContext,
+    prefillData,
+    handleCreateNew,
+    handleOpenWizard,
+    handleWizardClose,
+    handleProceedToForm,
+    handleSaveSuccess,
+    handleModalClose,
     setDuplicateSample,
-    setIsModalOpen,
     setEditingSample,
+    setIsModalOpen,
+    handleEdit,
   } = useNewSampleModal({ refetch });
 
   useEffect(() => {
     setCurrentPage(1);
   }, [filters]);
-
-  const handleEdit = (sample: SamplesDto) => {
-    setEditingSample(sample);
-    setDuplicateSample(null);
-    setIsModalOpen(true);
-  };
 
   const handleClone = (sample: SamplesDto) => {
     setDuplicateSample(sample);
@@ -113,7 +120,12 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
             onClearFilters={clearFilters}
             activeFiltersCount={activeFiltersCount}
           >
-            {isAuthenticated && isAdmin && <ActionBar refetch={refetch} />}
+            {isAuthenticated && isAdmin && (
+              <ActionBar
+                handleCreateNew={handleCreateNew}
+                handleOpenWizard={handleOpenWizard}
+              />
+            )}
           </FilterToolbar>
 
           {error && (
@@ -151,6 +163,24 @@ export const SamplesView: React.FC<SamplesViewProps> = ({ onOpenQR }) => {
           )}
         </div>
       </div>
+
+      {isWizardOpen && (
+        <SampleCreationWizard
+          onClose={handleWizardClose}
+          onProceedToForm={handleProceedToForm}
+        />
+      )}
+
+      {isModalOpen && (
+        <SampleFormModal
+          sample={editingSample ?? duplicateSample}
+          onClose={handleModalClose}
+          onSuccess={handleSaveSuccess}
+          forceCreate={!!duplicateSample}
+          initialData={prefillData}
+          lineStatusContext={lineStatusContext}
+        />
+      )}
 
       {!isModalOpen && (
         <DeleteDialog
