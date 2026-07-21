@@ -158,6 +158,7 @@ model Transactions {
   encomenda       String?   @db.VarChar(50)
   sender          String?   @db.VarChar(30)
   notes           String?   @db.VarChar(255)
+  prodId          String?   @db.VarChar(50)
 }
 
 model Connectors_Comps {

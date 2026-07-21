@@ -40,6 +40,7 @@ function TableHeader({
         <StickyHeaderCell className="min-w-36">Amount</StickyHeaderCell>
         <StickyHeaderCell className="min-w-36">Sender</StickyHeaderCell>
         <StickyHeaderCell className="min-w-36">Encomenda</StickyHeaderCell>
+        <StickyHeaderCell className="min-w-36">Prod Id</StickyHeaderCell>
         <StickyHeaderCell className="min-w-60">Notes</StickyHeaderCell>
         <StickyHeaderCell className="min-w-32">Wires</StickyHeaderCell>
         <StickyHeaderCell className="min-w-32">Date</StickyHeaderCell>

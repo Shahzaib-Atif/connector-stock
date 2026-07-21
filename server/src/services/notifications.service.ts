@@ -276,6 +276,8 @@ export class NotificationsService {
       department: notification.SenderSector ?? '',
       sender: notification.SenderUser,
       notes: dto.completionNote,
+      encomenda: notification.parsedEncomenda,
+      prodId: notification.parsedProdId,
     };
   }
 

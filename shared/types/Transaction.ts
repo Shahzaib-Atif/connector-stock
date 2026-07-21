@@ -12,6 +12,7 @@ export interface Transaction {
   department?: string;
   updatedAt?: number;
   notes?: string;
+  prodId?: string;
 }
 
 export type CreateTransactionsDto = Omit<Transaction, "ID">;

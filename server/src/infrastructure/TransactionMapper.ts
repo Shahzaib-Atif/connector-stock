@@ -15,6 +15,7 @@ export class TransactionMapper {
       notes: transaction.notes,
       sender: transaction.sender,
       subType: transaction.subType,
+      prodId: transaction.prodId,
     };
   }
 }
