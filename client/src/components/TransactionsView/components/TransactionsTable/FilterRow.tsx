@@ -68,6 +68,7 @@ function FilterRow({
       <StickySpacerCell />
       <StickySpacerCell />
       <StickySpacerCell />
+      <StickySpacerCell />
     </tr>
   );
 }
